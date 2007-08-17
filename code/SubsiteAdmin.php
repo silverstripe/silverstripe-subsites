@@ -21,15 +21,14 @@ class SubsiteAdmin extends GenericDataAdmin {
 		return $this->getLink();
 	}
 	
-	function Results() {
+	function Results($data, $form) {
 		$where = '';
-		
-		if(isset($_REQUEST['action_getResults']) && $_REQUEST['action_getResults']) {
-			$SQL_name = Convert::raw2sql($_REQUEST['Name']);
+		if(isset($data['Name']) && $data['Name']) {
+			$SQL_name = Convert::raw2sql($data['Name']);
 			$where = "`Title` LIKE '%$SQL_name%'";
 		}
 		
-		$intranets = DataObject::get('Intranet', $where);
+		$intranets = DataObject::get('Subsite', $where);
 		if(!$intranets)
 			return null;
 			
