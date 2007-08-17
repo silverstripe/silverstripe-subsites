@@ -34,4 +34,20 @@ Page:
 #        Title: Page not Found
 #        ErrorCode: 404
 #        SubsiteID: =>Subsite_Template.main
+
+Group:
+    admin:
+        Title: Admin
         
+Member:
+    admin:
+        FirstName: Admin
+        Surname: User
+        Email: admin@test.com
+        Password: rangi
+        Groups: =>Group.admin
+    
+Permission:
+    admin:
+        Code: ADMIN
+        GroupID: =>Group.admin
