@@ -14,14 +14,16 @@ class SubsiteAdmin extends GenericDataAdmin {
 	}
 	
 	function getLink() {
-		return 'admin/intranets/';
+		return 'admin/subsites/';
 	}
 	
 	function Link() {
 		return $this->getLink();
 	}
 	
-	function Results($data, $form) {
+	function Results($data = null) {
+		if(!$data) $data = $this->requestParams;
+		
 		$where = '';
 		if(isset($data['Name']) && $data['Name']) {
 			$SQL_name = Convert::raw2sql($data['Name']);
@@ -38,7 +40,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 		foreach($intranets as $intranet) {
 			$numIntranets++;
 			$evenOdd = ($numIntranets % 2) ? 'odd':'even';
-			$html .= "<tr class=\"$evenOdd\"><td><a href=\"admin/intranets/show/{$intranet->ID}\">{$intranet->Title}</a></td><td>{$intranet->Subdomain}.{$intranet->Domain}</td></tr>";
+			$html .= "<tr class=\"$evenOdd\"><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">{$intranet->Title}</a></td><td>{$intranet->Subdomain}.{$intranet->Domain}</td></tr>";
 		}
 		$html .= "</tbody></table>";
 		return $html;
@@ -108,7 +110,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 		
 		$member->Groups()->add($groupObjects['Administrators']);
 		
-		Director::redirect('admin/intranets/show/' . $intranet->ID);
+		Director::redirect('admin/subsites/show/' . $intranet->ID);
 	}
 }
 ?>

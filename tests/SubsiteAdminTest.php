@@ -2,6 +2,27 @@
 
 class SubsiteAdminTest extends SapphireTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+
+        /**
+         * Test generation of the view
+         */
+        function testBasicView() {
+            // Open the admin area logged in as admin
+            $response1 = Director::test('admin/subsites/');
+            
+            
+            // Confirm that this URL gets you the entire page, with the edit form loaded
+            $response2 = Director::test('admin/subsites/show/1');
+            $this->assertTrue(strpos($response2->getBody(), 'id="Root_Configuration"') !== false);
+            $this->assertTrue(strpos($response2->getBody(), '<head') !== false);
+
+            // Confirm that this URL gets you just the form content, with the edit form loaded
+            $response3 = Director::test('admin/subsites/show/1', array('ajax' => 1));
+
+            $this->assertTrue(strpos($response3->getBody(), 'id="Root_Configuration"') !== false);
+            $this->assertTrue(strpos($response3->getBody(), '<form') === false);
+            $this->assertTrue(strpos($response3->getBody(), '<head') === false);
+        }
 	
 	/**
 	 * Test that the template list is properly generated.
@@ -31,20 +52,16 @@ class SubsiteAdminTest extends SapphireTest {
 		
 		$searches = array(
 			array('Name' => 'Other'),
-			array('Name' => ''),
 		);
 		
 		foreach($searches as $search) {
 			$response = $form->testAjaxSubmission('getResults', $search);
-
-			echo $response->getBody();
+            $links = $response->getLinks();
+            foreach($links as $link) {
+                $this->assertTrue(preg_match('/^admin\/subsites\/show\/[0-9]+$/', $link['href']) == 1, "Search result links bad.");
+            }
 		}
 		
-		
-		/*
-		$this->assertHasLink($response->getBody(), 'admin/intranets/show/' . $this->idFromFixture('Subsite', 'other'));
-		$this->assertHasntLink($response->getBody(), 'admin/intranets/show/' . $this->idFromFixture('Subsite', 'other'));
-		*/
 		$cont->popCurrent();
 	}
 	

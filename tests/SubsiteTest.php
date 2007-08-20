@@ -2,7 +2,7 @@
 
 class SubsiteTest extends SapphireTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
-	
+
 	/**
 	 * Create a new subsite from the template and verify that all the template's pages are copied
 	 */

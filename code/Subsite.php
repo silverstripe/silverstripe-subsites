@@ -220,8 +220,8 @@ SQL;
 		$SQLa_perm = Convert::raw2sql($permissionCodes);
 		$SQL_perms = join("','", $SQLa_perm);		
 		$memberID = (int)$member->ID;
-
-		return DB::query("SELECT COUNT(`Permission`.`ID`) FROM `Permission` LEFT JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` LEFT JOIN `Group_Members` USING(`GroupID`) WHERE `Permission`.`Code` IN ('$SQL_perms') AND `SubsiteID` = 0 AND `MemberID` = {$memberID}")->value();
+    // `SubsiteID` = 0 AND 
+		return DB::query("SELECT COUNT(`Permission`.`ID`) FROM `Permission` LEFT JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` LEFT JOIN `Group_Members` USING(`GroupID`) WHERE `Permission`.`Code` IN ('$SQL_perms') AND `MemberID` = {$memberID}")->value();
 	}
 	
 	function createInitialRecords() {
