@@ -46,14 +46,18 @@ class SubsiteAdmin extends GenericDataAdmin {
 		return $html;
 	}
 	
+	/**
+	 * Returns the form for adding subsites.
+	 * @returns Form A nerw form object
+	 */
 	function AddSubsiteForm() {
 		$templates = $this->getIntranetTemplates();
 	
 		if($templates) {
-			$templateArray = $templates->map('ID', 'Domain');
+			$templateArray = $templates->map('ID', 'Title');
 		}
 		
-		return new Form($this, 'AddIntranetForm', new FieldSet(
+		return new Form($this, 'AddSubsiteForm', new FieldSet(
 			new TextField('Name', 'Name:'),
 			new TextField('Subdomain', 'Subdomain:'),
 			new DropdownField('TemplateID', 'Use template:', $templateArray),
@@ -66,11 +70,10 @@ class SubsiteAdmin extends GenericDataAdmin {
 	}
 	
 	public function getIntranetTemplates() {
-		return DataObject::get('Subsite_Template', '', 'Domain DESC');
+		return DataObject::get('Subsite_Template', '', 'Title');
 	}
 	
 	function addintranet($data, $form) {
-		
 		$SQL_email = Convert::raw2sql($data['AdminEmail']);
 		$member = DataObject::get_one('Member', "`Email`='$SQL_email'");
 		
@@ -85,7 +88,8 @@ class SubsiteAdmin extends GenericDataAdmin {
 		
 		// Create intranet from existing template
 		// TODO Change template based on the domain selected.
-		$intranet = Intranet::createFromTemplate($data['Name'], $data['Subdomain'], $data['TemplateID']);
+		$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
+		$intranet = $template->createInstance($data['Name'], $data['Subdomain']);
 		
 		$groupObjects = array();
 		
