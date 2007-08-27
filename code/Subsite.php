@@ -2,7 +2,7 @@
 /**
  * A dynamically created subdomain. SiteTree objects can now belong to a subdomain
  */
-class Subsite extends DataObject {
+class Subsite extends DataObject implements PermissionProvider {
 	
 	static $default_sort = 'Title';
 	
@@ -26,6 +26,9 @@ class Subsite extends DataObject {
 	static $base_domain, $default_subdomain;
 	
 	static $cached_subsite = null;
+	
+	public static $allowed_domains = array(
+	);
 	
 	/**
 	 * Return the base domain for this set of subsites.
@@ -63,7 +66,10 @@ class Subsite extends DataObject {
 				new Tab('Configuration',
 					new HeaderField($this->getClassName() . ' configuration', 2),
 					new TextField('Title', 'Name of subsite:', $this->Title),
-					$this->domainField(),
+					new FieldGroup('URL',
+						new TextField('Subdomain',"", $this->Subdomain),
+						new DropdownField('Domain','.', $this->stat('allowed_domains'), $this->Domain)
+					),
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
 					new CheckboxField('DefaultSite', 'Use this subsite as the default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Can access this subsite publicly?', $this->IsPublic)
@@ -80,20 +86,12 @@ class Subsite extends DataObject {
 		return $fields;
 	}
 	
-	function domainField() {
-		return new FieldGroup('Subsite domain',
-			new TextField('Subdomain',"", $this->Subdomain),
-			new TextField('Domain','.', $this->Domain)
-		);
-	}
-	
 	function getClassName() {
 		return $this->class;
 	}
 	
 	function getCMSActions() {
 		return new FieldSet(
-			new FormAction('savesubsite', 'Save')
 		);
 	}
 	
@@ -241,6 +239,11 @@ SQL;
 		);	
 	}
 	
+	function providePermissions() {
+		return array(
+			'SUBSITE_EDIT' => 'Edit Sub-site Details',
+		);
+	}
 }
 
 /**
