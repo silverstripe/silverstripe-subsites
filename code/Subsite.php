@@ -92,7 +92,17 @@ class Subsite extends DataObject implements PermissionProvider {
 	
 	function getCMSActions() {
 		return new FieldSet(
+            new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
 		);
+	}
+	
+	function adminDuplicate() {
+		$newItem = $this->duplicate();
+		$JS_title = Convert::raw2js($this->Title);
+		return <<<JS
+			statusMessage('Created a copy of $JS_title', 'good');
+			$('Form_EditForm').loadURLFromServer('admin/subsites/show/$newItem->ID');
+JS;
 	}
 	
 	static function currentSubsite() {
@@ -225,7 +235,43 @@ SQL;
 	function createInitialRecords() {
 		
 	}
-	
+
+	/**
+	 * Duplicate this subsite
+	 */
+	function duplicate() {
+		$newTemplate = parent::duplicate();
+		
+		$oldSubsiteID = Session::get('SubsiteID');
+		self::changeSubsite($this->ID);
+		
+		/*
+		 * Copy data from this template to the given subsite. Does this using an iterative depth-first search.
+		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
+		 * issues with having to check whether or not the new parents have been added to the site tree
+		 * when a page, etc, is duplicated
+		 */
+		$stack = array(array(0,0));
+		while(count($stack) > 0) {		
+			list($sourceParentID, $destParentID) = array_pop($stack);
+			
+			$children = Versioned::get_by_stage('Page', 'Live', "`ParentID`=$sourceParentID", '');
+			
+			if($children) {
+				foreach($children as $child) {
+					$childClone = $child->duplicateToSubsite($newTemplate, false);
+					$childClone->ParentID = $destParentID;
+					$childClone->writeToStage('Stage');
+					$childClone->publish('Stage', 'Live');
+					array_push($stack, array($child->ID, $childClone->ID));
+				}
+			}
+		}
+
+		self::changeSubsite($oldSubsiteID);
+		
+		return $newTemplate;
+	}	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// CMS ADMINISTRATION HELPERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,20 +296,6 @@ SQL;
  * An instance of subsite that can be duplicated to provide a quick way to create new subsites.
  */
 class Subsite_Template extends Subsite {
-	
-	function duplicate($args = null) {
-		if(!$args)
-			$args = array();
-		
-		// create the subsite
-		$subsite = Subsite::create('');
-		
-		// Apply arguments to field values
-		
-		$subsite->write();
-	}
-
-
 	/**
 	 * Create an instance of this template, with the given title & subdomain
 	 */
@@ -293,7 +325,7 @@ class Subsite_Template extends Subsite {
 			
 			if($children) {
 				foreach($children as $child) {
-					$childClone = $child->duplicateToSubsite($intranet, 'Stage');
+					$childClone = $child->duplicateToSubsite($intranet);
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');

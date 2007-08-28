@@ -30,7 +30,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 			$where = "`Title` LIKE '%$SQL_name%'";
 		}
 		
-		$intranets = DataObject::get('Subsite', $where);
+		$intranets = DataObject::get('Subsite', $where, "if(ClassName = 'Subsite_Template',0,1), Title");
 		if(!$intranets)
 			return null;
 			
@@ -40,7 +40,8 @@ class SubsiteAdmin extends GenericDataAdmin {
 		foreach($intranets as $intranet) {
 			$numIntranets++;
 			$evenOdd = ($numIntranets % 2) ? 'odd':'even';
-			$html .= "<tr class=\"$evenOdd\"><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">{$intranet->Title}</a></td><td>{$intranet->Subdomain}.{$intranet->Domain}</td></tr>";
+			$prefix = ($intranet instanceof Subsite_Template) ? " * " : "";
+			$html .= "<tr class=\"$evenOdd\"><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">$prefix{$intranet->Title}</a></td><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">{$intranet->Subdomain}.{$intranet->Domain}</a></td></tr>";
 		}
 		$html .= "</tbody></table>";
 		return $html;
@@ -60,6 +61,10 @@ class SubsiteAdmin extends GenericDataAdmin {
 		return new Form($this, 'AddSubsiteForm', new FieldSet(
 			new TextField('Name', 'Name:'),
 			new TextField('Subdomain', 'Subdomain:'),
+			new DropdownField('Type', 'Type', array(
+				'subsite' => 'New site',
+				'template' => 'New template',
+			)),
 			new DropdownField('TemplateID', 'Use template:', $templateArray),
 			new TextField('AdminName', 'Admin name:'),
 			new EmailField('AdminEmail', 'Admin email:')
@@ -85,12 +90,24 @@ class SubsiteAdmin extends GenericDataAdmin {
 			$member->Email = $data['AdminEmail'];
 			$member->write();
 		}
+
+		$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
 		
 		// Create intranet from existing template
-		// TODO Change template based on the domain selected.
-		$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
-		$intranet = $template->createInstance($data['Name'], $data['Subdomain']);
+		switch($data['Type']) {
+			case 'template':
+				$intranet = $template->duplicate();
+				$intranet->Title = $data['Name'];
+				$intranet->write();
+				break;
+
+			default:
+			case 'subsite':
+				$intranet = $template->createInstance($data['Name'], $data['Subdomain']);		
+				break;
+		}
 		
+		// NOTE: This stuff is pretty oriwave2-specific...
 		$groupObjects = array();
 		
 		// create Staff, Management and Administrator groups

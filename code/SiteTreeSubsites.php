@@ -81,8 +81,10 @@ class SiteTreeSubsites extends DataObjectDecorator {
 
 	/**
 	 * Create a duplicate of this page and save it to another subsite
+	 * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
+	 * @param $isTemplate boolean If this is true, then the current page will be treated as the template, and MasterPageID will be set
 	 */
-	public function duplicateToSubsite($subsiteID = null, $stage = 'Live') {
+	public function duplicateToSubsite($subsiteID = null, $isTemplate = true) {
 		if(is_object($subsiteID)) {
 			$subsite = $subsiteID;
 			$subsiteID = $subsite->ID;
@@ -95,7 +97,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		$page->CheckedPublicationDifferences = $page->AddedToStage = true;
 		$subsiteID = ($subsiteID ? $subsiteID : Subsite::currentSubsiteID());
 		$page->SubsiteID = $subsiteID;
-		$page->MasterPageID = $this->owner->ID;
+		
+		if($isTemplate) $page->MasterPageID = $this->owner->ID;
 		
 		foreach(self::$template_fields as $field) {
 			foreach(self::$template_variables as $variable => $intranetField) {
