@@ -49,10 +49,10 @@ class SiteTreeSubsites extends DataObjectDecorator {
 
 			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
 			else $subsiteID = (int)Subsite::currentSubsiteID();
-
+			
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
-				$query->where[] = "`$tableName`.SubsiteID IN (0, $subsiteID)";
+				$query->where[] = "`$tableName`.SubsiteID IN ($subsiteID)";
 				break;
 			}
 		}
