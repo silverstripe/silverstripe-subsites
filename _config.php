@@ -16,7 +16,7 @@ Director::addRules(100, array(
 	'admin/subsites/$Action/$ID/$OtherID' => 'SubsiteAdmin',
 ));
 Object::addStaticVars( 'LeftAndMain', array( 'extra_menu_items' => array(
-	'Sub-sites' => array("intranets", "admin/subsites/")
+	'Sub-sites' => array("intranets", "admin/subsites/", 'SubsiteAdmin')
 )));
 
 ?>

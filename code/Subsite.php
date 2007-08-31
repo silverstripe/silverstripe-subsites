@@ -158,6 +158,13 @@ JS;
 	
 	}
 	
+	/**
+	 * Make this subsite the current one
+	 */
+	public function activate() {
+		Subsite::changeSubsite($this);
+	}
+	
 	function canEdit() {
 		return true;
 	}
@@ -170,9 +177,11 @@ JS;
 		$SQL_subdomain = Convert::raw2sql(array_shift($domainNameParts));
 		$SQL_domain = join('.', Convert::raw2sql($domainNameParts));
 		// $_REQUEST['showqueries'] = 1;
+		$subsite = null;
 		if(self::$use_domain) {
 			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `Domain`='$SQL_domain' AND `IsPublic`=1");
-		} else {
+		}
+		if(!$subsite) {
 			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `IsPublic`=1");
 		}
 		
@@ -271,7 +280,31 @@ SQL;
 		self::changeSubsite($oldSubsiteID);
 		
 		return $newTemplate;
-	}	
+	}
+	
+	
+	/**
+	 * Return the subsites that the current user can access.
+	 * Look for one of the given permission codes on the site.
+	 * 
+	 * @param $permCode array|string Either a single permission code or an array of permission codes.
+	 */
+	function accessible_sites($permCode) {
+		$member = Member::currentUser();
+		
+		if(is_array($permCode))	$SQL_codes = "'" . implode("', '", Convert::raw2sql($permCode)) . "'";
+		else $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
+		
+		if(!$member) return new DataObjectSet();
+
+		$subsites = DataObject::get('Subsite',
+			"`Group_Members`.`MemberID` = $member->ID AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN')", '',
+			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0) LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
+				LEFT JOIN `Permission` ON `Group`.`ID`=`Permission`.`GroupID`");
+		
+		return $subsites;
+	}
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// CMS ADMINISTRATION HELPERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

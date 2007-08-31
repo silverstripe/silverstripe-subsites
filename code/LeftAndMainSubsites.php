@@ -55,11 +55,10 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function Subsites() {
-		$subsites = Subsite::getSubsitesForMember(Member::currentUser(), array('CMS_ACCESS_CMSMain', 'ADMIN'));
-		
 		$siteList = new DataObjectSet();
-		
-		if(Subsite::hasMainSitePermission(Member::currentUser(), array('CMS_ACCESS_CMSMain', 'ADMIN')))
+		$subsites = Subsite::accessible_sites('CMS_ACCESS_' . $this->owner->class);
+
+		if(Subsite::hasMainSitePermission(Member::currentUser(), array('CMS_ACCESS_' . $this->owner->class, 'ADMIN')))
 			$siteList->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 		
 		if($subsites)
@@ -90,6 +89,38 @@ class LeftAndMainSubsites extends Extension {
 	
 	public function CanAddSubsites() {
 		return Permission::check("ADMIN", "any", null, "all");
-	}}
+	}
+
+	/**
+	 * Alternative security checker for LeftAndMain.
+	 * If security isn't found, then it will switch to a subsite where we do have access.
+	 */
+	public function alternateAccessCheck() {
+		$className = $this->owner->class;
+		
+		if($result = Permission::check("CMS_ACCESS_$className")) {
+			return $result;
+		} else {
+			if($className == 'CMSMain') {
+				// When access /admin/, we should try a redirect to another part of the admin rather than be locked out
+				$menu = $this->owner->MainMenu();
+				if(($first = $menu->First()) && $first->Link) {
+					Director::redirect($first->Link);
+					return;
+				}
+			}
+
+			$otherSites = Subsite::accessible_sites("CMS_ACCESS_$className");
+			if($otherSites && $otherSites->TotalItems() > 0) {
+				$otherSites->First()->activate();
+				return Permission::check("CMS_ACCESS_$className");
+			}
+		}
+		
+		return null;
+	}
+}
+	
+	
 
 ?>
