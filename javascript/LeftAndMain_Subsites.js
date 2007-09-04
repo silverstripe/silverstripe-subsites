@@ -1,7 +1,7 @@
 Behaviour.register({
 	'#SubsiteActions select' : {
 		onchange: function() {
-			var request = new Ajax.Request('admin/security/changesubsite?ID=' + this.value + '&ajax=1', {
+			var request = new Ajax.Request(SiteTreeHandlers.controller_url + '/changesubsite?ID=' + this.value + '&ajax=1', {
 				onSuccess: function(response) {
 					$('sitetree').innerHTML = response.responseText;
 					SiteTree.applyTo($('sitetree'));
