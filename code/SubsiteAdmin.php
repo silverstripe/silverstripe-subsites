@@ -56,6 +56,8 @@ class SubsiteAdmin extends GenericDataAdmin {
 	
 		if($templates) {
 			$templateArray = $templates->map('ID', 'Title');
+		} else {
+			$templateArray = array();
 		}
 		
 		return new Form($this, 'AddSubsiteForm', new FieldSet(
