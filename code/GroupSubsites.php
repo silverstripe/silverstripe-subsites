@@ -7,7 +7,7 @@ class GroupSubsites extends DataObjectDecorator {
 	
 	function extraDBFields() {
 		// This is hard-coded to be applied to SiteTree, unfortunately
-		if($this->class == 'SiteTree') {
+        if($this->owner->class == 'Group') {
 			return array(
 				'has_one' => array(
 					'Subsite' => 'Subsite',
