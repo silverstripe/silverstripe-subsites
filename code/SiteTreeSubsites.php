@@ -128,6 +128,10 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		// Need to set the SubsiteID to null incase we've been in the CMS
 		Session::set('SubsiteID', null);
 	}
+	
+	function alternateAbsoluteLink() {
+		return "http://" . $this->owner->Subsite()->domain() . $this->owner->Link();
+	}
 }
 
 ?>
