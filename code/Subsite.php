@@ -3,6 +3,8 @@
  * A dynamically created subdomain. SiteTree objects can now belong to a subdomain
  */
 class Subsite extends DataObject implements PermissionProvider {
+
+	static $disable_subsite_filter = false;
 	
 	static $default_sort = 'Title';
 	
@@ -322,6 +324,13 @@ SQL;
 		return array(
 			'SUBSITE_EDIT' => 'Edit Sub-site Details',
 		);
+	}
+
+	static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "") {
+		self::$disable_subsite_filter = true;
+		$result = DataObject::get($className, $filter, $sort, $join, $limit);
+		self::$disable_subsite_filter = false;
+		return $result;
 	}
 }
 

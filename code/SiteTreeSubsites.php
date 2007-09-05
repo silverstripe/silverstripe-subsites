@@ -8,7 +8,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		'((Company Name))' => 'Title'
 	);
 	
-	protected static $template_fields = array(
+	static $template_fields = array(
 		"URLSegment",
 		"Title",
 		"MenuTitle",
@@ -44,6 +44,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 * Update any requests to limit the results to the current site
 	 */
 	function augmentSQL(SQLQuery &$query) {
+		if(Subsite::$disable_subsite_filter) return;
+		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false) {
 
