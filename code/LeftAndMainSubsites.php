@@ -119,6 +119,10 @@ class LeftAndMainSubsites extends Extension {
 		
 		return null;
 	}
+	
+	function augmentNewSiteTreeItem(&$item) {
+		$item->SubsiteID = Subsite::currentSubsiteID();	
+	}
 }
 	
 	
