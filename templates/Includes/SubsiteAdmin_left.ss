@@ -9,9 +9,12 @@ Site</div>
 $AddSubsiteForm
 </div>
 <h2>Search for Intranets</h2>
-<div id="SearchForm_holder" style="overflow:auto">
-$SearchForm
+<div id="Search_holder" style="overflow: auto;">
+	<div id="SearchForm_holder" style="overflow:auto">
+	$SearchForm
+	</div>
+	<div id="ResultTable_holder" style="overflow:auto">
+	$Results
+	</div>
 </div>
-<div id="ResultTable_holder" style="overflow:auto">
-$Results</div>
 </div>

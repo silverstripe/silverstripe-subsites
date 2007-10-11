@@ -68,3 +68,5 @@ Behaviour.register({
 		}
 	}	
 });
+
+fitToParent('ResultTable_holder');
