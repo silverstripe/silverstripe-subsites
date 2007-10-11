@@ -135,5 +135,12 @@ class SubsiteAdmin extends GenericDataAdmin {
 		
 		Director::redirect('admin/subsites/show/' . $intranet->ID);
 	}
+
+	/**
+	 * Use this as an action handler for custom CMS buttons.
+	 */
+	function callPageMethod2($data, $form) {
+		return $this->callPageMethod($data, $form);
+	}
 }
 ?>
