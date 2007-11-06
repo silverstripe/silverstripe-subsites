@@ -54,6 +54,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 			
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
+				// The tableName should be SiteTree or SiteTree_Live...
+				if(strpos($tableName,'SiteTree') === false) break;
 				$query->where[] = "`$tableName`.SubsiteID IN ($subsiteID)";
 				break;
 			}
