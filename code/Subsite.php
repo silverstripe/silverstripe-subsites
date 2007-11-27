@@ -300,7 +300,7 @@ SQL;
 		if(!$member) return new DataObjectSet();
 
 		$subsites = DataObject::get('Subsite',
-			"`Group_Members`.`MemberID` = $member->ID AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN')", '',
+			"`Group_Members`.`MemberID` = $member->ID AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN') AND `Subsite`.Title != ''", '',
 			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0) LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
 				LEFT JOIN `Permission` ON `Group`.`ID`=`Permission`.`GroupID`");
 		
