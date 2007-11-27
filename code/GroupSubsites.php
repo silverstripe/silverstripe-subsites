@@ -44,6 +44,17 @@ class GroupSubsites extends DataObjectDecorator {
 	function augmentBeforeWrite() {
 		if(!is_numeric($this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
 	}
+	
+	function alternateCanEdit() {
+		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
+		$oldSubsiteID = Session::get('SubsiteID');
+
+		Session::set('SubsiteID', $this->owner->SubsiteID);
+		$access = Permission::check('CMS_ACCESS_SecurityAdmin');
+		Session::set('SubsiteID', $oldSubsiteID);
+		
+		return $access;
+	}
 }
 
 ?>
