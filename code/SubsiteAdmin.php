@@ -81,59 +81,63 @@ class SubsiteAdmin extends GenericDataAdmin {
 	}
 	
 	function addintranet($data, $form) {
-		$SQL_email = Convert::raw2sql($data['AdminEmail']);
-		$member = DataObject::get_one('Member', "`Email`='$SQL_email'");
+		if($data['Name'] && $data['Subdomain']) {
+			$SQL_email = Convert::raw2sql($data['AdminEmail']);
+			$member = DataObject::get_one('Member', "`Email`='$SQL_email'");
 		
-		if(!$member) {
-			$member = Object::create('Member');
-			$nameParts = explode(' ', $data['AdminName']);
-			$member->FirstName = array_shift($nameParts);
-			$member->Surname = join(' ', $nameParts);
-			$member->Email = $data['AdminEmail'];
-			$member->write();
-		}
-
-		$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
-		
-		// Create intranet from existing template
-		switch($data['Type']) {
-			case 'template':
-				$intranet = $template->duplicate();
-				$intranet->Title = $data['Name'];
-				$intranet->write();
-				break;
-
-			default:
-			case 'subsite':
-				$intranet = $template->createInstance($data['Name'], $data['Subdomain']);		
-				break;
-		}
-		
-		// NOTE: This stuff is pretty oriwave2-specific...
-		$groupObjects = array();
-		
-		// create Staff, Management and Administrator groups
-		$groups = array(
-			'Administrators' => array('CL_ADMIN', 'CMS_ACCESS_CMSMain', 'CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_SecurityAdmin', 'CMS_ACCESS_IntranetAdmin'),
-			'Management' => array('CL_MGMT'),
-			'Staff' => array('CL_STAFF')
-		);
-		foreach($groups as $name => $perms) {
-			$group = new Group();
-			$group->SubsiteID = $intranet->ID;
-			$group->Title = $name;
-			$group->write();
-			
-			foreach($perms as $perm) {
-				Permission::grant($group->ID, $perm);
+			if(!$member) {
+				$member = Object::create('Member');
+				$nameParts = explode(' ', $data['AdminName']);
+				$member->FirstName = array_shift($nameParts);
+				$member->Surname = join(' ', $nameParts);
+				$member->Email = $data['AdminEmail'];
+				$member->write();
 			}
+
+			$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
+		
+			// Create intranet from existing template
+			switch($data['Type']) {
+				case 'template':
+					$intranet = $template->duplicate();
+					$intranet->Title = $data['Name'];
+					$intranet->write();
+					break;
+
+				default:
+				case 'subsite':
+					$intranet = $template->createInstance($data['Name'], $data['Subdomain']);		
+					break;
+			}
+		
+			// NOTE: This stuff is pretty oriwave2-specific...
+			$groupObjects = array();
+		
+			// create Staff, Management and Administrator groups
+			$groups = array(
+				'Administrators' => array('CL_ADMIN', 'CMS_ACCESS_CMSMain', 'CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_SecurityAdmin', 'CMS_ACCESS_IntranetAdmin'),
+				'Management' => array('CL_MGMT'),
+				'Staff' => array('CL_STAFF')
+			);
+			foreach($groups as $name => $perms) {
+				$group = new Group();
+				$group->SubsiteID = $intranet->ID;
+				$group->Title = $name;
+				$group->write();
 			
-			$groupObjects[$name] = $group;
+				foreach($perms as $perm) {
+					Permission::grant($group->ID, $perm);
+				}
+			
+				$groupObjects[$name] = $group;
+			}
+		
+			$member->Groups()->add($groupObjects['Administrators']);
+		
+			Director::redirect('admin/subsites/show/' . $intranet->ID);
+		} else {
+			echo "You must provide a Name and Subdomain.";
 		}
-		
-		$member->Groups()->add($groupObjects['Administrators']);
-		
-		Director::redirect('admin/subsites/show/' . $intranet->ID);
 	}
 
 	/**
