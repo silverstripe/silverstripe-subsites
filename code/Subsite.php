@@ -174,7 +174,7 @@ JS;
 	static function getSubsiteIDForDomain() {
 		$domainNameParts = explode('.', $_SERVER['HTTP_HOST']);
 		
-		if($domainNameParts[0] == 'www') return 0;
+		if($domainNameParts[0] == 'www') array_shift($domainNameParts);
 			
 		$SQL_subdomain = Convert::raw2sql(array_shift($domainNameParts));
 		$SQL_domain = join('.', Convert::raw2sql($domainNameParts));
