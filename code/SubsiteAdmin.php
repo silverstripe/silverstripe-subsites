@@ -67,9 +67,9 @@ class SubsiteAdmin extends GenericDataAdmin {
 				'subsite' => 'New site',
 				'template' => 'New template',
 			)),
-			new DropdownField('TemplateID', 'Use template:', $templateArray),
-			new TextField('AdminName', 'Admin name:'),
-			new EmailField('AdminEmail', 'Admin email:')
+			new DropdownField('TemplateID', 'Use template:', $templateArray)//,
+			/*new TextField('AdminName', 'Admin name:'),
+			new EmailField('AdminEmail', 'Admin email:')*/
 		),
 		new FieldSet(
 			new FormAction('addintranet', 'Add')
@@ -82,6 +82,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 	
 	function addintranet($data, $form) {
 		if($data['Name'] && $data['Subdomain']) {
+			/*
 			$SQL_email = Convert::raw2sql($data['AdminEmail']);
 			$member = DataObject::get_one('Member', "`Email`='$SQL_email'");
 		
@@ -93,6 +94,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 				$member->Email = $data['AdminEmail'];
 				$member->write();
 			}
+			*/
 
 			$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
 		
@@ -132,7 +134,9 @@ class SubsiteAdmin extends GenericDataAdmin {
 				$groupObjects[$name] = $group;
 			}
 		
+			/*
 			$member->Groups()->add($groupObjects['Administrators']);
+			*/
 		
 			Director::redirect('admin/subsites/show/' . $intranet->ID);
 		} else {
