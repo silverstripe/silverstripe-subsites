@@ -18,7 +18,6 @@ class FileSubsites extends DataObjectDecorator {
 	/**
 	 * Amends the CMS tree title for folders in the Files & Images section.
 	 * Prefixes a '* ' to the folders that are accessible from all subsites.  
-	 * 
 	 */
 	function alternateTreeTitle() {
 		if($this->owner->SubsiteID == 0) return " * " . $this->owner->Title;
