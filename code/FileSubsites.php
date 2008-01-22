@@ -14,6 +14,12 @@ class FileSubsites extends DataObjectDecorator {
 			);
 		}
 	}	
+
+
+	function alternateTreeTitle() {
+		if($this->owner->SubsiteID == 0) return " * " . $this->owner->Title;
+		else return $this->owner->Title;
+	}
 	
 	/**
 	 * Add subsites-specific fields to the folder editor.
