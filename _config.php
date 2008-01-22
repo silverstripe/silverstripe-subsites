@@ -11,6 +11,7 @@ new SiteTree();
 
 Object::add_extension('LeftAndMain', 'LeftAndMainSubsites');
 Object::add_extension('Group', 'GroupSubsites');
+Object::add_extension('File', 'FileSubsites');
 
 Director::addRules(100, array(
 	'admin/subsites/$Action/$ID/$OtherID' => 'SubsiteAdmin',
