@@ -104,12 +104,6 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		
 		if($isTemplate) $page->MasterPageID = $this->owner->ID;
 		
-		foreach(self::$template_fields as $field) {
-			foreach(self::$template_variables as $variable => $intranetField) {
-				$page->$field = str_ireplace($variable, $subsite->$intranetField, $page->$field);
-			}
-		}
-		
 		$page->write();
 
 		return $page;
