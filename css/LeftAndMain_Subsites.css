@@ -41,3 +41,13 @@
 	font-size: 80%;
 	margin-left: 3px;
 }
+
+#Form_AddSubsiteForm .field {
+	margin-left: 100px;
+}
+
+#Form_AddSubsiteForm label.left {
+	float: left;
+	width: 100px;
+	margin-left: -100px;
+}

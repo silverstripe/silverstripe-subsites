@@ -1,8 +1,5 @@
-<div class="title">
-<div style="background-image : url(cms/images/panels/EditPage.png)">Edit
-Page</div>
-</div>
-<% include Editor_toolbar %> <% if EditForm %> $EditForm <% else %>
+<!--<% xinclude Editor_toolbar %>-->
+<% if EditForm %> $EditForm <% else %>
 <form id="Form_EditForm" action="{$Link}?executeForm=EditForm"
 	method="post" enctype="multipart/form-data">
 <h1>$ApplicationName</h1>
@@ -12,6 +9,5 @@ entries on the left pane.</p>
 
 </form>
 <% end_if %>
-
 
 <p id="statusMessage" style="visibility:hidden"></p>

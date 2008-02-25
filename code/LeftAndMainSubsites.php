@@ -4,6 +4,11 @@
  * Decorator designed to add subsites support to LeftAndMain
  */
 class LeftAndMainSubsites extends Extension {
+	static $allowed_actions = array(
+		'addsubsite',
+		'changesubsite',
+	);
+	
 	function augmentInit() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
@@ -62,7 +67,7 @@ class LeftAndMainSubsites extends Extension {
 			$siteList->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 		
 		if($subsites)
-			$siteList->append($subsites);
+			$siteList->merge($subsites);
 			
 		return $siteList;
 	}
