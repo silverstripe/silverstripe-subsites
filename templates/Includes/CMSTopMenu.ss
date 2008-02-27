@@ -5,8 +5,7 @@
 	</ul>
 	<form id="SubsiteActions">
 		<fieldset>
-			<span style="float: right">$ApplicationLogoText</span>
-			$SubsiteList
-			<!-- <img src="../images/mainmenu/help.gif" alt="Get Help"> -->
+		$SubsiteList
+			<span>$ApplicationLogoText</span>
 		</fieldset>
 	</form>	
