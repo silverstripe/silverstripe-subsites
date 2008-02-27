@@ -17,7 +17,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		"MetaDescription",
 		"MetaKeywords",
 	);
-	
+
 	/**
 	 * Set the fields that will be copied from the template.
 	 * Note that ParentID and Sort are implied.
@@ -34,7 +34,6 @@ class SiteTreeSubsites extends DataObjectDecorator {
 				'has_one' => array(
 					'Subsite' => 'Subsite', // The subsite that this page belongs to
 					'MasterPage' => 'SiteTree', // Optional; the page that is the content master
-					'CustomContent' => 'Boolean', // On a page that has a content master, set this to true to 
 				),
 			);
 		}
