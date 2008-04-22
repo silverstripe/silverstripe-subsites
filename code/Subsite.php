@@ -32,6 +32,15 @@ class Subsite extends DataObject implements PermissionProvider {
 	public static $allowed_domains = array(
 	);
 	
+	static function set_allowed_domains($domain){
+		if(is_array($domain)){
+			foreach($domain as $do){
+				Subsite::set_allowed_domains($do);
+			}
+		}else{
+			self::$allowed_domains[] = $domain;
+		}
+	}
 	/**
 	 * Return the base domain for this set of subsites.
 	 * You can set this by setting Subsite::$Base_domain, otherwise it defaults to HTTP_HOST
