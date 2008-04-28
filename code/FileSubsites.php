@@ -30,7 +30,7 @@ class FileSubsites extends DataObjectDecorator {
 	function updateCMSFields(FieldSet &$fields) {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-			$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $sites->toDropdownMap('ID', 'Title', "(Public)")));
+			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $sites->toDropdownMap('ID', 'Title', "(Public)")));
 		}
 	}
 
