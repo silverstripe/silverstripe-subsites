@@ -20,6 +20,9 @@ class Subsite extends DataObject implements PermissionProvider {
 		'IsPublic' => 'Boolean'
 	);
 	
+	static $has_one = array(
+	);
+	
 	static $indexes = array(
 		'Subdomain' => true,
 		'Domain' => true
@@ -94,6 +97,8 @@ class Subsite extends DataObject implements PermissionProvider {
 /*		if($themes = SSViewer::getThemes(false))
 			$fields->addFieldsToTab('Root.Configuration', new DropdownField('Theme', 'Theme:', $themes, $this->Theme));
 */
+
+		$this->updateCMSFields($fields);
 		return $fields;
 	}
 	
