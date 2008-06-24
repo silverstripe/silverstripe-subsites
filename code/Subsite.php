@@ -27,13 +27,16 @@ class Subsite extends DataObject implements PermissionProvider {
 		'Subdomain' => true,
 		'Domain' => true
 	);
+
+	static $defaults = array(
+		'IsPublic' => 1,
+	);
 	
 	static $base_domain, $default_subdomain;
-	
 	static $cached_subsite = null;
 	
-	public static $allowed_domains = array(
-	);
+	public static $allowed_domains = array();
+	protected static $allowed_themes = array();	
 	
 	static function set_allowed_domains($domain){
 		if(is_array($domain)){
@@ -44,6 +47,11 @@ class Subsite extends DataObject implements PermissionProvider {
 			self::$allowed_domains[] = $domain;
 		}
 	}
+	
+	static function set_allowed_themes($themes) {
+		self::$allowed_themes = $themes;
+	}
+	
 	/**
 	 * Return the base domain for this set of subsites.
 	 * You can set this by setting Subsite::$Base_domain, otherwise it defaults to HTTP_HOST
@@ -86,7 +94,9 @@ class Subsite extends DataObject implements PermissionProvider {
 					),
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
 					new CheckboxField('DefaultSite', 'Use this subsite as the default site', $this->DefaultSite),
-					new CheckboxField('IsPublic', 'Can access this subsite publicly?', $this->IsPublic)
+					new CheckboxField('IsPublic', 'Can access this subsite publicly?', $this->IsPublic),
+
+					new DropdownField('Theme','Theme', ArrayLib::valuekey($this->stat('allowed_themes')), $this->Theme)
 				)
 			),
 			new HiddenField('ID', '', $this->ID),
