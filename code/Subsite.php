@@ -82,7 +82,7 @@ class Subsite extends DataObject implements PermissionProvider {
 					new TextField('Title', 'Name of subsite:', $this->Title),
 					new FieldGroup('URL',
 						new TextField('Subdomain',"", $this->Subdomain),
-						new DropdownField('Domain','.', Array::valuekey($this->stat('allowed_domains')), $this->Domain)
+						new DropdownField('Domain','.', ArrayLib::valuekey($this->stat('allowed_domains')), $this->Domain)
 					),
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
 					new CheckboxField('DefaultSite', 'Use this subsite as the default site', $this->DefaultSite),
