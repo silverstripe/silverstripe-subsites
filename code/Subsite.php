@@ -108,7 +108,7 @@ class Subsite extends DataObject implements PermissionProvider {
 			$fields->addFieldsToTab('Root.Configuration', new DropdownField('Theme', 'Theme:', $themes, $this->Theme));
 */
 
-		$this->updateCMSFields($fields);
+		$this->extend('updateCMSFields', $fields);
 		return $fields;
 	}
 	
