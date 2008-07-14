@@ -32,6 +32,11 @@ class FileSubsites extends DataObjectDecorator {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
 			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $sites->toDropdownMap('ID', 'Title', "(Public)")));
 		}
+		
+		if($this->owner->SubsiteID == 0&&!Permission::check('EDIT_PERMISSIONS')){
+				$fields->removeFieldFromTab("Root", "Upload");
+				$fields->transform(new ReadonlyTransformation());
+		}
 	}
 
 	/**
@@ -55,18 +60,21 @@ class FileSubsites extends DataObjectDecorator {
 	}
 	
 	function augmentBeforeWrite() {
-		if(!is_numeric($this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
+		if(!$this->owner->ID && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
 	}
 	
 	function alternateCanEdit() {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
-		$oldSubsiteID = Session::get('SubsiteID');
+		$subsiteID = Session::get('SubsiteID');
 
-		Session::set('SubsiteID', $this->owner->SubsiteID);
-		$access = Permission::check('CMS_ACCESS_SecurityAdmin');
-		Session::set('SubsiteID', $oldSubsiteID);
+		if($subsiteID&&$subsiteID == $this->owner->SubsiteID) return true;
+		else {
+			Session::set('SubsiteID', $this->owner->SubsiteID);
+			$access = Permission::check('CMS_ACCESS_AssetAdmin');
+			Session::set('SubsiteID', $subsiteID);
 		
-		return $access;
+			return $access;
+		}
 	}	
 }
 
