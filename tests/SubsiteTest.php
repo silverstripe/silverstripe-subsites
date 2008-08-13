@@ -71,5 +71,11 @@ class SubsiteTest extends SapphireTest {
 	 * Edit a page without actually making any changes and verify that CustomContent isn't set.
 	 */
 	
+	function tearDown() {
+		// Return to Subsite #0
+		Subsite::changeSubsite(0);
+		parent::tearDown();
+	}
+	
 
 }
