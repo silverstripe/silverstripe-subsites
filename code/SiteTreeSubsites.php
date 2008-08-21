@@ -65,9 +65,11 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		if(!is_numeric($this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
 
 		// If the content has been changed, then the page should be marked as 'custom content'
-		if(!$this->owner->CustomContent) {
+		if($this->owner->ID && $this->owner->MasterPageID && !$this->owner->CustomContent) {
+			$changed = $this->owner->getChangedFields();
+
 			foreach(self::$template_fields as $field) {
-				if($this->owner->original[$field] != $this->owner->record[$field]) {
+				if(isset($changed[$field]) && $changed[$field]) {
 					$this->owner->CustomContent = true;
 					FormResponse::add("$('Form_EditForm_CustomContent').checked = true;");
 					break;
