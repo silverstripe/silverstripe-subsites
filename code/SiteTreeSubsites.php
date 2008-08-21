@@ -61,11 +61,21 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		}
 	}
 	
+	/**
+	 * Call this method before writing; the next write carried out by the system won't
+	 * set the CustomContent value
+	 */
+	function nextWriteDoesntCustomise() {
+		$this->nextWriteDoesntCustomise = true;
+	}
+	
+	protected $nextWriteDoesntCustomise = false;
+	
 	function augmentBeforeWrite() {
 		if(!is_numeric($this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
 
 		// If the content has been changed, then the page should be marked as 'custom content'
-		if($this->owner->ID && $this->owner->MasterPageID && !$this->owner->CustomContent) {
+		if(!$this->nextWriteDoesntCustomise && $this->owner->ID && $this->owner->MasterPageID && !$this->owner->CustomContent) {
 			$changed = $this->owner->getChangedFields();
 
 			foreach(self::$template_fields as $field) {
@@ -76,6 +86,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 				}
 			}
 		}
+		
+		$this->nextWriteDoesntCustomise = false;
 	}
 
 	function updateCMSFields(&$fields) {
