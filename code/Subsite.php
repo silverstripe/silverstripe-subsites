@@ -356,6 +356,13 @@ SQL;
 		self::$disable_subsite_filter = false;
 		return $result;
 	}
+	
+	/**
+	 * Disable the sub-site filtering; queries will select from all subsites
+	 */	
+	static function disable_subsite_filter($disabled = true) {
+		self::$disable_subsite_filter = $disabled;
+	}
 }
 
 /**
