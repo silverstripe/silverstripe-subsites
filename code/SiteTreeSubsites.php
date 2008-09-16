@@ -81,7 +81,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 			foreach(self::$template_fields as $field) {
 				if(isset($changed[$field]) && $changed[$field]) {
 					$this->owner->CustomContent = true;
-					FormResponse::add("$('Form_EditForm_CustomContent').checked = true;");
+					FormResponse::add("if($('Form_EditForm_CustomContent')) $('Form_EditForm_CustomContent').checked = true;");
 					break;
 				}
 			}
