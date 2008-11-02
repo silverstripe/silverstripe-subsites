@@ -5,6 +5,12 @@ class SubsiteAdmin extends GenericDataAdmin {
 	static $subitem_class = "Subsite";
 	static $data_type = 'Subsite';
 	
+	static $url_segment = 'subsites';
+	
+	static $url_rule = '/$Action/$ID/$OtherID';
+	
+	static $menu_title = 'Subsites';
+	
 	function performSearch() {
 		
 	}
