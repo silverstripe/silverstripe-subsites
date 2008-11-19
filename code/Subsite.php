@@ -53,6 +53,24 @@ class Subsite extends DataObject implements PermissionProvider {
 	}
 	
 	/**
+	 * Return the themes that can be used with this subsite, as an array of themecode => description
+	 */
+	function allowedThemes() {
+		if($themes = $this->stat('allowed_themes')) {
+			return ArrayLib::valuekey($themes);
+		} else {
+			$themes = array();
+			foreach(scandir('../themes/') as $theme) {
+				if($theme[0] == '.') continue;
+				$theme = strtok($theme,'_');
+				$themes[$theme] = $theme;
+			}
+			ksort($themes);
+			return $themes;
+		}
+	}
+	
+	/**
 	 * Return the base domain for this set of subsites.
 	 * You can set this by setting Subsite::$Base_domain, otherwise it defaults to HTTP_HOST
 	 */
@@ -96,7 +114,7 @@ class Subsite extends DataObject implements PermissionProvider {
 					new CheckboxField('DefaultSite', 'Use this subsite as the default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Can access this subsite publicly?', $this->IsPublic),
 
-					new DropdownField('Theme','Theme', ArrayLib::valuekey($this->stat('allowed_themes')), $this->Theme)
+					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme)
 				)
 			),
 			new HiddenField('ID', '', $this->ID),

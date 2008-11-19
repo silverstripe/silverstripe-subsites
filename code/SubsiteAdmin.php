@@ -62,10 +62,9 @@ class SubsiteAdmin extends GenericDataAdmin {
 	function AddSubsiteForm() {
 		$templates = $this->getIntranetTemplates();
 	
+		$templateArray = array('' => "(No template)");
 		if($templates) {
-			$templateArray = $templates->map('ID', 'Title');
-		} else {
-			$templateArray = array();
+			$templateArray = $templateArray + $templates->map('ID', 'Title');
 		}
 		
 		return new Form($this, 'AddSubsiteForm', new FieldSet(
@@ -104,19 +103,32 @@ class SubsiteAdmin extends GenericDataAdmin {
 			}
 			*/
 
-			$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
+			if(isset($data['TemplateID']) && $data['TemplateID']) {
+				$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
+			} else {
+				$template = null;
+			}
 		
 			// Create intranet from existing template
 			switch($data['Type']) {
 				case 'template':
-					$intranet = $template->duplicate();
+					if($template) $intranet = $template->duplicate();
+					else $intranet = new Subsite_Template();
+					
 					$intranet->Title = $data['Name'];
 					$intranet->write();
 					break;
 
-				default:
 				case 'subsite':
-					$intranet = $template->createInstance($data['Name'], $data['Subdomain']);		
+				default:
+					if($template) $intranet = $template->createInstance($data['Name'], $data['Subdomain']);		
+					else {
+						$intranet = new Subsite();
+						$intranet->Title = $data['Name'];
+						$intranet->Subdomain = $data['Subdomain'];
+						$intranet->write();
+					}
+					
 					break;
 			}
 		

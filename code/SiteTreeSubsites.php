@@ -128,6 +128,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	static function contentcontrollerInit($controller) {
 		// Need to set the SubsiteID to null incase we've been in the CMS
 		Session::set('SubsiteID', null);
+		$subsite = Subsite::currentSubsite();
+		if($subsite && $subsite->Theme) SSViewer::set_theme(Subsite::currentSubsite()->Theme);
 	}
 	
 	/**
