@@ -54,3 +54,7 @@
 	width: 100px;
 	margin-left: -100px;
 }
+
+body.SubsiteAdmin .right form #URL .fieldgroup * {
+	font-size: 11px;
+}
