@@ -2,10 +2,12 @@ Subsite_Template:
    main:
       Title: Template
       Domain: test.com
-   other:
-      Title: Other Template
-      Domain: other.com
-   
+   subsite1:
+      Title: Subsite1 Template
+      Subdomain: subsite1
+   subsite2:
+      Title: Subsite2 Template
+      Subdomain: subsite2
 Page:
    home:
       Title: Home
@@ -20,26 +22,40 @@ Page:
    contact:
       Title: Contact Us
       SubsiteID: =>Subsite_Template.main
-
-# Pages from the other template - added here as a control group :-)
-   home2:
-      Title: Home
-      SubsiteID: =>Subsite_Template.other
-   contact2:
-      Title: Contact Us
-      SubsiteID: =>Subsite_Template.other
-      
-#ErrorPage:
-#   404:
-#      Title: Page not Found
-#      ErrorCode: 404
-#      SubsiteID: =>Subsite_Template.main
-
+   subsite1_home:
+      Title: Home (Subsite 1)
+      SubsiteID: =>Subsite_Template.subsite1
+   subsite1_contactus:
+      Title: Contact Us (Subsite 1)
+      SubsiteID: =>Subsite_Template.subsite1
+   subsite2_home:
+      Title: Home (Subsite 2)
+      SubsiteID: =>Subsite_Template.subsite2
+   subsite2_contactus:
+      Title: Contact Us (Subsite 2)
+      SubsiteID: =>Subsite_Template.subsite2
+Permission:
+   admin:
+      Code: ADMIN
+   accesscmsmain1:
+      Code: CMS_ACCESS_CMSMain
+   accesscmsmain2:
+      Code: CMS_ACCESS_CMSMain
 Group:
    admin:
       Title: Admin
-   
-
+      Code: admin
+      Permissions: =>Permission.admin
+   subsite1_group:
+      Title: subsite1_group
+      Code: subsite1_group
+      Subsite: =>Subsite_Template.subsite1
+      Permissions: =>Permission.accesscmsmain1
+   subsite2_group:
+      Title: subsite2_group
+      Code: subsite1_group
+      Subsite: =>Subsite_Template.subsite2
+      Permissions: =>Permission.accesscmsmain2
 Member:
    admin:
       FirstName: Admin
@@ -47,8 +63,9 @@ Member:
       Email: admin@test.com
       Password: rangi
       Groups: =>Group.admin
-   
-Permission:
-   admin:
-      Code: ADMIN
-      GroupID: =>Group.admin
+   subsite1member:
+      Email: subsite1member@test.com
+      Groups: =>Group.subsite1_group
+   subsite2member:
+      Email: subsite2member@test.com
+      Groups: =>Group.subsite2_group

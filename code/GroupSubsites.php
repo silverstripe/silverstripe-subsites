@@ -34,6 +34,12 @@ class GroupSubsites extends DataObjectDecorator {
 
 	}
 	
+	/**
+	 * If this group belongs to a subsite,
+	 * append the subsites title to the group title
+	 * to make it easy to distinguish in the tree-view
+	 * of the security admin interface.
+	 */
     function alternateTreeTitle() {
         if($this->owner->SubsiteID == 0) {
 			return $this->owner->Title;

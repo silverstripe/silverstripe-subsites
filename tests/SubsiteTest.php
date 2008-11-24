@@ -47,6 +47,8 @@ class SubsiteTest extends SapphireTest {
 		$siteStaff = DataObject::get_one('SiteTree', "URLSegment = '" . Convert::raw2sql($tmplStaff->URLSegment) . "'");
 		$this->assertEquals($siteStaff->MasterPageID, $tmplStaff->ID);
 		
+		Subsite::changeSubsite(0);
+		
 	}
 	
 	/**
@@ -71,11 +73,41 @@ class SubsiteTest extends SapphireTest {
 	 * Edit a page without actually making any changes and verify that CustomContent isn't set.
 	 */
 	
-	function tearDown() {
-		// Return to Subsite #0
+	function testCanEditSiteTree() {
+		$admin = $this->objFromFixture('Member', 'admin');
+		$subsite1member = $this->objFromFixture('Member', 'subsite1member');
+		$subsite2member = $this->objFromFixture('Member', 'subsite2member');
+		$mainpage = $this->objFromFixture('Page', 'home');
+		$subsite1page = $this->objFromFixture('Page', 'subsite1_home');
+		$subsite2page = $this->objFromFixture('Page', 'subsite2_home');
+		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
+		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
+
+		$this->assertTrue(
+			$subsite1page->canEdit($admin),
+			'Administrators can edit all subsites'
+		);
+
+		// @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
+		Subsite::changeSubsite($subsite1);
+		$this->assertTrue(
+			$subsite1page->canEdit($subsite1member),
+			'Members can edit pages on a subsite if they are in a group belonging to this subsite'
+		);
+
+		$this->assertFalse(
+			$subsite1page->canEdit($subsite2member),
+			'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
+		);
+		
+		// @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
+		Subsite::changeSubsite($subsite2);
+		$this->assertFalse(
+			$mainpage->canEdit($subsite2member),
+			'Members cant edit pages on the main site if they are not in a group allowing this'
+		);
+		
 		Subsite::changeSubsite(0);
-		parent::tearDown();
-	}
-	
+	}	
 
 }

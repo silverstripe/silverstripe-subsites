@@ -95,6 +95,54 @@ class SiteTreeSubsites extends DataObjectDecorator {
 			$fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
 		}
 	}
+	
+	/**
+	 * Only allow editing of a page if the member satisfies one of the following conditions:
+	 * - Is in a group which has access to the subsite this page belongs to
+	 * - Is in a group with edit permissions on the "main site"
+	 * 
+	 * @return boolean
+	 */
+	function canEdit($member = null) {
+		if(!$member) $member = Member::currentUser();
+		
+		$allowedSubsites = Subsite::getSubsitesForMember($member);
+		if(
+			!$allowedSubsites 
+			|| !in_array($this->owner->SubsiteID, $allowedSubsites->column('ID'))
+		) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * @return boolean
+	 */
+	function canDelete($member = null) {
+		if(!$member) $member = Member::currentUser();
+		
+		return $this->canEdit($member);
+	}
+	
+	/**
+	 * @return boolean
+	 */
+	function canAddChildren($member = null) {
+		if(!$member) $member = Member::currentUser();
+		
+		return $this->canEdit($member);
+	}
+	
+	/**
+	 * @return boolean
+	 */
+	function canPublish($member = null) {
+		if(!$member) $member = Member::currentUser();
+		
+		return $this->canEdit($member);
+	}
 
 	/**
 	 * Create a duplicate of this page and save it to another subsite
