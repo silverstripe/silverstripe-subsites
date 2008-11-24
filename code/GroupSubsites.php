@@ -17,6 +17,23 @@ class GroupSubsites extends DataObjectDecorator {
 		}
 	}
 	
+	function updateCMSFields(&$fields) {
+		$subsites = DataObject::get('Subsite');
+		$tab = $fields->findOrMakeTab(
+			'Root.Subsites',
+			_t('GroupSubsites.SECURITYTABTITLE', 'Subsites')
+		);
+		$tab->push(new DropdownField(
+			'SubsiteID', 
+			_t('GroupSubsites.SECURITYACCESS', 'Limit CMS access to subsites', PR_MEDIUM, 'Dropdown listing existing subsites which this group has access to'),
+			($subsites) ? $subsites->toDropDownMap() : null,
+			null,
+			null,
+			'(' . _t('GroupSubsites.SECURITYACCESS_ALL', 'all', PR_MEDIUM, 'Default for dropdown selection: Group has access to all existingsubsites') . ')'
+		));
+
+	}
+	
     function alternateTreeTitle() {
         if($this->owner->SubsiteID == 0) return " * " . $this->owner->Title;
         else return $this->owner->Title;
