@@ -220,8 +220,8 @@ JS;
 	 * @param boolean $cache
 	 * @return Subsite
 	 */
-	static function currentSubsite() {
-		if(!self::$cached_subsite) self::$cached_subsite = DataObject::get_by_id('Subsite', self::currentSubsiteID());
+	static function currentSubsite($cache = true) {
+		if(!self::$cached_subsite || !$cache) self::$cached_subsite = DataObject::get_by_id('Subsite', self::currentSubsiteID());
 		return self::$cached_subsite;
 	}
 	
@@ -231,12 +231,13 @@ JS;
 	 * directly from ModelAsController::getNestedController. Only gets Subsite instances which have their
 	 * {@link IsPublic} flag set to TRUE.
 	 * 
+	 * @param boolean $cache
 	 * @return int ID of the current subsite instance
 	 */
-	static function currentSubsiteID() {
+	static function currentSubsiteID($cache = true) {
 		$id = Session::get('SubsiteID');
 	
-		if($id === null) Session::set('SubsiteID', $id = self::getSubsiteIDForDomain());
+		if($id === null) Session::set('SubsiteID', $id = self::getSubsiteIDForDomain($cache));
 		
 		return (int)$id;
 	}
