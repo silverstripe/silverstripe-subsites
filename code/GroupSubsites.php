@@ -35,8 +35,11 @@ class GroupSubsites extends DataObjectDecorator {
 	}
 	
     function alternateTreeTitle() {
-        if($this->owner->SubsiteID == 0) return " * " . $this->owner->Title;
-        else return $this->owner->Title;
+        if($this->owner->SubsiteID == 0) {
+			return $this->owner->Title;
+		} else {
+			return $this->owner->Title . ' <i>(' . $this->owner->Subsite()->Title . ')</i>';
+		}
     }
     
 	/**
