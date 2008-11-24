@@ -255,29 +255,16 @@ JS;
 	}
 	
 	/**
-	 * Switch to another subsite
-	 * @param $subsite Either the ID of the subsite, or the subsite object itself
+	 * Switch to another subsite.
+	 * 
+	 * @param int|Subsite $subsite Either the ID of the subsite, or the subsite object itself
 	 */
 	static function changeSubsite($subsite) {
-		
-		// Debug::backtrace();
-		
-		if(!$subsite) {
-			Session::set('SubsiteID', 0);
-			return;
-		}	
+		if(is_object($subsite)) $subsiteID = $subsite->ID;
+		elseif(is_numeric($subsite)) $subsiteID = $subsite;
+		else user_error('Subsite::changeSubsite(): Wrong format', E_USER_ERROR);
 	
-		if(is_object($subsite))
-			$subsite = $subsite->ID;
-	
-		Session::set('SubsiteID', $subsite);
-	
-		/*if(!is_object($subsite) && is_numeric($subsite))
-			$subsite = DataObject::get_by_id('Subsite', $subsite);
-	
-		if($subsite)
-			Session::set('SubsiteID', $subsite->ID);*/
-	
+		Session::set('SubsiteID', $subsiteID);
 	}
 	
 	/**
@@ -329,51 +316,59 @@ JS;
 		
 		$SQL_permissionCodes = join("','", $SQL_permissionCodes);
 		
-		$join = <<<SQL
-LEFT JOIN `Group_Members` ON `Member`.`ID` = `Group_Members`.`MemberID`
-LEFT JOIN `Group` ON `Group`.`ID` = `Group_Members`.`GroupID`
-LEFT JOIN `Permission` ON `Permission`.`GroupID` = `Group`.`ID`
-SQL;
-		return DataObject::get('Member', "`Group`.`SubsiteID` = $this->ID AND `Permission`.`Code` IN ('$SQL_permissionCodes')", '', $join);
+		return DataObject::get(
+			'Member', 
+			"`Group`.`SubsiteID` = $this->ID AND `Permission`.`Code` IN ('$SQL_permissionCodes')", 
+			'', 
+			"LEFT JOIN `Group_Members` ON `Member`.`ID` = `Group_Members`.`MemberID`
+			LEFT JOIN `Group` ON `Group`.`ID` = `Group_Members`.`GroupID`
+			LEFT JOIN `Permission` ON `Permission`.`GroupID` = `Group`.`ID`"
+		);
 	}
 	
-	static function getSubsitesForMember( $member = null, $permissionCodes = array('ADMIN')) {
-		if(!is_array($permissionCodes))
-			user_error('Permissions must be passed to Subsite::getSubsitesForMember as an array', E_USER_ERROR);
-		
-		if(!$member)
-			$member = Member::currentMember();		
+	/**
+	 * Get all subsites.
+	 * 
+	 * @return DataObjectSet Subsite instances
+	 */
+	static function getSubsitesForMember( $member = null) {
+		if(!$member) $member = Member::currentMember();		
 
-		$memberID = (int)$member->ID;
-
-		$SQLa_permissionCodes = Convert::raw2sql($permissionCodes);
-		
-		$SQLa_permissionCodes = join("','", $SQLa_permissionCodes);
-		
-		if(self::hasMainSitePermission($member, $permissionCodes))
+		if(self::hasMainSitePermission($member)) {
 			return DataObject::get('Subsite');
-		else
-			return DataObject::get('Subsite', "`MemberID` = {$memberID}" . ($permissionCodes ? " AND `Permission`.`Code` IN ('$SQLa_permissionCodes')" : ''), '', "LEFT JOIN `Group` ON `Subsite`.`ID` = `SubsiteID` LEFT JOIN `Permission` ON `Group`.`ID` = `Permission`.`GroupID` LEFT JOIN `Group_Members` ON `Group`.`ID` = `Group_Members`.`GroupID`");
+		} else {
+			return DataObject::get(
+				'Subsite', 
+				"`MemberID` = {$member->ID}", 
+				'', 
+				"LEFT JOIN `Group` ON `Subsite`.`ID` = `SubsiteID` 
+				LEFT JOIN `Permission` ON `Group`.`ID` = `Permission`.`GroupID` 
+				LEFT JOIN `Group_Members` ON `Group`.`ID` = `Group_Members`.`GroupID`"
+			);
+		}
 	}
 	
 	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
-
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
 		if(!$member) $member = Member::currentMember();
-			
-		if(Permission::checkMember($member, "ADMIN")) return true; 
+		
+		if(Permission::checkMember($member, "ADMIN")) return true;
 
 		$SQLa_perm = Convert::raw2sql($permissionCodes);
 		$SQL_perms = join("','", $SQLa_perm);		
 		$memberID = (int)$member->ID;
-
-		return DB::query("SELECT COUNT(`Permission`.`ID`) FROM `Permission`  
-			INNER JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` AND `Group`.`SubsiteID` = 0 
-			INNER JOIN `Group_Members` USING(`GroupID`)  
-			WHERE `Permission`.`Code` IN ('$SQL_perms') AND `MemberID` = {$memberID}")->value();
-	}
+		
+		DB::query("
+			SELECT COUNT(`Permission`.`ID`) 
+			FROM `Permission`   
+			INNER JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` AND `Group`.`SubsiteID` = 0  
+			INNER JOIN `Group_Members` USING(`GroupID`)   
+			WHERE 
+			`Permission`.`Code` IN ('$SQL_perms') 
+			AND `MemberID` = {$memberID}
+		")->value();	}
 	
 	function createInitialRecords() {
 		
@@ -431,10 +426,16 @@ SQL;
 		
 		if(!$member) return new DataObjectSet();
 
-		$subsites = DataObject::get('Subsite',
-			"`Group_Members`.`MemberID` = $member->ID AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN') AND Subdomain IS NOT NULL AND `Subsite`.Title != ''", '',
-			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0) LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
-				LEFT JOIN `Permission` ON `Group`.`ID`=`Permission`.`GroupID`");
+		$subsites = DataObject::get(
+			'Subsite',
+			"`Group_Members`.`MemberID` = $member->ID 
+			AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN') 
+			AND Subdomain IS NOT NULL AND `Subsite`.Title != ''", 
+			'',
+			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0) 
+			LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
+			LEFT JOIN `Permission` ON `Group`.`ID`=`Permission`.`GroupID`"
+		);
 		
 		return $subsites;
 	}
