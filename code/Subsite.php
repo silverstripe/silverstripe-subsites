@@ -361,14 +361,18 @@ SQL;
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
-		if(!$member)
-			$member = Member::currentMember();		
+		if(!$member) $member = Member::currentMember();
+			
+		if(Permission::checkMember($member, "ADMIN")) return true; 
 
 		$SQLa_perm = Convert::raw2sql($permissionCodes);
 		$SQL_perms = join("','", $SQLa_perm);		
 		$memberID = (int)$member->ID;
-    // `SubsiteID` = 0 AND 
-		return DB::query("SELECT COUNT(`Permission`.`ID`) FROM `Permission` LEFT JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` LEFT JOIN `Group_Members` USING(`GroupID`) WHERE `Permission`.`Code` IN ('$SQL_perms') AND `MemberID` = {$memberID}")->value();
+
+		return DB::query("SELECT COUNT(`Permission`.`ID`) FROM `Permission`  
+			INNER JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` AND `Group`.`SubsiteID` = 0 
+			INNER JOIN `Group_Members` USING(`GroupID`)  
+			WHERE `Permission`.`Code` IN ('$SQL_perms') AND `MemberID` = {$memberID}")->value();
 	}
 	
 	function createInitialRecords() {
