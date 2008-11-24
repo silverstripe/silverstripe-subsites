@@ -1,53 +1,54 @@
 Subsite_Template:
-    main:
-        Title: Template
-        Domain: test.com
-    other:
-        Title: Other Template
-        Domain: other.com
-    
+   main:
+      Title: Template
+      Domain: test.com
+   other:
+      Title: Other Template
+      Domain: other.com
+   
 Page:
-    home:
-        Title: Home
-        SubsiteID: =>Subsite_Template.main
-    about:
-        Title: About
-        SubsiteID: =>Subsite_Template.main
-    staff:
-        Title: Staff
-        ParentID: =>Page.about
-        SubsiteID: =>Subsite_Template.main
-    contact:
-        Title: Contact Us
-        SubsiteID: =>Subsite_Template.main
+   home:
+      Title: Home
+      SubsiteID: =>Subsite_Template.main
+   about:
+      Title: About
+      SubsiteID: =>Subsite_Template.main
+   staff:
+      Title: Staff
+      ParentID: =>Page.about
+      SubsiteID: =>Subsite_Template.main
+   contact:
+      Title: Contact Us
+      SubsiteID: =>Subsite_Template.main
 
 # Pages from the other template - added here as a control group :-)
-    home2:
-        Title: Home
-        SubsiteID: =>Subsite_Template.other
-    contact2:
-        Title: Contact Us
-        SubsiteID: =>Subsite_Template.other
-        
+   home2:
+      Title: Home
+      SubsiteID: =>Subsite_Template.other
+   contact2:
+      Title: Contact Us
+      SubsiteID: =>Subsite_Template.other
+      
 #ErrorPage:
-#    404:
-#        Title: Page not Found
-#        ErrorCode: 404
-#        SubsiteID: =>Subsite_Template.main
+#   404:
+#      Title: Page not Found
+#      ErrorCode: 404
+#      SubsiteID: =>Subsite_Template.main
 
 Group:
-    admin:
-        Title: Admin
-        
+   admin:
+      Title: Admin
+   
+
 Member:
-    admin:
-        FirstName: Admin
-        Surname: User
-        Email: admin@test.com
-        Password: rangi
-        Groups: =>Group.admin
-    
+   admin:
+      FirstName: Admin
+      Surname: User
+      Email: admin@test.com
+      Password: rangi
+      Groups: =>Group.admin
+   
 Permission:
-    admin:
-        Code: ADMIN
-        GroupID: =>Group.admin
+   admin:
+      Code: ADMIN
+      GroupID: =>Group.admin
