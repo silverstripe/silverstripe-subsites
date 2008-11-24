@@ -1,7 +1,8 @@
 <?php
-
 /**
  * Decorator designed to add subsites support to LeftAndMain
+ * 
+ * @package subsites
  */
 class LeftAndMainSubsites extends Extension {
 	static $allowed_actions = array(

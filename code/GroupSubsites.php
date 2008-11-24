@@ -1,7 +1,8 @@
 <?php
-
 /**
  * Extension for the Group object to add subsites support
+ * 
+ * @package subsites
  */
 class GroupSubsites extends DataObjectDecorator {
 	

@@ -1,7 +1,8 @@
 <?php
-
 /**
  * Extension for the File object to add subsites support
+ * 
+ * @package subsites
  */
 class FileSubsites extends DataObjectDecorator {
 	function extraDBFields() {

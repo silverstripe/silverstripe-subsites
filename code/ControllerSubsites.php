@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @package subsites
+ */
 class ControllerSubsites extends Extension {
 	function controllerAugmentInit(){
 		if($subsite = Subsite::currentSubsite()){

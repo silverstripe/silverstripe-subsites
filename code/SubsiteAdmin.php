@@ -1,4 +1,9 @@
 <?php
+/**
+ * Admin interface to manage and create {@link Subsite} instances.
+ * 
+ * @package subsites
+ */
 class SubsiteAdmin extends GenericDataAdmin {
 	
 	static $tree_class = "Subsite";

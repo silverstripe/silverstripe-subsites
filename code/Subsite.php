@@ -1,13 +1,24 @@
 <?php
 /**
  * A dynamically created subdomain. SiteTree objects can now belong to a subdomain
+ * 
+ * @package subsites
  */
 class Subsite extends DataObject implements PermissionProvider {
 
+	/**
+	 * @var boolean $disable_subsite_filter If enabled, bypasses the query decoration
+	 * to limit DataObject::get*() calls to a specific subsite. Useful for debugging.
+	 */
 	static $disable_subsite_filter = false;
 	
 	static $default_sort = 'Title';
 	
+	/**
+	 * @var boolean $use_domain Checks for valid domain in addition to subdomain
+	 * when searching for a matching page with {@link getSubsiteIDForDomain()}.
+	 * By default, only the subdomain has to match.
+	 */
 	static $use_domain = false;
 	
 	static $db = array(
@@ -17,6 +28,8 @@ class Subsite extends DataObject implements PermissionProvider {
 		'DefaultSite' => 'Boolean',
 		'Theme' => 'Varchar',
 		'Domain' => 'Varchar',
+		// Used to hide unfinished/private subsites from public view.
+		// If unset, will default to 
 		'IsPublic' => 'Boolean'
 	);
 	
@@ -32,19 +45,58 @@ class Subsite extends DataObject implements PermissionProvider {
 		'IsPublic' => 1,
 	);
 	
-	static $base_domain, $default_subdomain;
-	static $cached_subsite = null;
+	/**
+	 * @var string $base_domain If {@link Domain} is not set for this subsite instance,
+	 * default to this domain (without subdomain or protocol prefix).
+	 */
+	static $base_domain;
 	
+	/**
+	 * @var string $default_subdomain If {@link Subdomain} is not set for this subsite instance,
+	 * default to this domain (without domain or protocol prefix).
+	 */
+	static $default_subdomain;
+
+	/**
+	 * @var Subsite $cached_subsite Internal cache used by {@link currentSubsite()}.
+	 */
+	protected static $cached_subsite = null;
+	
+	/**
+	 * @var array $allowed_domains Numeric array of all domains which are selectable for (without their subdomain-parts or http:// prefix)
+	 */
 	public static $allowed_domains = array();
+	
+	/**
+	 * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
+	 * Corresponds to subfolder names within the /themes folder. By default, all themes contained in this folder
+	 * are listed.
+	 */
 	protected static $allowed_themes = array();	
 	
 	static function set_allowed_domains($domain){
 		if(is_array($domain)){
 			foreach($domain as $do){
-				Subsite::set_allowed_domains($do);
+				self::set_allowed_domains($do);
 			}
 		}else{
 			self::$allowed_domains[] = $domain;
+		}
+	}
+	
+	/**
+	 * Returns all domains (without their subdomain parts)
+	 * which are allowed to be combined to the full URL
+	 * (subdomain.domain). If no custom domains are set through
+	 * {@link set_allowed_domains()}, will fall back to the {@link base_domain()}. 
+	 * 
+	 * @return array
+	 */
+	static function allowed_domains() {
+		if(self::$allowed_domains && count(self::$allowed_domains)) {
+			return self::$allowed_domains;
+		} else {
+			return array(self::base_domain());
 		}
 	}
 	
@@ -72,7 +124,9 @@ class Subsite extends DataObject implements PermissionProvider {
 	
 	/**
 	 * Return the base domain for this set of subsites.
-	 * You can set this by setting Subsite::$Base_domain, otherwise it defaults to HTTP_HOST
+	 * You can set this by setting Subsite::$base_domain, otherwise it defaults to HTTP_HOST
+	 * 
+	 * @return string Domain name (without protocol prefix).
 	 */
 	static function base_domain() {
 		if(self::$base_domain) return self::$base_domain;
@@ -81,7 +135,9 @@ class Subsite extends DataObject implements PermissionProvider {
 	
 	/**
 	 * Return the default domain of this set of subsites.  Generally this will be the base domain,
-	 * but hyou can also set Subsite::$default_subdomain to add a default prefix to this
+	 * but you can also set Subsite::$default_subdomain to add a default prefix to this.
+	 * 
+	 * @return string Domain name (without protocol prefix).
 	 */
 	static function default_domain() {
 		if(self::$default_subdomain) return self::$default_subdomain . '.' . self::base_domain();
@@ -90,6 +146,8 @@ class Subsite extends DataObject implements PermissionProvider {
 	
 	/**
 	 * Return the domain of this site
+	 * 
+	 * @return string Domain name including subdomain (without protocol prefix)
 	 */
 	function domain() {
 		$base = $this->Domain ? $this->Domain : self::base_domain();
@@ -99,7 +157,9 @@ class Subsite extends DataObject implements PermissionProvider {
 		else return $base;
 	}
 	
-	// Show the configuration fields for each subsite
+	/**
+	 * Show the configuration fields for each subsite
+	 */
 	function getCMSFields() {
 		$fields = new FieldSet(
 			new TabSet('Root',
@@ -107,12 +167,12 @@ class Subsite extends DataObject implements PermissionProvider {
 					new HeaderField($this->getClassName() . ' configuration', 2),
 					new TextField('Title', 'Name of subsite:', $this->Title),
 					new FieldGroup('URL',
-						new TextField('Subdomain',"", $this->Subdomain),
-						new DropdownField('Domain','.', ArrayLib::valuekey($this->stat('allowed_domains')), $this->Domain)
+						new TextField('Subdomain',"Subdomain <small>(without domain or protocol)</small>", $this->Subdomain),
+						new DropdownField('Domain','.', ArrayLib::valuekey(self::allowed_domains()), $this->Domain)
 					),
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
-					new CheckboxField('DefaultSite', 'Use this subsite as the default site', $this->DefaultSite),
-					new CheckboxField('IsPublic', 'Can access this subsite publicly?', $this->IsPublic),
+					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
+					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
 
 					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme)
 				)
@@ -130,6 +190,9 @@ class Subsite extends DataObject implements PermissionProvider {
 		return $fields;
 	}
 	
+	/**
+	 * @todo getClassName is redundant, already stored as a database field?
+	 */
 	function getClassName() {
 		return $this->class;
 	}
@@ -149,6 +212,14 @@ class Subsite extends DataObject implements PermissionProvider {
 JS;
 	}
 	
+	/**
+	 * Gets the subsite currently set in the session.
+	 * 
+	 * @uses ControllerSubsites->controllerAugmentInit()
+	 * 
+	 * @param boolean $cache
+	 * @return Subsite
+	 */
 	static function currentSubsite() {
 		if(!self::$cached_subsite) self::$cached_subsite = DataObject::get_by_id('Subsite', self::currentSubsiteID());
 		return self::$cached_subsite;
@@ -157,7 +228,10 @@ JS;
 	/**
 	 * This function gets the current subsite ID from the session. It used in the backend so Ajax requests
 	 * use the correct subsite. The frontend handles subsites differently. It calls getSubsiteIDForDomain
-	 * directly from ModelAsController::getNestedController.
+	 * directly from ModelAsController::getNestedController. Only gets Subsite instances which have their
+	 * {@link IsPublic} flag set to TRUE.
+	 * 
+	 * @return int ID of the current subsite instance
 	 */
 	static function currentSubsiteID() {
 		$id = Session::get('SubsiteID');
@@ -167,6 +241,9 @@ JS;
 		return (int)$id;
 	}
 	
+	/**
+	 * @todo Object::create() shoudln't be overloaded with different parameters.
+	 */
 	static function create($name) {
 		$newSubsite = Object::create('Subsite');
 		$newSubsite->Title = $name;
@@ -209,10 +286,18 @@ JS;
 		Subsite::changeSubsite($this);
 	}
 	
+	/**
+	 * @todo Possible security issue, don't grant edit permissions to everybody.
+	 */
 	function canEdit() {
 		return true;
 	}
 	
+	/**
+	 * Get a matching subsite for the domain defined in HTTP_HOST.
+	 * 
+	 * @return int Subsite ID
+	 */
 	static function getSubsiteIDForDomain() {
 		$domainNameParts = explode('.', $_SERVER['HTTP_HOST']);
 		
@@ -220,7 +305,7 @@ JS;
 			
 		$SQL_subdomain = Convert::raw2sql(array_shift($domainNameParts));
 		$SQL_domain = join('.', Convert::raw2sql($domainNameParts));
-		// $_REQUEST['showqueries'] = 1;
+
 		$subsite = null;
 		if(self::$use_domain) {
 			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `Domain`='$SQL_domain' AND `IsPublic`=1");
@@ -385,6 +470,8 @@ SQL;
 
 /**
  * An instance of subsite that can be duplicated to provide a quick way to create new subsites.
+ * 
+ * @package subsites
  */
 class Subsite_Template extends Subsite {
 	/**
