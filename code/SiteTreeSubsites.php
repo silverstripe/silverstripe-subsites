@@ -104,8 +104,14 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 * @return boolean
 	 */
 	function canEdit($member = null) {
-		if(!$member) $member = Member::currentUser();
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
 		
+		// if no subsites exist, member can edit from a subsites perspective
+		$allSubsites = DataObject::get('Subsite');
+		if(!$allSubsites) return true;
+		
+		// otherwise get all allowed subsites, and check if the subsite
+		// this page belongs to is in the list
 		$allowedSubsites = Subsite::getSubsitesForMember($member);
 		if(
 			!$allowedSubsites 
@@ -121,7 +127,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 * @return boolean
 	 */
 	function canDelete($member = null) {
-		if(!$member) $member = Member::currentUser();
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
 		
 		return $this->canEdit($member);
 	}
@@ -130,7 +136,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 * @return boolean
 	 */
 	function canAddChildren($member = null) {
-		if(!$member) $member = Member::currentUser();
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
 		
 		return $this->canEdit($member);
 	}
@@ -139,8 +145,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 * @return boolean
 	 */
 	function canPublish($member = null) {
-		if(!$member) $member = Member::currentUser();
-		
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
+
 		return $this->canEdit($member);
 	}
 
