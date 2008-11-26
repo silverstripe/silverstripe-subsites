@@ -360,7 +360,7 @@ JS;
 		$SQL_perms = join("','", $SQLa_perm);		
 		$memberID = (int)$member->ID;
 		
-		DB::query("
+		$groupCount = DB::query("
 			SELECT COUNT(`Permission`.`ID`) 
 			FROM `Permission`   
 			INNER JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` AND `Group`.`SubsiteID` = 0  
@@ -368,7 +368,11 @@ JS;
 			WHERE 
 			`Permission`.`Code` IN ('$SQL_perms') 
 			AND `MemberID` = {$memberID}
-		")->value();	}
+		")->value();
+
+		return ($groupCount > 0);
+	
+	}
 	
 	function createInitialRecords() {
 		
