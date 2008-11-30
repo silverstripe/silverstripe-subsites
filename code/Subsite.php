@@ -353,7 +353,7 @@ JS;
 
 		if(!$member) $member = Member::currentMember();
 		
-		if(Permission::checkMember($member, "ADMIN")) return true;
+		if(Permission::checkMember($member->ID, "ADMIN")) return true;
 
 		$SQLa_perm = Convert::raw2sql($permissionCodes);
 		$SQL_perms = join("','", $SQLa_perm);		
