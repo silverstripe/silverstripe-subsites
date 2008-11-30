@@ -261,8 +261,7 @@ JS;
 	 */
 	static function changeSubsite($subsite) {
 		if(is_object($subsite)) $subsiteID = $subsite->ID;
-		elseif(is_numeric($subsite)) $subsiteID = $subsite;
-		else user_error('Subsite::changeSubsite(): Wrong format', E_USER_ERROR);
+		else $subsiteID = $subsite;
 	
 		Session::set('SubsiteID', $subsiteID);
 	}
