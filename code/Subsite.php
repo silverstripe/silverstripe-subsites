@@ -1,6 +1,7 @@
 <?php
 /**
- * A dynamically created subdomain. SiteTree objects can now belong to a subdomain
+ * A dynamically created subdomain. SiteTree objects can now belong to a subdomain.
+ * You can simulate subsite access without creating subdomains by appending ?SubsiteID=<ID> to the request.
  * 
  * @package subsites
  */
@@ -231,13 +232,24 @@ JS;
 	 * directly from ModelAsController::getNestedController. Only gets Subsite instances which have their
 	 * {@link IsPublic} flag set to TRUE.
 	 * 
+	 * You can simulate subsite access without creating subdomains by appending ?SubsiteID=<ID> to the request.
+	 * 
+	 * @todo Pass $request object from controller so we don't have to rely on $_REQUEST
+	 * 
 	 * @param boolean $cache
 	 * @return int ID of the current subsite instance
 	 */
 	static function currentSubsiteID($cache = true) {
-		$id = Session::get('SubsiteID');
+		if(isset($_REQUEST['SubsiteID'])) {
+			$id = (int)$_REQUEST['SubsiteID'];
+		} else if(Session::get('SubsiteID')) {
+			$id = Session::get('SubsiteID');
+		}
 	
-		if($id === null) Session::set('SubsiteID', $id = self::getSubsiteIDForDomain($cache));
+		if(!isset($id) || $id === NULL) {
+			$id = self::getSubsiteIDForDomain($cache);
+			Session::set('SubsiteID', $id);
+		}
 		
 		return (int)$id;
 	}
