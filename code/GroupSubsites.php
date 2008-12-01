@@ -29,7 +29,7 @@ class GroupSubsites extends DataObjectDecorator {
 			($subsites) ? $subsites->toDropDownMap() : null,
 			null,
 			null,
-			'(' . _t('GroupSubsites.SECURITYACCESS_ALL', 'all', PR_MEDIUM, 'Default for dropdown selection: Group has access to all existingsubsites') . ')'
+			''
 		));
 
 	}

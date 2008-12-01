@@ -105,6 +105,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 */
 	function canEdit($member = null) {
 		if(!$member && $member !== FALSE) $member = Member::currentUser();
+
+		if(Permission::checkMember($member, 'SUBSITE_ACCESS_ALL')) return true;
 		
 		// if no subsites exist, member can edit from a subsites perspective
 		$allSubsites = DataObject::get('Subsite');
