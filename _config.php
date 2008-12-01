@@ -24,4 +24,8 @@ if(!class_exists('CMSMenu')) {
 		'Sub-sites' => array("intranets", "admin/subsites/", 'SubsiteAdmin') 
 	)));
 }
+
+if(!class_exists('GenericDataAdmin')) {
+	user_error('Please install the module "genericdataadmin" to use subsites', E_USER_ERROR);
+}
 ?>
