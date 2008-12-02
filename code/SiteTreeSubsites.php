@@ -94,6 +94,18 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		if($this->owner->MasterPageID) {
 			$fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
 		}
+		
+		// replace readonly link prefix
+		$subsite = $this->owner->Subsite();
+		if($subsite && $subsite->ID) {
+			$baseUrl = 'http://' . $subsite->domain() . '/';
+			$fields->removeByName('BaseUrlLabel');
+			$fields->addFieldToTab(
+				'Root.Content.Metadata',
+				new LabelField('BaseUrlLabel',$baseUrl),
+				'URLSegment'
+			);
+		}
 	}
 	
 	/**
