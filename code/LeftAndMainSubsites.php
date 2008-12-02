@@ -13,6 +13,7 @@ class LeftAndMainSubsites extends Extension {
 	function augmentInit() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
+		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
 	}
 	
 	/**
@@ -76,11 +77,14 @@ class LeftAndMainSubsites extends Extension {
 	public function SubsiteList() {
 		$list = $this->Subsites();
 		
+		$requestSubsiteID = Controller::curr()->getRequest()->getVar('SubsiteID');
+		$currentSubsiteID = ($requestSubsiteID) ? $requestSubsiteID : Session::get('SubsiteID');
+		
 		if($list->Count() > 1) {
 			$output = '<select id="SubsitesSelect">';
 		
 			foreach($list as $subsite) {
-				$selected = $subsite->ID == Session::get('SubsiteID') ? ' selected="selected"' : '';
+				$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
 		
 				$output .= "\n<option value=\"{$subsite->ID}\"$selected>{$subsite->Title}</option>";
 			}
@@ -103,7 +107,7 @@ class LeftAndMainSubsites extends Extension {
 	 */
 	public function alternateAccessCheck() {
 		$className = $this->owner->class;
-		
+
 		if($result = Permission::check("CMS_ACCESS_$className")) {
 			return $result;
 		} else {
