@@ -65,8 +65,23 @@ class LeftAndMainSubsites extends Extension {
 		$siteList = new DataObjectSet();
 		$subsites = Subsite::accessible_sites('CMS_ACCESS_' . $this->owner->class);
 
-		if(Subsite::hasMainSitePermission(Member::currentUser(), array('CMS_ACCESS_' . $this->owner->class, 'ADMIN')))
-			$siteList->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
+		
+		$mainSiteTitle = null;
+		switch($this->owner->class) {
+			case "AssetAdmin":
+				$mainSiteTitle = "Shared files & images"; break;
+			case "SecurityAdmin":
+				$mainSiteTitle = "Groups accessing all sites"; break;
+			case "CMSMain":
+				// If there's a default site then main site has no meaning
+				if(!DataObject::get_one('Subsite',"`DefaultSite` AND `IsPublic`")) {
+					$mainSiteTitle = "Main site";
+				}
+				break;
+		}
+
+		if($mainSiteTitle && Subsite::hasMainSitePermission(Member::currentUser(), array('CMS_ACCESS_' . $this->owner->class, 'ADMIN')))
+			$siteList->push(new ArrayData(array('Title' => $mainSiteTitle, 'ID' => 0)));
 		
 		if($subsites)
 			$siteList->merge($subsites);
@@ -77,7 +92,9 @@ class LeftAndMainSubsites extends Extension {
 	public function SubsiteList() {
 		$list = $this->Subsites();
 		
-		$requestSubsiteID = Controller::curr()->getRequest()->getVar('SubsiteID');
+		if(Controller::curr()->hasMethod('getRequest')) $requestSubsiteID = Controller::curr()->getRequest()->getVar('SubsiteID');
+		else $requestSubsiteID = isset($_REQUEST['SubsiteID']) ? $_REQUEST['SubsiteID'] : null;
+		
 		$currentSubsiteID = ($requestSubsiteID) ? $requestSubsiteID : Session::get('SubsiteID');
 		
 		if($list->Count() > 1) {

@@ -157,6 +157,10 @@ class Subsite extends DataObject implements PermissionProvider {
 		if($sub) return "$sub.$base";
 		else return $base;
 	}
+
+	function absoluteBaseURL() {
+		return "http://" . $this->domain() . Director::baseURL();
+	}
 	
 	/**
 	 * Show the configuration fields for each subsite
@@ -310,7 +314,10 @@ JS;
 			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `Domain`='$SQL_domain' AND `IsPublic`=1");
 		}
 		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `IsPublic`=1");
+			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `IsPublic`");
+		}
+		if(!$subsite) {
+			$subsite = DataObject::get_one('Subsite',"`DefaultSite` AND `IsPublic`");
 		}
 		
 		if($subsite) {

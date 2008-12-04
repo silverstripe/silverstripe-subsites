@@ -4,7 +4,10 @@ SubsitesTreeDropdownField.prototype = {
 	//subsiteID: null,
 	
 	ajaxGetTree: function(after) {
-		var ajaxURL = this.helperURLBase() + 'gettree?forceValues=' + this.inputTag.value;
+		// This if block is necessary to maintain both 2.2 and 2.3 support
+		var baseURL = this.options.dropdownField.helperURLBase();
+        if(baseURL.match('action_callfieldmethod') var ajaxURL =  baseURL+ '&methodName=gettree&forceValues=' + this.getIdx();
+        else var ajaxURL =  baseURL+ 'gettree?forceValues=' + this.getIdx();
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
 		if(this.subsiteID) ajaxURL += '&' + this.id + '_SubsiteID=' + this.subsiteID;
@@ -22,7 +25,10 @@ SubsitesTreeDropdownField.prototype = {
 		var ul = this.treeNodeHolder();
 		ul.innerHTML = ss.i18n._t('LOADING');
 		
-		var ajaxURL = this.options.dropdownField.helperURLBase() + 'getsubtree?&SubtreeRootID=' + this.getIdx();
+		// This if block is necessary to maintain both 2.2 and 2.3 support
+		var baseURL = this.options.dropdownField.helperURLBase();
+        if(baseURL.match('action_callfieldmethod') var ajaxURL =  baseURL+ '&methodName=gettree&SubtreeRootID=' + this.getIdx();
+        else var ajaxURL =  baseURL+ 'gettree?SubtreeRootID=' + this.getIdx();
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
 		if(this.subsiteID) ajaxURL += '&' + this.id + '_SubsiteID=' + this.subsiteID;
