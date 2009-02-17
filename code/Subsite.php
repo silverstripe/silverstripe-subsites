@@ -113,12 +113,14 @@ class Subsite extends DataObject implements PermissionProvider {
 			return ArrayLib::valuekey($themes);
 		} else {
 			$themes = array();
-			foreach(scandir('../themes/') as $theme) {
-				if($theme[0] == '.') continue;
-				$theme = strtok($theme,'_');
-				$themes[$theme] = $theme;
+			if(is_dir('../themes/')) {
+				foreach(scandir('../themes/') as $theme) {
+					if($theme[0] == '.') continue;
+					$theme = strtok($theme,'_');
+					$themes[$theme] = $theme;
+				}
+				ksort($themes);
 			}
-			ksort($themes);
 			return $themes;
 		}
 	}
