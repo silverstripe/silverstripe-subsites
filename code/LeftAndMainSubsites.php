@@ -128,15 +128,6 @@ class LeftAndMainSubsites extends Extension {
 		if($result = Permission::check("CMS_ACCESS_$className")) {
 			return $result;
 		} else {
-			if($className == 'CMSMain') {
-				// When access /admin/, we should try a redirect to another part of the admin rather than be locked out
-				$menu = $this->owner->MainMenu();
-				if(($first = $menu->First()) && $first->Link) {
-					Director::redirect($first->Link);
-					return;
-				}
-			}
-
 			$otherSites = Subsite::accessible_sites("CMS_ACCESS_$className");
 			if($otherSites && $otherSites->TotalItems() > 0) {
 				$otherSites->First()->activate();

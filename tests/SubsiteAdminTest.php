@@ -91,6 +91,26 @@ class SubsiteAdminTest extends SapphireTest {
         
         $cont->popCurrent();
   }
+
+	
+	/**
+	 * Test that the main-site user with ADMIN permissions can access all subsites, regardless
+	 * of whether he is in a subsite-specific group or not.
+	 */
+	function testMainsiteAdminCanAccessAllSubsites() {
+		$member = $this->objFromFixture('Member', 'admin');
+		$member->logIn();
+		
+		$cmsMain = new CMSMain();
+		foreach($cmsMain->Subsites() as $subsite) {
+			$ids[$subsite->ID] = true;
+		}
+		$this->assertArrayHasKey(0, $ids, "Main site accessible");
+		$this->assertArrayHasKey(1, $ids, "Site with no groups inaccesible");
+		$this->assertArrayHasKey(2, $ids, "Subsite1 Template inaccessible");
+		$this->assertArrayHasKey(3, $ids, "Subsite2 Template inaccessible");
+	}
+
 	
 }
 
