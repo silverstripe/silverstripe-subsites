@@ -433,6 +433,9 @@ JS;
 	 * Return the subsites that the current user can access.
 	 * Look for one of the given permission codes on the site.
 	 * 
+	 * Sites will only be included if they have a Title and a Subdomain.
+	 * Templates will only be included if they have a Title.
+	 * 
 	 * @param $permCode array|string Either a single permission code or an array of permission codes.
 	 */
 	function accessible_sites($permCode) {
@@ -442,12 +445,14 @@ JS;
 		else $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
 		
 		if(!$member) return new DataObjectSet();
+		
+		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
 		$subsites = DataObject::get(
 			'Subsite',
 			"`Group_Members`.`MemberID` = $member->ID 
 			AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN') 
-			AND Subdomain IS NOT NULL AND `Subsite`.Title != ''", 
+			AND (Subdomain IS NOT NULL OR `Subsite`.ClassName IN ($templateClassList)) AND `Subsite`.Title != ''", 
 			'',
 			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0) 
 			LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
@@ -514,7 +519,7 @@ class Subsite_Template extends Subsite {
 		self::changeSubsite($this->ID);
 		
 		/*
-		 * Copy data from this template to the given subsite. Does this using an iterative depth-first search.
+		 * Copy site content from this template to the given subsite. Does this using an iterative depth-first search.
 		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
 		 * issues with having to check whether or not the new parents have been added to the site tree
 		 * when a page, etc, is duplicated
@@ -534,6 +539,15 @@ class Subsite_Template extends Subsite {
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}
+		}
+		
+		/**
+		 * Copy groups from the template to the given subsites.  Each of the groups will be created and left
+		 * empty.
+		 */
+		$groups = DataObject::get("Group", "SubsiteID = '$this->ID'");
+		if($groups) foreach($groups as $group) {
+			$group->duplicateToSubsite($intranet);
 		}
 
 		self::changeSubsite($oldSubsiteID);

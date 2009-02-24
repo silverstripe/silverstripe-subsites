@@ -42,9 +42,9 @@ class GroupSubsites extends DataObjectDecorator {
 	 */
     function alternateTreeTitle() {
         if($this->owner->SubsiteID == 0) {
-			return $this->owner->Title;
+			return $this->owner->Title . ' <i>(global group)</i>';
 		} else {
-			return $this->owner->Title . ' <i>(' . $this->owner->Subsite()->Title . ')</i>';
+			return $this->owner->Title; // . ' <i>(' . $this->owner->Subsite()->Title . ')</i>';
 		}
     }
     
@@ -84,6 +84,38 @@ class GroupSubsites extends DataObjectDecorator {
 		
 		return $access;
 	}
+
+
+	/**
+	 * Create a duplicate of this group and save it to another subsite.
+	 * The group and permissions will be duplicated, but not the members.
+	 * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
+	 */
+	public function duplicateToSubsite($subsiteID = null) {
+		if(is_object($subsiteID)) {
+			$subsite = $subsiteID;
+			$subsiteID = $subsite->ID;
+		} else {
+			$subsite = DataObject::get_by_id('Subsite', $subsiteID);
+		}
+		
+		$group = $this->owner->duplicate(false);
+
+		$subsiteID = ($subsiteID ? $subsiteID : Subsite::currentSubsiteID());
+		$group->SubsiteID = $subsiteID;
+		$group->write();
+		
+		// Duplicate permissions
+		$permissions = $this->owner->Permissions();
+		foreach($permissions as $permission) {
+			$newPerm = $permission->duplicate(false);
+			$newPerm->GroupID = $group->ID;
+			$newPerm->write();
+		}
+
+		return $group;
+	}
+
 }
 
 ?>
