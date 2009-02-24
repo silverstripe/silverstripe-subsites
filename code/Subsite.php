@@ -113,12 +113,14 @@ class Subsite extends DataObject implements PermissionProvider {
 			return ArrayLib::valuekey($themes);
 		} else {
 			$themes = array();
-			foreach(scandir('../themes/') as $theme) {
-				if($theme[0] == '.') continue;
-				$theme = strtok($theme,'_');
-				$themes[$theme] = $theme;
+			if(is_dir('../themes/')) {
+				foreach(scandir('../themes/') as $theme) {
+					if($theme[0] == '.') continue;
+					$theme = strtok($theme,'_');
+					$themes[$theme] = $theme;
+				}
+				ksort($themes);
 			}
-			ksort($themes);
 			return $themes;
 		}
 	}
@@ -156,6 +158,10 @@ class Subsite extends DataObject implements PermissionProvider {
 		
 		if($sub) return "$sub.$base";
 		else return $base;
+	}
+
+	function absoluteBaseURL() {
+		return "http://" . $this->domain() . Director::baseURL();
 	}
 	
 	/**
@@ -310,7 +316,10 @@ JS;
 			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `Domain`='$SQL_domain' AND `IsPublic`=1");
 		}
 		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `IsPublic`=1");
+			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `IsPublic`");
+		}
+		if(!$subsite) {
+			$subsite = DataObject::get_one('Subsite',"`DefaultSite` AND `IsPublic`");
 		}
 		
 		if($subsite) {
@@ -343,7 +352,9 @@ JS;
 	 * @return DataObjectSet Subsite instances
 	 */
 	static function getSubsitesForMember( $member = null) {
-		if(!$member) $member = Member::currentMember();		
+		if(!$member && $member !== FALSE) $member = Member::currentMember();
+		
+		if(!$member) return false;
 
 		if(self::hasMainSitePermission($member)) {
 			return DataObject::get('Subsite');
@@ -363,7 +374,9 @@ JS;
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
-		if(!$member) $member = Member::currentMember();
+		if(!$member && $member !== FALSE) $member = Member::currentMember();
+		
+		if(!$member) return false;
 		
 		if(Permission::checkMember($member->ID, "ADMIN")) return true;
 
