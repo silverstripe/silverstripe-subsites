@@ -8,7 +8,7 @@ Subsite_Template:
    subsite2:
       Title: Subsite2 Template
       Subdomain: subsite2
-Page:
+SiteTree:
    home:
       Title: Home
       SubsiteID: =>Subsite_Template.main
@@ -17,7 +17,7 @@ Page:
       SubsiteID: =>Subsite_Template.main
    staff:
       Title: Staff
-      ParentID: =>Page.about
+      ParentID: =>SiteTree.about
       SubsiteID: =>Subsite_Template.main
    contact:
       Title: Contact Us
@@ -34,28 +34,28 @@ Page:
    subsite2_contactus:
       Title: Contact Us (Subsite 2)
       SubsiteID: =>Subsite_Template.subsite2
-Permission:
-   admin:
-      Code: ADMIN
-   accesscmsmain1:
-      Code: CMS_ACCESS_CMSMain
-   accesscmsmain2:
-      Code: CMS_ACCESS_CMSMain
 Group:
    admin:
       Title: Admin
       Code: admin
-      Permissions: =>Permission.admin
    subsite1_group:
       Title: subsite1_group
       Code: subsite1_group
-      Subsite: =>Subsite_Template.subsite1
-      Permissions: =>Permission.accesscmsmain1
+      SubsiteID: =>Subsite_Template.subsite1
    subsite2_group:
       Title: subsite2_group
       Code: subsite1_group
-      Subsite: =>Subsite_Template.subsite2
-      Permissions: =>Permission.accesscmsmain2
+      SubsiteID: =>Subsite_Template.subsite2
+Permission:
+   admin:
+      Code: ADMIN
+      GroupID: =>Group.admin
+   accesscmsmain1:
+      Code: CMS_ACCESS_CMSMain
+      GroupID: =>Group.subsite1_group
+   accesscmsmain2:
+      Code: CMS_ACCESS_CMSMain
+      GroupID: =>Group.subsite2_group
 Member:
    admin:
       FirstName: Admin

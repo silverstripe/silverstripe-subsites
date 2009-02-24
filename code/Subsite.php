@@ -541,7 +541,7 @@ class Subsite_Template extends Subsite {
 		while(count($stack) > 0) {		
 			list($sourceParentID, $destParentID) = array_pop($stack);
 			
-			$children = Versioned::get_by_stage('Page', 'Live', "`ParentID`=$sourceParentID", '');
+			$children = Versioned::get_by_stage('SiteTree', 'Live', "`ParentID`=$sourceParentID", '');
 			
 			if($children) {
 				foreach($children as $child) {
