@@ -109,7 +109,7 @@ class LeftAndMainSubsites extends Extension {
 			$output .= '</select>';
 		
 			return $output;
-		} else {
+		} else if($list->Count() == 1) {
 			return $list->First()->Title;
 		}
 	}
