@@ -364,7 +364,6 @@ JS;
 				"`MemberID` = {$member->ID}", 
 				'', 
 				"LEFT JOIN `Group` ON `Subsite`.`ID` = `SubsiteID` 
-				LEFT JOIN `Permission` ON `Group`.`ID` = `Permission`.`GroupID` 
 				LEFT JOIN `Group_Members` ON `Group`.`ID` = `Group_Members`.`GroupID`"
 			);
 		}

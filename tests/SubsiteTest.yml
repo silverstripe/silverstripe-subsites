@@ -53,7 +53,7 @@ Group:
       Permissions: =>Permission.accesscmsmain1
    subsite2_group:
       Title: subsite2_group
-      Code: subsite1_group
+      Code: subsite2_group
       Subsite: =>Subsite_Template.subsite2
       Permissions: =>Permission.accesscmsmain2
 Member:
