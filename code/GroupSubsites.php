@@ -41,8 +41,7 @@ class GroupSubsites extends DataObjectDecorator {
 	 * of the security admin interface.
 	 */
     function alternateTreeTitle() {
-		// Previously: if(Subsite::currentSubsiteID() == 0 && $this->owner->SubsiteID == 0) {
-        if(Subsite::currentSubsiteID() == 0) {
+        if($this->owner->SubsiteID == 0) {
 			return $this->owner->Title . ' <i>(global group)</i>';
 		} else {
 			return $this->owner->Title; // . ' <i>(' . $this->owner->Subsite()->Title . ')</i>';
