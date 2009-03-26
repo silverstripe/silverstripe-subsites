@@ -492,6 +492,7 @@ JS;
 		return array(
 			'SUBSITE_EDIT' => 'Edit Sub-site Details',
 			'SUBSITE_ACCESS_ALL' => 'Access all subsites',
+			'SUBSITE_ASSETS_EDIT' => 'Edit Sub-site Assets Admin'
 		);
 	}
 

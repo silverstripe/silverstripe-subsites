@@ -34,7 +34,7 @@ class FileSubsites extends DataObjectDecorator {
 			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $sites->toDropdownMap('ID', 'Title', "(Public)")));
 		}
 		
-		if($this->owner->SubsiteID == 0&&!Permission::check('EDIT_PERMISSIONS')){
+		if($this->owner->SubsiteID == 0 && !Permission::check('EDIT_PERMISSIONS') && !Permission::check('SUBSITE_ASSETS_EDIT')){
 				$fields->removeFieldFromTab("Root", "Upload");
 				$fields->transform(new ReadonlyTransformation());
 		}
@@ -62,6 +62,11 @@ class FileSubsites extends DataObjectDecorator {
 	
 	function augmentBeforeWrite() {
 		if(!$this->owner->ID && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
+	}
+	
+	function onAfterUpload() {
+		$this->owner->SubsiteID = Subsite::currentSubsiteID();
+		$this->owner->write();
 	}
 	
 	function alternateCanEdit() {
