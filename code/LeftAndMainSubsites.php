@@ -77,7 +77,9 @@ class LeftAndMainSubsites extends Extension {
 					$mainSiteTitle = "Main site";
 				}
 				break;
-			
+			default: 
+				$mainSiteTitle = "Main site";
+				break;	
 		}
 
 		if($mainSiteTitle && Subsite::hasMainSitePermission(Member::currentUser(), array('CMS_ACCESS_' . $this->owner->class, 'ADMIN')))
