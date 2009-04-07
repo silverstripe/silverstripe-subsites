@@ -13,15 +13,16 @@ Object::add_extension('LeftAndMain', 'LeftAndMainSubsites');
 Object::add_extension('LeftAndMain', 'ControllerSubsites');
 
 Object::add_extension('Group', 'GroupSubsites');
+Object::add_extension('Member', 'MemberSubsites');
 Object::add_extension('File', 'FileSubsites');
 
 // Backwards compatibility with SilverStripe 2.2
 if(!class_exists('CMSMenu')) {
-	Director::addRules(100, array( 
-		'admin/subsites/$Action/$ID/$OtherID' => 'SubsiteAdmin', 
-	)); 
-	Object::addStaticVars( 'LeftAndMain', array( 'extra_menu_items' => array( 
-		'Sub-sites' => array("intranets", "admin/subsites/", 'SubsiteAdmin') 
+	Director::addRules(100, array(
+		'admin/subsites/$Action/$ID/$OtherID' => 'SubsiteAdmin',
+	));
+	Object::addStaticVars( 'LeftAndMain', array( 'extra_menu_items' => array(
+		'Sub-sites' => array("intranets", "admin/subsites/", 'SubsiteAdmin')
 	)));
 }
 
