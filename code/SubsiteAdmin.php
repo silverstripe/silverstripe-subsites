@@ -79,7 +79,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 				'subsite' => 'New site',
 				'template' => 'New template',
 			)),
-			new DropdownField('TemplateID', 'Use template:', $templateArray)//,
+			new DropdownField('TemplateID', 'Copy structure from:', $templateArray)//,
 			/*new TextField('AdminName', 'Admin name:'),
 			new EmailField('AdminEmail', 'Admin email:')*/
 		),
