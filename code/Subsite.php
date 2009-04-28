@@ -285,7 +285,7 @@ JS;
 
 		// And clear caches
 		self::$cached_subsite = NULL ;
-		Permission::flush_permission_cache() ;
+		if(method_exists("Permission", "flush_permission_cache")) Permission::flush_permission_cache() ;
 	}
 
 	/**
