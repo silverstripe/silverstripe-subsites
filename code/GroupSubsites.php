@@ -21,15 +21,14 @@ class GroupSubsites extends DataObjectDecorator {
 
 		if( $this->owner->SubsiteID == 0 || $this->owner->canEdit() ){
 			$subsites = DataObject::get('Subsite');
+			if ( $subsites && $subsites->exists() ) {
+				$oldSubsiteID = Session::get('SubsiteID');
+				foreach( $subsites as $subsite ) {
+					Subsite::changeSubsite($subsite->ID);
+					if ( !Permission::check('CL_Admin') ) { $subsites->remove( $subsite ) ; }
+				}
+				Subsite::changeSubsite($oldSubsiteID);
 
-			$oldSubsiteID = Session::get('SubsiteID');
-			foreach( $subsites as $subsite ) {
-				Subsite::changeSubsite($subsite->ID);
-				if ( !Permission::check('CL_Admin') ) { $subsites->remove( $subsite ) ; }
-			}
-			Subsite::changeSubsite($oldSubsiteID);
-
-			if ( $subsites->exists() ) {
 				$tab = $fields->findOrMakeTab(
 					'Root.Subsites',
 					_t('GroupSubsites.SECURITYTABTITLE', 'Subsites')

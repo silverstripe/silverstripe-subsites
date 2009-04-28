@@ -98,7 +98,7 @@ class SubsiteTest extends SapphireTest {
 			'Members can edit pages on a subsite if they are in a group belonging to this subsite'
 		);
 
-		Session::set("loggedInAs", $subsite2smember->ID);
+		Session::set("loggedInAs", $subsite2member->ID);
 		$this->assertFalse(
 			(bool)$subsite1page->canEdit(),
 			'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
