@@ -1,4 +1,4 @@
-<?
+<?php
 
 class SubsiteAdminTest extends SapphireTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
