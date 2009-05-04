@@ -1,4 +1,4 @@
-<?
+<?php
 
 class SubsiteAdminTest extends SapphireTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
@@ -99,7 +99,7 @@ class SubsiteAdminTest extends SapphireTest {
 	 */
 	function testMainsiteAdminCanAccessAllSubsites() {
 		$member = $this->objFromFixture('Member', 'admin');
-		$member->logIn();
+		Session::set("loggedInAs", $member->ID);
 		
 		$cmsMain = new CMSMain();
 		foreach($cmsMain->Subsites() as $subsite) {

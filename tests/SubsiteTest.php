@@ -35,7 +35,7 @@ class SubsiteTest extends SapphireTest {
 		// Another test that changeSubsite is working
 		Subsite::changeSubsite($subsite->ID);
 		$pages = DataObject::get("SiteTree");
-		
+
 		$siteHome = DataObject::get_one('SiteTree', "URLSegment = 'home'");
 		$this->assertEquals($subsite->ID, $siteHome->SubsiteID);
 		
@@ -43,7 +43,7 @@ class SubsiteTest extends SapphireTest {
 		$this->assertEquals($siteHome->MasterPageID, $tmplHome->ID);
 		
 		// Check linking of child pages
-		$tmplStaff = $this->objFromFixture('Page','staff');
+		$tmplStaff = $this->objFromFixture('SiteTree','staff');
 		$siteStaff = DataObject::get_one('SiteTree', "URLSegment = '" . Convert::raw2sql($tmplStaff->URLSegment) . "'");
 		$this->assertEquals($siteStaff->MasterPageID, $tmplStaff->ID);
 		
@@ -77,33 +77,37 @@ class SubsiteTest extends SapphireTest {
 		$admin = $this->objFromFixture('Member', 'admin');
 		$subsite1member = $this->objFromFixture('Member', 'subsite1member');
 		$subsite2member = $this->objFromFixture('Member', 'subsite2member');
-		$mainpage = $this->objFromFixture('Page', 'home');
-		$subsite1page = $this->objFromFixture('Page', 'subsite1_home');
-		$subsite2page = $this->objFromFixture('Page', 'subsite2_home');
+		$mainpage = $this->objFromFixture('SiteTree', 'home');
+		$subsite1page = $this->objFromFixture('SiteTree', 'subsite1_home');
+		$subsite2page = $this->objFromFixture('SiteTree', 'subsite2_home');
 		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
 		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
 
+		Session::set("loggedInAs", $admin->ID);
 		$this->assertTrue(
-			$subsite1page->canEdit($admin),
+			(bool)$subsite1page->canEdit(),
 			'Administrators can edit all subsites'
 		);
 
 		// @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
 		Subsite::changeSubsite($subsite1);
+		
+		Session::set("loggedInAs", $subsite1member->ID);
 		$this->assertTrue(
-			$subsite1page->canEdit($subsite1member),
+			(bool)$subsite1page->canEdit(),
 			'Members can edit pages on a subsite if they are in a group belonging to this subsite'
 		);
 
+		Session::set("loggedInAs", $subsite2member->ID);
 		$this->assertFalse(
-			$subsite1page->canEdit($subsite2member),
+			(bool)$subsite1page->canEdit(),
 			'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
 		);
 		
 		// @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
 		Subsite::changeSubsite($subsite2);
 		$this->assertFalse(
-			$mainpage->canEdit($subsite2member),
+			$mainpage->canEdit(),
 			'Members cant edit pages on the main site if they are not in a group allowing this'
 		);
 		

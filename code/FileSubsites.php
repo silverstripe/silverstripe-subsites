@@ -1,7 +1,7 @@
 <?php
 /**
  * Extension for the File object to add subsites support
- * 
+ *
  * @package subsites
  */
 class FileSubsites extends DataObjectDecorator {
@@ -14,17 +14,17 @@ class FileSubsites extends DataObjectDecorator {
 				),
 			);
 		}
-	}	
+	}
 
 	/**
 	 * Amends the CMS tree title for folders in the Files & Images section.
-	 * Prefixes a '* ' to the folders that are accessible from all subsites.  
+	 * Prefixes a '* ' to the folders that are accessible from all subsites.
 	 */
 	function alternateTreeTitle() {
 		if($this->owner->SubsiteID == 0) return " * " . $this->owner->Title;
 		else return $this->owner->Title;
 	}
-	
+
 	/**
 	 * Add subsites-specific fields to the folder editor.
 	 */
@@ -33,10 +33,10 @@ class FileSubsites extends DataObjectDecorator {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
 			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $sites->toDropdownMap('ID', 'Title', "(Public)")));
 		}
-		
-		if($this->owner->SubsiteID == 0&&!Permission::check('EDIT_PERMISSIONS')){
+
+		if($this->owner->SubsiteID == 0 && !Permission::check('EDIT_PERMISSIONS') && !Permission::check('SUBSITE_ASSETS_EDIT')){
 				$fields->removeFieldFromTab("Root", "Upload");
-				$fields->transform(new ReadonlyTransformation());
+				$fields = $fields->transform(new ReadonlyTransformation());
 		}
 	}
 
@@ -49,7 +49,7 @@ class FileSubsites extends DataObjectDecorator {
 
 			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
 			else $subsiteID = (int)Subsite::currentSubsiteID();
-			
+
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
 				$query->where[] = "`$tableName`.SubsiteID IN (0, $subsiteID)";
@@ -59,11 +59,16 @@ class FileSubsites extends DataObjectDecorator {
             $query->orderby = 'SubsiteID' . ($query->orderby ? ', ' : '') . $query->orderby;
 		}
 	}
-	
+
 	function augmentBeforeWrite() {
 		if(!$this->owner->ID && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
 	}
-	
+
+	function onAfterUpload() {
+		$this->owner->SubsiteID = Subsite::currentSubsiteID();
+		$this->owner->write();
+	}
+
 	function alternateCanEdit() {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
 		$subsiteID = Session::get('SubsiteID');
@@ -73,9 +78,9 @@ class FileSubsites extends DataObjectDecorator {
 			Session::set('SubsiteID', $this->owner->SubsiteID);
 			$access = Permission::check('CMS_ACCESS_AssetAdmin');
 			Session::set('SubsiteID', $subsiteID);
-		
+
 			return $access;
 		}
-	}	
+	}
 }
 
