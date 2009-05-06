@@ -116,25 +116,16 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 * @return boolean
 	 */
 	function canEdit($member = null) {
-		if(!$member && $member !== FALSE) $member = Member::currentUser();
+		// Check the CMS_ACCESS_CMSMain privileges on the subsite that owns this group
+		$oldSubsiteID = Session::get('SubsiteID');
 
-		if(Permission::checkMember($member, 'SUBSITE_ACCESS_ALL')) return true;
+		Subsite::changeSubsite($this->owner->SubsiteID) ;
+		$access = Permission::check('CMS_ACCESS_CMSMain');
+		Subsite::changeSubsite($oldSubsiteID);
 		
-		// if no subsites exist, member can edit from a subsites perspective
-		$allSubsites = DataObject::get('Subsite');
-		if(!$allSubsites) return true;
+		if(!$access) $access = Permission::checkMember($member, 'SUBSITE_ACCESS_ALL');
 		
-		// otherwise get all allowed subsites, and check if the subsite
-		// this page belongs to is in the list
-		$allowedSubsites = Subsite::getSubsitesForMember($member);
-		if(
-			!$allowedSubsites 
-			|| !in_array($this->owner->SubsiteID, $allowedSubsites->column('ID'))
-		) {
-			return false;
-		}
-		
-		return true;
+		return $access;
 	}
 	
 	/**
