@@ -26,7 +26,7 @@ class LeftAndMainSubsites extends Extension {
 
 
 	public function changesubsite() {
-		$id = $_REQUEST['ID'];
+		$id = $_REQUEST['SubsiteID'];
 		
 		Subsite::changeSubsite($id);
 		
