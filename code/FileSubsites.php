@@ -33,11 +33,6 @@ class FileSubsites extends DataObjectDecorator {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
 			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $sites->toDropdownMap('ID', 'Title', "(Public)")));
 		}
-
-		if($this->owner->SubsiteID == 0 && !Permission::check('EDIT_PERMISSIONS') && !Permission::check('SUBSITE_ASSETS_EDIT')){
-				$fields->removeFieldFromTab("Root", "Upload");
-				$fields = $fields->transform(new ReadonlyTransformation());
-		}
 	}
 
 	/**
@@ -69,7 +64,7 @@ class FileSubsites extends DataObjectDecorator {
 		$this->owner->write();
 	}
 
-	function alternateCanEdit() {
+	function canEdit() {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
 		$subsiteID = Session::get('SubsiteID');
 
