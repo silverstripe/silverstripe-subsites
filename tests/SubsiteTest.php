@@ -105,13 +105,11 @@ class SubsiteTest extends SapphireTest {
 		);
 		
 		// @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
-		Subsite::changeSubsite($subsite2);
+		Subsite::changeSubsite(0);
 		$this->assertFalse(
 			$mainpage->canEdit(),
 			'Members cant edit pages on the main site if they are not in a group allowing this'
 		);
-		
-		Subsite::changeSubsite(0);
 	}	
 
 }
