@@ -116,11 +116,13 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	 * @return boolean
 	 */
 	function canEdit($member = null) {
+		if(!$member)  $member = Member::currentUser();
+		
 		// Check the CMS_ACCESS_CMSMain privileges on the subsite that owns this group
 		$oldSubsiteID = Session::get('SubsiteID');
 
 		Subsite::changeSubsite($this->owner->SubsiteID) ;
-		$access = Permission::check('CMS_ACCESS_CMSMain');
+		$access = Permission::checkMember($member, 'CMS_ACCESS_CMSMain');
 		Subsite::changeSubsite($oldSubsiteID);
 		
 		if(!$access) $access = Permission::checkMember($member, 'SUBSITE_ACCESS_ALL');
