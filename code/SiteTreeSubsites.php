@@ -202,7 +202,10 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	}
 	
 	function alternateAbsoluteLink() {
-		return "http://" . $this->owner->Subsite()->domain() . $this->owner->Link();
+		// Generate the existing absolute URL and replace the domain with the subsite domain.
+		// This helps deal with Link() returning an absolute URL.
+		$url = Director::absoluteURL($this->owner->Link());
+		return preg_replace('/\/\/[^\/]+\//', '//' .  $this->owner->Subsite()->domain() . '/', $url);
 	}
 }
 
