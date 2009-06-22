@@ -28,15 +28,15 @@ class SiteTreeSubsites extends DataObjectDecorator {
 
 	
 	function extraStatics() {
-		// This is hard-coded to be applied to SiteTree, unfortunately
-		if($this->owner->class == 'SiteTree') {
-			return array(
-				'has_one' => array(
-					'Subsite' => 'Subsite', // The subsite that this page belongs to
-					'MasterPage' => 'SiteTree', // Optional; the page that is the content master
-				),
-			);
+		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
+			if($this->owner->class != 'SiteTree') return null;
 		}
+		return array(
+			'has_one' => array(
+				'Subsite' => 'Subsite', // The subsite that this page belongs to
+				'MasterPage' => 'SiteTree', // Optional; the page that is the content master
+			)
+		);
 	}
 	
 	/**

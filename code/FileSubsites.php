@@ -5,15 +5,16 @@
  * @package subsites
  */
 class FileSubsites extends DataObjectDecorator {
+	
 	function extraStatics() {
-		// This is hard-coded to be applied to SiteTree, unfortunately
-        if($this->owner->class == 'File') {
-			return array(
-				'has_one' => array(
-					'Subsite' => 'Subsite',
-				),
-			);
+		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
+			if($this->owner->class != 'File') return null;
 		}
+		return array(
+			'has_one' => array(
+				'Subsite' => 'Subsite',
+			),
+		);
 	}
 
 	/**
