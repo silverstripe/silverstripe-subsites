@@ -43,8 +43,8 @@ class FileSubsites extends DataObjectDecorator {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false) {
 
-			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-			else $subsiteID = (int)Subsite::currentSubsiteID();
+			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
+			else $subsiteID = (int) Subsite::currentSubsiteID();
 
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
@@ -56,8 +56,8 @@ class FileSubsites extends DataObjectDecorator {
 				$query->where[] = $where;
 				break;
 			}
-
-            $query->orderby = 'SubsiteID' . ($query->orderby ? ', ' : '') . $query->orderby;
+			
+			$query->orderby = 'SubsiteID' . ($query->orderby ? ', ' : '') . $query->orderby;
 		}
 	}
 
