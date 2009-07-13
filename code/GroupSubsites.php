@@ -85,8 +85,6 @@ class GroupSubsites extends DataObjectDecorator {
 				$query->where[] = $where;
 				break;
 			}
-
-			$query->orderby = 'SubsiteID' . ($query->orderby ? ', ' : '') . $query->orderby;
 		}
 	}
 
