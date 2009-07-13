@@ -48,14 +48,19 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
 
-			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-			else $subsiteID = (int)Subsite::currentSubsiteID();
+			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
+			else $subsiteID = (int) Subsite::currentSubsiteID();
 			
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
+				$where = "`$tableName`.SubsiteID IN ($subsiteID)";
+				if(defined('Database::USE_ANSI_SQL')) {
+					$where = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
+				}
+				
 				// The tableName should be SiteTree or SiteTree_Live...
 				if(strpos($tableName,'SiteTree') === false) break;
-				$query->where[] = "`$tableName`.SubsiteID IN ($subsiteID)";
+				$query->where[] = $where;
 				break;
 			}
 		}

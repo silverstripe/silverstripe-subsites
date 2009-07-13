@@ -317,13 +317,13 @@ JS;
 
 		$subsite = null;
 		if(self::$use_domain) {
-			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `Domain`='$SQL_domain' AND `IsPublic`=1");
+			$subsite = DataObject::get_one('Subsite', "Subdomain = '$SQL_subdomain' AND Domain = '$SQL_domain' AND IsPublic = 1");
 		}
 		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite',"`Subdomain` = '$SQL_subdomain' AND `IsPublic`");
+			$subsite = DataObject::get_one('Subsite', "Subdomain = '$SQL_subdomain' AND IsPublic = 1");
 		}
 		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite',"`DefaultSite` AND `IsPublic`");
+			$subsite = DataObject::get_one('Subsite', "DefaultSite = 1 AND IsPublic = 1");
 		}
 
 		if($subsite) {
@@ -355,24 +355,23 @@ JS;
 	 *
 	 * @return DataObjectSet Subsite instances
 	 */
-	static function getSubsitesForMember( $member = null) {
+	static function getSubsitesForMember($member = null) {
 		if(!$member && $member !== FALSE) $member = Member::currentMember();
-
 		if(!$member) return false;
 
 		if(self::hasMainSitePermission($member)) {
 			return DataObject::get('Subsite');
-		} else {
-			return DataObject::get(
-				'Subsite', 
-					"`MemberID` = {$member->ID}", 
-				'', 
-				"LEFT JOIN `Group` ON `Subsite`.`ID` = `SubsiteID` 
-				LEFT JOIN `Group_Members` ON `Group`.`ID` = `Group_Members`.`GroupID`"
-			);
 		}
+		
+		return DataObject::get(
+			'Subsite', 
+			"MemberID = {$member->ID}", 
+			'',
+			"LEFT JOIN `Group` ON `Subsite`.`ID` = `SubsiteID` 
+			LEFT JOIN `Group_Members` ON `Group`.`ID` = `Group_Members`.`GroupID`"
+		);
 	}
-
+	
 	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
@@ -426,7 +425,7 @@ JS;
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('Page', 'Live', "`ParentID`=$sourceParentID", '');
+			$children = Versioned::get_by_stage('Page', 'Live', "ParentID = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {
@@ -545,7 +544,7 @@ class Subsite_Template extends Subsite {
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('SiteTree', 'Live', "`ParentID`=$sourceParentID", '');
+			$children = Versioned::get_by_stage('SiteTree', 'Live', "ParentID = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {
