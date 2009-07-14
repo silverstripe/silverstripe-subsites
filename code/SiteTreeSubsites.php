@@ -40,6 +40,15 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	}
 	
 	/**
+	 * Check if we're currently looking at the main site.
+	 * @return boolean TRUE main site | FALSE sub-site
+	 */
+	function isMainSite() {
+		if($this->owner->SubsiteID == 0) return true;
+		return false;
+	}
+	
+	/**
 	 * Update any requests to limit the results to the current site
 	 */
 	function augmentSQL(SQLQuery &$query) {
@@ -212,6 +221,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		$url = Director::absoluteURL($this->owner->Link());
 		return preg_replace('/\/\/[^\/]+\//', '//' .  $this->owner->Subsite()->domain() . '/', $url);
 	}
+	
 }
 
 ?>
