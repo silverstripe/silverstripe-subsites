@@ -1,38 +1,37 @@
 /**
  * Styling for the subsite actions section in the CMS
  */
-#SubsiteActions{
+#SubsiteActions {
 	position: absolute;
-	padding : 0px;
-	margin : 0px;
-	right: 0px;
-	top: 0px;
+	padding: 0;
+	margin: 0;
+	right: 0;
+	top: 0;
 	width: 350px;
 	text-align: right;
-}
-
-#SubsiteActions fieldset {
-	background-color : #a5aab0;
-	padding : 3px;
-	border-style : none;
-	margin-top : 1px;
-	background: 30%;
-}
-
-#SubsiteActions fieldset span {
-	padding: 3px;
-}
-
-#SubsiteActions fieldset #SubsitesSelect{
-	font-size : 12px;
-	width: 240px;
-}
-
-#SubsiteActions {
-	height : 51px;
+	margin-right: 130px;
+	height: 51px;
 	border-bottom: 3px solid #d4d0c8;
-	color: #FFF;
+	color: #fff;
 }
+	#SubsiteActions fieldset {
+		padding: 3px;
+		border-style: none;
+		margin-top: 1px;
+		background: none;
+	}
+		#SubsiteActions fieldset span {
+			padding: 3px;
+		}
+
+#SubsitesSelect,
+#SubsitesSelect option {
+	font-size: 12px;
+}
+	#SubsitesSelect {
+		width: 200px;
+		padding: 3px;
+	}
 
 #top #MainMenu #Menu-help {
 	margin-right: 260px;
