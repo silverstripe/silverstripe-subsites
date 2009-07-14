@@ -340,6 +340,17 @@ JS;
 
 		$SQL_permissionCodes = join("','", $SQL_permissionCodes);
 
+		if(defined('Database::USE_ANSI_SQL')) {
+			return DataObject::get(
+				'Member',
+				"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
+				'',
+				"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
+				LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
+				LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
+			);
+		}
+		
 		return DataObject::get(
 			'Member',
 			"`Group`.`SubsiteID` = $this->ID AND `Permission`.`Code` IN ('$SQL_permissionCodes')",
@@ -361,6 +372,16 @@ JS;
 
 		if(self::hasMainSitePermission($member)) {
 			return DataObject::get('Subsite');
+		}
+		
+		if(defined('Database::USE_ANSI_SQL')) {
+			return DataObject::get(
+				'Subsite', 
+				"\"MemberID\" = {$member->ID}", 
+				'',
+				"LEFT JOIN \"Group\" ON \"Subsite\".\"ID\" = \"SubsiteID\"
+				LEFT JOIN \"Group_Members\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\""
+			);
 		}
 		
 		return DataObject::get(
@@ -388,18 +409,27 @@ JS;
 		$SQL_perms = join("','", $SQLa_perm);
 		$memberID = (int)$member->ID;
 
-		$groupCount = DB::query("
-			SELECT COUNT(`Permission`.`ID`)
-			FROM `Permission`
-			INNER JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` AND `Group`.`SubsiteID` = 0
-			INNER JOIN `Group_Members` USING(`GroupID`)
-			WHERE
-			`Permission`.`Code` IN ('$SQL_perms')
-			AND `MemberID` = {$memberID}
-		")->value();
-
+		if(defined('Database::USE_ANSI_SQL')) {
+			$groupCount = DB::query("
+				SELECT COUNT(\"Permission\".\"ID\")
+				FROM \"Permission\"
+				INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"SubsiteID\" = 0
+				INNER JOIN \"Group_Members\" USING(\"GroupID\")
+				WHERE \"Permission\".\"Code\" IN ('$SQL_perms') AND \"MemberID\" = {$memberID}
+			")->value();
+		} else {
+			$groupCount = DB::query("
+				SELECT COUNT(`Permission`.`ID`)
+				FROM `Permission`
+				INNER JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` AND `Group`.`SubsiteID` = 0
+				INNER JOIN `Group_Members` USING(`GroupID`)
+				WHERE
+				`Permission`.`Code` IN ('$SQL_perms')
+				AND `MemberID` = {$memberID}
+			")->value();
+		}
+		
 		return ($groupCount > 0);
-
 	}
 
 	function createInitialRecords() {
@@ -463,7 +493,20 @@ JS;
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
-		$subsites = DataObject::get(
+		if(defined('Database::USE_ANSI_SQL')) {
+			return DataObject::get(
+				'Subsite',
+				"\"Group_Members\".\"MemberID\" = $member->ID
+				AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')
+				AND (\"Subdomain\" IS NOT NULL OR \"Subsite\".\"ClassName\" IN ($templateClassList)) AND \"Subsite\".\"Title\" != ''",
+				'',
+				"LEFT JOIN \"Group\" ON (\"SubsiteID\" = \"Subsite\".\"ID\" OR \"SubsiteID\" = 0)
+				LEFT JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Group\".\"ID\"
+				LEFT JOIN \"Permission\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\""
+			);
+		}
+
+		return DataObject::get(
 			'Subsite',
 			"`Group_Members`.`MemberID` = $member->ID
 			AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN')
@@ -473,8 +516,6 @@ JS;
 			LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
 			LEFT JOIN `Permission` ON `Group`.`ID`=`Permission`.`GroupID`"
 		);
-
-		return $subsites;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -74,7 +74,7 @@ class LeftAndMainSubsites extends Extension {
 				$mainSiteTitle = "Groups accessing all sites"; break;
 			case "CMSMain":
 				// If there's a default site then main site has no meaning
-				if(!DataObject::get_one('Subsite',"`DefaultSite` AND `IsPublic`")) {
+				if(!DataObject::get_one('Subsite', "DefaultSite = 1 AND IsPublic = 1")) {
 					$mainSiteTitle = "Main site";
 				}
 				break;

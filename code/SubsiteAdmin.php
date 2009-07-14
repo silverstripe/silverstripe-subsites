@@ -38,15 +38,25 @@ class SubsiteAdmin extends GenericDataAdmin {
 		$where = '';
 		if(isset($data['Name']) && $data['Name']) {
 			$SQL_name = Convert::raw2sql($data['Name']);
-			$where = "`Title` LIKE '%$SQL_name%'";
+			$where = "Title LIKE '%$SQL_name%'";
 		} else {
-			$where = "`Title` != ''";
+			$where = "Title != ''";
 		}
 		
-		$intranets = DataObject::get('Subsite', $where, "if(ClassName = 'Subsite_Template',0,1), Title");
-		if(!$intranets)
-			return null;
-			
+		$intranets = null;
+		$intranets = DataObject::get('Subsite_Template', $where, 'Title');
+		$subsites = DataObject::get('Subsite', $where, 'Title');
+		
+		if($intranets) {
+			$intranets->merge($subsites);
+		} else {
+			$intranets = $subsites;
+		}
+		
+		if(!$intranets) return null;
+		
+		$intranets->removeDuplicates();
+		
 		$html = "<table class=\"ResultTable\"><thead><tr><th>Name</th><th>Domain</th></tr></thead><tbody>";
 		
 		$numIntranets = 0;
