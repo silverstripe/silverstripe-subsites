@@ -34,9 +34,7 @@ class SubsitesVirtualPage extends VirtualPage {
 		
 		if(Controller::curr()->getRequest()) {
 			$subsiteID = Controller::curr()->getRequest()->getVar('TreeDropdownField_Form_EditForm_CopyContentFromID_SubsiteID');
-			if($subsiteID) {
-				$pageSelectionField->setSubsiteID($subsiteID);
-			}
+			$pageSelectionField->setSubsiteID($subsiteID);
 		}
 		$fields->replaceField('CopyContentFromID', $pageSelectionField);
 		

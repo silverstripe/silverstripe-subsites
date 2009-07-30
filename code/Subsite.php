@@ -248,7 +248,7 @@ JS;
 	static function currentSubsiteID($cache = true) {
 		if(isset($_REQUEST['SubsiteID'])) {
 			$id = (int)$_REQUEST['SubsiteID'];
-		} else if(Session::get('SubsiteID')) {
+		} else {
 			$id = Session::get('SubsiteID');
 		}
 
