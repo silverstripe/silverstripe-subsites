@@ -383,8 +383,7 @@ JS;
 		if(!$member) return false;
 
 		if(Permission::checkMember($member->ID, "ADMIN")) return true;
-
-		if(Permission::checkMember($member, "SUBSITE_ACCESS_ALL")) return true;
+		if(Permission::checkMember($member->ID, "SUBSITE_ACCESS_ALL")) return true;
 
 		$SQLa_perm = Convert::raw2sql($permissionCodes);
 		$SQL_perms = join("','", $SQLa_perm);
