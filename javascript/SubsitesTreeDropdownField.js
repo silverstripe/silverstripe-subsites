@@ -32,10 +32,15 @@ SubsitesTreeDropdownField.prototype = {
         if(baseURL.match('action_callfieldmethod')) var ajaxURL =  baseURL+ '&methodName=getsubtree&SubtreeRootID=' + this.getIdx();
         else var ajaxURL =  baseURL+ 'getsubtree?SubtreeRootID=' + this.getIdx();
 		
-		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
-		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID);
+		// Find the root of the tree - this points to a list item in the tree, not the root div we actually want
+		// @todo: We should be using framework API calls to find the tree
+		var tree = this;
+		while (tree && !tree.className.match(/(^| )SubsitesTreeDropdownField( |$)/)) tree = tree.parentNode;
 		
+		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
+		ajaxURL += '&' + tree.id + '_SubsiteID=' + parseInt(tree.subsiteID);
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
+		
 		new Ajax.Request(ajaxURL, {
 			onSuccess : this.installSubtree.bind(this),
 			onFailure : function(response) { errorMessage('error loading subtree', response); }
