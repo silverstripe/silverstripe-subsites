@@ -57,7 +57,7 @@ class FileSubsites extends DataObjectDecorator {
 				break;
 			}
 			
-			if(sizeof($query->select)>1 || $query->select[0]!='COUNT(*)'){
+			if(sizeof($query->select) > 1 && $query->select[0] != 'COUNT(*)'){
 				$query->orderby = 'SubsiteID' . ($query->orderby ? ', ' : '') . $query->orderby;
 			}
 		}
