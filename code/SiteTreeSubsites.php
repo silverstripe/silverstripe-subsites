@@ -211,6 +211,13 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	function alternateAbsoluteLink() {
 		return "http://" . $this->owner->Subsite()->domain() . $this->owner->Link();
 	}
+	
+	function getFaviconImageLink(){
+		if($subsite = $this->owner->Subsite()){
+			if($subsite->ID && $favicon = $subsite->Favicon())
+				return $favicon->Link();
+		}
+	}
 }
 
 ?>

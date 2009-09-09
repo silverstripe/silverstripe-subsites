@@ -35,6 +35,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	);
 
 	static $has_one = array(
+		'Favicon' => "FaviconImage"
 	);
 
 	static $indexes = array(
@@ -181,7 +182,8 @@ class Subsite extends DataObject implements PermissionProvider {
 					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
 
-					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme)
+					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme),
+					new ImageField('Favicon', 'Bookmark Icon')
 				)
 			),
 			new HiddenField('ID', '', $this->ID),
