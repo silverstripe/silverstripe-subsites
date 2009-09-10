@@ -23,6 +23,16 @@ $lang['en_US']['Subsite']['SINGULARNAME'] = array(
 	50,
 	'Singular name of the object, used in dropdowns and to generally identify a single object in the interface'
 );
+$lang['en_US']['Subsite_Template']['PLURALNAME'] = array(
+	'Subsite Templats',
+	50,
+	'Pural name of the object, used in dropdowns and to generally identify a collection of this object in the interface'
+);
+$lang['en_US']['Subsite_Template']['SINGULARNAME'] = array(
+	'Subsite Template',
+	50,
+	'Singular name of the object, used in dropdowns and to generally identify a single object in the interface'
+);
 $lang['en_US']['SubsitesVirtualPage']['PLURALNAME'] = array(
 	'Subsites Virtual Pags',
 	50,
