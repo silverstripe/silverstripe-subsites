@@ -86,7 +86,10 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	protected $nextWriteDoesntCustomise = false;
 	
 	function augmentBeforeWrite() {
-		if(!is_numeric($this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
+		// if the page hasn't been written to a database table yet and no subsite has been set, then give it a subsite
+		if((!is_numeric($this->owner->ID) || $this->owner->ID == 0) && !$this->owner->SubsiteID) {
+			$this->owner->SubsiteID = Subsite::currentSubsiteID();
+		}
 
 		// If the content has been changed, then the page should be marked as 'custom content'
 		if(!$this->nextWriteDoesntCustomise && $this->owner->ID && $this->owner->MasterPageID && !$this->owner->CustomContent) {
