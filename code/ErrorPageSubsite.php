@@ -12,8 +12,18 @@ class ErrorPageSubsite extends DataObjectDecorator {
 	function alternateFilepathForErrorcode($statusCode, $locale = null) {
 		$static_filepath = Object::get_static($this->owner->ClassName, 'static_filepath');
 		$subdomainPart = "";
-
-		if($subsite = Subsite::currentSubsite(false)) {	
+		
+		// when there's a controller get it subsite from session
+		if (Controller::curr()) {
+			$subsite = Subsite::currentSubsite(false);
+		} 
+		// since this function is called from Page class before the controller is created, we have to get subsite from domain instead
+		else {
+			$subsiteID = Subsite::getSubsiteIDForDomain();
+			if($subsiteID != 0) $subsite = DataObject::get_by_id("Subsite", $subsiteID);
+		}
+		
+		if($subsite) {	
 			$subdomain = $subsite->Subdomain;
 			$subdomainPart = "-{$subdomain}";
 		}
