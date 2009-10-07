@@ -26,16 +26,15 @@ class LeftAndMainSubsites extends Extension {
 
 	public function changesubsite() {
 		$id = $_REQUEST['ID'];
-		
 		Subsite::changeSubsite($id);
 		
-		if(Director::is_ajax()) {
+		if(Director::is_ajax() && method_exists($this->owner, 'SiteTreeAsUL')) {
 			$tree = $this->owner->SiteTreeAsUL();
 			$tree = ereg_replace('^[ \t\r\n]*<ul[^>]*>','', $tree);
 			$tree = ereg_replace('</ul[^>]*>[ \t\r\n]*$','', $tree);
 			return $tree;
 		} else
-			return array();
+			return null;
 	}
 	
 	public function addsubsite() {
