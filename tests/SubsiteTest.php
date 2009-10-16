@@ -3,18 +3,48 @@
 class SubsiteTest extends SapphireTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
+	function testPagesInDifferentSubsitesCanShareURLSegment() {
+		$subsiteMain = $this->objFromFixture('Subsite_Template', 'main');
+		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
+		
+		$pageMain = new SiteTree();
+		$pageMain->URLSegment = 'testpage';
+		$pageMain->write();
+		$pageMain->publish('Stage', 'Live');
+		
+		$pageMainOther = new SiteTree();
+		$pageMainOther->URLSegment = 'testpage';
+		$pageMainOther->write();
+		$pageMainOther->publish('Stage', 'Live');
+		
+		$this->assertNotEquals($pageMain->URLSegment, $pageMainOther->URLSegment,
+			'Pages in same subsite cant share the same URL'
+		);
+	
+		Subsite::changeSubsite($subsite1->ID);
+	
+		$pageSubsite1 = new SiteTree();
+		$pageSubsite1->URLSegment = 'testpage';
+		$pageSubsite1->write();
+		$pageSubsite1->publish('Stage', 'Live');
+		
+		$this->assertEquals($pageMain->URLSegment, $pageSubsite1->URLSegment,
+			'Pages in different subsites can share the same URL'
+		);
+	}
+	
 	/**
 	 * Create a new subsite from the template and verify that all the template's pages are copied
 	 */
 	function testSubsiteCreation() {
 		// Create the instance
 		$template = $this->objFromFixture('Subsite_Template', 'main');
-
+	
 		// Test that changeSubsite is working
 		Subsite::changeSubsite($template->ID);
-
+	
 		$tmplHome = DataObject::get_one('SiteTree', "URLSegment = 'home'");
-
+	
 		// Publish all the pages in the template, testing that DataObject::get only returns pages from the chosen subsite
 		$pages = DataObject::get("SiteTree");
 		$totalPages = $pages->TotalItems();
@@ -25,22 +55,22 @@ class SubsiteTest extends SapphireTest {
 		
 		// Create a new site
 		$subsite = $template->createInstance('My Site', 'something');
-
+	
 		// Check title
 		$this->assertEquals($subsite->Title, 'My Site');
 		
 		// Check that domain generation is working
 		$this->assertEquals($subsite->domain(), 'something.test.com');
-
+	
 		// Another test that changeSubsite is working
 		Subsite::changeSubsite($subsite->ID);
-		$pages = DataObject::get("SiteTree");
-
+	
 		$siteHome = DataObject::get_one('SiteTree', "URLSegment = 'home'");
-		$this->assertEquals($subsite->ID, $siteHome->SubsiteID);
-		
-		// Check master page value
-		$this->assertEquals($siteHome->MasterPageID, $tmplHome->ID);
+		$this->assertNotNull($siteHome);
+		$this->assertEquals($subsite->ID, $siteHome->SubsiteID,
+			'createInstance() copies existing pages retaining the same URLSegment'
+		);
+		$this->assertEquals($siteHome->MasterPageID, $tmplHome->ID, 'Check master page value');
 		
 		// Check linking of child pages
 		$tmplStaff = $this->objFromFixture('SiteTree','staff');
@@ -57,7 +87,7 @@ class SubsiteTest extends SapphireTest {
 	function testUnpublishedPagesDontCopy() {
 		
 	}
-
+	
 	/**
 	 * Publish a change on a master page of a newly created sub-site, and verify that the change has been propagated.
 	 * Verify that if CustomContent is set, then the changes aren't propagated.
@@ -82,13 +112,14 @@ class SubsiteTest extends SapphireTest {
 		$subsite2page = $this->objFromFixture('SiteTree', 'subsite2_home');
 		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
 		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
-
+	
+		// Cant pass member as arguments to canEdit() because of GroupSubsites
 		Session::set("loggedInAs", $admin->ID);
 		$this->assertTrue(
 			(bool)$subsite1page->canEdit(),
 			'Administrators can edit all subsites'
 		);
-
+	
 		// @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
 		Subsite::changeSubsite($subsite1);
 		
@@ -97,7 +128,7 @@ class SubsiteTest extends SapphireTest {
 			(bool)$subsite1page->canEdit(),
 			'Members can edit pages on a subsite if they are in a group belonging to this subsite'
 		);
-
+	
 		Session::set("loggedInAs", $subsite2member->ID);
 		$this->assertFalse(
 			(bool)$subsite1page->canEdit(),
