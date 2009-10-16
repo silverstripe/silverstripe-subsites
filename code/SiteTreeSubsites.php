@@ -57,7 +57,8 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
 
-			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
+			$context = DataObject::context_obj();
+			if($context && is_numeric($context->SubsiteID)) $subsiteID = (int) $context->SubsiteID;
 			else $subsiteID = (int) Subsite::currentSubsiteID();
 			
 			// The foreach is an ugly way of getting the first key :-)
