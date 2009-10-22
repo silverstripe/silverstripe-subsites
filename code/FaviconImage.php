@@ -7,7 +7,7 @@ class FaviconImage extends Image{
 	}
 	
 	public function CMSThumbnail() {
-		return $this;
+		return $this->getFormattedImage('CMSThumbnail');
 	}
 }
 

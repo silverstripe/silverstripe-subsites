@@ -181,7 +181,7 @@ class Subsite extends DataObject implements PermissionProvider {
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
 					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
-					new ImageField('Favicon', 'Bookmark Icon')
+					new ImageField('Favicon', 'Bookmark Icon', $this->ID)
 				)
 			),
 			new HiddenField('ID', '', $this->ID),
