@@ -114,7 +114,7 @@ class Subsite extends DataObject implements PermissionProvider {
 			return ArrayLib::valuekey($themes);
 		} else {
 			$themes = array();
-			if(is_dir('../themes/')) {
+			if(is_dir('../themes')) {
 				foreach(scandir('../themes/') as $theme) {
 					if($theme[0] == '.') continue;
 					$theme = strtok($theme,'_');
@@ -181,14 +181,18 @@ class Subsite extends DataObject implements PermissionProvider {
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
 					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
-
-					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme),
 					new ImageField('Favicon', 'Bookmark Icon')
 				)
 			),
 			new HiddenField('ID', '', $this->ID),
 			new HiddenField('IsSubsite', '', 1)
 		);
+		
+		if($themes = $this->allowedThemes()){
+			$fields -> push(
+				new DropdownField('Theme','Theme', $themes, $this->Theme)
+			);
+		}
 
 // This code needs to be updated to reference the new SS 2.0.3 theme system
 /*		if($themes = SSViewer::getThemes(false))
@@ -253,7 +257,6 @@ JS;
 		} else if(Session::get('SubsiteID')) {
 			$id = Session::get('SubsiteID');
 		}
-
 		if(!isset($id) || $id === NULL) {
 			$id = self::getSubsiteIDForDomain($cache);
 			Session::set('SubsiteID', $id);
