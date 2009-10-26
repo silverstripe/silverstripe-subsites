@@ -49,7 +49,7 @@ class FileSubsites extends DataObjectDecorator {
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
 				$where = "`$tableName`.SubsiteID IN (0, $subsiteID)";
-				if(defined('Database::USE_ANSI_SQL')) {
+				if(defined('DB::USE_ANSI_SQL')) {
 					$where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
 				}
 				

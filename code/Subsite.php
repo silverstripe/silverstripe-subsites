@@ -340,7 +340,7 @@ JS;
 
 		$SQL_permissionCodes = join("','", $SQL_permissionCodes);
 
-		if(defined('Database::USE_ANSI_SQL')) {
+		if(defined('DB::USE_ANSI_SQL')) {
 			return DataObject::get(
 				'Member',
 				"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
@@ -374,7 +374,7 @@ JS;
 			return DataObject::get('Subsite');
 		}
 		
-		if(defined('Database::USE_ANSI_SQL')) {
+		if(defined('DB::USE_ANSI_SQL')) {
 			return DataObject::get(
 				'Subsite', 
 				"\"MemberID\" = {$member->ID}", 
@@ -409,7 +409,7 @@ JS;
 		$SQL_perms = join("','", $SQLa_perm);
 		$memberID = (int)$member->ID;
 
-		if(defined('Database::USE_ANSI_SQL')) {
+		if(defined('DB::USE_ANSI_SQL')) {
 			$groupCount = DB::query("
 				SELECT COUNT(\"Permission\".\"ID\")
 				FROM \"Permission\"
@@ -493,7 +493,7 @@ JS;
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
-		if(defined('Database::USE_ANSI_SQL')) {
+		if(defined('DB::USE_ANSI_SQL')) {
 			return DataObject::get(
 				'Subsite',
 				"\"Group_Members\".\"MemberID\" = $member->ID
