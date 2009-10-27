@@ -55,7 +55,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		if(Subsite::$disable_subsite_filter) return;
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
-		if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
+		if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], "\"ID\" = ") !== 0)) {
 
 			$context = DataObject::context_obj();
 			if($context && is_numeric($context->SubsiteID)) $subsiteID = (int) $context->SubsiteID;

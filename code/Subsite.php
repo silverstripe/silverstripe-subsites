@@ -353,11 +353,11 @@ JS;
 		
 		return DataObject::get(
 			'Member',
-			"`Group`.`SubsiteID` = $this->ID AND `Permission`.`Code` IN ('$SQL_permissionCodes')",
+			"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
 			'',
-			"LEFT JOIN `Group_Members` ON `Member`.`ID` = `Group_Members`.`MemberID`
-			LEFT JOIN `Group` ON `Group`.`ID` = `Group_Members`.`GroupID`
-			LEFT JOIN `Permission` ON `Permission`.`GroupID` = `Group`.`ID`"
+			"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
+			LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
+			LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
 		);
 	}
 
@@ -508,13 +508,13 @@ JS;
 
 		return DataObject::get(
 			'Subsite',
-			"`Group_Members`.`MemberID` = $member->ID
-			AND `Permission`.`Code` IN ($SQL_codes, 'ADMIN')
-			AND (Subdomain IS NOT NULL OR `Subsite`.ClassName IN ($templateClassList)) AND `Subsite`.Title != ''",
+			"\"Group_Members\".\"MemberID\" = $member->ID
+			AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')
+			AND (\"Subdomain\" IS NOT NULL OR \"Subsite\".\"ClassName\" IN ($templateClassList)) AND \"Subsite\".\"Title\" != ''",
 			'',
-			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0)
-			LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
-			LEFT JOIN `Permission` ON `Group`.`ID`=`Permission`.`GroupID`"
+			"LEFT JOIN \"Group\" ON (\"SubsiteID\"=\"Subsite\".\"ID\" OR \"SubsiteID\" = 0)
+			LEFT JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
+			LEFT JOIN \"Permission\" ON \"Group\".\"ID\"=\"Permission\".\"GroupID\""
 		);
 	}
 
