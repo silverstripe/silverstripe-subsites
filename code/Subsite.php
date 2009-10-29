@@ -340,25 +340,19 @@ JS;
 
 		$SQL_permissionCodes = join("','", $SQL_permissionCodes);
 
-		if(defined('DB::USE_ANSI_SQL')) {
-			return DataObject::get(
-				'Member',
-				"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
-				'',
-				"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
-				LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
-				LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
-			);
-		}
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
 		
 		return DataObject::get(
 			'Member',
-			"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
+			"{$q}Group{$q}.{$q}SubsiteID{$q} = $this->ID AND {$q}Permission{$q}.{$q}Code{$q} IN ('$SQL_permissionCodes')",
 			'',
-			"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
-			LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
-			LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
+			"LEFT JOIN {$q}Group_Members{$q} ON {$q}Member{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}MemberID{$q}
+			LEFT JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}GroupID{$q}
+			LEFT JOIN {$q}Permission{$q} ON {$q}Permission{$q}.{$q}GroupID{$q} = {$q}Group{$q}.{$q}ID{$q}"
 		);
+	
 	}
 
 	/**
@@ -374,23 +368,18 @@ JS;
 			return DataObject::get('Subsite');
 		}
 		
-		if(defined('DB::USE_ANSI_SQL')) {
-			return DataObject::get(
-				'Subsite', 
-				"\"MemberID\" = {$member->ID}", 
-				'',
-				"LEFT JOIN \"Group\" ON \"Subsite\".\"ID\" = \"SubsiteID\"
-				LEFT JOIN \"Group_Members\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\""
-			);
-		}
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
 		
 		return DataObject::get(
 			'Subsite', 
-			"MemberID = {$member->ID}", 
+			"{$q}MemberID{$q} = {$member->ID}", 
 			'',
-			"LEFT JOIN `Group` ON `Subsite`.`ID` = `SubsiteID` 
-			LEFT JOIN `Group_Members` ON `Group`.`ID` = `Group_Members`.`GroupID`"
+			"LEFT JOIN {$q}Group{$q} ON {$q}Subsite{$q}.{$q}ID{$q} = {$q}SubsiteID{$q}
+			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}GroupID{$q}"
 		);
+	
 	}
 	
 	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
@@ -493,29 +482,20 @@ JS;
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
-		if(defined('DB::USE_ANSI_SQL')) {
-			return DataObject::get(
-				'Subsite',
-				"\"Group_Members\".\"MemberID\" = $member->ID
-				AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')
-				AND (\"Subdomain\" IS NOT NULL OR \"Subsite\".\"ClassName\" IN ($templateClassList)) AND \"Subsite\".\"Title\" != ''",
-				'',
-				"LEFT JOIN \"Group\" ON (\"SubsiteID\" = \"Subsite\".\"ID\" OR \"SubsiteID\" = 0)
-				LEFT JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Group\".\"ID\"
-				LEFT JOIN \"Permission\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\""
-			);
-		}
-
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
 		return DataObject::get(
 			'Subsite',
-			"\"Group_Members\".\"MemberID\" = $member->ID
-			AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')
-			AND (\"Subdomain\" IS NOT NULL OR \"Subsite\".\"ClassName\" IN ($templateClassList)) AND \"Subsite\".\"Title\" != ''",
+			"{$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
+			AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')
+			AND ({$q}Subdomain{$q} IS NOT NULL OR {$q}Subsite{$q}.{$q}ClassName{$q} IN ($templateClassList)) AND {$q}Subsite{$q}.{$q}Title{$q} != ''",
 			'',
-			"LEFT JOIN \"Group\" ON (\"SubsiteID\"=\"Subsite\".\"ID\" OR \"SubsiteID\" = 0)
-			LEFT JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
-			LEFT JOIN \"Permission\" ON \"Group\".\"ID\"=\"Permission\".\"GroupID\""
-		);
+			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
+			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q} = {$q}Group{$q}.{$q}ID{$q}
+			LEFT JOIN {$q}Permission{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Permission{$q}.{$q}GroupID{$q}"
+		);		
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

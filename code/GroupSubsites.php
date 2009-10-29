@@ -69,19 +69,19 @@ class GroupSubsites extends DataObjectDecorator {
 	function augmentSQL(SQLQuery &$query) {
 		if(Subsite::$disable_subsite_filter) return;
 
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
-		if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".\"ID\" = ") === false)) {
+		if(!$query->where || (strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false)) {
 
 			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
 			else $subsiteID = (int) Subsite::currentSubsiteID();
 
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
-				$where = "`$tableName`.SubsiteID IN (0, $subsiteID)";
-				if(defined('DB::USE_ANSI_SQL')) {
-					$where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
-				}
-				
+				$where = "{$q}$tableName{$q}.{$q}SubsiteID{$q} IN (0, $subsiteID)";
 				$query->where[] = $where;
 				break;
 			}

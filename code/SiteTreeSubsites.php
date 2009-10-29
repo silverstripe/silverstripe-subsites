@@ -54,8 +54,12 @@ class SiteTreeSubsites extends DataObjectDecorator {
 	function augmentSQL(SQLQuery &$query) {
 		if(Subsite::$disable_subsite_filter) return;
 		
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
-		if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], "\"ID\" = ") !== 0)) {
+		if(!$query->where || (strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], "{$q}ID{$q} = ") !== 0)) {
 
 			$context = DataObject::context_obj();
 			if($context && is_numeric($context->SubsiteID)) $subsiteID = (int) $context->SubsiteID;
@@ -63,10 +67,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 			
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
-				$where = "`$tableName`.SubsiteID IN ($subsiteID)";
-				if(defined('DB::USE_ANSI_SQL')) {
-					$where = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
-				}
+				$where = "{$q}$tableName{$q}.{$q}SubsiteID{$q} IN ($subsiteID)";
 				
 				// The tableName should be SiteTree or SiteTree_Live...
 				if(strpos($tableName,'SiteTree') === false) break;
