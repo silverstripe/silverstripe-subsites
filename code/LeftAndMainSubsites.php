@@ -65,6 +65,9 @@ class LeftAndMainSubsites extends Extension {
 		$siteList = new DataObjectSet();
 		$subsites = Subsite::accessible_sites('CMS_ACCESS_' . $this->owner->class);
 
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
 		
 		$mainSiteTitle = null;
 		switch($this->owner->class) {
@@ -74,7 +77,7 @@ class LeftAndMainSubsites extends Extension {
 				$mainSiteTitle = "Groups accessing all sites"; break;
 			case "CMSMain":
 				// If there's a default site then main site has no meaning
-				if(!DataObject::get_one('Subsite', "DefaultSite = 1 AND IsPublic = 1")) {
+				if(!DataObject::get_one('Subsite', "{$q}DefaultSite{$q} = 1 AND {$q}IsPublic{$q} = 1")) {
 					$mainSiteTitle = "Main site";
 				}
 				break;

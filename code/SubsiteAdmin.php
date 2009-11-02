@@ -35,17 +35,21 @@ class SubsiteAdmin extends GenericDataAdmin {
 	function Results($data = null) {
 		if(!$data) $data = $this->requestParams;
 		
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
 		$where = '';
 		if(isset($data['Name']) && $data['Name']) {
 			$SQL_name = Convert::raw2sql($data['Name']);
-			$where = "Title LIKE '%$SQL_name%'";
+			$where = "{$q}Title{$q} LIKE '%$SQL_name%'";
 		} else {
-			$where = "Title != ''";
+			$where = "{$q}Title{$q} != ''";
 		}
 		
 		$intranets = null;
-		$intranets = DataObject::get('Subsite_Template', $where, 'Title');
-		$subsites = DataObject::get('Subsite', $where, 'Title');
+		$intranets = DataObject::get('Subsite_Template', $where, "{$q}Title{$q}");
+		$subsites = DataObject::get('Subsite', $where, "{$q}Title{$q}");
 		
 		if($intranets) {
 			$intranets->merge($subsites);
@@ -99,7 +103,11 @@ class SubsiteAdmin extends GenericDataAdmin {
 	}
 	
 	public function getIntranetTemplates() {
-		return DataObject::get('Subsite_Template', '', 'Title');
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
+		return DataObject::get('Subsite_Template', '', "{$q}Title{$q}");
 	}
 	
 	function addintranet($data, $form) {
