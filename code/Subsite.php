@@ -314,16 +314,20 @@ JS;
 
 		$SQL_subdomain = Convert::raw2sql(array_shift($domainNameParts));
 		$SQL_domain = join('.', Convert::raw2sql($domainNameParts));
-
+		
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
 		$subsite = null;
 		if(self::$use_domain) {
-			$subsite = DataObject::get_one('Subsite', "Subdomain = '$SQL_subdomain' AND Domain = '$SQL_domain' AND IsPublic = 1");
+			$subsite = DataObject::get_one('Subsite', "{$q}Subdomain{$q} = '$SQL_subdomain' AND {$q}Domain{$q} = '$SQL_domain' AND {$q}IsPublic{$q} = 1");
 		}
 		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite', "Subdomain = '$SQL_subdomain' AND IsPublic = 1");
+			$subsite = DataObject::get_one('Subsite', "{$q}Subdomain{$q} = '$SQL_subdomain' AND {$q}IsPublic{$q} = 1");
 		}
 		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite', "DefaultSite = 1 AND IsPublic = 1");
+			$subsite = DataObject::get_one('Subsite', "{$q}DefaultSite{$q} = 1 AND {$q}IsPublic{$q} = 1");
 		}
 
 		if($subsite) {
@@ -398,26 +402,18 @@ JS;
 		$SQL_perms = join("','", $SQLa_perm);
 		$memberID = (int)$member->ID;
 
-		if(defined('DB::USE_ANSI_SQL')) {
-			$groupCount = DB::query("
-				SELECT COUNT(\"Permission\".\"ID\")
-				FROM \"Permission\"
-				INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"SubsiteID\" = 0
-				INNER JOIN \"Group_Members\" USING(\"GroupID\")
-				WHERE \"Permission\".\"Code\" IN ('$SQL_perms') AND \"MemberID\" = {$memberID}
-			")->value();
-		} else {
-			$groupCount = DB::query("
-				SELECT COUNT(`Permission`.`ID`)
-				FROM `Permission`
-				INNER JOIN `Group` ON `Group`.`ID` = `Permission`.`GroupID` AND `Group`.`SubsiteID` = 0
-				INNER JOIN `Group_Members` USING(`GroupID`)
-				WHERE
-				`Permission`.`Code` IN ('$SQL_perms')
-				AND `MemberID` = {$memberID}
-			")->value();
-		}
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
 		
+		$groupCount = DB::query("
+			SELECT COUNT({$q}Permission{$q}.{$q}ID{$q})
+			FROM {$q}Permission{$q}
+			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Permission{$q}.{$q}GroupID{$q} AND {$q}Group{$q}.{$q}SubsiteID{$q} = 0
+			INNER JOIN {$q}Group_Members{$q} USING({$q}GroupID{$q})
+			WHERE {$q}Permission{$q}.{$q}Code{$q} IN ('$SQL_perms') AND {$q}MemberID{$q} = {$memberID}
+		")->value();
+			
 		return ($groupCount > 0);
 	}
 
@@ -434,6 +430,10 @@ JS;
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
 
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
 		/*
 		 * Copy data from this template to the given subsite. Does this using an iterative depth-first search.
 		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
@@ -444,7 +444,7 @@ JS;
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('Page', 'Live', "ParentID = $sourceParentID", '');
+			$children = Versioned::get_by_stage('Page', 'Live', "{$q}ParentID{$q} = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {
@@ -555,6 +555,10 @@ class Subsite_Template extends Subsite {
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
 
+		if(defined('DB::USE_ANSI_SQL')) 
+			$q="\"";
+		else $q='`';
+		
 		/*
 		 * Copy site content from this template to the given subsite. Does this using an iterative depth-first search.
 		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
@@ -565,7 +569,7 @@ class Subsite_Template extends Subsite {
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('SiteTree', 'Live', "ParentID = $sourceParentID", '');
+			$children = Versioned::get_by_stage('SiteTree', 'Live', "{$q}ParentID{$q} = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {
@@ -582,7 +586,7 @@ class Subsite_Template extends Subsite {
 		 * Copy groups from the template to the given subsites.  Each of the groups will be created and left
 		 * empty.
 		 */
-		$groups = DataObject::get("Group", "SubsiteID = '$this->ID'");
+		$groups = DataObject::get("Group", "{$q}SubsiteID{$q} = '$this->ID'");
 		if($groups) foreach($groups as $group) {
 			$group->duplicateToSubsite($intranet);
 		}
