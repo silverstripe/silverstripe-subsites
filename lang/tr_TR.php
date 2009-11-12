@@ -2,11 +2,11 @@
 
 /**
  * Turkish (Turkey) language pack
- * @package modules: subsites
+ * @package subsites
  * @subpackage i18n
  */
 
-i18n::include_locale_file('modules: subsites', 'en_US');
+i18n::include_locale_file('subsites', 'en_US');
 
 global $lang;
 
