@@ -10,7 +10,7 @@ class LeftAndMainSubsites extends Extension {
 		'changesubsite',
 	);
 	
-	function augmentInit() {
+	function init() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
