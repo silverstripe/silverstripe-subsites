@@ -104,11 +104,12 @@ class SubsiteAdminTest extends SapphireTest {
 		$cmsMain = new CMSMain();
 		foreach($cmsMain->Subsites() as $subsite) {
 			$ids[$subsite->ID] = true;
-		}
+		}	
+
 		$this->assertArrayHasKey(0, $ids, "Main site accessible");
-		$this->assertArrayHasKey(1, $ids, "Site with no groups inaccesible");
-		$this->assertArrayHasKey(2, $ids, "Subsite1 Template inaccessible");
-		$this->assertArrayHasKey(3, $ids, "Subsite2 Template inaccessible");
+		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','main'), $ids, "Site with no groups inaccesible");
+		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','subsite1'), $ids, "Subsite1 Template inaccessible");
+		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','subsite2'), $ids, "Subsite2 Template inaccessible");
 	}
 
 	
