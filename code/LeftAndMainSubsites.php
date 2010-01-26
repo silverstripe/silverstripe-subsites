@@ -21,7 +21,7 @@ class LeftAndMainSubsites extends Extension {
 	 */
 	function getCMSTreeTitle() {
 		$subsite = Subsite::currentSubSite();
-		return $subsite ? $subsite->Title : 'Site Content';
+		return $subsite ? $subsite->Title : null;
 	}
 
 
