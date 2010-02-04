@@ -13,7 +13,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	static $disable_subsite_filter = false;
 
-	static $default_sort = 'Title';
+	static $default_sort = "\"Title\"";
 
 	/**
 	 * @var boolean $use_domain Checks for valid domain in addition to subdomain
