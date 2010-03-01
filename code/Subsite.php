@@ -474,11 +474,14 @@ JS;
 			if ($domains) foreach($domains as $domain) {
 				$hostmap[str_replace('www.', '', $domain->Domain)] = $subsite->domain(); 
 			}
+			if ($subsite->DefaultSite) $hostmap['default'] = $subsite->domain();
 		}
 		
 		$data = '<?php $subsiteHostmap = '.var_export($hostmap, true).' ?>';
-		
-		if (is_writable($file)) file_put_contents($file, $data);
+
+		if (is_writable(dirname($file)) || is_writable($file)) {
+			file_put_contents($file, $data);
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
