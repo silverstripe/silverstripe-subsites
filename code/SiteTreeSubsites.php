@@ -59,8 +59,7 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		else $q='`';
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
-		if(!$query->where || (strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], "{$q}ID{$q} = ") !== 0)) {
-
+		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]))) {
 			$context = DataObject::context_obj();
 			if($context && is_numeric($context->SubsiteID)) $subsiteID = (int) $context->SubsiteID;
 			else $subsiteID = (int) Subsite::currentSubsiteID();

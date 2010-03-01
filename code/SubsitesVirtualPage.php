@@ -65,18 +65,6 @@ class SubsitesVirtualPage extends VirtualPage {
 
 		return $fields;
 	}
-	
-	function onBeforeWrite() {
-		Subsite::$disable_subsite_filter = true;
-		
-		parent::onBeforeWrite();
-	}
-	
-	function onAfterWrite() {
-		Subsite::$disable_subsite_filter = false;
-		
-		parent::onAfterWrite();
-	}
 }
 
 class SubsitesVirtualPage_Controller extends VirtualPage_Controller {
