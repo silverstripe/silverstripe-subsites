@@ -20,7 +20,7 @@ class LeftAndMainSubsites extends Extension {
 	 */
 	function getCMSTreeTitle() {
 		$subsite = Subsite::currentSubSite();
-		return $subsite ? $subsite->Title : null;
+		return $subsite ? htmlspecialchars($subsite->Title, ENT_QUOTES) : 'Site Content';
 	}
 	
 	function updatePageOptions(&$fields) {
@@ -99,7 +99,7 @@ class LeftAndMainSubsites extends Extension {
 			foreach($list as $subsite) {
 				$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
 		
-				$output .= "\n<option value=\"{$subsite->ID}\"$selected>{$subsite->Title}</option>";
+				$output .= "\n<option value=\"{$subsite->ID}\"$selected>".htmlspecialchars($subsite->Title, ENT_QUOTES)."</option>";
 			}
 		
 			$output .= '</select>';

@@ -99,10 +99,10 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 	 */
 	function alternateTreeTitle() {
 		if($this->owner->AccessAllSubsites) {
-			return $this->owner->Title . ' <i>(global group)</i>';
+			return htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(global group)</i>';
 		} else {
 			$subsites = Convert::raw2xml(implode(", ", $this->owner->Subsites()->column('Title')));
-			return $this->owner->Title . " <i>($subsites)</i>";
+			return htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
 		}
 	}
 
