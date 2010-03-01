@@ -21,9 +21,10 @@ class Subsite extends DataObject implements PermissionProvider {
 		'RedirectURL' => 'Varchar(255)',
 		'DefaultSite' => 'Boolean',
 		'Theme' => 'Varchar',
+		'Language' => 'Varchar(6)',
 
 		// Used to hide unfinished/private subsites from public view.
-		// If unset, will default to
+		// If unset, will default to true
 		'IsPublic' => 'Boolean'
 	);
 	
@@ -142,6 +143,8 @@ class Subsite extends DataObject implements PermissionProvider {
 			array("Domain" => "Domain (use * as a wildcard)", "IsPrimary" => "Primary domain?"), 
 			array("Domain" => "TextField", "IsPrimary" => "CheckboxField"), 
 			"SubsiteID", $this->ID);
+			
+		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_languages());
 
 		$fields = new FieldSet(
 			new TabSet('Root',
@@ -151,6 +154,7 @@ class Subsite extends DataObject implements PermissionProvider {
 					
 					new HeaderField("Domains for this subsite"),
 					$domainTable,
+					$languageSelector,
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
 					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
@@ -250,6 +254,13 @@ JS;
 		else $subsiteID = $subsite;
 		
 		Session::set('SubsiteID', (int)$subsiteID);
+		
+		// Set locale
+		if (is_object($subsite) && $subsite->Language != '') {
+			if (isset(i18n::$likely_subtags[$subsite->Language])) {
+				i18n::set_locale(i18n::$likely_subtags[$subsite->Language]);
+			}
+		}
 		
 		// Only bother flushing caches if we've actually changed
 		if($subsiteID != self::currentSubsiteID()) {
