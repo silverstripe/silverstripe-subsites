@@ -35,7 +35,7 @@ SubsitesTreeDropdownField.prototype = {
 		var ul = this.treeNodeHolder();
 		ul.innerHTML = ss.i18n._t('LOADING');
 		
-		var ajaxURL =  this.buildURL('getsubtree?SubtreeRootID=' + this.getIdx());
+		var ajaxURL =  this.options.dropdownField.buildURL('getsubtree?SubtreeRootID=' + this.getIdx());
 		
 		// Find the root of the tree - this points to a list item in the tree, not the root div we actually want
 		// @todo: We should be using framework API calls to find the tree
