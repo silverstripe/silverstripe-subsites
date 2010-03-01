@@ -341,27 +341,15 @@ JS;
 		
 		return DataObject::get(
 			'Member',
-<<<<<<< .working
 			"{$q}Group{$q}.{$q}SubsiteID{$q} = $this->ID AND {$q}Permission{$q}.{$q}Code{$q} IN ('$SQL_permissionCodes')",
-=======
-			"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
->>>>>>> .merge-right.r88146
 			'',
-<<<<<<< .working
 			"LEFT JOIN {$q}Group_Members{$q} ON {$q}Member{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}MemberID{$q}
 			LEFT JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}GroupID{$q}
 			LEFT JOIN {$q}Permission{$q} ON {$q}Permission{$q}.{$q}GroupID{$q} = {$q}Group{$q}.{$q}ID{$q}"
-=======
-			"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
-			LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
-			LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
->>>>>>> .merge-right.r88146
 		);
 	
 	}
 
-<<<<<<< .working
-=======
 	/**
 	 * Get all subsites.
 	 *
@@ -385,7 +373,6 @@ JS;
 		}
 	}
 
->>>>>>> .merge-right.r88146
 	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
@@ -400,33 +387,18 @@ JS;
 		$SQL_perms = join("','", $SQLa_perm);
 		$memberID = (int)$member->ID;
 		
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
 		$groupCount = DB::query("
-<<<<<<< .working
-			SELECT COUNT({$q}Permission{$q}.{$q}ID{$q})
-			FROM {$q}Permission{$q}
-			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Permission{$q}.{$q}GroupID{$q} AND {$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1
-			INNER JOIN {$q}Group_Members{$q} USING({$q}GroupID{$q})
-=======
 			SELECT COUNT(\"Permission\".\"ID\")
 			FROM \"Permission\"
-			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"SubsiteID\" = 0
+			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
 			INNER JOIN \"Group_Members\" USING(\"GroupID\")
->>>>>>> .merge-right.r88146
 			WHERE
-<<<<<<< .working
-			{$q}Permission{$q}.{$q}Code{$q} IN ('$SQL_perms')
-			AND {$q}MemberID{$q} = {$memberID}
-=======
 			\"Permission\".\"Code\" IN ('$SQL_perms')
 			AND \"MemberID\" = {$memberID}
->>>>>>> .merge-right.r88146
 		")->value();
-			
+
 		return ($groupCount > 0);
+
 	}
 
 	/**
@@ -503,7 +475,17 @@ JS;
 
 		if(is_array($permCode))	$SQL_codes = "'" . implode("', '", Convert::raw2sql($permCode)) . "'";
 		else $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
+<<<<<<< .working
 		
+=======
+
+		if(!$member) return new DataObjectSet();
+		
+		if (Permission::check('ADMIN') || Permission::check('SUBSITE_ACCESS_ALL')) {
+			return DataObject::get('Subsite');
+		}
+
+>>>>>>> .merge-right.r96290
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
 		if(defined('DB::USE_ANSI_SQL')) 
