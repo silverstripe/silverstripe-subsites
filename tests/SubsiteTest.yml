@@ -45,6 +45,9 @@ SiteTree:
    about:
       Title: About
       SubsiteID: =>Subsite_Template.main
+   linky:
+       Title: Linky
+       SubsiteID: =>Subsite_Template.main
    staff:
       Title: Staff
       ParentID: =>SiteTree.about
@@ -64,6 +67,7 @@ SiteTree:
    subsite2_contactus:
       Title: Contact Us (Subsite 2)
       SubsiteID: =>Subsite_Template.subsite2
+
 Group:
    admin:
       Title: Admin
