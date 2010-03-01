@@ -79,7 +79,7 @@ class SubsitesVirtualPage extends VirtualPage {
 	function syncLinkTracking() {
 		$oldState = Subsite::$disable_subsite_filter;
 		Subsite::$disable_subsite_filter = true;
-		$this->HasBrokenLink = DataObject::get_by_id('SiteTree', $this->CopyContentFromID) ? false : true;
+		if ($this->CopyContentFromID) $this->HasBrokenLink = DataObject::get_by_id('SiteTree', $this->CopyContentFromID) ? false : true;
 		Subsite::$disable_subsite_filter = $oldState;
 	}
 	
