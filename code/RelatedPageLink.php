@@ -39,8 +39,8 @@ class RelatedPageLink extends DataObject {
 			"MenuTitle"
 		);
 		
-		if (isset($_GET['TreeDropdownField_ComplexTableField_Popup_AddForm_RelatedPageID_SubsiteID'])) {
-			$pageSelectionField->setSubsiteID($_GET['TreeDropdownField_ComplexTableField_Popup_AddForm_RelatedPageID_SubsiteID']);
+		if (isset($_GET['RelatedPageID_SubsiteID'])) {
+			$pageSelectionField->setSubsiteID($_GET['RelatedPageID_SubsiteID']);
 		}
 				
 		$pageSelectionField->setFilterFunction(create_function('$item', 'return $item->ClassName != "VirtualPage";'));

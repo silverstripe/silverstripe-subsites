@@ -20,7 +20,7 @@ SubsitesTreeDropdownField.prototype = {
         else var ajaxURL =  baseURL+ 'gettree?forceValues=' + this.inputTag.value;
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
-		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID());
+		ajaxURL += '&' + this.inputTag.name + '_SubsiteID=' + parseInt(this.subsiteID());
 		
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
 		new Ajax.Request(ajaxURL, {
@@ -49,7 +49,7 @@ SubsitesTreeDropdownField.prototype = {
 		while (tree && !tree.className.match(/(^| )SubsitesTreeDropdownField( |$)/)) tree = tree.parentNode;
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
-		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.tree.options.dropdownField.subsiteID());
+		ajaxURL += '&' + this.inputTag.name + '_SubsiteID=' + parseInt(this.tree.options.dropdownField.subsiteID());
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
 		
 		new Ajax.Request(ajaxURL, {
