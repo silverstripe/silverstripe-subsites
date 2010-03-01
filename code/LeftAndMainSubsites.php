@@ -23,7 +23,7 @@ class LeftAndMainSubsites extends Extension {
 		
 		// Switch to a subsite that this user can actually access.
 		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->toDropdownMap();
-		if(!isset($sites[Subsite::currentSubsiteID()])) {
+		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 			$siteIDs = array_keys($sites);
 			Subsite::changeSubsite($siteIDs[0]);
 		}
