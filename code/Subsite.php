@@ -92,6 +92,15 @@ class Subsite extends DataObject implements PermissionProvider {
 	}
 
 	/**
+	 * Whenever a Subsite is written, rewrite the hostmap
+	 *
+	 * @return void
+	 */
+	public function onAfterWrite() {
+		Subsite::writeHostMap();
+	}
+	
+	/**
 	 * Return the domain of this site
 	 *
 	 * @return string The full domain name of this subsite (without protocol prefix)
@@ -242,7 +251,6 @@ JS;
 		Session::set('SubsiteID', $subsiteID);
 
 		// And clear caches
-		self::$cached_subsite = NULL ;
 		Permission::flush_permission_cache() ;
 	}
 
@@ -446,6 +454,31 @@ JS;
 			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q} = {$q}Group{$q}.{$q}ID{$q}
 			LEFT JOIN {$q}Permission{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Permission{$q}.{$q}GroupID{$q}"
 		);		
+	}
+	
+	/**
+	 * Write a host->domain map to cache/host-map.php
+	 *
+	 * This is used primarily when using subsites in conjunction with StaticPublisher
+	 *
+	 * @return void
+	 * @author Tom Rix
+	 */
+	static function writeHostMap($file = null) {
+		if (!$file) $file = Director::baseFolder().'/cache/host-map.php';
+		$hostmap = array();
+		
+		$subsites = DataObject::get('Subsite');
+		
+		if ($subsites) foreach($subsites as $subsite) {
+			$domains = $subsite->Domains();
+			if ($domains) foreach($domains as $domain) {
+				$hostmap[str_replace('www.', '', $domain->Domain)] = $subsite->domain(); 
+			}
+		}
+		
+		$data = '<?php $subsiteHostmap = '.var_export($hostmap, true).' ?>';
+		file_put_contents($file, $data);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

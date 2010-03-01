@@ -8,4 +8,13 @@ class SubsiteDomain extends DataObject {
 	static $has_one = array(
  		"Subsite" => "Subsite",
 	);
+	
+	/**
+	 * Whenever a Subsite Domain is written, rewrite the hostmap
+	 *
+	 * @return void
+	 */
+	public function onAfterWrite() {
+		Subsite::writeHostMap();
+	}
 }
