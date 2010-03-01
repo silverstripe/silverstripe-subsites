@@ -17,16 +17,9 @@ class SubsiteAdminTest extends SapphireTest {
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
         
         // Confirm that this URL gets you the entire page, with the edit form loaded
-        $response2 = Director::test('admin/subsites/show/1', null, $this->adminLoggedInSession());
+        $response2 = Director::test('admin/subsites/Subsite/1/edit', null, $this->adminLoggedInSession());
         $this->assertTrue(strpos($response2->getBody(), 'id="Form_EditForm_ID"') !== false, "Testing Form_EditForm_ID exists");
         $this->assertTrue(strpos($response2->getBody(), '<head') !== false, "Testing <head> exists");
-
-        // Confirm that this URL gets you just the form content, with the edit form loaded
-        $response3 = Director::test('admin/subsites/show/1', array('ajax' => 1), $this->adminLoggedInSession());
-
-        $this->assertTrue(strpos($response3->getBody(), 'id="Form_EditForm_ID"') !== false, "Testing Form_EditForm_ID exists on ajax page");
-        $this->assertTrue(strpos($response3->getBody(), '<form') === false, "Testing <form> doesn't exist on ajax page");
-        $this->assertTrue(strpos($response3->getBody(), '<head') === false, "Testing <head> doesn't exist on ajax page");
     }
 	
 	/**
