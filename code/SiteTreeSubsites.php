@@ -411,6 +411,13 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		
 		$this->owner->CrossSubsiteLinkTracking()->setByIDList($linkedPages);
 	}
+	
+	/**
+	 * Return a piece of text to keep DataObject cache keys appropriately specific
+	 */
+	function cacheKeyComponent() {
+		return 'subsite-'.Subsite::currentSubsiteID();
+	}
 }
 
 ?>
