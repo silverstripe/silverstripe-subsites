@@ -22,6 +22,10 @@ class LeftAndMainSubsites extends Extension {
 		$subsite = Subsite::currentSubSite();
 		return $subsite ? $subsite->Title : null;
 	}
+	
+	function updatePageOptions(&$fields) {
+		$fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
+	}
 
 
 	public function changesubsite() {
@@ -154,7 +158,7 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	function augmentNewSiteTreeItem(&$item) {
-		$item->SubsiteID = Subsite::currentSubsiteID();	
+		$item->SubsiteID = isset($_POST['SubsiteID']) ? $_POST['SubsiteID'] : Subsite::currentSubsiteID();	
 	}
 	
 	function onAfterSave($record) {
