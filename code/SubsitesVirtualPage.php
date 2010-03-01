@@ -87,13 +87,21 @@ class SubsitesVirtualPage extends VirtualPage {
 		parent::onBeforeWrite();
 	
 		if($this->CustomMetaTitle) $this->MetaTitle = $this->CustomMetaTitle;
-		else $this->MetaTitle = $this->ContentSource()->MetaTitle;
+		else {
+			$this->MetaTitle = $this->ContentSource()->MetaTitle ? $this->ContentSource()->MetaTitle : $this->MetaTitle; 
+		}
 		if($this->CustomMetaKeywords) $this->MetaKeywords = $this->CustomMetaKeywords;
-		else $this->MetaKeywords = $this->ContentSource()->MetaKeywords;
+		else {
+			$this->MetaKeywords = $this->ContentSource()->MetaKeywords ? $this->ContentSource()->MetaKeywords : $this->MetaKeywords; 
+		}
 		if($this->CustomMetaDescription) $this->MetaDescription = $this->CustomMetaDescription;
-		else $this->MetaDescription = $this->ContentSource()->MetaDescription;
+		else {
+			$this->MetaDescription = $this->ContentSource()->MetaDescription ? $this->ContentSource()->MetaDescription : $this->MetaDescription; 
+		}
 		if($this->CustomExtraMeta) $this->ExtraMeta = $this->CustomExtraMeta;
-		else $this->CustomExtraMeta = $this->ContentSource()->CustomExtraMeta;
+		else {
+			$this->ExtraMeta = $this->ContentSource()->ExtraMeta ? $this->ContentSource()->ExtraMeta : $this->ExtraMeta; 
+		}
 	}
 }
 
