@@ -69,9 +69,11 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]))) {
-			$context = DataObject::context_obj();
-			if($context && is_numeric($context->SubsiteID)) $subsiteID = (int) $context->SubsiteID;
-			else $subsiteID = (int) Subsite::currentSubsiteID();
+			if (Subsite::$force_subsite) $subsiteID = Subsite::$force_subsite;
+			else {
+				if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+				else $subsiteID = (int)Subsite::currentSubsiteID();
+			}
 			
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {

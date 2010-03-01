@@ -12,6 +12,12 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * to limit DataObject::get*() calls to a specific subsite. Useful for debugging.
 	 */
 	static $disable_subsite_filter = false;
+	
+	/**
+	 * Allows you to force a specific subsite ID, or comma separated list of IDs.
+	 * Only works for reading. An object cannot be written to more than 1 subsite.
+	 */
+	static $force_subsite = null;
 
 	static $write_hostmap = true;
 	static $default_sort = 'Title';
