@@ -5,9 +5,9 @@ SubsitesTreeDropdownField.prototype = {
 	
 	ajaxGetTree: function(after) {
 		// This if block is necessary to maintain both 2.2 and 2.3 support
-		var baseURL = this.helperURLBase();
-		if(baseURL.match('action_callfieldmethod')) var ajaxURL =  baseURL+ '&methodName=gettree&forceValues=' + this.inputTag.value;
-        else var ajaxURL =  baseURL+ 'gettree?forceValues=' + this.inputTag.value;
+		var baseURL = this.options.dropdownField.helperURLBase();
+        if(baseURL.match('action_callfieldmethod')) var ajaxURL =  baseURL+ '&methodName=gettree&forceValues=' + this.getIdx();
+        else var ajaxURL =  baseURL+ 'gettree?forceValues=' + this.getIdx();
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
 		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID);
