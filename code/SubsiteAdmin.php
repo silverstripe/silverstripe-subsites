@@ -10,7 +10,7 @@ class SubsiteAdmin extends ModelAdmin {
 	static $url_segment = 'subsites';
 	
 	static $collection_controller_class = "SubsiteAdmin_CollectionController";
-	
+
 	function Link() {
 		return 'admin/subsites/';
 	}
