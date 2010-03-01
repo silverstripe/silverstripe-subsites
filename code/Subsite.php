@@ -15,13 +15,6 @@ class Subsite extends DataObject implements PermissionProvider {
 
 	static $default_sort = "\"Title\"";
 
-	/**
-	 * @var boolean $use_domain Checks for valid domain in addition to subdomain
-	 * when searching for a matching page with {@link getSubsiteIDForDomain()}.
-	 * By default, only the subdomain has to match.
-	 */
-	static $use_domain = false;
-
 	static $db = array(
 		'Title' => 'Varchar(255)',
 		'RedirectURL' => 'Varchar(255)',
