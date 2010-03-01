@@ -24,4 +24,6 @@ Usage Overview
 Known issues:
 -----------------------------------------------
 
-
+When setting up SubsiteDomains, the port is important.
+If you are running on a non-standard port, you must put
+that in the Domain text box.
