@@ -67,6 +67,17 @@ class RelatedPageLink extends DataObject {
 	function RelatedPageAdminLink() {
 		return '<a href="admin/show/' . $this->RelatedPage()->ID . '" class="externallink" >' . Convert::raw2xml($this->RelatedPage()->Title) . '</a>';
 	}
+	/*
+	function canView($member = null) {
+		return $this->MasterPage()->canView($member);
+	}
+	function canEdit($member = null) {
+		return $this->MasterPage()->canView($member);
+	}
+	function canDelete($member = null) {
+		return $this->MasterPage()->canDelete($member);
+	}
+	*/
 }
 
 ?>
