@@ -3,9 +3,11 @@ Behaviour.register({
 		onchange: function() {
 			var request = new Ajax.Request(SiteTreeHandlers.controller_url + '/changesubsite?SubsiteID=' + this.value + '&ajax=1', {
 				onSuccess: function(response) {
-					$('sitetree').innerHTML = response.responseText;
-					SiteTree.applyTo($('sitetree'));
-					$('sitetree').getTreeNodeByIdx(0).onselect();
+					if ($('sitetree')) {
+						$('sitetree').innerHTML = response.responseText;
+						SiteTree.applyTo($('sitetree'));
+						$('sitetree').getTreeNodeByIdx(0).onselect();
+					}
 				},
 				
 				onFailure: function(response) {
