@@ -50,9 +50,6 @@ class LeftAndMainSubsites extends Extension {
 		if ($id == '-1') Cookie::set('noSubsiteFilter', 'true', 1);
 		else Cookie::set('noSubsiteFilter', 'false', 1);
 		
-		if ($id == '-1') Cookie::set('noSubsiteFilter', 'true', 1);
-		else Cookie::set('noSubsiteFilter', 'false', 1);
-		
 		if(Director::is_ajax()) {
 			$tree = $this->owner->SiteTreeAsUL();
 			$tree = ereg_replace('^[ \t\r\n]*<ul[^>]*>','', $tree);
