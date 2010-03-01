@@ -312,15 +312,15 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$page = $this->objFromFixture('SiteTree', 'importantpage');
 		$page->doUnpublish();
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite1');
-		Subsite::changeSubsite($subsite->ID);
-		$onLive = Versioned::get_by_stage('Page', 'Live', "SiteTree_Live.ID = ".$vp1->ID);
-		$this->assertNull($onLive, 'SVP has been removed from live');
+		Subsite::changeSubsite($vp1->SubsiteID);
+		$_REQUEST['showqueries']=1;
+		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "SiteTree_Live.ID = ".$vp1->ID);
+		$this->assertFalse($onLive, 'SVP has been removed from live');
 		
 		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
-		Subsite::changeSubsite($subsite->ID);
-		$onLive = Versioned::get_by_stage('Page', 'Live', "SiteTree_Live.ID = ".$vp2->ID);
-		$this->assertNull($onLive, 'SVP has been removed from live');
+		Subsite::changeSubsite($vp2->SubsiteID);
+		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "SiteTree_Live.ID = ".$vp2->ID);
+		$this->assertFalse($onLive, 'SVP has been removed from live');
 	}
 
 	function fixVersionNumberCache($page) {
