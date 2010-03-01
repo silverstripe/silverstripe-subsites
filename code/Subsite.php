@@ -464,7 +464,7 @@ JS;
 		return DataObject::get(
 			'Subsite',
 			"{$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
-			AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN', 'SUBSITE_ACCESS_ALL')
+			AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')
 			AND {$q}Subsite{$q}.{$q}Title{$q} != ''",
 			'',
 			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
