@@ -454,6 +454,10 @@ JS;
 		else $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
 
 		if(!$member) return new DataObjectSet();
+		
+		if (Permission::check('ADMIN') || Permission::check('SUBSITE_ACCESS_ALL')) {
+			return DataObject::get('Subsite');
+		}
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
