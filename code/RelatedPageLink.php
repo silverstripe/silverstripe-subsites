@@ -59,11 +59,24 @@ class RelatedPageLink extends DataObject {
 		return $fields;
 	}
 	
-	function RelatedPageAdminLink() {
-		return '<a href="admin/show/' . $this->RelatedPage()->ID . '" class="cmsEditlink">' . Convert::raw2xml($this->RelatedPage()->Title) . '</a>';
+	function RelatedPageAdminLink($master = false) {
+		$page = $master ? Dataobject::get_by_id("SiteTree", $this->MasterPageID)
+			: Dataobject::get_by_id("SiteTree", $this->RelatedPageID);
+		$otherPage = $master ? Dataobject::get_by_id("SiteTree", $this->RelatedPageID)
+			: Dataobject::get_by_id("SiteTree", $this->MasterPageID);
+		if(!$page) return;
+		
+		// Use cmsEditlink only when moving between different pages in the same subsite.
+		$classClause = ($page->SubsiteID == $otherPage->SubsiteID) ? ' class="cmsEditlink"' : '';
+		return '<a href="admin/show/' . $page->ID . "\"$classClause>" . Convert::raw2xml($page->Title) . '</a>';
 	}
-	function AbsoluteLink() {
-		$url = $this->RelatedPage()->AbsoluteLink();
+	function AbsoluteLink($master = false) {
+		$page = $master ? Dataobject::get_by_id("SiteTree", $this->MasterPageID)
+			: Dataobject::get_by_id("SiteTree", $this->RelatedPageID);
+		if(!$page) return;
+		
+
+		$url = $page->AbsoluteLink();
 		return '<a href="' . Convert::raw2att($url) .'" class="externallink">' . Convert::raw2xml($url) . '</a>';
 	}
 

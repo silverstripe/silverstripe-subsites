@@ -188,27 +188,24 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$related->setPermissions(array('add', 'edit', 'delete'));
 		
 		if($reverse) {
-			$text = '<p>In addition, this page is marked as related by the following pages: </p><ul>';
+			$text = '<p>In addition, this page is marked as related by the following pages: </p><p>';
 			foreach($reverse as $rpage) {
-				$text .= '<ul><a href="admin/show/' . $rpage->ID . '" class="cmsEditlink">' . $rpage->Title . '</a> '.$rpage->AbsoluteLink().'</ul>';
+				$text .= $rpage->RelatedPageAdminLink(true) . " - " . $rpage->AbsoluteLink(true) . "<br />\n";
 			}
-			$text .= '</ul>';
+			$text .= '</p>';
 			
 			$tab->push(new LiteralField('ReverseRelated', $text));
 		}
 	
 	}
 	
+	/**
+	 * Returns the RelatedPageLink objects that are reverse-associated with this page.
+	 */
 	function ReverseRelated() {
-		$return = new DataObjectSet();
-		$links = DataObject::get('RelatedPageLink', 'RelatedPageID = ' . $this->owner->ID);
-		if($links) foreach($links as $link) {
-			if($link->MasterPage()->exists()) {
-				$return->push($link->MasterPage());
-			}
-		}
-		
-		return $return->Count() > 0 ? $return : false;
+		return DataObject::get('RelatedPageLink', 'RelatedPageID = ' . $this->owner->ID,'',
+			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\""
+		);
 	}
 	
 	function NormalRelated() {
