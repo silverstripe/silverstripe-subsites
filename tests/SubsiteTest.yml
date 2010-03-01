@@ -55,6 +55,9 @@ SiteTree:
    contact:
       Title: Contact Us
       SubsiteID: =>Subsite_Template.main
+   importantpage:
+      Title: Important Page
+      SubsiteID: =>Subsite_Template.main
    subsite1_home:
       Title: Home (Subsite 1)
       SubsiteID: =>Subsite_Template.subsite1
