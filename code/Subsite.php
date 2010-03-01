@@ -516,7 +516,7 @@ JS;
 			"{$q}Subsite{$q}.{$q}Title{$q} != ''",
 =======
 			"\"Group_Members\".\"MemberID\" = $member->ID
-			AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN', 'SUBSITE_ACCESS_ALL')
+			AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')
 			AND \"Subsite\".Title != ''",
 >>>>>>> .merge-right.r88146
 			'',
