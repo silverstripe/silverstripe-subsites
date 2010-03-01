@@ -518,10 +518,10 @@ JS;
 
 	function providePermissions() {
 		return array(
-			'SUBSITE_EDIT' => 'Edit Sub-site Details',
+			'SUBSITE_EDIT' => 'Edit subsite Details',
 			'SUBSITE_ACCESS_ALL' => 'Access all subsites',
-			'SUBSITE_ASSETS_EDIT' => 'Edit Sub-site Assets Admin',
-			'SUBSITE_ASSETS_CREATE_SUBSITE' => 'Create/edit sub-site specific asset folders'
+			'SUBSITE_ASSETS_EDIT' => 'Edit subsite Assets Admin',
+			'SUBSITE_ASSETS_CREATE_SUBSITE' => 'Create/edit subsite specific asset folders'
 		);
 	}
 
