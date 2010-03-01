@@ -332,33 +332,6 @@ JS;
 	
 	}
 
-	/**
-	 * Get all subsites.
-	 *
-	 * @return DataObjectSet Subsite instances
-	 */
-	static function getSubsitesForMember($member = null) {
-		if(!$member && $member !== FALSE) $member = Member::currentMember();
-		if(!$member) return false;
-
-		if(self::hasMainSitePermission($member)) {
-			return DataObject::get('Subsite');
-		}
-		
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
-		return DataObject::get(
-			'Subsite', 
-			"{$q}MemberID{$q} = {$member->ID}", 
-			'',
-			"LEFT JOIN {$q}Group{$q} ON {$q}Subsite{$q}.{$q}ID{$q} = {$q}SubsiteID{$q}
-			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}GroupID{$q}"
-		);
-	
-	}
-	
 	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
@@ -366,15 +339,13 @@ JS;
 		if(!$member && $member !== FALSE) $member = Member::currentMember();
 
 		if(!$member) return false;
-
-		if(Permission::checkMember($member->ID, "ADMIN")) return true;
-
-		if(Permission::checkMember($member, "SUBSITE_ACCESS_ALL")) return true;
+		
+		if(!in_array("ADMIN", $permissionCodes)) $permissionCodes[] = "ADMIN";
 
 		$SQLa_perm = Convert::raw2sql($permissionCodes);
 		$SQL_perms = join("','", $SQLa_perm);
 		$memberID = (int)$member->ID;
-
+		
 		if(defined('DB::USE_ANSI_SQL')) 
 			$q="\"";
 		else $q='`';
