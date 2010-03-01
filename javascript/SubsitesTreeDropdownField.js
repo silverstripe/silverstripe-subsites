@@ -1,15 +1,26 @@
 SubsitesTreeDropdownField = Class.extend('TreeDropdownField');
 SubsitesTreeDropdownField.prototype = {
 	
-	//subsiteID: null,
+	subsiteID: function() {
+		var subsiteSel = $$('#CopyContentFromID_SubsiteID select')[0];
+		subsiteSel.onchange = (function() {
+			this.createTreeNode(true);
+			this.ajaxGetTree((function(response) {
+				this.newTreeReady(response, true);
+				this.updateTreeLabel();
+			}).bind(this));
+		}).bind(this);
+		return subsiteSel.options[subsiteSel.selectedIndex].value;
+	},
 	
 	ajaxGetTree: function(after) {
+		// This if block is necessary to maintain both 2.2 and 2.3 support
 		var baseURL = this.helperURLBase();
-		// Can't force value because it might be on a different subsite!
-		var ajaxURL =  baseURL+ 'gettree?forceValues=' + 0; //this.inputTag.value;
+		if(baseURL.match('action_callfieldmethod')) var ajaxURL =  baseURL+ '&methodName=gettree&forceValues=' + this.inputTag.value;
+        else var ajaxURL =  baseURL+ 'gettree?forceValues=' + this.inputTag.value;
 		
-		// Customised: Append subsiteid (evaluated in SubsitesVirtualPage.php)
-		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID);
+		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
+		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID());
 		
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
 		new Ajax.Request(ajaxURL, {
@@ -25,8 +36,11 @@ SubsitesTreeDropdownField.prototype = {
 		var ul = this.treeNodeHolder();
 		ul.innerHTML = ss.i18n._t('LOADING');
 		
+		// This if block is necessary to maintain both 2.2 and 2.3 support
 		var baseURL = this.options.dropdownField.helperURLBase();
-		var ajaxURL =  baseURL+ 'getsubtree?SubtreeRootID=' + this.getIdx();
+
+        if(baseURL.match('action_callfieldmethod')) var ajaxURL =  baseURL+ '&methodName=getsubtree&SubtreeRootID=' + this.getIdx();
+        else var ajaxURL =  baseURL+ 'getsubtree?SubtreeRootID=' + this.getIdx();
 		
 		// Find the root of the tree - this points to a list item in the tree, not the root div we actually want
 		// @todo: We should be using framework API calls to find the tree
@@ -34,7 +48,7 @@ SubsitesTreeDropdownField.prototype = {
 		while (tree && !tree.className.match(/(^| )SubsitesTreeDropdownField( |$)/)) tree = tree.parentNode;
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
-		ajaxURL += '&' + tree.id + '_SubsiteID=' + parseInt(tree.subsiteID);
+		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID());
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
 		
 		new Ajax.Request(ajaxURL, {
