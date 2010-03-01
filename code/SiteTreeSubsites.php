@@ -192,7 +192,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		if($reverse) {
 			$text = '<p>In addition, this page is marked as related by the following pages: </p><ul>';
 			foreach($reverse as $rpage) {
-				$text .= '<ul><a href="admin/show/' . $rpage->ID . '">' . $rpage->Title . '</a></ul>';
+				$text .= '<ul><a href="admin/show/' . $rpage->ID . '">' . $rpage->Title . '</a> '.$rpage->AbsoluteLink().'</ul>';
 			}
 			$text .= '</ul>';
 			
