@@ -199,26 +199,38 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			$tab->push(new LiteralField('ReverseRelated', $text));
 		}
 		
+		$virtualPagesTable = new SubsiteAgnosticTableListField(
+			'VirtualPageTracking',
+			'SiteTree',
+			array(
+				'Title' => 'Title',
+				'AbsoluteLink' => 'URL',
+				'Subsite.Title' => 'Subsite'
+			),
+			'"CopyContentFromID" = ' . $this->owner->ID,
+			''
+		);
+		$virtualPagesTable->setFieldFormatting(array(
+			'Title' => '<a href=\"admin/show/$ID\">$Title</a>'
+		));
+		$virtualPagesTable->setPermissions(array(
+			'show',
+			'export'
+		));
+		
+		
+		
 		if ($tab = $fields->fieldByName('Root.VirtualPages')) {
 			$tab->removeByName('VirtualPageTracking');
-			$tab->push($virtualPagesTable = new SubsiteAgnosticTableListField(
-				'VirtualPageTracking',
-				'SiteTree',
-				array(
-					'Title' => 'Title',
-					'AbsoluteLink' => 'URL',
-					'Subsite.Title' => 'Subsite'
-				),
-				'"CopyContentFromID" = ' . $this->owner->ID,
-				''
-			));
-			$virtualPagesTable->setFieldFormatting(array(
-				'Title' => '<a href=\"admin/show/$ID\">$Title</a>'
-			));
-			$virtualPagesTable->setPermissions(array(
-				'show',
-				'export'
-			));
+			$tab->push($virtualPagesTable);
+		} else {
+			if ($virtualPagesTable->TotalCount()) {
+				$virtualPagesNote = new LiteralField('BackLinksNote', '<p>' . _t('SiteTree.VIRTUALPAGESLINKING', 'The following virtual pages pull from this page:') . '</p>');
+				$fields->fieldByName('Root')->push($tabVirtualPages = new Tab('VirtualPages',
+					$virtualPagesNote,
+					$virtualPagesTable
+				));
+			}
 		}
 	
 	}
