@@ -28,8 +28,11 @@ class SubsitesVirtualPage extends VirtualPage {
 		$pageSelectionField = new SubsitesTreeDropdownField(
 			"CopyContentFromID", 
 			_t('VirtualPage.CHOOSE', "Choose a page to link to"), 
-			"SiteTree"
+			"SiteTree",
+			"ID",
+			"MenuTitle"
 		);
+				
 		$pageSelectionField->setFilterFunction(create_function('$item', 'return $item->ClassName != "VirtualPage";'));
 		
 		if(Controller::curr()->getRequest()) {
