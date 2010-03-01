@@ -63,9 +63,9 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	function augmentSQL(SQLQuery &$query) {
 		if(Subsite::$disable_subsite_filter) return;
 		
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
+		$q = defined('DB::USE_ANSI_SQL') ? '"' : '`';
+
+		if ($query->delete) return;
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]))) {
