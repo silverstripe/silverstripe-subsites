@@ -9,6 +9,8 @@ class SubsiteAdmin extends ModelAdmin {
 	static $managed_models = array('Subsite');
 	static $url_segment = 'subsites';
 	
+	static $menu_title = "Subsites";
+	
 	static $collection_controller_class = "SubsiteAdmin_CollectionController";
 
 	function Link() {
