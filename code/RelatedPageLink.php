@@ -18,12 +18,8 @@ class RelatedPageLink extends DataObject {
 	);
 	
 	function getCMSFields() {
-		$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
+		$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", true);
 		if(!$subsites) $subsites = new DataObjectSet();
-		
-		if(Subsite::hasMainSitePermission(null, array("CMS_ACCESS_CMSMain"))) {
-			$subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
-		}
 	
 		if($subsites->Count()) {
 			$subsiteSelectionField = new DropdownField(

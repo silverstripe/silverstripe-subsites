@@ -56,39 +56,33 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function Subsites() {
-		$siteList = new DataObjectSet();
-		$subsites = Subsite::accessible_sites('CMS_ACCESS_' . $this->owner->class);
-
+		$accessPerm = 'CMS_ACCESS_'. $this->owner->class;
 		if(defined('DB::USE_ANSI_SQL')) 
 			$q="\"";
 		else $q='`';
 		
-		$mainSiteTitle = null;
 		switch($this->owner->class) {
 			case "AssetAdmin":
-				$mainSiteTitle = "Shared files & images"; break;
-			case "SecurityAdmin":
-				$mainSiteTitle = "Groups accessing all sites";
-				$siteList->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
+				$subsites = Subsite::accessible_sites($accessPerm, true, "Shared files & images");
 				break;
+				
+			case "SecurityAdmin":
+				$subsites = Subsite::accessible_sites($accessPerm, true, "Groups accessing all sites");
+				$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
+				break;
+				
 			case "CMSMain":
 				// If there's a default site then main site has no meaning
-				if(!DataObject::get_one('Subsite', "{$q}DefaultSite{$q} = 1 AND {$q}IsPublic{$q} = 1")) {
-					$mainSiteTitle = "Main site";
-				}
+				$showMainSite = !DataObject::get_one('Subsite',"{$q}DefaultSite{$q} AND {$q}IsPublic{$q}");
+				$subsites = Subsite::accessible_sites($accessPerm, $showMainSite);
 				break;
+				
 			default: 
-				$mainSiteTitle = "Main site";
+				$subsites = Subsite::accessible_sites($accessPerm);
 				break;	
 		}
 
-		if($mainSiteTitle && Subsite::hasMainSitePermission(Member::currentUser(), array('CMS_ACCESS_' . $this->owner->class, 'ADMIN')))
-			$siteList->push(new ArrayData(array('Title' => $mainSiteTitle, 'ID' => 0)));
-		
-		if($subsites)
-			$siteList->merge($subsites);
-			
-		return $siteList;
+		return $subsites;
 	}
 	
 	public function SubsiteList() {

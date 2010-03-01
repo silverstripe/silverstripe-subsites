@@ -417,8 +417,10 @@ JS;
 	 * Sites and Templates will only be included if they have a Title
 	 *
 	 * @param $permCode array|string Either a single permission code or an array of permission codes.
+	 * @param $includeMainSite If true, the main site will be included if appropriate.
+	 * @param $mainSiteTitle The label to give to the main site
 	 */
-	function accessible_sites($permCode) {
+	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site") {
 		$member = Member::currentUser();
 
 		if(is_array($permCode))	$SQL_codes = "'" . implode("', '", Convert::raw2sql($permCode)) . "'";
@@ -426,10 +428,6 @@ JS;
 
 		if(!$member) return new DataObjectSet();
 		
-		if (Permission::check('ADMIN') || Permission::check('SUBSITE_ACCESS_ALL')) {
-			return DataObject::get('Subsite');
-		}
-
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
 		if(defined('DB::USE_ANSI_SQL')) 
@@ -465,6 +463,17 @@ JS;
 		if($rolesSubsites) foreach($rolesSubsites as $subsite) {
 			if(!$subsites->containsIDs(array($subsite->ID))) {
 				$subsites->push($subsite);
+			}
+		}
+		
+		// Include the main site
+		if(!$subsites) $subsites = new DataObjectSet();
+		if($includeMainSite) {
+			if(!is_array($permCode)) $permCode = array($permCode);
+			if(self::hasMainSitePermission($member, $permCode)) {
+				$mainSite = new Subsite();
+				$mainSite->Title = $mainSiteTitle;
+				$subsites->insertFirst($mainSite);
 			}
 		}
 
