@@ -75,7 +75,7 @@ class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController 
 		
 		if(Director::is_ajax()) {
 			$recordController = new ModelAdmin_RecordController($this, $request, $subsite->ID);
-			return new SS_HTTPResponse(
+			return new HTTPResponse(
 				$recordController->EditForm()->forAjaxTemplate(), 
 				200, 
 				sprintf(
