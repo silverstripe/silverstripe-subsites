@@ -12,10 +12,6 @@ class SubsiteAdmin extends ModelAdmin {
 	static $menu_title = "Subsites";
 	
 	static $collection_controller_class = "SubsiteAdmin_CollectionController";
-
-	function Link() {
-		return 'admin/subsites/';
-	}
 }
 
 class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController {
