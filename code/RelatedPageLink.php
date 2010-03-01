@@ -9,8 +9,12 @@ class RelatedPageLink extends DataObject {
 	);
 	
 	static $has_one = array(
+		'RelatedPage' => 'SiteTree',
+		// Note: The *last* matching has_one relation to SiteTree is used as the link field for the
+		// has_many (RelatedPages) on SiteTree.  This isn't obvious and the framework could be
+		// extended in a future version to allow for explicit selection of a has_one relation to
+		// bind a has_many to.
 		'MasterPage' => 'SiteTree',
-		'RelatedPage' => 'SiteTree'
 	);
 	
 	function getCMSFields() {
