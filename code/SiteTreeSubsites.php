@@ -198,6 +198,28 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			
 			$tab->push(new LiteralField('ReverseRelated', $text));
 		}
+		
+		if ($tab = $fields->fieldByName('Root.VirtualPages')) {
+			$tab->removeByName('VirtualPageTracking');
+			$tab->push($virtualPagesTable = new SubsiteAgnosticTableListField(
+				'VirtualPageTracking',
+				'SiteTree',
+				array(
+					'Title' => 'Title',
+					'AbsoluteLink' => 'URL',
+					'Subsite.Title' => 'Subsite'
+				),
+				'"CopyContentFromID" = ' . $this->owner->ID,
+				''
+			));
+			$virtualPagesTable->setFieldFormatting(array(
+				'Title' => '<a href=\"admin/show/$ID\">$Title</a>'
+			));
+			$virtualPagesTable->setPermissions(array(
+				'show',
+				'export'
+			));
+		}
 	
 	}
 	
