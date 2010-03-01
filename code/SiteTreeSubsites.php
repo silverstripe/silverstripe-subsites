@@ -273,43 +273,6 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	}
 	
 	/**
-	 * Returns the RelatedPageLink objects that are reverse-associated with this page.
-	 */
-	function ReverseRelated() {
-		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
-			AND R2.\"ID\" IS NULL", '',
-			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"
-			LEFT JOIN \"RelatedPageLink\" AS R2 ON R2.MasterPageID = {$this->owner->ID}
-			AND R2.RelatedPageID = RelatedPageLink.MasterPageID
-			"
-		);
-	}
-	
-	function NormalRelated() {
-		$return = new DataObjectSet();
-		$links = DataObject::get('RelatedPageLink', 'MasterPageID = ' . $this->owner->ID);
-		if($links) foreach($links as $link) {
-			if($link->RelatedPage()->exists()) {
-				$return->push($link->RelatedPage());
-			}
-		}
-		
-		return $return->Count() > 0 ? $return : false;
-	}
-	
-	function alternateSiteConfig() {
-		$sc = DataObject::get_one('SiteConfig', 'SubsiteID = ' . $this->owner->SubsiteID);
-		if(!$sc) {
-			$sc = new SiteConfig();
-			$sc->SubsiteID = $this->owner->SubsiteID;
-			$sc->Title = 'Your Site Name';
-			$sc->Tagline = 'your tagline here';
-			$sc->write();
-		}
-		return $sc;
-	}
-	
-	/**
 	 * Only allow editing of a page if the member satisfies one of the following conditions:
 	 * - Is in a group which has access to the subsite this page belongs to
 	 * - Is in a group with edit permissions on the "main site"
@@ -405,14 +368,6 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			$url = preg_replace('/\/\/[^\/]+\//', '//' .  $this->owner->Subsite()->domain() . '/', $url);
 		}
 		return $url;
-	}
-
-	
-	/**
-	 * Return a piece of text to keep DataObject cache keys appropriately specific
-	 */
-	function cacheKeyComponent() {
-		return 'subsite-'.Subsite::currentSubsiteID();
 	}
 	
 	function augmentSyncLinkTracking() {
