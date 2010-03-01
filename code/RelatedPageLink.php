@@ -74,6 +74,7 @@ class RelatedPageLink extends DataObject {
 		$classClause = ($page->SubsiteID == $otherPage->SubsiteID) ? ' class="cmsEditlink"' : '';
 		return '<a href="admin/show/' . $page->ID . "\"$classClause>" . Convert::raw2xml($page->Title) . '</a>';
 	}
+
 	function AbsoluteLink($master = false) {
 		$page = $master ? Dataobject::get_by_id("SiteTree", $this->MasterPageID)
 			: Dataobject::get_by_id("SiteTree", $this->RelatedPageID);
@@ -93,6 +94,7 @@ class RelatedPageLink extends DataObject {
 	function canDelete($member = null) {
 		return $this->MasterPage()->canDelete($member);
 	}
+
 }
 
 ?>
