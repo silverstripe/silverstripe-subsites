@@ -10,11 +10,8 @@ $lang['en_US']['SubsiteAdmin']['MENUTITLE'] = array(
 $lang['en_US']['GroupSubsites']['ACCESSALL'] = 'All subsites';
 $lang['en_US']['GroupSubsites']['ACCESSONLY'] = 'Only these subsites';
 $lang['en_US']['GroupSubsites']['ACCESSRADIOTITLE'] = 'Give this group access to';
-$lang['en_US']['GroupSubsites']['MANAGE_SUBSITES'] = 'Manage subsites for groups';
-$lang['en_US']['GroupSubsites']['MANAGE_SUBSITES_HELP'] = 'Ability to limit the permissions for a group to one or more subsites.';
 $lang['en_US']['GroupSubsites']['SECURITYTABTITLE'] = 'Subsites';
 $lang['en_US']['ModelAdmin']['LOADEDFOREDITING'] = 'Loaded \'%s\' for editing.';
-$lang['en_US']['Permissions']['PERMISSIONS_CATEGORY'] = 'Roles and access permissions';
 $lang['en_US']['RelatedPageLink']['PLURALNAME'] = array(
 	'Related Page Links',
 	50,
@@ -25,8 +22,6 @@ $lang['en_US']['RelatedPageLink']['SINGULARNAME'] = array(
 	50,
 	'Singular name of the object, used in dropdowns and to generally identify a single object in the interface'
 );
-$lang['en_US']['Subsite']['MANAGE_ASSETS'] = 'Manage assets for subsites';
-$lang['en_US']['Subsite']['MANAGE_ASSETS_HELP'] = 'Ability to select the subsite to which an asset folder belongs. Requires "Access to Files & Images."';
 $lang['en_US']['ModelAdmin']['LOADEDFOREDITING'] = 'Loaded \'%s\' for editing.';
 $lang['en_US']['RelatedPageLink']['PLURALNAME'] = array(
 	'Related Page Links',
