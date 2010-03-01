@@ -3,7 +3,7 @@
 /**
  * Extension for the SiteTree object to add subsites support
  */
-class SiteTreeSubsites extends DataObjectDecorator {
+class SiteTreeSubsites extends SiteTreeDecorator {
 	static $template_variables = array(
 		'((Company Name))' => 'Title'
 	);
@@ -106,6 +106,32 @@ class SiteTreeSubsites extends DataObjectDecorator {
 		}
 		
 		$this->nextWriteDoesntCustomise = false;
+	}
+	
+	function onAfterWrite(&$original) {
+		// Update any subsite virtual pages that might need updating
+		Subsite::$disable_subsite_filter = true;
+		
+		$linkedPages = DataObject::get("SubsitesVirtualPage", "CopyContentFromID = {$this->owner->ID}");
+		if($linkedPages) foreach($linkedPages as $page) {
+			$page->copyFrom($page->CopyContentFrom());
+			$page->write();
+		}
+		
+		Subsite::$disable_subsite_filter = false;
+	}
+	
+	function onAfterPublish(&$original) {
+		// Publish any subsite virtual pages that might need publishing
+		Subsite::$disable_subsite_filter = true;
+		
+		$linkedPages = DataObject::get("SubsitesVirtualPage", "CopyContentFromID = {$this->owner->ID}");
+		if($linkedPages) foreach($linkedPages as $page) {
+			$page->copyFrom($page->CopyContentFrom());
+			$page->doPublish();
+		}
+		
+		Subsite::$disable_subsite_filter = false;
 	}
 
 	function updateCMSFields(&$fields) {
