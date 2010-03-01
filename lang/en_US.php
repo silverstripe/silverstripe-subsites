@@ -3,7 +3,7 @@
 global $lang;
 
 $lang['en_US']['SubsiteAdmin']['MENUTITLE'] = array(
-	'Subsite',
+	'Subsites',
 	100,
 	'Menu title'
 );
