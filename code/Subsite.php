@@ -547,9 +547,7 @@ JS;
 
 	function providePermissions() {
 		return array(
-			'SUBSITE_EDIT' => 'Edit subsite Details',
-			'SUBSITE_ASSETS_EDIT' => 'Edit subsite Assets Admin',
-			'SUBSITE_ASSETS_CREATE_SUBSITE' => 'Create/edit subsite specific asset folders'
+			'SUBSITE_ASSETS_CREATE_SUBSITE' => 'Manage assets for subsites'
 		);
 	}
 
