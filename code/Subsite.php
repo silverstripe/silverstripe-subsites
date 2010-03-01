@@ -1,7 +1,7 @@
 <?php
 /**
- * A dynamically created subdomain. SiteTree objects can now belong to a subdomain.
- * You can simulate subsite access without creating subdomains by appending ?SubsiteID=<ID> to the request.
+ * A dynamically created subsite. SiteTree objects can now belong to a subsite.
+ * You can simulate subsite access without setting up virtual hosts by appending ?SubsiteID=<ID> to the request.
  *
  * @package subsites
  */
@@ -84,7 +84,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	/**
 	 * Return the domain of this site
 	 *
-	 * @return string Domain name including subdomain (without protocol prefix)
+	 * @return string The full domain name of this subsite (without protocol prefix)
 	 */
 	function domain() {
 		if($this->ID) {
@@ -188,7 +188,7 @@ JS;
 	 * directly from ModelAsController::getNestedController. Only gets Subsite instances which have their
 	 * {@link IsPublic} flag set to TRUE.
 	 *
-	 * You can simulate subsite access without creating subdomains by appending ?SubsiteID=<ID> to the request.
+	 * You can simulate subsite access without creating virtual hosts by appending ?SubsiteID=<ID> to the request.
 	 *
 	 * @todo Pass $request object from controller so we don't have to rely on $_REQUEST
 	 *
@@ -407,8 +407,7 @@ JS;
 	 * Return the subsites that the current user can access.
 	 * Look for one of the given permission codes on the site.
 	 *
-	 * Sites will only be included if they have a Title and a Subdomain.
-	 * Templates will only be included if they have a Title.
+	 * Sites and Templates will only be included if they have a Title
 	 *
 	 * @param $permCode array|string Either a single permission code or an array of permission codes.
 	 */
@@ -481,7 +480,7 @@ JS;
  */
 class Subsite_Template extends Subsite {
 	/**
-	 * Create an instance of this template, with the given title & subdomain
+	 * Create an instance of this template, with the given title & domain
 	 */
 	function createInstance($title, $domain) {
 		$intranet = Object::create('Subsite');

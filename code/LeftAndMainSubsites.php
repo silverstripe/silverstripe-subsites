@@ -6,7 +6,6 @@
  */
 class LeftAndMainSubsites extends Extension {
 	static $allowed_actions = array(
-		'addsubsite',
 		'changesubsite',
 	);
 	
@@ -35,28 +34,6 @@ class LeftAndMainSubsites extends Extension {
 			$tree = ereg_replace('^[ \t\r\n]*<ul[^>]*>','', $tree);
 			$tree = ereg_replace('</ul[^>]*>[ \t\r\n]*$','', $tree);
 			return $tree;
-		} else
-			return array();
-	}
-	
-	public function addsubsite() {
-		$name = $_REQUEST['Name'];
-		$newSubsite = Subsite::create($name);
-	
-		$subsites = $this->Subsites();
-		
-		if(Director::is_ajax()) {
-			/*$output = "var option = null; for(var i = 0; i < \$('SubsitesSelect').size; i++) {\$('SubsitesSelect').remove(i);}\n";			
-
-			if($subsites) {
-				foreach($subsites as $subsite) {
-					$output .= "option = document.createElement('option');\n option.title = '$subsite->Title';\n option.value = $subsite->ID;\$('SubsitesSelect').add(option);\n";
-				}
-			}
-			
-			return $output;*/
-			
-			return $this->SubsiteList();
 		} else
 			return array();
 	}
