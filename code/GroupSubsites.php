@@ -18,36 +18,36 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 	}
 	
 	function updateCMSFields(&$fields) {
-
-		if (!Permission::check('ADMIN') && !Permission::check('SECURITY_SUBSITE_GROUP')) return;
-		
-		if( $this->owner->SubsiteID == 0 || $this->owner->canEdit() ){
-			$subsites = DataObject::get('Subsite');
-			if ( $subsites && $subsites->exists() ) {
-				$oldSubsiteID = Session::get('SubsiteID');
-				foreach( $subsites as $subsite ) {
-					Subsite::changeSubsite($subsite->ID);
-					if ( !Permission::check('CL_Admin') ) { $subsites->remove( $subsite ) ; }
-				}
-				Subsite::changeSubsite($oldSubsiteID);
-
-				$tab = $fields->findOrMakeTab(
-					'Root.Subsites',
-					_t('GroupSubsites.SECURITYTABTITLE', 'Subsites')
-				);
-
-				$dropdown = new DropdownField(
-					'SubsiteID',
-					_t('GroupSubsites.SECURITYACCESS', 'Limit CMS access to subsites', PR_MEDIUM, 'Dropdown listing existing subsites which this group has access to'),
-					$subsites->toDropDownMap(),
-					null,
-					null,
-					''
-				);
-				if ( $subsites->Count() == 1 ) $dropdown = $dropdown->transform(new ReadonlyTransformation()) ;
-
-				$tab->push($dropdown) ;
+		if($this->owner->canEdit() ){
+			$subsiteMap = array();
+			if(Subsite::hasMainSitePermission(Member::currentUser(), array('ADMIN', 'SECURITY_SUBSITE_GROUP'))) {
+				$subsiteMap[0] = 'Main site';
 			}
+			foreach(Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP')) as $subsite) {
+				$subsiteMap[$subsite->ID] = $subsite->Title;
+			}
+			
+			$tab = $fields->findOrMakeTab(
+				'Root.Subsites',
+				_t('GroupSubsites.SECURITYTABTITLE', 'Subsites')
+			);
+			
+			// This will trick the $dropdown code below to displaying the correct human val,
+			// readonly
+			if(!isset($subsiteMap[$this->owner->SubsiteID])) {
+				if($this->owner->SubsiteID) $subsiteTitle = $this->owner->Subsite()->Title;
+				else $subsiteTitle = "Main site";
+				$subsiteMap = array($this->owner->SubsiteID => $subsiteTitle);
+			}
+				
+			$dropdown = new DropdownField(
+				'SubsiteID',
+				_t('GroupSubsites.SECURITYACCESS', 'Limit CMS access to subsites', PR_MEDIUM, 'Dropdown listing existing subsites which this group has access to'),
+				$subsiteMap
+			);
+			
+			if (sizeof($subsiteMap) <= 1) $dropdown = $dropdown->transform(new ReadonlyTransformation()) ;
+			$tab->push($dropdown);
 		}
 	}
 
