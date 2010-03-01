@@ -205,8 +205,12 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 * Returns the RelatedPageLink objects that are reverse-associated with this page.
 	 */
 	function ReverseRelated() {
-		return DataObject::get('RelatedPageLink', 'RelatedPageID = ' . $this->owner->ID,'',
-			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\""
+		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
+			AND R2.\"ID\" IS NULL", '',
+			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"
+			LEFT JOIN \"RelatedPageLink\" AS R2 ON R2.MasterPageID = {$this->owner->ID}
+			AND R2.RelatedPageID = RelatedPageLink.MasterPageID
+			"
 		);
 	}
 	
