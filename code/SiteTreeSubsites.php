@@ -37,7 +37,13 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 				'MasterPage' => 'SiteTree',// Optional; the page that is the content master
 			),
 			'has_many' => array(
-				'RelatedPages' => 'SiteTree'
+				'RelatedPages' => 'RelatedPageLink'
+			),
+			'many_many' => array(
+				'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
+			),
+			'belongs_many_many' => array(
+				'BackCrossSubsiteLinkTracking' => 'SiteTree'
 			)
 		);
 	}
@@ -154,13 +160,17 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			);
 		}
 		
+		$relatedCount = 0;
+		$reverse = $this->ReverseRelated();
+		if($reverse) $relatedCount += $reverse->Count();
+		$normalRelated = $this->NormalRelated();
+		if($normalRelated) $relatedCount += $normalRelated->Count();
+		
+		$tabName = $relatedCount ? 'Related (' . $relatedCount . ')' : 'Related';
+		$tab = $fields->findOrMakeTab('Root.Related', $tabName);
 		// Related pages
-		$fields->addFieldToTab(
-			'Root.Related',
-			new LiteralField('RelatedNote', '<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>')
-		);
-		$fields->addFieldToTab(
-			'Root.Related',
+		$tab->push(new LiteralField('RelatedNote', '<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>'));
+		$tab->push(
 			$related = new ComplexTableField(
 					$this,
 					'RelatedPages',
@@ -170,6 +180,41 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 					)
 			)
 		);
+		
+		if($reverse) {
+			$text = '<p>In addition, this page is marked as related by the following pages: </p><ul>';
+			foreach($reverse as $rpage) {
+				$text .= '<ul><a href="admin/show/' . $rpage->ID . '">' . $rpage->Title . '</a></ul>';
+			}
+			$text .= '</ul>';
+			
+			$tab->push(new LiteralField('ReverseRelated', $text));
+		}
+	
+	}
+	
+	function ReverseRelated() {
+		$return = new DataObjectSet();
+		$links = DataObject::get('RelatedPageLink', 'RelatedPageID = ' . $this->owner->ID);
+		if($links) foreach($links as $link) {
+			if($link->MasterPage()->exists()) {
+				$return->push($link->MasterPage());
+			}
+		}
+		
+		return $return->Count() > 0 ? $return : false;
+	}
+	
+	function NormalRelated() {
+		$return = new DataObjectSet();
+		$links = DataObject::get('RelatedPageLink', 'MasterPageID = ' . $this->owner->ID);
+		if($links) foreach($links as $link) {
+			if($link->RelatedPage()->exists()) {
+				$return->push($link->RelatedPage());
+			}
+		}
+		
+		return $return->Count() > 0 ? $return : false;
 	}
 	
 	/**
@@ -274,7 +319,37 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		}
 		return $url;
 	}
-	
+
+	function augmentSyncLinkTracking() {
+		// Set LinkTracking appropriately
+		$links = HTTP::getLinksIn($this->owner->Content);
+		$linkedPages = array();
+		
+		if($links) foreach($links as $link) {
+			if(substr($link, 0, strlen('http://')) == 'http://') {
+				$withoutHttp = substr($link, strlen('http://'));
+				if(strpos($withoutHttp, '/') && strpos($withoutHttp, '/') < strlen($withoutHttp)) {
+					$domain = substr($withoutHttp, 0, strpos($withoutHttp, '/'));
+					$rest = substr($withoutHttp, strpos($withoutHttp, '/') + 1);
+					
+					$subsiteID = Subsite::getSubsiteIDForDomain($domain);
+					if($subsiteID == 0) continue; // We have no idea what the domain for the main site is, so cant track links to it
+					
+					Subsite::disable_subsite_filter(true);
+					$candidatePage = DataObject::get_one("SiteTree", "\"URLSegment\" = '" . urldecode( $rest). "' AND \"SubsiteID\" = " . $subsiteID, false);
+					Subsite::disable_subsite_filter(false);
+					
+					if($candidatePage) {
+						$linkedPages[] = $candidatePage->ID;
+					} else {
+						$this->owner->HasBrokenLink = true;
+					}
+				}
+			}
+		}
+		
+		$this->owner->CrossSubsiteLinkTracking()->setByIDList($linkedPages);
+	}
 }
 
 ?>

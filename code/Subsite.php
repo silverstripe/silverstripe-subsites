@@ -290,7 +290,7 @@ JS;
 	 *
 	 * @return int Subsite ID
 	 */
-	static function getSubsiteIDForDomain($host = null) {
+	static function getSubsiteIDForDomain($host = null, $returnMainIfNotFound = true) {
 		if($host == null) $host = $_SERVER['HTTP_HOST'];
 		
 		$host = str_replace('www.','',$host);
