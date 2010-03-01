@@ -29,6 +29,9 @@ class LeftAndMainSubsites extends Extension {
 		
 		Subsite::changeSubsite($id);
 		
+		if ($id == '-1') Cookie::set('noSubsiteFilter', 'true', 1);
+		else Cookie::set('noSubsiteFilter', 'false', 1);
+		
 		if(Director::is_ajax()) {
 			$tree = $this->owner->SiteTreeAsUL();
 			$tree = ereg_replace('^[ \t\r\n]*<ul[^>]*>','', $tree);
@@ -51,7 +54,9 @@ class LeftAndMainSubsites extends Extension {
 			case "AssetAdmin":
 				$mainSiteTitle = "Shared files & images"; break;
 			case "SecurityAdmin":
-				$mainSiteTitle = "Groups accessing all sites"; break;
+				$mainSiteTitle = "Groups accessing all sites";
+				$siteList->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
+				break;
 			case "CMSMain":
 				// If there's a default site then main site has no meaning
 				if(!DataObject::get_one('Subsite', "{$q}DefaultSite{$q} = 1 AND {$q}IsPublic{$q} = 1")) {

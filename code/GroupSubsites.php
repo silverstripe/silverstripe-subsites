@@ -16,7 +16,7 @@ class GroupSubsites extends DataObjectDecorator {
 			),
 		);
 	}
-
+	
 	function updateCMSFields(&$fields) {
 
 		if( $this->owner->SubsiteID == 0 || $this->owner->canEdit() ){
@@ -59,7 +59,7 @@ class GroupSubsites extends DataObjectDecorator {
 		if($this->owner->SubsiteID == 0) {
 			return $this->owner->Title . ' <i>(global group)</i>';
 		} else {
-			return $this->owner->Title; // . ' <i>(' . $this->owner->Subsite()->Title . ')</i>';
+			return $this->owner->Title; //. ' <i>(' . $this->owner->Subsite()->Title . ')</i>';
 		}
 	}
 
@@ -68,6 +68,7 @@ class GroupSubsites extends DataObjectDecorator {
 	 */
 	function augmentSQL(SQLQuery &$query) {
 		if(Subsite::$disable_subsite_filter) return;
+		if(Cookie::get('noSubsiteFilter') == 'true') return;
 
 		if(defined('DB::USE_ANSI_SQL')) 
 			$q="\"";
