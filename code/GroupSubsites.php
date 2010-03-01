@@ -61,6 +61,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 
 			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true);
 			$subsiteMap = $subsites->toDropdownMap();
+
 			
 			// Interface is different if you have the rights to modify subsite group values on
 			// all subsites
