@@ -72,6 +72,8 @@ class SubsitesVirtualPage extends VirtualPage {
 		foreach($fields as $k => $v) {
 			if($v == 'SubsiteID') unset($fields[$k]);
 		}
+		
+		foreach(self::$db as $field => $type) if (in_array($field, $fields)) unset($fields[array_search($field, $fields)]);
 
 		return $fields;
 	}

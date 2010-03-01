@@ -47,6 +47,7 @@ SiteTree:
       SubsiteID: =>Subsite_Template.main
    linky:
        Title: Linky
+       MetaTitle: Linky
        SubsiteID: =>Subsite_Template.main
    staff:
       Title: Staff

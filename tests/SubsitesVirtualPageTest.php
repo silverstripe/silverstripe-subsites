@@ -163,4 +163,35 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		}
 	}
 
+	/**
+	 * Test custom metadata. Reloading Content should not
+	 * obliterate our custom fields
+	 */
+	function testCustomMetadata() {
+		Subsite::$write_hostmap = false;
+		
+		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		
+		Subsite::changeSubsite($subsite->ID);
+		
+		$orig = $this->objFromFixture('SiteTree', 'linky');
+		
+		$svp = new SubsitesVirtualPage();
+		$svp->CopyContentFromID = $orig->ID;
+		$svp->SubsiteID = $subsite->ID;
+		$svp->URLSegment = 'linky-'.rand();
+		$svp->write();
+		
+		$this->assertEquals($svp->MetaTitle, 'Linky');
+		
+		$svp->CustomMetaTitle = 'SVPTitle';
+		$svp->write();
+		$this->assertEquals($svp->MetaTitle, 'SVPTitle');
+		
+		$svp->copyFrom($svp->CopyContentFrom());
+		$svp->write();
+		
+		$this->assertEquals($svp->MetaTitle, 'SVPTitle');
+		
+	}
 }
