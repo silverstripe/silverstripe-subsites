@@ -117,7 +117,6 @@ class LeftAndMainSubsites extends Extension {
 	public function alternateAccessCheck() {
 		$className = $this->owner->class;
 
-		
 		// Switch to the subsite of the current page
 		if ($this->owner->class == 'CMSMain' && $currentPage = $this->owner->currentPage()) {
 			if (Subsite::currentSubsiteID() != $currentPage->SubsiteID) {
@@ -133,8 +132,24 @@ class LeftAndMainSubsites extends Extension {
 			return true;
 		}
 		
-		if(!$sites) return null;
+		// Switch to a different top-level menu item
+		$menu = CMSMenu::get_menu_items();
+		foreach($menu as $candidate) {
+			if($candidate->controller != $this->owner->class) {
+					
+				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}")->toDropdownMap();
+				if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
+					$siteIDs = array_keys($sites);
+					Subsite::changeSubsite($siteIDs[0]);
+					$cClass = $candidate->controller;
+					$cObj = new $cClass();
+					Director::redirect($cObj->Link());
+					return null;
+				}
+			}
+		}
 		
+		// If all of those fail, you really don't have access to the CMS		
 		return null;
 	}
 	

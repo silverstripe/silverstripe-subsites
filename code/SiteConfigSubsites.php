@@ -19,7 +19,10 @@ class SiteConfigSubsites extends DataObjectDecorator {
 		if(Subsite::$disable_subsite_filter) return;
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
-		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]))) {
+		if (!$query->where || (
+			!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]) &&
+			!preg_match('/\.?(\'|"|`|)SubsiteID(\'|"|`|)( ?)=/', $query->where[0])
+		)) {
 
 			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
 			else $subsiteID = (int)Subsite::currentSubsiteID();
