@@ -215,6 +215,33 @@ class SubsiteTest extends SapphireTest {
 			$mainpage->canEdit(),
 			'Members cant edit pages on the main site if they are not in a group allowing this'
 		);
-	}	
+	}
+	
+	function testTwoPagesWithSameURLOnDifferentSubsites() {
+		// Set up a couple of pages with the same URL on different subsites
+		$s1 = $this->objFromFixture('Subsite','domaintest1');
+		$s2 = $this->objFromFixture('Subsite','domaintest2');
+		
+		$p1 = new SiteTree();
+		$p1->Title = $p1->URLSegment = "test-page";
+		$p1->SubsiteID = $s1->ID;
+		$p1->write();
+
+		$p2 = new SiteTree();
+		$p2->Title = $p1->URLSegment = "test-page";
+		$p2->SubsiteID = $s2->ID;
+		$p2->write();
+
+		// Check that the URLs weren't modified in our set-up
+		$this->assertEquals($p1->URLSegment, 'test-page');
+		$this->assertEquals($p2->URLSegment, 'test-page');
+		
+		// Check that if we switch between the different subsites, we receive the correct pages
+		Subsite::changeSubsite($s1);
+		$this->assertEquals($p1->ID, SiteTree::get_by_url('test-page')->ID);
+
+		Subsite::changeSubsite($s2);
+		$this->assertEquals($p2->ID, SiteTree::get_by_url('test-page')->ID);
+	}
 
 }

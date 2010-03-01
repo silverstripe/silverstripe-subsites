@@ -38,4 +38,11 @@ class SiteConfigSubsites extends DataObjectDecorator {
 			$this->owner->SubsiteID = Subsite::currentSubsiteID();
 		}
 	}
+
+	/**
+	 * Return a piece of text to keep DataObject cache keys appropriately specific
+	 */
+	function cacheKeyComponent() {
+		return 'subsite-'.Subsite::currentSubsiteID();
+	}
 }

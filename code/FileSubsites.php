@@ -102,5 +102,14 @@ class FileSubsites extends DataObjectDecorator {
 			return $access;
 		}
 	}
+	
+	/**
+	 * Return a piece of text to keep DataObject cache keys appropriately specific
+	 */
+	function cacheKeyComponent() {
+		return 'subsite-'.Subsite::currentSubsiteID();
+	}
+	
 }
+
 
