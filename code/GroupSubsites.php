@@ -19,7 +19,8 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 	
 	function updateCMSFields(&$fields) {
 		if($this->owner->canEdit() ){
-			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true);
+			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true,
+				"All sites");
 			$subsiteMap = $subsites->toDropdownMap();
 			
 			$tab = $fields->findOrMakeTab(
@@ -31,7 +32,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 			// readonly
 			if(!isset($subsiteMap[$this->owner->SubsiteID])) {
 				if($this->owner->SubsiteID) $subsiteTitle = $this->owner->Subsite()->Title;
-				else $subsiteTitle = "Main site";
+				else $subsiteTitle = "All sites";
 				$subsiteMap = array($this->owner->SubsiteID => $subsiteTitle);
 			}
 				
