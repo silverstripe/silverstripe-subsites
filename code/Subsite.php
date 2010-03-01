@@ -25,12 +25,34 @@ class Subsite extends DataObject implements PermissionProvider {
 		// If unset, will default to
 		'IsPublic' => 'Boolean'
 	);
-
+	
 	static $has_one = array(
+	);
+	
+	static $has_many = array(
+		'Domains' => 'SubsiteDomain',
 	);
 
 	static $defaults = array(
 		'IsPublic' => 1,
+	);
+
+	static $searchable_fields = array(
+		'Title' => array(
+			'title' => 'Subsite Name'
+		),
+		'Domains.Domain' => array(
+			'title' => 'Domain name'
+		),
+		'IsPublic' => array(
+			'title' => 'Active subsite',
+		),	
+	);
+
+	static $summary_fields = array(
+		'Title' => 'Subsite Name',
+		'PrimaryDomain' => 'Primary Domain',
+		'IsPublic' => 'Active subsite',
 	);
 
 	/**
@@ -94,6 +116,10 @@ class Subsite extends DataObject implements PermissionProvider {
 			}
 		}
 	}
+	
+	function getPrimaryDomain() {
+		return $this->domain();
+	}
 
 	function absoluteBaseURL() {
 		return "http://" . $this->domain() . Director::baseURL();
@@ -106,11 +132,7 @@ class Subsite extends DataObject implements PermissionProvider {
 		$domainTable = new TableField("Domains", "SubsiteDomain", 
 			array("Domain" => "Domain (use * as a wildcard)", "IsPrimary" => "Primary domain?"), 
 			array("Domain" => "TextField", "IsPrimary" => "CheckboxField"), 
-			null, "SubsiteDomain.SubsiteID", $this->ID);
-			
-		$domainTable->setExtraData(array(
-			'SubsiteID' => $this->ID ? $this->ID : '$RecordID',
-		));
+			"SubsiteID", $this->ID);
 
 		$fields = new FieldSet(
 			new TabSet('Root',
@@ -473,16 +495,18 @@ class Subsite_Template extends Subsite {
 	/**
 	 * Create an instance of this template, with the given title & domain
 	 */
-	function createInstance($title, $domain) {
+	function createInstance($title, $domain = null) {
 		$intranet = Object::create('Subsite');
 		$intranet->Title = $title;
 		$intranet->TemplateID = $this->ID;
 		$intranet->write();
 		
-		$intranetDomain = Object::create('SubsiteDomain');
-		$intranetDomain->SubsiteID = $intranet->ID;
-		$intranetDomain->Domain = $domain;
-		$intranetDomain->write();
+		if($domain) {
+			$intranetDomain = Object::create('SubsiteDomain');
+			$intranetDomain->SubsiteID = $intranet->ID;
+			$intranetDomain->Domain = $domain;
+			$intranetDomain->write();
+		}
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
