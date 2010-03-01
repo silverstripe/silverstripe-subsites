@@ -119,6 +119,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	
 	function onAfterWrite(&$original) {
 		// Update any subsite virtual pages that might need updating
+		$oldState = Subsite::$disable_subsite_filter;
 		Subsite::$disable_subsite_filter = true;
 		
 		$linkedPages = DataObject::get("SubsitesVirtualPage", "CopyContentFromID = {$this->owner->ID}");
@@ -127,11 +128,12 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			$page->write();
 		}
 		
-		Subsite::$disable_subsite_filter = false;
+		Subsite::$disable_subsite_filter = $oldState;
 	}
 	
 	function onAfterPublish(&$original) {
 		// Publish any subsite virtual pages that might need publishing
+		$oldState = Subsite::$disable_subsite_filter;
 		Subsite::$disable_subsite_filter = true;
 		
 		$linkedPages = DataObject::get("SubsitesVirtualPage", "CopyContentFromID = {$this->owner->ID}");
@@ -140,7 +142,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			$page->doPublish();
 		}
 		
-		Subsite::$disable_subsite_filter = false;
+		Subsite::$disable_subsite_filter = $oldState;
 	}
 
 	function updateCMSFields(&$fields) {
