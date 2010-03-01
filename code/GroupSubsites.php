@@ -78,12 +78,15 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 					$subsiteMap));
 
 			} else {
-				if (sizeof($subsiteMap) <= 1) $dropdown = $dropdown->transform(new ReadonlyTransformation()) ;
-				$tab->push($dropdown);
-
-				$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", 
-					_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-					$subsiteMap));
+				if (sizeof($subsiteMap) <= 1) {
+					$fields->addFieldToTab("Root.Subsites", new ReadonlyField("SubsitesHuman", 
+						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+						reset($subsiteMap)));
+				} else {
+					$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", 
+						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+						$subsiteMap));
+				}
 			}
 		}
 	}
@@ -138,6 +141,8 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 						= {$q}Group{$q}.{$q}ID{$q} AND {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = $subsiteID");
 					$query->where[] = "({$q}Group_Subsites{$q}.{$q}SubsiteID{$q} IS NOT NULL OR
 						{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1)";
+						
+					if(!$query->groupby) $query->groupby[] = "\"Group\".\"ID\"";
 				} else {
 					$query->where[] = "{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1";
 				}
