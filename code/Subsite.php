@@ -350,29 +350,6 @@ JS;
 	
 	}
 
-	/**
-	 * Get all subsites.
-	 *
-	 * @return DataObjectSet Subsite instances
-	 */
-	static function getSubsitesForMember( $member = null) {
-		if(!$member && $member !== FALSE) $member = Member::currentMember();
-
-		if(!$member) return false;
-
-		if(self::hasMainSitePermission($member)) {
-			return DataObject::get('Subsite');
-		} else {
-			return DataObject::get(
-				'Subsite', 
-					"\"MemberID\" = {$member->ID}", 
-				'', 
-				"LEFT JOIN \"Group\" ON \"Subsite\".\"ID\" = \"SubsiteID\" 
-				LEFT JOIN \"Group_Members\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\""
-			);
-		}
-	}
-
 	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
