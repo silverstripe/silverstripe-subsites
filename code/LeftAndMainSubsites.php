@@ -13,6 +13,12 @@ class LeftAndMainSubsites extends Extension {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
+		
+		if ($currentPage = $this->owner->currentPage()) {
+			if (Subsite::currentSubsiteID() != $currentPage->SubsiteID) {
+				Subsite::changeSubsite($currentPage->SubsiteID);
+			}
+		}
 	}
 	
 	/**
