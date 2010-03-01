@@ -88,6 +88,14 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function SubsiteList() {
+		if ($this->owner->class == 'AssetAdmin') {
+			// See if the right decorator is there....
+			$file = new File();
+			if (!$file->hasExtension('FileSubsites')) {
+				return false;
+			}
+		}
+		
 		$list = $this->Subsites();
 		
 		if(Controller::curr()->hasMethod('getRequest')) $requestSubsiteID = Controller::curr()->getRequest()->getVar('SubsiteID');
