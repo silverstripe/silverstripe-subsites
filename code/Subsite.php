@@ -131,11 +131,6 @@ class Subsite extends DataObject implements PermissionProvider {
 			new HiddenField('IsSubsite', '', 1)
 		);
 
-// This code needs to be updated to reference the new SS 2.0.3 theme system
-/*		if($themes = SSViewer::getThemes(false))
-			$fields->addFieldsToTab('Root.Configuration', new DropdownField('Theme', 'Theme:', $themes, $this->Theme));
-*/
-
 		$this->extend('updateCMSFields', $fields);
 		return $fields;
 	}
