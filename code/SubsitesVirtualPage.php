@@ -10,25 +10,20 @@ class SubsitesVirtualPage extends VirtualPage {
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
 		
-		$subsites = Subsite::getSubsitesForMember();
-		if(!$subsites) $subsites = new DataObjectSet();
-		if(Subsite::hasMainSitePermission()) {
-			$subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
-		}
+		$subsites = DataObject::get('Subsite');
+		$subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 
-		if($subsites->Count()) {
-			$subsiteSelectionField = new DropdownField(
-				"CopyContentFromID_SubsiteID", 
-				"Subsite", 
-				$subsites->toDropdownMap('ID', 'Title'),
-				($this->CopyContentFromID) ? $this->CopyContentFrom()->SubsiteID : Session::get('SubsiteID')
-			);
-			$fields->addFieldToTab(
-				'Root.Content.Main',
-				$subsiteSelectionField,
-				'CopyContentFromID'
-			);
-		}
+		$subsiteSelectionField = new DropdownField(
+			"CopyContentFromID_SubsiteID", 
+			"Subsite", 
+			$subsites->toDropdownMap('ID', 'Title'),
+			($this->CopyContentFromID) ? $this->CopyContentFrom()->SubsiteID : Session::get('SubsiteID')
+		);
+		$fields->addFieldToTab(
+			'Root.Content.Main',
+			$subsiteSelectionField,
+			'CopyContentFromID'
+		);
 		
 		// Setup the linking to the original page.
 		$pageSelectionField = new SubsitesTreeDropdownField(
