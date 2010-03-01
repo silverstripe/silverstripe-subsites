@@ -464,8 +464,8 @@ JS;
 		return DataObject::get(
 			'Subsite',
 			"{$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
-			AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')
-			AND ({$q}Subdomain{$q} IS NOT NULL OR {$q}Subsite{$q}.{$q}ClassName{$q} IN ($templateClassList)) AND {$q}Subsite{$q}.{$q}Title{$q} != ''",
+			AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN', 'SUBSITE_ACCESS_ALL')
+			AND {$q}Subsite{$q}.{$q}Title{$q} != ''",
 			'',
 			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
 			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q} = {$q}Group{$q}.{$q}ID{$q}

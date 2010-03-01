@@ -124,6 +124,12 @@ class LeftAndMainSubsites extends Extension {
 	function augmentNewSiteTreeItem(&$item) {
 		$item->SubsiteID = Subsite::currentSubsiteID();	
 	}
+	
+	function onAfterSave($record) {
+		if($record->hasMethod('RelatedPages') && $record->RelatedPages()) {
+			FormResponse::status_message('Saved, please update related pages.', 'good');
+		}
+	}
 }
 	
 	

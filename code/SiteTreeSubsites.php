@@ -34,7 +34,10 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		return array(
 			'has_one' => array(
 				'Subsite' => 'Subsite', // The subsite that this page belongs to
-				'MasterPage' => 'SiteTree', // Optional; the page that is the content master
+				'MasterPage' => 'SiteTree',// Optional; the page that is the content master
+			),
+			'has_many' => array(
+				'RelatedPages' => 'SiteTree'
 			)
 		);
 	}
@@ -150,6 +153,23 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 				'URLSegment'
 			);
 		}
+		
+		// Related pages
+		$fields->addFieldToTab(
+			'Root.Related',
+			new LiteralField('RelatedNote', '<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>')
+		);
+		$fields->addFieldToTab(
+			'Root.Related',
+			$related = new ComplexTableField(
+					$this,
+					'RelatedPages',
+					'RelatedPageLink',
+					array(
+						'RelatedPageAdminLink' => 'Page'
+					)
+			)
+		);
 	}
 	
 	/**
