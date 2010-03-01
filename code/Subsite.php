@@ -457,14 +457,14 @@ JS;
 	}
 	
 	/**
-	 * Write a host->domain map to cache/host-map.php
+	 * Write a host->domain map to subsites/host-map.php
 	 *
 	 * This is used primarily when using subsites in conjunction with StaticPublisher
 	 *
 	 * @return void
 	 */
 	static function writeHostMap($file = null) {
-		if (!$file) $file = Director::baseFolder().'/cache/host-map.php';
+		if (!$file) $file = Director::baseFolder().'/subsites/host-map.php';
 		$hostmap = array();
 		
 		$subsites = DataObject::get('Subsite');
