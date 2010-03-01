@@ -345,6 +345,9 @@ JS;
 		return ($groupCount > 0);
 	}
 
+	/**
+	 * Overload this function to generate initial records in your newly created subsite.
+	 */
 	function createInitialRecords() {
 
 	}
