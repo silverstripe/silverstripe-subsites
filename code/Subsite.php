@@ -13,7 +13,8 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	static $disable_subsite_filter = false;
 
-	static $default_sort = "\"Title\"";
+	static $write_hostmap = true;
+	static $default_sort = 'Title';
 
 	static $db = array(
 		'Title' => 'Varchar(255)',
@@ -469,6 +470,8 @@ JS;
 	 * @return void
 	 */
 	static function writeHostMap($file = null) {
+		if (!self::$write_hostmap) return;
+		
 		if (!$file) $file = Director::baseFolder().'/subsites/host-map.php';
 		$hostmap = array();
 		
@@ -506,7 +509,8 @@ JS;
 		return array(
 			'SUBSITE_EDIT' => 'Edit Sub-site Details',
 			'SUBSITE_ACCESS_ALL' => 'Access all subsites',
-			'SUBSITE_ASSETS_EDIT' => 'Edit Sub-site Assets Admin'
+			'SUBSITE_ASSETS_EDIT' => 'Edit Sub-site Assets Admin',
+			'SUBSITE_ASSETS_CREATE_SUBSITE' => 'Create/edit sub-site specific asset folders'
 		);
 	}
 

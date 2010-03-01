@@ -13,6 +13,7 @@ class SubsiteAdminTest extends SapphireTest {
      * Test generation of the view
      */
     function testBasicView() {
+		Subsite::$write_hostmap = false;
         // Open the admin area logged in as admin
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
         

@@ -5,6 +5,8 @@ class SubsitesVirtualPageTest extends SapphireTest {
 	
 	// Attempt to bring main:linky to subsite2:linky
 	function testVirtualPageFromAnotherSubsite() {
+		Subsite::$write_hostmap = false;
+		
 		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
 		
 		Subsite::changeSubsite($subsite->ID);

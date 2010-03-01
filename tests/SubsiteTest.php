@@ -37,6 +37,8 @@ class SubsiteTest extends SapphireTest {
 	 * Create a new subsite from the template and verify that all the template's pages are copied
 	 */
 	function testSubsiteCreation() {
+		Subsite::$write_hostmap = false;
+		
 		// Create the instance
 		$template = $this->objFromFixture('Subsite_Template', 'main');
 	
