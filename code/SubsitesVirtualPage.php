@@ -1,5 +1,11 @@
 <?php
 class SubsitesVirtualPage extends VirtualPage {
+	static $db = array(
+		'CustomMetaTitle' => 'Varchar(255)',
+		'CustomMetaKeywords' => 'Varchar(255)',
+		'CustomMetaDescription' => 'Text',
+		'CustomExtraMeta' => 'HTMLText'
+	);
 	
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
@@ -57,6 +63,11 @@ class SubsitesVirtualPage extends VirtualPage {
 			$linkToContentLabelField->setAllowHTML(true);
 		}
 		
+		$fields->addFieldToTab('Root.Content.Metadata', new TextField('CustomMetaTitle', 'Title (overrides virtual)'), 'MetaTitle');
+		$fields->addFieldToTab('Root.Content.Metadata', new TextareaField('CustomMetaKeywords', 'Keywords (overrides virtual)'), 'MetaKeywords');
+		$fields->addFieldToTab('Root.Content.Metadata', new TextareaField('CustomMetaDescription', 'Description (overrides virtual)'), 'MetaDescription');
+		$fields->addFieldToTab('Root.Content.Metadata', new TextField('CustomExtraMeta', 'Custom Meta Tags (overrides virtual)'), 'ExtraMeta');
+		
 		return $fields;
 	}
 	
@@ -67,6 +78,15 @@ class SubsitesVirtualPage extends VirtualPage {
 		}
 
 		return $fields;
+	}
+	
+	function onBeforeWrite() {
+		parent::onBeforeWrite();
+	
+		if($this->CustomMetaTitle) $this->MetaTitle = $this->CustomMetaTitle;
+		if($this->CustomMetaKeywords) $this->MetaKeywords = $this->CustomMetaKeywords;
+		if($this->CustomMetaDescription) $this->MetaDescription = $this->CustomMetaDescription;
+		if($this->CustomExtraMeta) $this->ExtraMeta = $this->CustomExtraMeta;
 	}
 }
 
