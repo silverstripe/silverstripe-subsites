@@ -4,12 +4,11 @@ SubsitesTreeDropdownField.prototype = {
 	//subsiteID: null,
 	
 	ajaxGetTree: function(after) {
-		// This if block is necessary to maintain both 2.2 and 2.3 support
-		var baseURL = this.options.dropdownField.helperURLBase();
-        if(baseURL.match('action_callfieldmethod')) var ajaxURL =  baseURL+ '&methodName=gettree&forceValues=' + this.getIdx();
-        else var ajaxURL =  baseURL+ 'gettree?forceValues=' + this.getIdx();
+		var baseURL = this.helperURLBase();
+		// Can't force value because it might be on a different subsite!
+		var ajaxURL =  baseURL+ 'gettree?forceValues=' + 0; //this.inputTag.value;
 		
-		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
+		// Customised: Append subsiteid (evaluated in SubsitesVirtualPage.php)
 		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID);
 		
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
@@ -26,11 +25,8 @@ SubsitesTreeDropdownField.prototype = {
 		var ul = this.treeNodeHolder();
 		ul.innerHTML = ss.i18n._t('LOADING');
 		
-		// This if block is necessary to maintain both 2.2 and 2.3 support
 		var baseURL = this.options.dropdownField.helperURLBase();
-
-        if(baseURL.match('action_callfieldmethod')) var ajaxURL =  baseURL+ '&methodName=getsubtree&SubtreeRootID=' + this.getIdx();
-        else var ajaxURL =  baseURL+ 'getsubtree?SubtreeRootID=' + this.getIdx();
+		var ajaxURL =  baseURL+ 'getsubtree?SubtreeRootID=' + this.getIdx();
 		
 		// Find the root of the tree - this points to a list item in the tree, not the root div we actually want
 		// @todo: We should be using framework API calls to find the tree
