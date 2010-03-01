@@ -310,6 +310,11 @@ JS;
 			return $subsiteIDs[0];
 		}
 		
+		// Check for a 'default' subsite
+		if ($default = DataObject::get_one('Subsite', 'DefaultSite = 1')) {
+			return $default->ID;
+		}
+		
 		// Default subsite id = 0, the main site
 		return 0;
 	}
