@@ -52,7 +52,7 @@ class FileSubsites extends DataObjectDecorator {
 		else $q='`';
 
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
-		if(!preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0])) {
+		if(!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0])) {
 			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
 			else $subsiteID = (int) Subsite::currentSubsiteID();
 
