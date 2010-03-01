@@ -537,6 +537,27 @@ JS;
 			LEFT JOIN \"Permission\" ON \"Group\".\"ID\"=\"Permission\".\"GroupID\""
 >>>>>>> .merge-right.r88146
 		);
+		
+		$rolesSubsites = DataObject::get(
+			'Subsite',
+			"`Group_Members`.`MemberID` = $member->ID
+			AND `PermissionRoleCode`.`Code` IN ($SQL_codes, 'ADMIN')
+			AND `Subsite`.Title != ''",
+			'',
+			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0)
+			LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
+			LEFT JOIN `Group_Roles` ON `Group_Roles`.`GroupID`=`Group`.`ID`
+			LEFT JOIN `PermissionRole` ON `Group_Roles`.`PermissionRoleID`=`PermissionRole`.`ID`
+			LEFT JOIN `PermissionRoleCode` ON `PermissionRole`.`ID`=`PermissionRoleCode`.`RoleID`"
+		);
+		
+		if(!$subsites && $rolesSubsites) return $rolesSubsites;
+		
+		if($rolesSubsites) foreach($rolesSubsites as $subsite) {
+			if(!$subsites->containsIDs(array($subsite->ID))) {
+				$subsites->push($subsite);
+			}
+		}
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
