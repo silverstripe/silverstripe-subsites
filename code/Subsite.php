@@ -462,7 +462,6 @@ JS;
 	 * This is used primarily when using subsites in conjunction with StaticPublisher
 	 *
 	 * @return void
-	 * @author Tom Rix
 	 */
 	static function writeHostMap($file = null) {
 		if (!$file) $file = Director::baseFolder().'/cache/host-map.php';
@@ -478,7 +477,8 @@ JS;
 		}
 		
 		$data = '<?php $subsiteHostmap = '.var_export($hostmap, true).' ?>';
-		file_put_contents($file, $data);
+		
+		if (is_writable($file)) file_put_contents($file, $data);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
