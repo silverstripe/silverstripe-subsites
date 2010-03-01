@@ -11,6 +11,7 @@ class SubsitesVirtualPage extends VirtualPage {
 		$fields = parent::getCMSFields();
 		
 		$subsites = DataObject::get('Subsite');
+		if(!$subsites) $subsites = new DataObjectSet();
 		$subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 
 		$subsiteSelectionField = new DropdownField(
