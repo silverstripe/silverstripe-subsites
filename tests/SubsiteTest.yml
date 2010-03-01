@@ -72,14 +72,17 @@ Group:
    admin:
       Title: Admin
       Code: admin
+      AccessAllSubsites: 1
    subsite1_group:
       Title: subsite1_group
       Code: subsite1_group
-      SubsiteID: =>Subsite_Template.subsite1
+      AccessAllSubsites: 0
+      Subsites: =>Subsite_Template.subsite1
    subsite2_group:
       Title: subsite2_group
       Code: subsite2_group
-      SubsiteID: =>Subsite_Template.subsite2
+      AccessAllSubsites: 0
+      Subsites: =>Subsite_Template.subsite2
 Permission:
    admin:
       Code: ADMIN

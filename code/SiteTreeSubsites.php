@@ -232,16 +232,11 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	function canEdit($member = null) {
 		if(!$member)  $member = Member::currentUser();
 		
-		// Check the CMS_ACCESS_CMSMain privileges on the subsite that owns this group
-		$oldSubsiteID = Session::get('SubsiteID');
-
-		Subsite::changeSubsite($this->owner->SubsiteID) ;
-		$access = Permission::checkMember($member, 'CMS_ACCESS_CMSMain');
-		Subsite::changeSubsite($oldSubsiteID);
+		// Find the sites that this user has access to
+		$goodSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain',true,'all',$member)->column('ID');
 		
-		if(!$access) $access = Permission::checkMember($member, 'SUBSITE_ACCESS_ALL');
-		
-		return $access;
+		// Return true if they have access to this object's site
+		return in_array(0, $goodSites) || in_array($this->owner->SubsiteID, $goodSites);
 	}
 	
 	/**

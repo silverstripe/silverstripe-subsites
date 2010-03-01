@@ -59,6 +59,22 @@ Behaviour.register({
 			
 			return false;
 		}
+	},
+	
+	// Subsite tab of Group editor
+	'#Form_EditForm_AccessAllSubsites' : {
+		initialize: function () {
+			this.showHideSubsiteList();
+			var i=0,items=this.getElementsByTagName('input');
+			for(i=0;i<items.length;i++) {
+				items[i].onchange = this.showHideSubsiteList;
+			}
+		},
+		
+		showHideSubsiteList : function () {
+			$('Form_EditForm_Subsites').parentNode.style.display = 
+				Form.Element.getValue($('Form_EditForm').AccessAllSubsites)==1 ? 'none' : '';
+		}
 	}
 });
 

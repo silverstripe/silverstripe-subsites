@@ -139,6 +139,30 @@ class SubsiteTest extends SapphireTest {
 	}
 	
 	/**
+	 * Test Subsite::accessible_sites()
+	 */
+	function testAccessibleSites() {
+		$member1Sites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", false, null, 
+			$this->objFromFixture('Member', 'subsite1member'));
+		$member1SiteTitles = $member1Sites->column("Title");
+		sort($member1SiteTitles);
+		$this->assertEquals(array('Subsite1 Template'), $member1SiteTitles);
+
+		$adminSites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", false, null, 
+			$this->objFromFixture('Member', 'admin'));
+		$adminSiteTitles = $adminSites->column("Title");
+		sort($adminSiteTitles);
+		$this->assertEquals(array(
+			'Subsite1 Template',
+			'Subsite2 Template',
+			'Template',
+			'Test 1',
+			'Test 2',
+			'Test 3',
+		), $adminSiteTitles);
+	}
+
+	/**
 	 * Publish a change on a master page of a newly created sub-site, and verify that the change has been propagated.
 	 * Verify that if CustomContent is set, then the changes aren't propagated.
 	 */

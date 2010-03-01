@@ -34,6 +34,10 @@ class Subsite extends DataObject implements PermissionProvider {
 	static $has_many = array(
 		'Domains' => 'SubsiteDomain',
 	);
+	
+	static $belongs_many_many = array(
+		"Groups" => "Group",
+	);
 
 	static $defaults = array(
 		'IsPublic' => 1,
@@ -353,9 +357,11 @@ JS;
 		$groupCount = DB::query("
 			SELECT COUNT({$q}Permission{$q}.{$q}ID{$q})
 			FROM {$q}Permission{$q}
-			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Permission{$q}.{$q}GroupID{$q} AND {$q}Group{$q}.{$q}SubsiteID{$q} = 0
+			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Permission{$q}.{$q}GroupID{$q} AND {$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1
 			INNER JOIN {$q}Group_Members{$q} USING({$q}GroupID{$q})
-			WHERE {$q}Permission{$q}.{$q}Code{$q} IN ('$SQL_perms') AND {$q}MemberID{$q} = {$memberID}
+			WHERE
+			{$q}Permission{$q}.{$q}Code{$q} IN ('$SQL_perms')
+			AND {$q}MemberID{$q} = {$memberID}
 		")->value();
 			
 		return ($groupCount > 0);
@@ -420,13 +426,17 @@ JS;
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
 	 * @param $mainSiteTitle The label to give to the main site
 	 */
-	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site") {
-		$member = Member::currentUser();
+	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
+		// For 2.3 and 2.4 compatibility
+		$q = defined('Database::USE_ANSI_SQL') ? "\"" : "`";
+
+		// Rationalise member arguments
+		if(!$member) $member = Member::currentUser();
+		if(!$member) return new DataObjectSet();
+		if(!is_object($member)) $member = DataObject::get_by_id('Member', $member);
 
 		if(is_array($permCode))	$SQL_codes = "'" . implode("', '", Convert::raw2sql($permCode)) . "'";
 		else $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
-
-		if(!$member) return new DataObjectSet();
 		
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
@@ -436,26 +446,38 @@ JS;
 		
 		return DataObject::get(
 			'Subsite',
-			"{$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
-			AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')
-			AND {$q}Subsite{$q}.{$q}Title{$q} != ''",
+			"{$q}Subsite{$q}.{$q}Title{$q} != ''",
 			'',
-			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q}={$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
-			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
-			LEFT JOIN {$q}Permission{$q} ON {$q}Group{$q}.{$q}ID{$q}={$q}Permission{$q}.{$q}GroupID{$q}"
+			"LEFT JOIN {$q}Group_Subsites{$q} 
+				ON {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q}
+			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Subsites{$q}.{$q}GroupID{$q}
+				OR {$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1
+			INNER JOIN {$q}Group_Members{$q} 
+				ON {$q}Group_Members{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
+				AND {$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
+			INNER JOIN {$q}Permission{$q} 
+				ON {$q}Group{$q}.{$q}ID{$q}={$q}Permission{$q}.{$q}GroupID{$q}
+				AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')"
 		);
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
-			"{$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
-			AND {$q}PermissionRoleCode{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')
-			AND {$q}Subsite{$q}.Title != ''",
+			"{$q}Subsite{$q}.Title != ''",
 			'',
-			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q}={$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
-			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
-			LEFT JOIN {$q}Group_Roles{$q} ON {$q}Group_Roles{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
-			LEFT JOIN {$q}PermissionRole{$q} ON {$q}Group_Roles{$q}.{$q}PermissionRoleID{$q}={$q}PermissionRole{$q}.{$q}ID{$q}
-			LEFT JOIN {$q}PermissionRoleCode{$q} ON {$q}PermissionRole{$q}.{$q}ID{$q}={$q}PermissionRoleCode{$q}.{$q}RoleID{$q}"
+			"LEFT JOIN {$q}Group_Subsites{$q} 
+				ON {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q}
+			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Subsites{$q}.{$q}GroupID{$q}
+				OR {$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1
+			INNER JOIN {$q}Group_Members{$q} 
+				ON {$q}Group_Members{$q}.{$q}GroupID$q={$q}Group{$q}.{$q}ID{$q}
+				AND {$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
+			INNER JOIN {$q}Group_Roles{$q}
+				ON {$q}Group_Roles{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
+			INNER JOIN {$q}PermissionRole{$q}
+				ON {$q}Group_Roles{$q}.{$q}PermissionRoleID{$q}={$q}PermissionRole{$q}.{$q}ID{$q}
+			INNER JOIN {$q}PermissionRoleCode{$q}
+				ON {$q}PermissionRole{$q}.{$q}ID{$q}={$q}PermissionRoleCode{$q}.{$q}RoleID{$q}
+				AND {$q}PermissionRoleCode{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')"
 		);
 
 		if(!$subsites && $rolesSubsites) return $rolesSubsites;
@@ -603,7 +625,8 @@ class Subsite_Template extends Subsite {
 		 * Copy groups from the template to the given subsites.  Each of the groups will be created and left
 		 * empty.
 		 */
-		$groups = DataObject::get("Group", "{$q}SubsiteID{$q} = '$this->ID'");
+
+		$groups = $this->Groups();
 		if($groups) foreach($groups as $group) {
 			$group->duplicateToSubsite($intranet);
 		}

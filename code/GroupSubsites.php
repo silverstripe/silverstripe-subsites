@@ -11,39 +11,80 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 			if($this->owner->class != 'Group') return null;
 		}
 		return array(
-			'has_one' => array(
-				'Subsite' => 'Subsite',
+			'db' => array(
+				'AccessAllSubsites' => 'Boolean',
+			),
+			'many_many' => array(
+				'Subsites' => 'Subsite',
+			),
+			'defaults' => array(
+				'AccessAllSubsites' => 1,
 			),
 		);
 	}
 	
+	
+	/**
+	 * Migrations for GroupSubsites data.
+	 */
+	function requireDefaultRecords() {
+		// Migration for Group.SubsiteID data from when Groups only had a single subsite
+		$groupFields = DB::getConn()->fieldList('Group');
+		
+		// Detection of SubsiteID field is the trigger for old-style-subsiteID migration
+		if(isset($groupFields['SubsiteID'])) {
+			// Migrate subsite-specific data
+		DB::query('INSERT INTO "Group_Subsites" ("GroupID", "SubsiteID")
+				SELECT "ID", "SubsiteID" FROM "Group" WHERE "SubsiteID" > 0');
+				
+			// Migrate global-access data
+			DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1 WHERE "SubsiteID" = 0');
+			
+			// Move the field out of the way so that this migration doesn't get executed again
+			DB::getConn()->renameField('Group', 'SubsiteID', '_obsolete_SubsiteID');
+			
+		// No subsite access on anything means that we've just installed the subsites module.
+		// Make all previous groups global-access groups
+		} else if(!DB::query('SELECT "ID" FROM "Group" WHERE "AccessAllSubsites" = 1
+			OR "Group_Subsites"."GroupID" IS NOT NULL 
+			LEFT JOIN "Group_Subsites" ON "Group_Subsites"."GroupID" = "Group"."ID"
+			AND "Group_Subsites"."SubsiteID" > 0')->value()) {
+			
+			DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1');
+		}
+	}
+	
 	function updateCMSFields(&$fields) {
 		if($this->owner->canEdit() ){
-			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true,
-				"All sites");
+			// i18n tab
+			$fields->findOrMakeTab('Root.Subsites',_t('GroupSubsites.SECURITYTABTITLE','Subsites'));
+
+			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true);
 			$subsiteMap = $subsites->toDropdownMap();
 			
-			$tab = $fields->findOrMakeTab(
-				'Root.Subsites',
-				_t('GroupSubsites.SECURITYTABTITLE', 'Subsites')
-			);
-			
-			// This will trick the $dropdown code below to displaying the correct human val,
-			// readonly
-			if(!isset($subsiteMap[$this->owner->SubsiteID])) {
-				if($this->owner->SubsiteID) $subsiteTitle = $this->owner->Subsite()->Title;
-				else $subsiteTitle = "All sites";
-				$subsiteMap = array($this->owner->SubsiteID => $subsiteTitle);
+			// Interface is different if you have the rights to modify subsite group values on
+			// all subsites
+			if(isset($subsiteMap[0])) {
+				$fields->addFieldToTab("Root.Subsites", new OptionsetField("AccessAllSubsites", 
+					_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+					array(
+						1 => _t('GroupSubsites.ACCESSALL', "All subsites"),
+						0 => _t('GroupSubsites.ACCESSONLY', "Only these subsites"),
+					)
+				));
+
+				unset($subsiteMap[0]);
+				$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", "",
+					$subsiteMap));
+
+			} else {
+				if (sizeof($subsiteMap) <= 1) $dropdown = $dropdown->transform(new ReadonlyTransformation()) ;
+				$tab->push($dropdown);
+
+				$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", 
+					_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+					$subsiteMap));
 			}
-				
-			$dropdown = new DropdownField(
-				'SubsiteID',
-				_t('GroupSubsites.SECURITYACCESS', 'Limit CMS access to subsites', PR_MEDIUM, 'Dropdown listing existing subsites which this group has access to'),
-				$subsiteMap
-			);
-			
-			if (sizeof($subsiteMap) <= 1) $dropdown = $dropdown->transform(new ReadonlyTransformation()) ;
-			$tab->push($dropdown);
 		}
 	}
 
@@ -54,10 +95,11 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 	 * of the security admin interface.
 	 */
 	function alternateTreeTitle() {
-		if($this->owner->SubsiteID == 0) {
+		if($this->owner->AccessAllSubsites) {
 			return $this->owner->Title . ' <i>(global group)</i>';
 		} else {
-			return $this->owner->Title; //. ' <i>(' . $this->owner->Subsite()->Title . ')</i>';
+			$subsites = Convert::raw2xml(implode(", ", $this->owner->Subsites()->column('Title')));
+			return $this->owner->Title . " <i>($subsites)</i>";
 		}
 	}
 
@@ -68,13 +110,11 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		if(Subsite::$disable_subsite_filter) return;
 		if(Cookie::get('noSubsiteFilter') == 'true') return;
 
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
-		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
-		if(!$query->where || (strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false)) {
 
+		$q = defined('Database::USE_ANSI_SQL') ? "\"" : "`";
+
+		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
+		if(!$query->filtersOnID()) {
 			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
 			else $subsiteID = (int) Subsite::currentSubsiteID();
 
@@ -84,22 +124,53 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 				$query->where[] = $where;
 				break;
 			}
+			
+			// Don't filter by Group_Subsites if we've already done that
+			$hasGroupSubsites = false;
+			foreach($query->from as $item) if(strpos($item, 'Group_Subsites') !== false) {
+				$hasGroupSubsites = true;
+				break;
+			}
+	
+			if(!$hasGroupSubsites) {
+				if($subsiteID) {
+					$query->leftJoin("Group_Subsites", "{$q}Group_Subsites{$q}.{$q}GroupID{$q} 
+						= {$q}Group{$q}.{$q}ID{$q} AND {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = $subsiteID");
+					$query->where[] = "({$q}Group_Subsites{$q}.{$q}SubsiteID{$q} IS NOT NULL OR
+						{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1)";
+				} else {
+					$query->where[] = "{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1";
+				}
+			}
+			$query->orderby = "{$q}AccessAllSubsites{$q} DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
 		}
 	}
 
-	function augmentBeforeWrite() {
-		if((!is_numeric($this->owner->ID) || !$this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
+	function onBeforeWrite() {
+		// New record test approximated by checking whether the ID has changed.
+		// Note also that the after write test is only used when we're *not* on a subsite
+		if($this->owner->isChanged('ID') && !Subsite::currentSubsiteID()) {
+			$this->owner->AccessAllSubsites = 1;
+		}
+	}
+	
+	function onAfterWrite() {
+		// New record test approximated by checking whether the ID has changed.
+		// Note also that the after write test is only used when we're on a subsite
+		if($this->owner->isChanged('ID') && $currentSubsiteID = Subsite::currentSubsiteID()) {
+			$subsites = $this->owner->Subsites();
+			$subsites->add($currentSubsiteID);
+		}
 	}
 
 	function alternateCanEdit() {
-		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
-		$oldSubsiteID = Session::get('SubsiteID');
-
-		Subsite::changeSubsite($this->owner->SubsiteID) ;
-		$access = Permission::check('CMS_ACCESS_SecurityAdmin');
-		Subsite::changeSubsite($oldSubsiteID) ;
-
-		return $access;
+		// Find the sites that this group belongs to and the sites where we have appropriate perm.
+		$accessibleSites = Subsite::accessible_sites('CMS_ACCESS_SecurityAdmin')->column('ID');
+		$linkedSites = $this->owner->Subsites()->column('ID');
+ 
+		// We are allowed to access this site if at we have CMS_ACCESS_SecurityAdmin permission on
+		// at least one of the sites
+		return (bool)array_intersect($accessibleSites, $linkedSites);
 	}
 
 	/**
@@ -117,9 +188,9 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 
 		$group = $this->owner->duplicate(false);
 
-		$subsiteID = ($subsiteID ? $subsiteID : Subsite::currentSubsiteID());
-		$group->SubsiteID = $subsiteID;
 		$group->write();
+
+		$subsite->Groups()->add($group->ID);
 
 		// Duplicate permissions
 		$permissions = $this->owner->Permissions();
