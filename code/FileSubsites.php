@@ -6,6 +6,10 @@
  */
 class FileSubsites extends DataObjectDecorator {
 	
+	// If this is set to true, all folders created will be default be
+	// considered 'global', unless set otherwise
+	static $default_root_folders_global = false;
+	
 	function extraStatics() {
 		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
 			if($this->owner->class != 'File') return null;
@@ -32,7 +36,10 @@ class FileSubsites extends DataObjectDecorator {
 	function updateCMSFields(FieldSet &$fields) {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $sites->toDropdownMap('ID', 'Title', "(Public)")));
+			$dropdownValues = $sites->toDropdownMap();
+			$dropdownValues[0] = 'All sites';
+			ksort($dropdownValues);
+			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $dropdownValues));
 		}
 	}
 
@@ -40,13 +47,12 @@ class FileSubsites extends DataObjectDecorator {
 	 * Update any requests to limit the results to the current site
 	 */
 	function augmentSQL(SQLQuery &$query) {
-		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(defined('DB::USE_ANSI_SQL')) 
 			$q="\"";
 		else $q='`';
-		
-		if(strpos($query->where[0], ".{$q}ID{$q} = ") === false && strpos($query->where[0], ".{$q}ID{$q} = ") === false) {
 
+		// If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
+		if(!preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0])) {
 			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
 			else $subsiteID = (int) Subsite::currentSubsiteID();
 
@@ -63,21 +69,32 @@ class FileSubsites extends DataObjectDecorator {
 		}
 	}
 
-	function augmentBeforeWrite() {
-		if(!$this->owner->ID && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
+	function onBeforeWrite() {
+		if (!$this->owner->ID && !$this->owner->SubsiteID) {
+			if (self::$default_root_folders_global) {
+				$this->owner->SubsiteID = 0;
+			} else {
+				$this->owner->SubsiteID = Subsite::currentSubsiteID();
+			}
+		}
 	}
 
 	function onAfterUpload() {
-		$this->owner->SubsiteID = Subsite::currentSubsiteID();
+		// If we have a parent, use it's subsite as our subsite
+		if ($this->owner->Parent()) {
+			$this->owner->SubsiteID = $this->owner->Parent()->SubsiteID;
+		} else {
+			$this->owner->SubsiteID = Subsite::currentSubsiteID();
+		}
 		$this->owner->write();
 	}
 
 	function canEdit() {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
 		$subsiteID = Session::get('SubsiteID');
-
-		if($subsiteID&&$subsiteID == $this->owner->SubsiteID) return true;
-		else {
+		if($subsiteID&&$subsiteID == $this->owner->SubsiteID) {
+			return true;
+		} else {
 			Session::set('SubsiteID', $this->owner->SubsiteID);
 			$access = Permission::check('CMS_ACCESS_AssetAdmin');
 			Session::set('SubsiteID', $subsiteID);
