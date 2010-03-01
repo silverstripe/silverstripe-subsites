@@ -67,7 +67,6 @@ class RelatedPageLink extends DataObject {
 		return '<a href="' . Convert::raw2att($url) .'" class="externallink">' . Convert::raw2xml($url) . '</a>';
 	}
 
-	/*
 	function canView($member = null) {
 		return $this->MasterPage()->canView($member);
 	}
@@ -77,7 +76,6 @@ class RelatedPageLink extends DataObject {
 	function canDelete($member = null) {
 		return $this->MasterPage()->canDelete($member);
 	}
-	*/
 }
 
 ?>
