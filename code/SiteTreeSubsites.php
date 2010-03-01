@@ -122,7 +122,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$oldState = Subsite::$disable_subsite_filter;
 		Subsite::$disable_subsite_filter = true;
 		
-		$linkedPages = DataObject::get("SubsitesVirtualPage", "CopyContentFromID = {$this->owner->ID}");
+		$linkedPages = DataObject::get("SubsitesVirtualPage", "\"CopyContentFromID\" = {$this->owner->ID}");
 		if($linkedPages) foreach($linkedPages as $page) {
 			$page->copyFrom($page->CopyContentFrom());
 			$page->write();
@@ -136,7 +136,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$oldState = Subsite::$disable_subsite_filter;
 		Subsite::$disable_subsite_filter = true;
 		
-		$linkedPages = DataObject::get("SubsitesVirtualPage", "CopyContentFromID = {$this->owner->ID}");
+		$linkedPages = DataObject::get("SubsitesVirtualPage", "\"CopyContentFromID\" = {$this->owner->ID}");
 		if($linkedPages) foreach($linkedPages as $page) {
 			$page->copyFrom($page->CopyContentFrom());
 			if($page->ExistsOnLive) $page->doPublish();

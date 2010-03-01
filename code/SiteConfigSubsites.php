@@ -29,7 +29,7 @@ class SiteConfigSubsites extends DataObjectDecorator {
 			
 			$tableName = array_shift(array_keys($query->from));
 			if($tableName != 'SiteConfig') return;
-			$query->where[] = "`$tableName`.SubsiteID IN ($subsiteID)";
+			$query->where[] = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
 		}
 	}
 

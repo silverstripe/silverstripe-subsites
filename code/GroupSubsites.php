@@ -147,7 +147,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 					$query->where[] = "{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1";
 				}
 			}
-			$query->orderby = "{$q}AccessAllSubsites{$q} DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
+			$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
 		}
 	}
 
