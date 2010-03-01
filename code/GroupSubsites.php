@@ -210,7 +210,12 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 	
 	function providePermissions() {
 		return array(
-			'SECURITY_SUBSITE_GROUP' => 'Manage subsites for groups'
+			'SECURITY_SUBSITE_GROUP' => array(
+				'name' => 'Manage subsites for groups',
+				'category' => 'Roles and access permissions',
+				'help' => 'Ability to limit the permissions for a group to one or more subsites.',
+				'sort' => 200
+			)
 		);
 	}
 

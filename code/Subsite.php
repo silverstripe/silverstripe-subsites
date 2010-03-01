@@ -547,7 +547,12 @@ JS;
 
 	function providePermissions() {
 		return array(
-			'SUBSITE_ASSETS_CREATE_SUBSITE' => 'Manage assets for subsites'
+			'SUBSITE_ASSETS_CREATE_SUBSITE' => array(
+				'name' => 'Manage assets for subsites',
+				'category' => 'Roles and access permissions',
+				'help' => 'Ability to select the subsite to which an asset folder belongs. Requires "Access to Files & Images."',
+				'sort' => 300
+			)
 		);
 	}
 
