@@ -181,6 +181,9 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			)
 		);
 		
+		// The 'show' link doesn't provide any useful info
+		$related->setPermissions(array('add', 'edit', 'delete'));
+		
 		if($reverse) {
 			$text = '<p>In addition, this page is marked as related by the following pages: </p><ul>';
 			foreach($reverse as $rpage) {
