@@ -23,8 +23,15 @@ class SubsiteReportWrapper extends SSReport {
 	function parameterFields() {
 		$subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
 		$options = $subsites->toDropdownMap('ID', 'Title');
+		
 		$subsiteField = new TreeMultiselectField('Subsites', 'Sites', $options);
+		$subsiteField->setValue(array_keys($options));
 
+		// We don't need to make the field editable if only one subsite is available
+		if(sizeof($options) <= 1) {
+			$subsiteField = $subsiteField->performReadonlyTransformation();
+		}
+		
 		$fields = $this->baseReport->parameterFields();
 		if($fields) {
 			$fields->insertBefore($subsiteField, $fields->First()->Name());
@@ -47,13 +54,15 @@ class SubsiteReportWrapper extends SSReport {
 	// Querying
 	
 	function beforeQuery($params) {
+		// The user has select a few specific sites
 		if(!empty($params['Subsites'])) {
-			// 'any' wasn't selected
-			$subsiteIds = array();
-			foreach(explode(',', $params['Subsites']) as $subsite) {
-				if(is_numeric(trim($subsite))) $subsiteIds[] = trim($subsite);
-			}
-			Subsite::$force_subsite = join(',', $subsiteIds);
+			Subsite::$force_subsite = $params['Subsites'];
+			
+		// Default: restrict to all accessible sites
+		} else {
+			$subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
+			$options = $subsites->toDropdownMap('ID', 'Title');
+			Subsite::$force_subsite = join(',', array_keys($options));
 		}
 	}
 	function afterQuery() {
