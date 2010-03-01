@@ -54,6 +54,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		}
 	}
 	
+	
 	function updateCMSFields(&$fields) {
 		if($this->owner->canEdit() ){
 			// i18n tab
@@ -207,6 +208,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 
 		return $group;
 	}
+<<<<<<< .working
 	
 	function providePermissions() {
 		return array(
@@ -218,6 +220,14 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 			)
 		);
 	}
+=======
+	
+	function providePermissions() {
+		return array(
+			'SECURITY_SUBSITE_GROUP' => 'Edit the subsite a group can access'
+		);
+	}
+>>>>>>> .merge-right.r96288
 
 }
 
