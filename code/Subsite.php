@@ -408,11 +408,7 @@ JS;
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-<<<<<<< .working
 			$children = Versioned::get_by_stage('Page', 'Live', "{$q}ParentID{$q} = $sourceParentID", '');
-=======
-			$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\"=$sourceParentID", '');
->>>>>>> .merge-right.r88146
 
 			if($children) {
 				foreach($children as $child) {
@@ -452,34 +448,13 @@ JS;
 
 		if(is_array($permCode))	$SQL_codes = "'" . implode("', '", Convert::raw2sql($permCode)) . "'";
 		else $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
-<<<<<<< .working
-		
-=======
 
-		if(!$member) return new DataObjectSet();
-		
-		if (Permission::check('ADMIN') || Permission::check('SUBSITE_ACCESS_ALL')) {
-			return DataObject::get('Subsite');
-		}
-
->>>>>>> .merge-right.r96290
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
-		return DataObject::get(
+		$subsites = DataObject::get(
 			'Subsite',
-<<<<<<< .working
 			"{$q}Subsite{$q}.{$q}Title{$q} != ''",
-=======
-			"\"Group_Members\".\"MemberID\" = $member->ID
-			AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')
-			AND \"Subsite\".Title != ''",
->>>>>>> .merge-right.r88146
 			'',
-<<<<<<< .working
 			"LEFT JOIN {$q}Group_Subsites{$q} 
 				ON {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q}
 			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Subsites{$q}.{$q}GroupID{$q}
@@ -490,33 +465,7 @@ JS;
 			INNER JOIN {$q}Permission{$q} 
 				ON {$q}Group{$q}.{$q}ID{$q}={$q}Permission{$q}.{$q}GroupID{$q}
 				AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')"
-=======
-			"LEFT JOIN \"Group\" ON (\"SubsiteID\"=\"Subsite\".\"ID\" OR \"SubsiteID\" = 0)
-			LEFT JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
-			LEFT JOIN \"Permission\" ON \"Group\".\"ID\"=\"Permission\".\"GroupID\""
->>>>>>> .merge-right.r88146
 		);
-		
-		$rolesSubsites = DataObject::get(
-			'Subsite',
-			"`Group_Members`.`MemberID` = $member->ID
-			AND `PermissionRoleCode`.`Code` IN ($SQL_codes, 'ADMIN')
-			AND `Subsite`.Title != ''",
-			'',
-			"LEFT JOIN `Group` ON (`SubsiteID`=`Subsite`.`ID` OR `SubsiteID` = 0)
-			LEFT JOIN `Group_Members` ON `Group_Members`.`GroupID`=`Group`.`ID`
-			LEFT JOIN `Group_Roles` ON `Group_Roles`.`GroupID`=`Group`.`ID`
-			LEFT JOIN `PermissionRole` ON `Group_Roles`.`PermissionRoleID`=`PermissionRole`.`ID`
-			LEFT JOIN `PermissionRoleCode` ON `PermissionRole`.`ID`=`PermissionRoleCode`.`RoleID`"
-		);
-		
-		if(!$subsites && $rolesSubsites) return $rolesSubsites;
-		
-		if($rolesSubsites) foreach($rolesSubsites as $subsite) {
-			if(!$subsites->containsIDs(array($subsite->ID))) {
-				$subsites->push($subsite);
-			}
-		}
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
@@ -539,13 +488,13 @@ JS;
 		);
 
 		if(!$subsites && $rolesSubsites) return $rolesSubsites;
-		
+
 		if($rolesSubsites) foreach($rolesSubsites as $subsite) {
 			if(!$subsites->containsIDs(array($subsite->ID))) {
 				$subsites->push($subsite);
 			}
 		}
-		
+
 		// Include the main site
 		if(!$subsites) $subsites = new DataObjectSet();
 		if($includeMainSite) {
@@ -669,11 +618,7 @@ class Subsite_Template extends Subsite {
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-<<<<<<< .working
 			$children = Versioned::get_by_stage('SiteTree', 'Live', "{$q}ParentID{$q} = $sourceParentID", '');
-=======
-			$children = Versioned::get_by_stage('SiteTree', 'Live', "\"ParentID\"=$sourceParentID", '');
->>>>>>> .merge-right.r88146
 
 			if($children) {
 				foreach($children as $child) {
@@ -690,12 +635,8 @@ class Subsite_Template extends Subsite {
 		 * Copy groups from the template to the given subsites.  Each of the groups will be created and left
 		 * empty.
 		 */
-<<<<<<< .working
 
 		$groups = $this->Groups();
-=======
-		$groups = DataObject::get("Group", "\"SubsiteID\" = '$this->ID'");
->>>>>>> .merge-right.r88146
 		if($groups) foreach($groups as $group) {
 			$group->duplicateToSubsite($intranet);
 		}

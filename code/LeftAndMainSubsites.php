@@ -64,9 +64,6 @@ class LeftAndMainSubsites extends Extension {
 	
 	public function Subsites() {
 		$accessPerm = 'CMS_ACCESS_'. $this->owner->class;
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
 		
 		switch($this->owner->class) {
 			case "AssetAdmin":
@@ -79,9 +76,10 @@ class LeftAndMainSubsites extends Extension {
 					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
 				}
 				break;
+				
 			case "CMSMain":
 				// If there's a default site then main site has no meaning
-				$showMainSite = !DataObject::get_one('Subsite',"{$q}DefaultSite{$q} AND {$q}IsPublic{$q}");
+				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1 AND \"IsPublic\"=1");
 				$subsites = Subsite::accessible_sites($accessPerm, $showMainSite);
 				break;
 				
