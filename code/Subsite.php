@@ -114,6 +114,10 @@ class Subsite extends DataObject implements PermissionProvider {
 				$domain = str_replace('.www.','.', $domain);
 				return $domain;
 			}
+			
+		// SubsiteID = 0 is often used to refer to the main site, just return $_SERVER['HTTP_HOST']
+		} else {
+			return $_SERVER['HTTP_HOST'];
 		}
 	}
 	
