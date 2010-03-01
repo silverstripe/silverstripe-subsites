@@ -190,15 +190,39 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$related->setPermissions(array('add', 'edit', 'delete'));
 		
 		if($reverse) {
-			$text = '<p>In addition, this page is marked as related by the following pages: </p><p>';
+			$text = '<p>In addition, this page is marked as related by the following pages: </p><ul>';
 			foreach($reverse as $rpage) {
-				$text .= $rpage->RelatedPageAdminLink(true) . " - " . $rpage->AbsoluteLink(true) . "<br />\n";
+				$text .= '<ul><a href="admin/show/' . $rpage->ID . '">' . $rpage->Title . '</a></ul>';
 			}
-			$text .= '</p>';
+			$text .= '</ul>';
 			
 			$tab->push(new LiteralField('ReverseRelated', $text));
 		}
 	
+	}
+	
+	function ReverseRelated() {
+		$return = new DataObjectSet();
+		$links = DataObject::get('RelatedPageLink', 'RelatedPageID = ' . $this->owner->ID);
+		if($links) foreach($links as $link) {
+			if($link->MasterPage()->exists()) {
+				$return->push($link->MasterPage());
+			}
+		}
+		
+		return $return->Count() > 0 ? $return : false;
+	}
+	
+	function NormalRelated() {
+		$return = new DataObjectSet();
+		$links = DataObject::get('RelatedPageLink', 'MasterPageID = ' . $this->owner->ID);
+		if($links) foreach($links as $link) {
+			if($link->RelatedPage()->exists()) {
+				$return->push($link->RelatedPage());
+			}
+		}
+		
+		return $return->Count() > 0 ? $return : false;
 	}
 	
 	/**
@@ -336,6 +360,14 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		return $url;
 	}
 
+	
+	/**
+	 * Return a piece of text to keep DataObject cache keys appropriately specific
+	 */
+	function cacheKeyComponent() {
+		return 'subsite-'.Subsite::currentSubsiteID();
+	}
+	
 	function augmentSyncLinkTracking() {
 		// Set LinkTracking appropriately
 		$links = HTTP::getLinksIn($this->owner->Content);
@@ -365,13 +397,6 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		}
 		
 		$this->owner->CrossSubsiteLinkTracking()->setByIDList($linkedPages);
-	}
-	
-	/**
-	 * Return a piece of text to keep DataObject cache keys appropriately specific
-	 */
-	function cacheKeyComponent() {
-		return 'subsite-'.Subsite::currentSubsiteID();
 	}
 }
 
