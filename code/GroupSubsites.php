@@ -87,7 +87,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 	}
 
 	function augmentBeforeWrite() {
-		if(!is_numeric($this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
+		if((!is_numeric($this->owner->ID) || !$this->owner->ID) && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
 	}
 
 	function alternateCanEdit() {
