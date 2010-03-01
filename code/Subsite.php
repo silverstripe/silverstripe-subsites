@@ -557,9 +557,10 @@ JS;
 	}
 
 	static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "") {
+		$oldState = self::$disable_subsite_filter;
 		self::$disable_subsite_filter = true;
 		$result = DataObject::get($className, $filter, $sort, $join, $limit);
-		self::$disable_subsite_filter = false;
+		self::$disable_subsite_filter = $oldState;
 		return $result;
 	}
 
