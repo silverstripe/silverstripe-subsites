@@ -36,7 +36,7 @@ class FileSubsites extends DataObjectDecorator {
 	function updateCMSFields(FieldSet &$fields) {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-			$dropdownValues = $sites->toDropdownMap();
+			$dropdownValues = ($sites) ? $sites->toDropdownMap() : array();
 			$dropdownValues[0] = 'All sites';
 			ksort($dropdownValues);
 			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $dropdownValues));
