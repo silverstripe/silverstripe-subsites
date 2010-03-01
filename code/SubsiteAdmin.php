@@ -70,8 +70,20 @@ class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController 
 		));
 		$form->saveInto($subsite);
 		$subsite->write();
-	
-		Director::redirect(Controller::join_links($this->Link(), $subsite->ID , 'edit'));
+		
+		if(Director::is_ajax()) {
+			$recordController = new ModelAdmin_RecordController($this, $request, $subsite->ID);
+			return new HTTPResponse(
+				$recordController->EditForm()->forAjaxTemplate(), 
+				200, 
+				sprintf(
+					_t('ModelAdmin.LOADEDFOREDITING', "Loaded '%s' for editing."),
+					$subsite->Title
+				)
+			);
+		} else {
+			Director::redirect(Controller::join_links($this->Link(), $subsitess->ID , 'edit'));
+		}
 	}
 }
 
