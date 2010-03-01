@@ -226,6 +226,10 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		return $return->Count() > 0 ? $return : false;
 	}
 	
+	function alternateSiteConfig() {
+		return DataObject::get_one('SiteConfig', 'SubsiteID = ' . $this->owner->SubsiteID);
+	}
+	
 	/**
 	 * Returns the RelatedPageLink objects that are reverse-associated with this page.
 	 */
