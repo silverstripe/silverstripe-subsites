@@ -23,7 +23,8 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 			if(Subsite::hasMainSitePermission(Member::currentUser(), array('ADMIN', 'SECURITY_SUBSITE_GROUP'))) {
 				$subsiteMap[0] = 'Main site';
 			}
-			foreach(Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP')) as $subsite) {
+			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'));
+			if($subsites) foreach($subsites as $subsite) {
 				$subsiteMap[$subsite->ID] = $subsite->Title;
 			}
 			
