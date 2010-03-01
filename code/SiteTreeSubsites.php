@@ -224,6 +224,10 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		return $return->Count() > 0 ? $return : false;
 	}
 	
+	function alternateSiteConfig() {
+		return DataObject::get_one('SiteConfig', 'SubsiteID = ' . $this->owner->SubsiteID);
+	}
+	
 	/**
 	 * Only allow editing of a page if the member satisfies one of the following conditions:
 	 * - Is in a group which has access to the subsite this page belongs to
