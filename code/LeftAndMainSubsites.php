@@ -36,6 +36,9 @@ class LeftAndMainSubsites extends Extension {
 		if ($id == '-1') Cookie::set('noSubsiteFilter', 'true', 1);
 		else Cookie::set('noSubsiteFilter', 'false', 1);
 		
+		if ($id == '-1') Cookie::set('noSubsiteFilter', 'true', 1);
+		else Cookie::set('noSubsiteFilter', 'false', 1);
+		
 		if(Director::is_ajax()) {
 			$tree = $this->owner->SiteTreeAsUL();
 			$tree = ereg_replace('^[ \t\r\n]*<ul[^>]*>','', $tree);
@@ -62,7 +65,6 @@ class LeftAndMainSubsites extends Extension {
 					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
 				}
 				break;
-				
 			case "CMSMain":
 				// If there's a default site then main site has no meaning
 				$showMainSite = !DataObject::get_one('Subsite',"{$q}DefaultSite{$q} AND {$q}IsPublic{$q}");
