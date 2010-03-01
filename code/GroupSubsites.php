@@ -4,7 +4,7 @@
  *
  * @package subsites
  */
-class GroupSubsites extends DataObjectDecorator {
+class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 
 	function extraStatics() {
 		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
@@ -19,6 +19,8 @@ class GroupSubsites extends DataObjectDecorator {
 	
 	function updateCMSFields(&$fields) {
 
+		if (!Permission::check('ADMIN') && !Permission::check('SECURITY_SUBSITE_GROUP')) return;
+		
 		if( $this->owner->SubsiteID == 0 || $this->owner->canEdit() ){
 			$subsites = DataObject::get('Subsite');
 			if ( $subsites && $subsites->exists() ) {
@@ -132,6 +134,12 @@ class GroupSubsites extends DataObjectDecorator {
 		}
 
 		return $group;
+	}
+	
+	function providePermissions() {
+		return array(
+			'SECURITY_SUBSITE_GROUP' => 'Edit the subsite a group can access'
+		);
 	}
 
 }
