@@ -10,6 +10,7 @@ Behaviour.register({
 						$('sitetree').innerHTML = response.responseText;
 						SiteTree.applyTo($('sitetree'));
 						$('sitetree').getTreeNodeByIdx(0).onselect();
+						$('siteTreeFilterList').reapplyIfNeeded();
 					}
 				},
 				
