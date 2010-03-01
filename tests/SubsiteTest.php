@@ -101,8 +101,8 @@ class SubsiteTest extends SapphireTest {
 		$this->assertEquals($this->idFromFixture('Subsite','domaintest2'),
 			Subsite::getSubsiteIDForDomain('other.mysite.com'));
 
-		$this->assertNull(Subsite::getSubsiteIDForDomain('other.example.com'));
-		$this->assertNull(Subsite::getSubsiteIDForDomain('two.example.com'));
+		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('other.example.com'));
+		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('two.example.com'));
 	}
 
 	/**
