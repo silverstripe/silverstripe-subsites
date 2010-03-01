@@ -58,13 +58,13 @@ class SubsiteTest extends SapphireTest {
 		}
 		
 		// Create a new site
-		$subsite = $template->createInstance('My Site', 'something');
+		$subsite = $template->createInstance('My Site', 'something.test.com');
 	
 		// Check title
 		$this->assertEquals($subsite->Title, 'My Site');
 		
 		// Check that domain generation is working
-		$this->assertEquals($subsite->domain(), 'something.test.com');
+		$this->assertEquals('something.test.com', $subsite->domain());
 	
 		// Another test that changeSubsite is working
 		Subsite::changeSubsite($subsite->ID);
@@ -84,6 +84,50 @@ class SubsiteTest extends SapphireTest {
 		Subsite::changeSubsite(0);
 		
 	}
+	
+	/**
+	 * Confirm that domain lookup is working
+	 */
+	function testDomainLookup() {
+		$this->assertEquals($this->idFromFixture('Subsite','domaintest1'),
+			Subsite::getSubsiteIDForDomain('one.example.org'));
+		$this->assertEquals($this->idFromFixture('Subsite','domaintest1'),
+			Subsite::getSubsiteIDForDomain('one.localhost'));
+
+		$this->assertEquals($this->idFromFixture('Subsite','domaintest2'),
+			Subsite::getSubsiteIDForDomain('two.mysite.com'));
+		$this->assertEquals($this->idFromFixture('Subsite','domaintest2'),
+			Subsite::getSubsiteIDForDomain('other.mysite.com'));
+
+		$this->assertNull(Subsite::getSubsiteIDForDomain('other.example.com'));
+		$this->assertNull(Subsite::getSubsiteIDForDomain('two.example.com'));
+	}
+
+	/**
+	 * Test the Subsite->domain() method
+	 */
+	function testDefaultDomain() {
+		$this->assertEquals('one.example.org', 
+			$this->objFromFixture('Subsite','domaintest1')->domain());
+
+		$this->assertEquals('two.mysite.com', 
+			$this->objFromFixture('Subsite','domaintest2')->domain());
+			
+		$originalHTTPHost = $_SERVER['HTTP_HOST'];
+		
+		$_SERVER['HTTP_HOST'] = "www.example.org";
+		$this->assertEquals('three.example.org', 
+			$this->objFromFixture('Subsite','domaintest3')->domain());
+
+		$_SERVER['HTTP_HOST'] = "mysite.example.org";
+		$this->assertEquals('three.mysite.example.org', 
+			$this->objFromFixture('Subsite','domaintest3')->domain());
+
+
+		$_SERVER['HTTP_HOST'] = $originalHTTPHost;
+
+	}
+	
 	
 	/**
 	 * Only the published content from the template should publish.

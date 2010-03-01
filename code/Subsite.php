@@ -23,12 +23,11 @@ class Subsite extends DataObject implements PermissionProvider {
 	static $use_domain = false;
 
 	static $db = array(
-		'Subdomain' => 'Varchar',
 		'Title' => 'Varchar(255)',
 		'RedirectURL' => 'Varchar(255)',
 		'DefaultSite' => 'Boolean',
 		'Theme' => 'Varchar',
-		'Domain' => 'Varchar',
+
 		// Used to hide unfinished/private subsites from public view.
 		// If unset, will default to
 		'IsPublic' => 'Boolean'
@@ -37,36 +36,14 @@ class Subsite extends DataObject implements PermissionProvider {
 	static $has_one = array(
 	);
 
-	static $indexes = array(
-		'Subdomain' => true,
-		'Domain' => true
-	);
-
 	static $defaults = array(
 		'IsPublic' => 1,
 	);
 
 	/**
-	 * @var string $base_domain If {@link Domain} is not set for this subsite instance,
-	 * default to this domain (without subdomain or protocol prefix).
-	 */
-	static $base_domain;
-
-	/**
-	 * @var string $default_subdomain If {@link Subdomain} is not set for this subsite instance,
-	 * default to this domain (without domain or protocol prefix).
-	 */
-	static $default_subdomain;
-
-	/**
 	 * @var Subsite $cached_subsite Internal cache used by {@link currentSubsite()}.
 	 */
 	protected static $cached_subsite = null;
-
-	/**
-	 * @var array $allowed_domains Numeric array of all domains which are selectable for (without their subdomain-parts or http:// prefix)
-	 */
-	public static $allowed_domains = array();
 
 	/**
 	 * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
@@ -76,29 +53,8 @@ class Subsite extends DataObject implements PermissionProvider {
 	protected static $allowed_themes = array();
 
 	static function set_allowed_domains($domain){
-		if(is_array($domain)){
-			foreach($domain as $do){
-				self::set_allowed_domains($do);
-			}
-		}else{
-			self::$allowed_domains[] = $domain;
-		}
-	}
-
-	/**
-	 * Returns all domains (without their subdomain parts)
-	 * which are allowed to be combined to the full URL
-	 * (subdomain.domain). If no custom domains are set through
-	 * {@link set_allowed_domains()}, will fall back to the {@link base_domain()}.
-	 *
-	 * @return array
-	 */
-	static function allowed_domains() {
-		if(self::$allowed_domains && count(self::$allowed_domains)) {
-			return self::$allowed_domains;
-		} else {
-			return array(self::base_domain());
-		}
+		user_error('Subsite::set_allowed_domains() is deprecated; it is no longer necessary '
+			. 'because users can now enter any domain name', E_USER_NOTICE);
 	}
 
 	static function set_allowed_themes($themes) {
@@ -126,38 +82,24 @@ class Subsite extends DataObject implements PermissionProvider {
 	}
 
 	/**
-	 * Return the base domain for this set of subsites.
-	 * You can set this by setting Subsite::$base_domain, otherwise it defaults to HTTP_HOST
-	 *
-	 * @return string Domain name (without protocol prefix).
-	 */
-	static function base_domain() {
-		if(self::$base_domain) return self::$base_domain;
-		else return $_SERVER['HTTP_HOST'];
-	}
-
-	/**
-	 * Return the default domain of this set of subsites.  Generally this will be the base domain,
-	 * but you can also set Subsite::$default_subdomain to add a default prefix to this.
-	 *
-	 * @return string Domain name (without protocol prefix).
-	 */
-	static function default_domain() {
-		if(self::$default_subdomain) return self::$default_subdomain . '.' . self::base_domain();
-		else return self::base_domain();
-	}
-
-	/**
 	 * Return the domain of this site
 	 *
 	 * @return string Domain name including subdomain (without protocol prefix)
 	 */
 	function domain() {
-		$base = $this->Domain ? $this->Domain : self::base_domain();
-		$sub = $this->Subdomain ? $this->Subdomain : self::$default_subdomain;
-
-		if($sub) return "$sub.$base";
-		else return $base;
+		if($this->ID) {
+			$domains = DataObject::get("SubsiteDomain", "SubsiteID = $this->ID", "IsPrimary DESC",
+				"", 1);
+			if($domains) {
+				$domain = $domains->First()->Domain;
+				// If there are wildcards in the primary domain (not recommended), make some
+				// educated guesses about what to replace them with
+				$domain = preg_replace("/\\.\\*\$/",".$_SERVER[HTTP_HOST]", $domain);
+				$domain = preg_replace("/^\\*\\./","subsite.", $domain);
+				$domain = str_replace('.www.','.', $domain);
+				return $domain;
+			}
+		}
 	}
 
 	function absoluteBaseURL() {
@@ -168,15 +110,23 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Show the configuration fields for each subsite
 	 */
 	function getCMSFields() {
+		$domainTable = new TableField("Domains", "SubsiteDomain", 
+			array("Domain" => "Domain (use * as a wildcard)", "IsPrimary" => "Primary domain?"), 
+			array("Domain" => "TextField", "IsPrimary" => "CheckboxField"), 
+			null, "SubsiteDomain.SubsiteID", $this->ID);
+			
+		$domainTable->setExtraData(array(
+			'SubsiteID' => $this->ID ? $this->ID : '$RecordID',
+		));
+
 		$fields = new FieldSet(
 			new TabSet('Root',
 				new Tab('Configuration',
 					new HeaderField($this->getClassName() . ' configuration', 2),
 					new TextField('Title', 'Name of subsite:', $this->Title),
-					new FieldGroup('URL',
-						new TextField('Subdomain',"Subdomain <small>(without domain or protocol)</small>", $this->Subdomain),
-						new DropdownField('Domain','.', ArrayLib::valuekey(self::allowed_domains()), $this->Domain)
-					),
+					
+					new HeaderField("Domains for this subsite"),
+					$domainTable,
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
 					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
@@ -303,37 +253,27 @@ JS;
 	}
 
 	/**
-	 * Get a matching subsite for the domain defined in HTTP_HOST.
+	 * Get a matching subsite for the given host, or for the current HTTP_HOST.
+	 * 
+	 * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST']
+	 * is used.
 	 *
 	 * @return int Subsite ID
 	 */
-	static function getSubsiteIDForDomain() {
-		$domainNameParts = explode('.', $_SERVER['HTTP_HOST']);
-
-		if($domainNameParts[0] == 'www') array_shift($domainNameParts);
-
-		$SQL_subdomain = Convert::raw2sql(array_shift($domainNameParts));
-		$SQL_domain = join('.', Convert::raw2sql($domainNameParts));
+	static function getSubsiteIDForDomain($host = null) {
+		if($host == null) $host = $_SERVER['HTTP_HOST'];
 		
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
-		$subsite = null;
-		if(self::$use_domain) {
-			$subsite = DataObject::get_one('Subsite', "{$q}Subdomain{$q} = '$SQL_subdomain' AND {$q}Domain{$q} = '$SQL_domain' AND {$q}IsPublic{$q} = 1");
-		}
-		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite', "{$q}Subdomain{$q} = '$SQL_subdomain' AND {$q}IsPublic{$q} = 1");
-		}
-		if(!$subsite) {
-			$subsite = DataObject::get_one('Subsite', "{$q}DefaultSite{$q} = 1 AND {$q}IsPublic{$q} = 1");
-		}
+		$host = str_replace('www.','',$host);
+		$SQL_host = Convert::raw2sql($host);
 
-		if($subsite) {
-			// This will need to be updated to use the current theme system
-			// SSViewer::setCurrentTheme($subsite->Theme);
-			return $subsite->ID;
+		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace({$q}SubsiteDomain{$q}.{$q}Domain{$q},'*','%')",
+			"{$q}IsPrimary{$q} DESC", "INNER JOIN {$q}Subsite{$q} ON {$q}Subsite{$q}.{$q}ID{$q} = {$q}SubsiteDomain{$q}.{$q}SubsiteID{$q} AND
+			{$q}Subsite{$q}.{$q}IsPublic{$q}");
+		
+		if($matchingDomains) {
+			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
+			if(sizeof($subsiteIDs) > 1) user_error("Multiple subsites match '$host'", E_USER_WARNING);
+			return $subsiteIDs[0];
 		}
 	}
 
@@ -543,14 +483,16 @@ class Subsite_Template extends Subsite {
 	/**
 	 * Create an instance of this template, with the given title & subdomain
 	 */
-	function createInstance($title, $subdomain) {
+	function createInstance($title, $domain) {
 		$intranet = Object::create('Subsite');
 		$intranet->Title = $title;
-		$intranet->Domain = $this->Domain;
-		$intranet->Subdomain = $subdomain;
 		$intranet->TemplateID = $this->ID;
 		$intranet->write();
-
+		
+		$intranetDomain = Object::create('SubsiteDomain');
+		$intranetDomain->SubsiteID = $intranet->ID;
+		$intranetDomain->Domain = $domain;
+		$intranetDomain->write();
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);

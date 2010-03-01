@@ -78,7 +78,7 @@ class SubsiteAdminTest extends SapphireTest {
 
         $response = $form->testSubmission('addintranet', array(
             'Name' => 'Test Intranet',
-            'Subdomain' => 'Test',
+            'Domain' => 'test.example.com',
             'TemplateID' => 1,
             'AdminEmail' => '',
             'AdminName' => '',

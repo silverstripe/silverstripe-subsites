@@ -1,13 +1,43 @@
 Subsite_Template:
    main:
       Title: Template
-      Domain: test.com
    subsite1:
       Title: Subsite1 Template
-      Subdomain: subsite1
    subsite2:
       Title: Subsite2 Template
-      Subdomain: subsite2
+Subsite:
+   domaintest1:
+      Title: Test 1
+   domaintest2:
+      Title: Test 2
+   domaintest3:
+      Title: Test 3
+SubsiteDomain:
+   subsite1:
+      SubsiteID: =>Subsite_Template.subsite1
+      Domain: subsite1.*
+   subsite2:
+      SubsiteID: =>Subsite_Template.subsite2
+      Domain: subsite2.*
+   dt1a:
+      SubsiteID: =>Subsite.domaintest1
+      Domain: one.example.org
+      IsPrimary: 1
+   dt1b:
+      SubsiteID: =>Subsite.domaintest1
+      Domain: one.*
+   dt2a:
+      SubsiteID: =>Subsite.domaintest2
+      Domain: two.mysite.com
+      IsPrimary: 1
+   dt2b:
+      SubsiteID: =>Subsite.domaintest2
+      Domain: *.mysite.com
+   dt3:
+      SubsiteID: =>Subsite.domaintest3
+      Domain: three.*
+      IsPrimary: 1
+      
 SiteTree:
    home:
       Title: Home

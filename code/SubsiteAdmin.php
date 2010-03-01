@@ -68,7 +68,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 			$numIntranets++;
 			$evenOdd = ($numIntranets % 2) ? 'odd':'even';
 			$prefix = ($intranet instanceof Subsite_Template) ? " * " : "";
-			$html .= "<tr class=\"$evenOdd\"><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">$prefix{$intranet->Title}</a></td><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">{$intranet->Subdomain}.{$intranet->Domain}</a></td></tr>";
+			$html .= "<tr class=\"$evenOdd\"><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">$prefix{$intranet->Title}</a></td><td><a class=\"show\" href=\"admin/subsites/show/{$intranet->ID}\">{$intranet->domain()}</a></td></tr>";
 		}
 		$html .= "</tbody></table>";
 		return $html;
@@ -88,7 +88,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 		
 		return new Form($this, 'AddSubsiteForm', new FieldSet(
 			new TextField('Name', 'Name:'),
-			new TextField('Subdomain', 'Subdomain:'),
+			new TextField('Domain', 'Domain name:'),
 			new DropdownField('Type', 'Type', array(
 				'subsite' => 'New site',
 				'template' => 'New template',
@@ -111,13 +111,13 @@ class SubsiteAdmin extends GenericDataAdmin {
 	}
 	
 	function addintranet($data, $form) {
-		if($data['Name'] && ($data['Subdomain'] || $data['Type'] == 'template')) {
+		if($data['Name'] && ($data['Domain'] || $data['Type'] == 'template')) {
 			if(isset($data['TemplateID']) && $data['TemplateID']) {
 				$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
 			} else {
 				$template = null;
 			}
-		
+
 			// Create intranet from existing template
 			switch($data['Type']) {
 				case 'template':
@@ -130,12 +130,17 @@ class SubsiteAdmin extends GenericDataAdmin {
 
 				case 'subsite':
 				default:
-					if($template) $intranet = $template->createInstance($data['Name'], $data['Subdomain']);		
+					if($template) $intranet = $template->createInstance($data['Name'], $data['Domain']);		
 					else {
 						$intranet = new Subsite();
 						$intranet->Title = $data['Name'];
-						$intranet->Subdomain = $data['Subdomain'];
 						$intranet->write();
+
+						$newSubsiteDomain = new SubsiteDomain();
+						$newSubsiteDomain->SubsiteID = $intranet->ID;
+						$newSubsiteDomain->write();
+						$newSubsiteDomain->Domain = $data['Domain'];
+						$newSubsiteDomain->write();
 					}
 					break;
 			}
@@ -143,7 +148,7 @@ class SubsiteAdmin extends GenericDataAdmin {
 			Director::redirect('admin/subsites/show/' . $intranet->ID);
 		} else {
 			if($data['Type'] == 'template') echo "You must provide a name for your new template.";
-			else echo "You must provide a name and subdomain for your new site.";
+			else echo "You must provide a name and domain for your new site.";
 		}
 	}
 
