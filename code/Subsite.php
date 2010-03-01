@@ -56,11 +56,6 @@ class Subsite extends DataObject implements PermissionProvider {
 	);
 
 	/**
-	 * @var Subsite $cached_subsite Internal cache used by {@link currentSubsite()}.
-	 */
-	protected static $cached_subsite = null;
-
-	/**
 	 * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
 	 * Corresponds to subfolder names within the /themes folder. By default, all themes contained in this folder
 	 * are listed.
@@ -187,13 +182,12 @@ JS;
 	 * Gets the subsite currently set in the session.
 	 *
 	 * @uses ControllerSubsites->controllerAugmentInit()
-	 *
-	 * @param boolean $cache
+	 * 
 	 * @return Subsite
 	 */
-	static function currentSubsite($cache = true) {
-		if(!self::$cached_subsite || !$cache) self::$cached_subsite = DataObject::get_by_id('Subsite', self::currentSubsiteID());
-		return self::$cached_subsite;
+	static function currentSubsite() {
+		// get_by_id handles caching so we don't have to
+		return DataObject::get_by_id('Subsite', self::currentSubsiteID());
 	}
 
 	/**
