@@ -40,8 +40,8 @@ class LeftAndMainSubsites extends Extension {
 
 	public function changesubsite() {
 		$id = $_REQUEST['SubsiteID'];
-		
-		Subsite::changeSubsite($id);
+
+		Subsite::changeSubsite($id==-1 ? 0 : $id);
 		
 		if ($id == '-1') Cookie::set('noSubsiteFilter', 'true', 1);
 		else Cookie::set('noSubsiteFilter', 'false', 1);
@@ -68,7 +68,9 @@ class LeftAndMainSubsites extends Extension {
 				
 			case "SecurityAdmin":
 				$subsites = Subsite::accessible_sites($accessPerm, true, "Groups accessing all sites");
-				$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
+				if($subsites->find('ID',0)) {
+					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
+				}
 				break;
 				
 			case "CMSMain":
