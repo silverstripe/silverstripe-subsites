@@ -146,7 +146,6 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$page->doUnpublish();
 		
 		Subsite::changeSubsite($vp1->SubsiteID);
-		$_REQUEST['showqueries']=1;
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "SiteTree_Live.ID = ".$vp1->ID);
 		$this->assertFalse($onLive, 'SVP has been removed from live');
 		
