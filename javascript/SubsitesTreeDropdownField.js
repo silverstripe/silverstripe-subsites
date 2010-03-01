@@ -31,6 +31,7 @@ SubsitesTreeDropdownField.prototype = {
 	},
 	
 	// This ajaxExpansion function is actually attached as a method on the tree object; therefore, this.getIdx() is a method
+	// note also this.tree.options.dropdownField.subsiteID() must be called, not this.subsiteID()
 	ajaxExpansion: function() {
 		this.addNodeClass('loading');
 		var ul = this.treeNodeHolder();
@@ -48,7 +49,7 @@ SubsitesTreeDropdownField.prototype = {
 		while (tree && !tree.className.match(/(^| )SubsitesTreeDropdownField( |$)/)) tree = tree.parentNode;
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
-		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.subsiteID());
+		ajaxURL += '&' + this.id + '_SubsiteID=' + parseInt(this.tree.options.dropdownField.subsiteID());
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
 		
 		new Ajax.Request(ajaxURL, {
