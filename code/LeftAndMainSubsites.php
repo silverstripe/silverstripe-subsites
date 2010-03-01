@@ -126,7 +126,7 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	function onAfterSave($record) {
-		if($record->hasMethod('RelatedPages') && $record->RelatedPages()) {
+		if($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
 			FormResponse::status_message('Saved, please update related pages.', 'good');
 		}
 	}
