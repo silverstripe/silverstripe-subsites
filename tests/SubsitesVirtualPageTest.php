@@ -282,6 +282,46 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$this->assertTrue($vp->ExistsOnLive);
 		$this->assertFalse($vp->IsModifiedOnStage);
 	}
+	
+	function testUnpublishingParentPageUnpublishesSubsiteVirtualPages() {
+		StaticPublisher::$disable_realtime = true;
+		
+		// Go to main site, get parent page
+		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		Subsite::changeSubsite($subsite->ID);
+		$page = $this->objFromFixture('SiteTree', 'importantpage');
+		
+		// Create two SVPs on other subsites
+		$subsite = $this->objFromFixture('Subsite_Template', 'subsite1');
+		Subsite::changeSubsite($subsite->ID);
+		$vp1 = new SubsitesVirtualPage();
+		$vp1->CopyContentFromID = $page->ID;
+		$vp1->write();
+		$vp1->doPublish();
+		
+		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		Subsite::changeSubsite($subsite->ID);
+		$vp2 = new SubsitesVirtualPage();
+		$vp2->CopyContentFromID = $page->ID;
+		$vp2->write();
+		$vp2->doPublish();
+		
+		// Switch back to main site, unpublish source
+		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		Subsite::changeSubsite($subsite->ID);
+		$page = $this->objFromFixture('SiteTree', 'importantpage');
+		$page->doUnpublish();
+		
+		$subsite = $this->objFromFixture('Subsite_Template', 'subsite1');
+		Subsite::changeSubsite($subsite->ID);
+		$onLive = Versioned::get_by_stage('Page', 'Live', "SiteTree_Live.ID = ".$vp1->ID);
+		$this->assertNull($onLive, 'SVP has been removed from live');
+		
+		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		Subsite::changeSubsite($subsite->ID);
+		$onLive = Versioned::get_by_stage('Page', 'Live', "SiteTree_Live.ID = ".$vp2->ID);
+		$this->assertNull($onLive, 'SVP has been removed from live');
+	}
 
 	function fixVersionNumberCache($page) {
 		$pages = func_get_args();
