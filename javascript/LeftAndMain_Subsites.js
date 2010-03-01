@@ -1,7 +1,9 @@
 Behaviour.register({
 	'#SubsiteActions select' : {
 		onchange: function() {
-			$('Form_AddPageOptionsForm_SubsiteID').value = this.value;
+			if($('Form_AddPageOptionsForm_SubsiteID')) {
+				$('Form_AddPageOptionsForm_SubsiteID').value = this.value;
+			}
 			var request = new Ajax.Request(SiteTreeHandlers.controller_url + '/changesubsite?SubsiteID=' + this.value + '&ajax=1', {
 				onSuccess: function(response) {
 					if ($('sitetree')) {
