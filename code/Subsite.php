@@ -205,7 +205,7 @@ JS;
 	 * @param boolean $cache
 	 * @return int ID of the current subsite instance
 	 */
-	static function currentSubsiteID($cache = true) {
+	static function currentSubsiteID() {
 		if(isset($_REQUEST['SubsiteID'])) {
 			$id = (int)$_REQUEST['SubsiteID'];
 		} else {
@@ -213,7 +213,7 @@ JS;
 		}
 
 		if(!isset($id) || $id === NULL) {
-			$id = self::getSubsiteIDForDomain($cache);
+			$id = self::getSubsiteIDForDomain();
 			Session::set('SubsiteID', $id);
 		}
 
