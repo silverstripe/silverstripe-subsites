@@ -14,7 +14,7 @@ class LeftAndMainSubsites extends Extension {
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
 		
-		if ($currentPage = $this->owner->currentPage()) {
+		if ($this->owner->class == 'CMSMain' && $currentPage = $this->owner->currentPage()) {
 			if (Subsite::currentSubsiteID() != $currentPage->SubsiteID) {
 				Subsite::changeSubsite($currentPage->SubsiteID);
 			}

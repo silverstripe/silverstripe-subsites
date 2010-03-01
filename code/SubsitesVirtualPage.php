@@ -63,10 +63,10 @@ class SubsitesVirtualPage extends VirtualPage {
 			$linkToContentLabelField->setAllowHTML(true);
 		}
 		
-		$fields->addFieldToTab('Root.Content.Metadata', new TextField('CustomMetaTitle', 'Title (overrides virtual)'), 'MetaTitle');
-		$fields->addFieldToTab('Root.Content.Metadata', new TextareaField('CustomMetaKeywords', 'Keywords (overrides virtual)'), 'MetaKeywords');
-		$fields->addFieldToTab('Root.Content.Metadata', new TextareaField('CustomMetaDescription', 'Description (overrides virtual)'), 'MetaDescription');
-		$fields->addFieldToTab('Root.Content.Metadata', new TextField('CustomExtraMeta', 'Custom Meta Tags (overrides virtual)'), 'ExtraMeta');
+		$fields->addFieldToTab('Root.Content.Metadata', new TextField('CustomMetaTitle', 'Title (overrides inherited value from the source)'), 'MetaTitle');
+		$fields->addFieldToTab('Root.Content.Metadata', new TextareaField('CustomMetaKeywords', 'Keywords (overrides inherited value from the source)'), 'MetaKeywords');
+		$fields->addFieldToTab('Root.Content.Metadata', new TextareaField('CustomMetaDescription', 'Description (overrides inherited value from the source)'), 'MetaDescription');
+		$fields->addFieldToTab('Root.Content.Metadata', new TextField('CustomExtraMeta', 'Custom Meta Tags (overrides inherited value from the source)'), 'ExtraMeta');
 		
 		return $fields;
 	}
