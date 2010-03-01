@@ -82,7 +82,6 @@ class RelatedPageLink extends DataObject {
 		
 
 		$url = $page->AbsoluteLink();
-		return '<a href="' . Convert::raw2att($url) .'" class="externallink">' . Convert::raw2xml($url) . '</a>';
 	}
 
 	function canView($member = null) {
