@@ -60,8 +60,13 @@ class RelatedPageLink extends DataObject {
 	}
 	
 	function RelatedPageAdminLink() {
-		return '<a href="admin/show/' . $this->RelatedPage()->ID . '" class="externallink" >' . Convert::raw2xml($this->RelatedPage()->Title) . '</a>';
+		return '<a href="admin/show/' . $this->RelatedPage()->ID . '" class="cmsEditlink">' . Convert::raw2xml($this->RelatedPage()->Title) . '</a>';
 	}
+	function AbsoluteLink() {
+		$url = $this->RelatedPage()->AbsoluteLink();
+		return '<a href="' . Convert::raw2att($url) .'" class="externallink">' . Convert::raw2xml($url) . '</a>';
+	}
+
 	/*
 	function canView($member = null) {
 		return $this->MasterPage()->canView($member);
