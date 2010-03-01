@@ -467,10 +467,33 @@ JS;
 			AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')
 			AND {$q}Subsite{$q}.{$q}Title{$q} != ''",
 			'',
-			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
-			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q} = {$q}Group{$q}.{$q}ID{$q}
-			LEFT JOIN {$q}Permission{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Permission{$q}.{$q}GroupID{$q}"
-		);		
+			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q}={$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
+			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
+			LEFT JOIN {$q}Permission{$q} ON {$q}Group{$q}.{$q}ID{$q}={$q}Permission{$q}.{$q}GroupID{$q}"
+		);
+
+		$rolesSubsites = DataObject::get(
+			'Subsite',
+			"{$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
+			AND {$q}PermissionRoleCode{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')
+			AND {$q}Subsite{$q}.Title != ''",
+			'',
+			"LEFT JOIN {$q}Group{$q} ON ({$q}SubsiteID{$q}={$q}Subsite{$q}.{$q}ID{$q} OR {$q}SubsiteID{$q} = 0)
+			LEFT JOIN {$q}Group_Members{$q} ON {$q}Group_Members{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
+			LEFT JOIN {$q}Group_Roles{$q} ON {$q}Group_Roles{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
+			LEFT JOIN {$q}PermissionRole{$q} ON {$q}Group_Roles{$q}.{$q}PermissionRoleID{$q}={$q}PermissionRole{$q}.{$q}ID{$q}
+			LEFT JOIN {$q}PermissionRoleCode{$q} ON {$q}PermissionRole{$q}.{$q}ID{$q}={$q}PermissionRoleCode{$q}.{$q}RoleID{$q}"
+		);
+
+		if(!$subsites && $rolesSubsites) return $rolesSubsites;
+		
+		if($rolesSubsites) foreach($rolesSubsites as $subsite) {
+			if(!$subsites->containsIDs(array($subsite->ID))) {
+				$subsites->push($subsite);
+			}
+		}
+
+		return $subsites;
 	}
 	
 	/**
