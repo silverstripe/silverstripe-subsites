@@ -219,7 +219,7 @@ JS;
 			$id = Session::get('SubsiteID');
 		}
 
-		if(!isset($id) || $id === NULL) {
+		if($id === NULL) {
 			$id = self::getSubsiteIDForDomain();
 			Session::set('SubsiteID', $id);
 		}
@@ -247,11 +247,13 @@ JS;
 	static function changeSubsite($subsite) {
 		if(is_object($subsite)) $subsiteID = $subsite->ID;
 		else $subsiteID = $subsite;
-
-		Session::set('SubsiteID', $subsiteID);
-
-		// And clear caches
-		Permission::flush_permission_cache() ;
+		
+		Session::set('SubsiteID', (int)$subsiteID);
+		
+		// Only bother flushing caches if we've actually changed
+		if($subsiteID != self::currentSubsiteID()) {
+			Permission::flush_permission_cache();
+		}
 	}
 
 	/**
@@ -291,6 +293,9 @@ JS;
 			if(sizeof($subsiteIDs) > 1) user_error("Multiple subsites match '$host'", E_USER_WARNING);
 			return $subsiteIDs[0];
 		}
+		
+		// Default subsite id = 0, the main site
+		return 0;
 	}
 
 	function getMembersByPermission($permissionCodes = array('ADMIN')){
