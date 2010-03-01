@@ -49,7 +49,7 @@ SubsitesTreeDropdownField.prototype = {
 		while (tree && !tree.className.match(/(^| )SubsitesTreeDropdownField( |$)/)) tree = tree.parentNode;
 		
 		// Customized: Append subsiteid (evaluated in SubsitesVirtualPage.php)
-		ajaxURL += '&' + this.inputTag.name + '_SubsiteID=' + parseInt(this.tree.options.dropdownField.subsiteID());
+		ajaxURL += '&' + this.options.dropdownField.inputTag.name + '_SubsiteID=' + parseInt(this.options.dropdownField.subsiteID());
 		ajaxURL += $('SecurityID') ? '&SecurityID=' + $('SecurityID').value : '';
 		
 		new Ajax.Request(ajaxURL, {
