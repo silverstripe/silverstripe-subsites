@@ -227,7 +227,15 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	}
 	
 	function alternateSiteConfig() {
-		return DataObject::get_one('SiteConfig', 'SubsiteID = ' . $this->owner->SubsiteID);
+		$sc = DataObject::get_one('SiteConfig', 'SubsiteID = ' . $this->owner->SubsiteID);
+		if(!$sc) {
+			$sc = new SiteConfig();
+			$sc->SubsiteID = $this->owner->SubsiteID;
+			$sc->Title = 'Your Site Name';
+			$sc->Tagline = 'your tagline here';
+			$sc->write();
+		}
+		return $sc;
 	}
 	
 	/**
