@@ -3,7 +3,7 @@
 global $lang;
 
 $lang['en_US']['SubsiteAdmin']['MENUTITLE'] = array(
-	'Subsites',
+	'Subsite',
 	100,
 	'Menu title'
 );
@@ -27,6 +27,17 @@ $lang['en_US']['RelatedPageLink']['SINGULARNAME'] = array(
 );
 $lang['en_US']['Subsite']['MANAGE_ASSETS'] = 'Manage assets for subsites';
 $lang['en_US']['Subsite']['MANAGE_ASSETS_HELP'] = 'Ability to select the subsite to which an asset folder belongs. Requires "Access to Files & Images."';
+$lang['en_US']['ModelAdmin']['LOADEDFOREDITING'] = 'Loaded \'%s\' for editing.';
+$lang['en_US']['RelatedPageLink']['PLURALNAME'] = array(
+	'Related Page Links',
+	50,
+	'Pural name of the object, used in dropdowns and to generally identify a collection of this object in the interface'
+);
+$lang['en_US']['RelatedPageLink']['SINGULARNAME'] = array(
+	'Related Page Link',
+	50,
+	'Singular name of the object, used in dropdowns and to generally identify a single object in the interface'
+);
 $lang['en_US']['Subsite']['PLURALNAME'] = array(
 	'Subsits',
 	50,
