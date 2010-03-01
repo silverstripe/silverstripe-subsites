@@ -1,28 +1,24 @@
-###############################################
 Subsites Module
-###############################################
+===============
 
 Maintainer Contact
------------------------------------------------
+------------------
+
 Sam Minnée (Nickname: sminnee)
 <sam (at) silverstripe (dot) com>
 
 Requirements
------------------------------------------------
-- SilverStripe 2.3.0 or higher
+------------
+
+SilverStripe 2.3.0 or higher
 
 Documentation
------------------------------------------------
-http://doc.silverstripe.com/doku.php?id=modules:subsites
+-------------
 
-Installation Instructions
------------------------------------------------
+Full documentation is available on [our wiki](http://doc.silverstripe.com/doku.php?id=modules:subsites).
 
-Usage Overview
------------------------------------------------
-
-Known issues:
------------------------------------------------
+Known issues
+------------
 
 When setting up SubsiteDomains, the port is important.
 If you are running on a non-standard port, you must put
