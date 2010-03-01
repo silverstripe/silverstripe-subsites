@@ -144,7 +144,7 @@ class Subsite extends DataObject implements PermissionProvider {
 			array("Domain" => "TextField", "IsPrimary" => "CheckboxField"), 
 			"SubsiteID", $this->ID);
 			
-		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_languages());
+		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
 
 		$fields = new FieldSet(
 			new TabSet('Root',
