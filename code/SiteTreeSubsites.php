@@ -139,7 +139,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$linkedPages = DataObject::get("SubsitesVirtualPage", "CopyContentFromID = {$this->owner->ID}");
 		if($linkedPages) foreach($linkedPages as $page) {
 			$page->copyFrom($page->CopyContentFrom());
-			$page->doPublish();
+			if($page->ExistsOnLive) $page->doPublish();
 		}
 		
 		Subsite::$disable_subsite_filter = $oldState;
