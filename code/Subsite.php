@@ -635,7 +635,6 @@ class Subsite_Template extends Subsite {
 		 * Copy groups from the template to the given subsites.  Each of the groups will be created and left
 		 * empty.
 		 */
-
 		$groups = $this->Groups();
 		if($groups) foreach($groups as $group) {
 			$group->duplicateToSubsite($intranet);

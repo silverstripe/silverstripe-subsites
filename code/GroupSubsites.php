@@ -113,20 +113,13 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		if(Subsite::$disable_subsite_filter) return;
 		if(Cookie::get('noSubsiteFilter') == 'true') return;
 
-
 		$q = defined('Database::USE_ANSI_SQL') ? "\"" : "`";
 
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(!$query->filtersOnID()) {
-			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
-			else $subsiteID = (int) Subsite::currentSubsiteID();
 
-			// The foreach is an ugly way of getting the first key :-)
-			foreach($query->from as $tableName => $info) {
-				$where = "{$q}$tableName{$q}.{$q}SubsiteID{$q} IN (0, $subsiteID)";
-				$query->where[] = $where;
-				break;
-			}
+			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+			else $subsiteID = (int)Subsite::currentSubsiteID();
 			
 			// Don't filter by Group_Subsites if we've already done that
 			$hasGroupSubsites = false;
@@ -134,7 +127,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 				$hasGroupSubsites = true;
 				break;
 			}
-	
+			
 			if(!$hasGroupSubsites) {
 				if($subsiteID) {
 					$query->leftJoin("Group_Subsites", "{$q}Group_Subsites{$q}.{$q}GroupID{$q} 
@@ -147,7 +140,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 					$query->where[] = "{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1";
 				}
 			}
-			$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
+			$query->orderby = "{$q}AccessAllSubsites{$q} DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
 		}
 	}
 
@@ -218,6 +211,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 			)
 		);
 	}
+
 }
 
 ?>

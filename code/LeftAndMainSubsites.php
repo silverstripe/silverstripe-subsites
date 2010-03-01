@@ -9,24 +9,10 @@ class LeftAndMainSubsites extends Extension {
 		'changesubsite',
 	);
 	
-	function init() {
+	function augmentInit() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
-		
-		// Switch to the subsite of the current page
-		if ($this->owner->class == 'CMSMain' && $currentPage = $this->owner->currentPage()) {
-			if (Subsite::currentSubsiteID() != $currentPage->SubsiteID) {
-				Subsite::changeSubsite($currentPage->SubsiteID);
-			}
-		}
-		
-		// Switch to a subsite that this user can actually access.
-		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->toDropdownMap();
-		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
-			$siteIDs = array_keys($sites);
-			Subsite::changeSubsite($siteIDs[0]);
-		}
 	}
 	
 	/**
