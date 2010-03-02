@@ -27,7 +27,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$this->assertEquals($svp->SubsiteID, $subsite->ID);
 		$this->assertEquals($svp->Title, $linky->Title);
 	}
-
+	
 	/**
 	 * Test custom metadata. Reloading Content should not
 	 * obliterate our custom fields
@@ -62,7 +62,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 
 	function testFileLinkRewritingOnVirtualPages() {
 		// File setup
-		$this->logInWithPermssion('ADMIN');
+		$this->logInWithPermission('ADMIN');
 		touch(Director::baseFolder() . '/assets/testscript-test-file.pdf');
 
 		// Publish the source page
@@ -178,7 +178,6 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$page->doUnpublish();
 		
 		Subsite::changeSubsite($vp1->SubsiteID);
-		$_REQUEST['showqueries']=1;
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "SiteTree_Live.ID = ".$vp1->ID);
 		$this->assertFalse($onLive, 'SVP has been removed from live');
 		

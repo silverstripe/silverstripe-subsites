@@ -49,26 +49,19 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	}
 	
 	/**
-	 * Check if we're currently looking at the main site.
-	 * @return boolean TRUE main site | FALSE sub-site
-	 */
-	function isMainSite() {
-		if($this->owner->SubsiteID == 0) return true;
-		return false;
-	}
-	
-	/**
 	 * Update any requests to limit the results to the current site
 	 */
 	function augmentSQL(SQLQuery &$query) {
 		if(Subsite::$disable_subsite_filter) return;
 		
-		$q = defined('DB::USE_ANSI_SQL') ? '"' : '`';
-
+		// Don't run on delete queries, since they are always tied to
+		// a specific ID.
 		if ($query->delete) return;
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
+		// if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
 		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]))) {
+
 			if (Subsite::$force_subsite) $subsiteID = Subsite::$force_subsite;
 			else {
 				if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
@@ -77,11 +70,9 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
-				$where = "{$q}$tableName{$q}.{$q}SubsiteID{$q} IN ($subsiteID)";
-				
 				// The tableName should be SiteTree or SiteTree_Live...
 				if(strpos($tableName,'SiteTree') === false) break;
-				$query->where[] = $where;
+				$query->where[] = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
 				break;
 			}
 		}
@@ -97,11 +88,8 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	
 	protected $nextWriteDoesntCustomise = false;
 	
-	function augmentBeforeWrite() {
-		// if the page hasn't been written to a database table yet and no subsite has been set, then give it a subsite
-		if((!is_numeric($this->owner->ID) || $this->owner->ID == 0) && !$this->owner->SubsiteID) {
-			$this->owner->SubsiteID = Subsite::currentSubsiteID();
-		}
+	function onBeforeWrite() {
+		if(!$this->owner->ID && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
 
 		// If the content has been changed, then the page should be marked as 'custom content'
 		if(!$this->nextWriteDoesntCustomise && $this->owner->ID && $this->owner->MasterPageID && !$this->owner->CustomContent) {
@@ -117,6 +105,8 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		}
 		
 		$this->nextWriteDoesntCustomise = false;
+		
+		parent::onBeforeWrite();
 	}
 	
 	function onAfterWrite(&$original) {
