@@ -101,6 +101,7 @@ class LeftAndMainSubsites extends Extension {
 		
 			$output .= '</select>';
 		
+			Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 			return $output;
 		} else if($list->Count() == 1) {
 			return $list->First()->Title;

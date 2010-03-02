@@ -1,6 +1,7 @@
 Behaviour.register({
 	'#SubsiteActions select' : {
 		onchange: function() {
+			console.log('onchange', this);
 			if($('Form_AddPageOptionsForm_SubsiteID')) {
 				$('Form_AddPageOptionsForm_SubsiteID').value = this.value;
 			}
