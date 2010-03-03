@@ -113,7 +113,7 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		if(Subsite::$disable_subsite_filter) return;
 		if(Cookie::get('noSubsiteFilter') == 'true') return;
 
-		$q = defined('Database::USE_ANSI_SQL') ? "\"" : "`";
+		$q = defined('SS_Database::USE_ANSI_SQL') ? "\"" : "`";
 
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(!$query->filtersOnID()) {

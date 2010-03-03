@@ -439,7 +439,7 @@ JS;
 	 */
 	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
 		// For 2.3 and 2.4 compatibility
-		$q = defined('Database::USE_ANSI_SQL') ? "\"" : "`";
+		$q = defined('SS_Database::USE_ANSI_SQL') ? "\"" : "`";
 
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
