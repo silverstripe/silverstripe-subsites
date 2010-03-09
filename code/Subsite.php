@@ -462,7 +462,7 @@ JS;
 			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\"
 				OR \"Group\".\"AccessAllSubsites\" = 1
 			INNER JOIN \"Group_Members\" 
-				ON \"Group_Members\".\"GroupID$q=\"Group\".\"ID\"
+				ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
 				AND \"Group_Members\".\"MemberID\" = $member->ID
 			INNER JOIN \"Group_Roles\"
 				ON \"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"
