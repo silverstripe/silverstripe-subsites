@@ -361,9 +361,8 @@ JS;
 			SELECT COUNT(\"Permission\".\"ID\")
 			FROM \"Permission\"
 			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
-			INNER JOIN \"Group_Members\" USING(\"GroupID\")
-			WHERE
-			\"Permission\".\"Code\" IN ('$SQL_perms')
+			INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
+			WHERE \"Permission\".\"Code\" IN ('$SQL_perms')
 			AND \"MemberID\" = {$memberID}
 		")->value();
 
