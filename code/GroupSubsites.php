@@ -132,13 +132,15 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 						= \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
 					$query->where[] = "(\"Group_Subsites\".\"SubsiteID\" IS NOT NULL OR
 						\"Group\".\"AccessAllSubsites\" = 1)";
-						
-					if(!$query->groupby) $query->groupby[] = "\"Group\".\"ID\"";
 				} else {
 					$query->where[] = "\"Group\".\"AccessAllSubsites\" = 1";
 				}
 			}
-			$query->orderby = "\"AccessAllSubsites\" DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
+			
+			// WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected (e.g. SQL Server)
+			if(!$query->select[0] == 'COUNT(*)') {
+				$query->orderby = "\"AccessAllSubsites\" DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
+			}
 		}
 	}
 
