@@ -302,16 +302,13 @@ JS;
 	 */
 	static function getSubsiteIDForDomain($host = null, $returnMainIfNotFound = true) {
 		if($host == null) $host = $_SERVER['HTTP_HOST'];
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
 		
 		$host = str_replace('www.','',$host);
 		$SQL_host = Convert::raw2sql($host);
 
-		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace({$q}SubsiteDomain{$q}.{$q}Domain{$q},'*','%')",
-			"{$q}IsPrimary{$q} DESC", "INNER JOIN {$q}Subsite{$q} ON {$q}Subsite{$q}.{$q}ID{$q} = {$q}SubsiteDomain{$q}.{$q}SubsiteID{$q} AND
-			{$q}Subsite{$q}.{$q}IsPublic{$q}=1");
+		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
+			"\"IsPrimary\" DESC", "INNER JOIN \"Subsite\" ON \"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
+			\"Subsite\".\"IsPublic\"=1");
 		
 		if($matchingDomains) {
 			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
@@ -335,17 +332,13 @@ JS;
 
 		$SQL_permissionCodes = join("','", $SQL_permissionCodes);
 
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
 		return DataObject::get(
 			'Member',
-			"{$q}Group{$q}.{$q}SubsiteID{$q} = $this->ID AND {$q}Permission{$q}.{$q}Code{$q} IN ('$SQL_permissionCodes')",
+			"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
 			'',
-			"LEFT JOIN {$q}Group_Members{$q} ON {$q}Member{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}MemberID{$q}
-			LEFT JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Members{$q}.{$q}GroupID{$q}
-			LEFT JOIN {$q}Permission{$q} ON {$q}Permission{$q}.{$q}GroupID{$q} = {$q}Group{$q}.{$q}ID{$q}"
+			"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
+			LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
+			LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
 		);
 	
 	}
@@ -394,10 +387,6 @@ JS;
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
 
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
 		/*
 		 * Copy data from this template to the given subsite. Does this using an iterative depth-first search.
 		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
@@ -408,7 +397,7 @@ JS;
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('Page', 'Live', "{$q}ParentID{$q} = $sourceParentID", '');
+			$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {
@@ -438,9 +427,6 @@ JS;
 	 * @param $mainSiteTitle The label to give to the main site
 	 */
 	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
-		// For 2.3 and 2.4 compatibility
-		$q = defined('SS_Database::USE_ANSI_SQL') ? "\"" : "`";
-
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
 		if(!$member) return new DataObjectSet();
@@ -453,38 +439,38 @@ JS;
 
 		$subsites = DataObject::get(
 			'Subsite',
-			"{$q}Subsite{$q}.{$q}Title{$q} != ''",
+			"\"Subsite\".\"Title\" != ''",
 			'',
-			"LEFT JOIN {$q}Group_Subsites{$q} 
-				ON {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q}
-			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Subsites{$q}.{$q}GroupID{$q}
-				OR {$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1
-			INNER JOIN {$q}Group_Members{$q} 
-				ON {$q}Group_Members{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
-				AND {$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
-			INNER JOIN {$q}Permission{$q} 
-				ON {$q}Group{$q}.{$q}ID{$q}={$q}Permission{$q}.{$q}GroupID{$q}
-				AND {$q}Permission{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')"
+			"LEFT JOIN \"Group_Subsites\" 
+				ON \"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"
+			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\"
+				OR \"Group\".\"AccessAllSubsites\" = 1
+			INNER JOIN \"Group_Members\" 
+				ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
+				AND \"Group_Members\".\"MemberID\" = $member->ID
+			INNER JOIN \"Permission\" 
+				ON \"Group\".\"ID\"=\"Permission\".\"GroupID\"
+				AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')"
 		);
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
-			"{$q}Subsite{$q}.Title != ''",
+			"\"Subsite\".Title != ''",
 			'',
-			"LEFT JOIN {$q}Group_Subsites{$q} 
-				ON {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = {$q}Subsite{$q}.{$q}ID{$q}
-			INNER JOIN {$q}Group{$q} ON {$q}Group{$q}.{$q}ID{$q} = {$q}Group_Subsites{$q}.{$q}GroupID{$q}
-				OR {$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1
-			INNER JOIN {$q}Group_Members{$q} 
-				ON {$q}Group_Members{$q}.{$q}GroupID$q={$q}Group{$q}.{$q}ID{$q}
-				AND {$q}Group_Members{$q}.{$q}MemberID{$q} = $member->ID
-			INNER JOIN {$q}Group_Roles{$q}
-				ON {$q}Group_Roles{$q}.{$q}GroupID{$q}={$q}Group{$q}.{$q}ID{$q}
-			INNER JOIN {$q}PermissionRole{$q}
-				ON {$q}Group_Roles{$q}.{$q}PermissionRoleID{$q}={$q}PermissionRole{$q}.{$q}ID{$q}
-			INNER JOIN {$q}PermissionRoleCode{$q}
-				ON {$q}PermissionRole{$q}.{$q}ID{$q}={$q}PermissionRoleCode{$q}.{$q}RoleID{$q}
-				AND {$q}PermissionRoleCode{$q}.{$q}Code{$q} IN ($SQL_codes, 'ADMIN')"
+			"LEFT JOIN \"Group_Subsites\" 
+				ON \"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"
+			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\"
+				OR \"Group\".\"AccessAllSubsites\" = 1
+			INNER JOIN \"Group_Members\" 
+				ON \"Group_Members\".\"GroupID$q=\"Group\".\"ID\"
+				AND \"Group_Members\".\"MemberID\" = $member->ID
+			INNER JOIN \"Group_Roles\"
+				ON \"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"
+			INNER JOIN \"PermissionRole\"
+				ON \"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"
+			INNER JOIN \"PermissionRoleCode\"
+				ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
+				AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'ADMIN')"
 		);
 
 		if(!$subsites && $rolesSubsites) return $rolesSubsites;
@@ -604,10 +590,6 @@ class Subsite_Template extends Subsite {
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
 
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
 		/*
 		 * Copy site content from this template to the given subsite. Does this using an iterative depth-first search.
 		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
@@ -618,7 +600,7 @@ class Subsite_Template extends Subsite {
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('SiteTree', 'Live', "{$q}ParentID{$q} = $sourceParentID", '');
+			$children = Versioned::get_by_stage('SiteTree', 'Live', "\"ParentID\" = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {

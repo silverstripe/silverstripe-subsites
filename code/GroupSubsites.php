@@ -113,8 +113,6 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		if(Subsite::$disable_subsite_filter) return;
 		if(Cookie::get('noSubsiteFilter') == 'true') return;
 
-		$q = defined('SS_Database::USE_ANSI_SQL') ? "\"" : "`";
-
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(!$query->filtersOnID()) {
 
@@ -130,17 +128,17 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 			
 			if(!$hasGroupSubsites) {
 				if($subsiteID) {
-					$query->leftJoin("Group_Subsites", "{$q}Group_Subsites{$q}.{$q}GroupID{$q} 
-						= {$q}Group{$q}.{$q}ID{$q} AND {$q}Group_Subsites{$q}.{$q}SubsiteID{$q} = $subsiteID");
-					$query->where[] = "({$q}Group_Subsites{$q}.{$q}SubsiteID{$q} IS NOT NULL OR
-						{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1)";
+					$query->leftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\" 
+						= \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
+					$query->where[] = "(\"Group_Subsites\".\"SubsiteID\" IS NOT NULL OR
+						\"Group\".\"AccessAllSubsites\" = 1)";
 						
 					if(!$query->groupby) $query->groupby[] = "\"Group\".\"ID\"";
 				} else {
-					$query->where[] = "{$q}Group{$q}.{$q}AccessAllSubsites{$q} = 1";
+					$query->where[] = "\"Group\".\"AccessAllSubsites\" = 1";
 				}
 			}
-			$query->orderby = "{$q}AccessAllSubsites{$q} DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
+			$query->orderby = "\"AccessAllSubsites\" DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
 		}
 	}
 
