@@ -45,11 +45,7 @@ class SubsiteTest extends SapphireTest {
 		// Test that changeSubsite is working
 		Subsite::changeSubsite($template->ID);
 	
-		if(defined('DB::USE_ANSI_SQL')) 
-			$q="\"";
-		else $q='`';
-		
-		$tmplHome = DataObject::get_one('SiteTree', "{$q}URLSegment{$q} = 'home'");
+		$tmplHome = DataObject::get_one('SiteTree', "\"URLSegment\" = 'home'");
 	
 		// Publish all the pages in the template, testing that DataObject::get only returns pages from the chosen subsite
 		$pages = DataObject::get("SiteTree");
@@ -71,7 +67,7 @@ class SubsiteTest extends SapphireTest {
 		// Another test that changeSubsite is working
 		Subsite::changeSubsite($subsite->ID);
 	
-		$siteHome = DataObject::get_one('SiteTree', "{$q}URLSegment{$q} = 'home'");
+		$siteHome = DataObject::get_one('SiteTree', "\"URLSegment\" = 'home'");
 		$this->assertNotNull($siteHome);
 		$this->assertEquals($subsite->ID, $siteHome->SubsiteID,
 			'createInstance() copies existing pages retaining the same URLSegment'
@@ -80,7 +76,7 @@ class SubsiteTest extends SapphireTest {
 		
 		// Check linking of child pages
 		$tmplStaff = $this->objFromFixture('SiteTree','staff');
-		$siteStaff = DataObject::get_one('SiteTree', "{$q}URLSegment{$q} = '" . Convert::raw2sql($tmplStaff->URLSegment) . "'");
+		$siteStaff = DataObject::get_one('SiteTree', "\"URLSegment\" = '" . Convert::raw2sql($tmplStaff->URLSegment) . "'");
 		$this->assertEquals($siteStaff->MasterPageID, $tmplStaff->ID);
 		
 		Subsite::changeSubsite(0);
