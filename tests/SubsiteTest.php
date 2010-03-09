@@ -234,10 +234,10 @@ class SubsiteTest extends SapphireTest {
 		
 		// Check that if we switch between the different subsites, we receive the correct pages
 		Subsite::changeSubsite($s1);
-		$this->assertEquals($p1->ID, SiteTree::get_by_url('test-page')->ID);
+		$this->assertEquals($p1->ID, SiteTree::get_by_link('test-page')->ID);
 
 		Subsite::changeSubsite($s2);
-		$this->assertEquals($p2->ID, SiteTree::get_by_url('test-page')->ID);
+		$this->assertEquals($p2->ID, SiteTree::get_by_link('test-page')->ID);
 	}
 
 }
