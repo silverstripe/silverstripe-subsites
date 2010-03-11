@@ -251,6 +251,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	}
 	
 	function alternateSiteConfig() {
+		if(!$this->owner->SubsiteID) return false;
 		$sc = DataObject::get_one('SiteConfig', 'SubsiteID = ' . $this->owner->SubsiteID);
 		if(!$sc) {
 			$sc = new SiteConfig();
