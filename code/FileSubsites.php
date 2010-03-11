@@ -59,7 +59,10 @@ class FileSubsites extends DataObjectDecorator {
 				break;
 			}
 			
-			$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
+			// Ordering when deleting doesn't make sense
+			if(!$query->delete) {
+				$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
+			}
 		}
 	}
 
