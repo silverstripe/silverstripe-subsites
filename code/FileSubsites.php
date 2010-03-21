@@ -11,9 +11,7 @@ class FileSubsites extends DataObjectDecorator {
 	static $default_root_folders_global = false;
 	
 	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
-			if($this->owner->class != 'File') return null;
-		}
+		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'File') return null;
 		return array(
 			'has_one' => array(
 				'Subsite' => 'Subsite',

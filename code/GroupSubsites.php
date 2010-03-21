@@ -171,36 +171,6 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		return (bool)array_intersect($accessibleSites, $linkedSites);
 	}
 
-	/**
-	 * Create a duplicate of this group and save it to another subsite.
-	 * The group and permissions will be duplicated, but not the members.
-	 * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
-	 */
-	public function duplicateToSubsite($subsiteID = null) {
-		if(is_object($subsiteID)) {
-			$subsite = $subsiteID;
-			$subsiteID = $subsite->ID;
-		} else {
-			$subsite = DataObject::get_by_id('Subsite', $subsiteID);
-		}
-
-		$group = $this->owner->duplicate(false);
-
-		$group->write();
-
-		$subsite->Groups()->add($group->ID);
-
-		// Duplicate permissions
-		$permissions = $this->owner->Permissions();
-		foreach($permissions as $permission) {
-			$newPerm = $permission->duplicate(false);
-			$newPerm->GroupID = $group->ID;
-			$newPerm->write();
-		}
-
-		return $group;
-	}
-	
 	function providePermissions() {
 		return array(
 			'SECURITY_SUBSITE_GROUP' => array(

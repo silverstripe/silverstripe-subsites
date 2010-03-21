@@ -97,6 +97,13 @@ Permission:
    accesscmsmain2:
       Code: CMS_ACCESS_CMSMain
       GroupID: =>Group.subsite2_group
+   securityaccess1:
+      Code: CMS_ACCESS_SecurityAdmin
+      GroupID: =>Group.subsite1_group
+   securityaccess2:
+      Code: CMS_ACCESS_SecurityAdmin
+      GroupID: =>Group.subsite2_group
+
 Member:
    admin:
       FirstName: Admin

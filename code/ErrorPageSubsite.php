@@ -14,9 +14,7 @@ class ErrorPageSubsite extends DataObjectDecorator {
 		$subdomainPart = "";
 		
 		// when there's a controller get it subsite from session
-		if (Controller::curr()) {
-			$subsite = Subsite::currentSubsite(false);
-		} 
+		if (Controller::curr()) $subsite = Subsite::currentSubsite(false);
 		// since this function is called from Page class before the controller is created, we have to get subsite from domain instead
 		else {
 			$subsiteID = Subsite::getSubsiteIDForDomain();
