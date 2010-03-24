@@ -96,6 +96,8 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function SubsiteList() {
+		if ($this->owner->class == 'ReportAdmin') return;
+		
 		$list = $this->Subsites();
 		
 		if(Controller::curr()->hasMethod('getRequest')) $requestSubsiteID = Controller::curr()->getRequest()->getVar('SubsiteID');
