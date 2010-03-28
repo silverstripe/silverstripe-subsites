@@ -1,7 +1,6 @@
 Behaviour.register({
 	'#SubsiteActions select' : {
 		onchange: function() {
-			console.log('onchange', this);
 			if($('Form_AddPageOptionsForm_SubsiteID')) {
 				$('Form_AddPageOptionsForm_SubsiteID').value = this.value;
 			}
@@ -46,7 +45,6 @@ Behaviour.register({
 								newOption.text = opt.firstChild.nodeValue;
 							
 							newOption.value = opt.value;
-							//console.log(newOption.text + ' ' + newOption.value);
 							try {
 								origSelect.add(newOption, null);
 							} catch(ex) {
