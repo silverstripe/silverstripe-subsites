@@ -228,11 +228,8 @@ JS;
 	 * @return int ID of the current subsite instance
 	 */
 	static function currentSubsiteID() {
-		if(isset($_REQUEST['SubsiteID'])) {
-			$id = (int)$_REQUEST['SubsiteID'];
-		} else {
-			$id = Session::get('SubsiteID');
-		}
+		if(isset($_REQUEST['SubsiteID'])) $id = (int)$_REQUEST['SubsiteID'];
+		else $id = Session::get('SubsiteID');
 
 		if($id === NULL) {
 			$id = self::getSubsiteIDForDomain();
@@ -241,19 +238,7 @@ JS;
 
 		return (int)$id;
 	}
-
-	/**
-	 * @todo Object::create() shoudln't be overloaded with different parameters.
-	 */
-	static function create($name) {
-		$newSubsite = Object::create('Subsite');
-		$newSubsite->Title = $name;
-		$newSubsite->Subdomain = str_replace(' ', '-', preg_replace('/[^0-9A-Za-z\s]/', '', strtolower(trim($name))));
-		$newSubsite->write();
-		$newSubsite->createInitialRecords();
-		return $newSubsite;
-	}
-
+	
 	/**
 	 * Switch to another subsite.
 	 *
@@ -273,9 +258,7 @@ JS;
 		}
 		
 		// Only bother flushing caches if we've actually changed
-		if($subsiteID != self::currentSubsiteID()) {
-			Permission::flush_permission_cache();
-		}
+		if($subsiteID != self::currentSubsiteID()) Permission::flush_permission_cache();
 	}
 
 	/**
@@ -367,13 +350,6 @@ JS;
 		")->value();
 
 		return ($groupCount > 0);
-
-	}
-
-	/**
-	 * Overload this function to generate initial records in your newly created subsite.
-	 */
-	function createInitialRecords() {
 
 	}
 
@@ -610,15 +586,6 @@ class Subsite_Template extends Subsite {
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}
-		}
-
-		/**
-		 * Copy groups from the template to the given subsites.  Each of the groups will be created and left
-		 * empty.
-		 */
-		$groups = $this->Groups();
-		if($groups) foreach($groups as $group) {
-			$group->duplicateToSubsite($intranet);
 		}
 
 		self::changeSubsite($oldSubsiteID);
