@@ -6,6 +6,7 @@ class FileSubsitesTest extends SapphireTest {
 	function testTrivialFeatures() {
 		$this->assertTrue(is_array(singleton('FileSubsites')->extraStatics()));
 		$file = new File();
+		$file->Name = 'FileTitle';
 		$file->Title = 'FileTitle';
 		$this->assertEquals(' * FileTitle', $file->alternateTreeTitle());
 		$file->SubsiteID = $this->objFromFixture('Subsite', 'domaintest1')->ID;

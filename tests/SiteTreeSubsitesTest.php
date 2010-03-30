@@ -51,7 +51,7 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$path = ErrorPage::get_filepath_for_errorcode(500);
 		
 		$static_path = Object::get_static('ErrorPage', 'static_filepath');
-		$expected_path = $static_path . '/error-500-'.$subsite1->Subdomain.'.html';
+		$expected_path = $static_path . '/error-500-'.$subsite1->Domains()->First()->Domain.'.html';
 		$this->assertEquals($expected_path, $path);
 	}
 	
