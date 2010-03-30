@@ -23,3 +23,11 @@ Known issues
 When setting up SubsiteDomains, the port is important.
 If you are running on a non-standard port, you must put
 that in the Domain text box.
+
+Test coverage
+-------------
+
+Line coverage is over 70%, but function coverage is only 51%.
+
+This is due to the difficulty of testing front end stuff like
+model admin, left and main etc.
