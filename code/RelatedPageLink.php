@@ -43,22 +43,12 @@ class RelatedPageLink extends DataObject {
 			"MenuTitle"
 		);
 		
-		if (isset($_GET['RelatedPageID_SubsiteID'])) {
-			$pageSelectionField->setSubsiteID($_GET['RelatedPageID_SubsiteID']);
-		}
+		if (isset($_GET['RelatedPageID_SubsiteID'])) $pageSelectionField->setSubsiteID($_GET['RelatedPageID_SubsiteID']);
 				
 		$pageSelectionField->setFilterFunction(create_function('$item', 'return $item->ClassName != "VirtualPage";'));
 		
-		if($subsites->Count()) {
-			$fields = new FieldSet(
-				$subsiteSelectionField,
-				$pageSelectionField
-			);
-		} else {
-			$fields = new FieldSet(
-				$pageSelectionField
-			);
-		}
+		if($subsites->Count()) $fields = new FieldSet($subsiteSelectionField, $pageSelectionField);
+		else $fields = new FieldSet($pageSelectionField);
 		
 		return $fields;
 	}

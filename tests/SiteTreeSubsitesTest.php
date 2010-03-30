@@ -34,14 +34,17 @@ class SiteTreeSubsitesTest extends SapphireTest {
 	}
 	
 	function testBasicSanity() {
+		$this->assertTrue(singleton('SiteTree')->getSiteConfig() instanceof SiteConfig);
 		$this->assertTrue(singleton('SiteTree')->getCMSFields() instanceof FieldSet);
+		$this->assertTrue(singleton('SubsitesVirtualPage')->getCMSFields() instanceof FieldSet);
 		$this->assertTrue(is_array(singleton('SiteTreeSubsites')->extraStatics()));
 		
 		$mainpage = $this->objFromFixture('SiteTree', 'home');
 		$this->objFromFixture('Member', 'admin')->logIn();
-		$this->assertTrue($mainpage->canEdit());
-		$this->assertTrue($mainpage->canDelete());
-		$this->assertTrue($mainpage->canPublish());
+		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canEdit());
+		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canDelete());
+		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canPublish());
+		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canAddChildren());
 	}
 	
 	function testErrorPageLocations() {
@@ -51,7 +54,7 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$path = ErrorPage::get_filepath_for_errorcode(500);
 		
 		$static_path = Object::get_static('ErrorPage', 'static_filepath');
-		$expected_path = $static_path . '/error-500-'.$subsite1->Domains()->First()->Domain.'.html';
+		$expected_path = $static_path . '/error-500-'.$subsite1->domain().'.html';
 		$this->assertEquals($expected_path, $path);
 	}
 	
@@ -70,6 +73,15 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		
 		$this->assertEquals($importantpage->NormalRelated()->Count(), 1);
 		$this->assertEquals($contact->ReverseRelated()->Count(), 1);
+		
+		$this->assertTrue($importantpage->getCMSFields() instanceof FieldSet);
+		$this->assertTrue($contact->getCMSFields() instanceof FieldSet);
+		
+		$this->assertEquals($importantpage->canView(), $link->canView());
+		$this->assertEquals($importantpage->canEdit(), $link->canEdit());
+		$this->assertEquals($importantpage->canDelete(), $link->canDelete());
+		$link->AbsoluteLink(true);
+		$this->assertEquals($link->RelatedPageAdminLink(), '<a href="admin/show/5" class="cmsEditlink">Contact Us</a>');
 	}
 	
 	function testPageWithVirtualPagesGetsTable() {

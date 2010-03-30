@@ -35,7 +35,7 @@ class SubsiteTest extends SapphireTest {
 		$this->assertEquals('something.test.com', $subsite->domain());
 	
 		// Another test that changeSubsite is working
-		Subsite::changeSubsite($subsite->ID);
+		$subsite->activate();
 	
 		$siteHome = DataObject::get_one('SiteTree', "\"URLSegment\" = 'home'");
 		$this->assertNotNull($siteHome);
@@ -69,6 +69,7 @@ class SubsiteTest extends SapphireTest {
 
 		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('other.example.com'));
 		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('two.example.com'));
+		
 	}
 
 	/**
@@ -90,6 +91,10 @@ class SubsiteTest extends SapphireTest {
 		$_SERVER['HTTP_HOST'] = "mysite.example.org";
 		$this->assertEquals('three.mysite.example.org', 
 			$this->objFromFixture('Subsite','domaintest3')->domain());
+			
+			
+		$this->assertEquals($_SERVER['HTTP_HOST'], singleton('Subsite')->PrimaryDomain);
+		$this->assertEquals('http://'.$_SERVER['HTTP_HOST'].Director::baseURL(), singleton('Subsite')->absoluteBaseURL());
 
 
 		$_SERVER['HTTP_HOST'] = $originalHTTPHost;
@@ -120,4 +125,29 @@ class SubsiteTest extends SapphireTest {
 		), $adminSiteTitles);
 	}
 
+	function testDuplicateSubsite() {
+		// get subsite1 & create page
+		$subsite1 = $this->objFromFixture('Subsite','domaintest1');
+		$subsite1->activate();
+		$page1 = new Page();
+		$page1->Title = 'MyAwesomePage';
+		$page1->write();
+		$page1->doPublish();
+		$this->assertEquals($page1->SubsiteID, $subsite1->ID);
+		
+		// duplicate
+		$subsite2 = $subsite1->duplicate();
+		$subsite2->activate();
+		// change content on dupe
+		$page2 = DataObject::get_one('Page', "Title = 'MyAwesomePage'");
+		$page2->Title = 'MyNewAwesomePage';
+		$page2->write();
+		$page2->doPublish();
+		
+		// check change & check change has not affected subiste1
+		$subsite1->activate();
+		$this->assertEquals('MyAwesomePage', DataObject::get_by_id('Page', $page1->ID)->Title);
+		$subsite2->activate();
+		$this->assertEquals('MyNewAwesomePage', DataObject::get_by_id('Page', $page2->ID)->Title);
+	}
 }

@@ -28,9 +28,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 
 	
 	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
-			if($this->owner->class != 'SiteTree') return null;
-		}
+		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'SiteTree') return null;
 		return array(
 			'has_one' => array(
 				'Subsite' => 'Subsite', // The subsite that this page belongs to
@@ -138,9 +136,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	}
 
 	function updateCMSFields(&$fields) {
-		if($this->owner->MasterPageID) {
-			$fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
-		}
+		if($this->owner->MasterPageID) $fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
 		
 		// replace readonly link prefix
 		$subsite = $this->owner->Subsite();
@@ -316,9 +312,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		if(is_object($subsiteID)) {
 			$subsite = $subsiteID;
 			$subsiteID = $subsite->ID;
-		} else {
-			$subsite = DataObject::get_by_id('Subsite', $subsiteID);
-		}
+		} else $subsite = DataObject::get_by_id('Subsite', $subsiteID);
 		
 		$page = $this->owner->duplicate(false);
 

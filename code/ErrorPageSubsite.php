@@ -22,7 +22,7 @@ class ErrorPageSubsite extends DataObjectDecorator {
 		}
 		
 		if($subsite) {	
-			$subdomain = $subsite->Domains()->First()->Domain;
+			$subdomain = $subsite->domain();
 			$subdomainPart = "-{$subdomain}";
 		}
 		
