@@ -85,10 +85,7 @@ class LeftAndMainSubsites extends Extension {
 		
 		$list = $this->Subsites();
 		
-		if(Controller::curr()->hasMethod('getRequest')) $requestSubsiteID = Controller::curr()->getRequest()->getVar('SubsiteID');
-		else $requestSubsiteID = isset($_REQUEST['SubsiteID']) ? $_REQUEST['SubsiteID'] : null;
-		
-		$currentSubsiteID = ($requestSubsiteID) ? $requestSubsiteID : Session::get('SubsiteID');
+		$currentSubsiteID = Subsite::currentSubsiteID();
 		
 		if($list->Count() > 1) {
 			$output = '<select id="SubsitesSelect">';
