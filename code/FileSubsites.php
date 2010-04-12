@@ -57,8 +57,10 @@ class FileSubsites extends DataObjectDecorator {
 				break;
 			}
 			
-			// Ordering when deleting doesn't make sense
-			if(!$query->delete) {
+			$isCounting = strpos($query->select[0], 'COUNT') !== false;
+
+			// Ordering when deleting or counting doesn't apply
+			if(!$query->delete && !$isCounting) {
 				$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
 			}
 		}
