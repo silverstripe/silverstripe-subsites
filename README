@@ -17,6 +17,8 @@ Documentation
 
 Full documentation is available on [our wiki](http://doc.silverstripe.com/doku.php?id=modules:subsites).
 
+To use subsites module with static publisher, see http://doc.silverstripe.org/staticpublisher#using_static_publisher_with_subsites_module
+
 Known issues
 ------------
 
