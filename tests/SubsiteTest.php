@@ -139,7 +139,7 @@ class SubsiteTest extends SapphireTest {
 		$subsite2 = $subsite1->duplicate();
 		$subsite2->activate();
 		// change content on dupe
-		$page2 = DataObject::get_one('Page', "Title = 'MyAwesomePage'");
+		$page2 = DataObject::get_one('Page', "\"Title\" = 'MyAwesomePage'");
 		$page2->Title = 'MyNewAwesomePage';
 		$page2->write();
 		$page2->doPublish();

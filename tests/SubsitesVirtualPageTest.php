@@ -177,12 +177,12 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$page->doUnpublish();
 		
 		Subsite::changeSubsite($vp1->SubsiteID);
-		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "SiteTree_Live.ID = ".$vp1->ID);
+		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
 		$this->assertFalse($onLive, 'SVP has been removed from live');
 		
 		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
 		Subsite::changeSubsite($vp2->SubsiteID);
-		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "SiteTree_Live.ID = ".$vp2->ID);
+		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
 		$this->assertFalse($onLive, 'SVP has been removed from live');
 	}
 

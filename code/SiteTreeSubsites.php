@@ -228,15 +228,15 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
 			AND R2.\"ID\" IS NULL", '',
 			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"
-			LEFT JOIN \"RelatedPageLink\" AS R2 ON R2.MasterPageID = {$this->owner->ID}
-			AND R2.RelatedPageID = RelatedPageLink.MasterPageID
+			LEFT JOIN \"RelatedPageLink\" AS R2 ON R2.\"MasterPageID\" = {$this->owner->ID}
+			AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"
 			"
 		);
 	}
 	
 	function NormalRelated() {
 		$return = new DataObjectSet();
-		$links = DataObject::get('RelatedPageLink', 'MasterPageID = ' . $this->owner->ID);
+		$links = DataObject::get('RelatedPageLink', '"MasterPageID" = ' . $this->owner->ID);
 		if($links) foreach($links as $link) {
 			if($link->RelatedPage()->exists()) {
 				$return->push($link->RelatedPage());
@@ -248,7 +248,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	
 	function alternateSiteConfig() {
 		if(!$this->owner->SubsiteID) return false;
-		$sc = DataObject::get_one('SiteConfig', 'SubsiteID = ' . $this->owner->SubsiteID);
+		$sc = DataObject::get_one('SiteConfig', '"SubsiteID" = ' . $this->owner->SubsiteID);
 		if(!$sc) {
 			$sc = new SiteConfig();
 			$sc->SubsiteID = $this->owner->SubsiteID;

@@ -430,7 +430,7 @@ JS;
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
-			"\"Subsite\".Title != ''",
+			"\"Subsite\".\"Title\" != ''",
 			'',
 			"LEFT JOIN \"Group_Subsites\" 
 				ON \"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"
