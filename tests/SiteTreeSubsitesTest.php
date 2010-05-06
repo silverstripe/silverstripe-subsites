@@ -81,7 +81,7 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$this->assertEquals($importantpage->canEdit(), $link->canEdit());
 		$this->assertEquals($importantpage->canDelete(), $link->canDelete());
 		$link->AbsoluteLink(true);
-		$this->assertEquals($link->RelatedPageAdminLink(), '<a href="admin/show/5" class="cmsEditlink">Contact Us</a>');
+		$this->assertEquals($link->RelatedPageAdminLink(), '<a href="admin/show/' . $contact->ID . '" class="cmsEditlink">Contact Us</a>');
 	}
 	
 	function testPageWithVirtualPagesGetsTable() {
