@@ -20,7 +20,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	static $force_subsite = null;
 
 	static $write_hostmap = true;
-	static $default_sort = 'Title';
+	static $default_sort = "\"Title\" ASC";
 
 	static $db = array(
 		'Title' => 'Varchar(255)',
