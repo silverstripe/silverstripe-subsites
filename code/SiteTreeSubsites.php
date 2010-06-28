@@ -46,6 +46,11 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		);
 	}
 	
+	function isMainSite() {
+		if($this->owner->SubsiteID == 0) return true;
+		return false;
+	}
+	
 	/**
 	 * Update any requests to limit the results to the current site
 	 */
