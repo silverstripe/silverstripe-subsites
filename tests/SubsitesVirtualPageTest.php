@@ -6,6 +6,26 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		'sapphire/tests/FileLinkTrackingTest.yml',
 	);
 	
+	function setUp() {
+		parent::setUp();
+		$this->logInWithPermission('ADMIN');
+		
+		$fh = fopen(Director::baseFolder() . '/assets/testscript-test-file.pdf', "w");
+		fwrite($fh, str_repeat('x',1000000));
+		fclose($fh);
+	}
+	function tearDown() {
+		parent::tearDown();
+		$testFiles = array(
+			'/assets/testscript-test-file.pdf',
+			'/assets/renamed-test-file.pdf',
+			'/assets/renamed-test-file-second-time.pdf',
+		);
+		foreach($testFiles as $file) {
+			if(file_exists(Director::baseFolder().$file)) unlink(Director::baseFolder().$file);
+		}
+	}
+	
 	// Attempt to bring main:linky to subsite2:linky
 	function testVirtualPageFromAnotherSubsite() {
 		Subsite::$write_hostmap = false;
@@ -78,6 +98,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		// Rename the file
 		$file = $this->objFromFixture('File', 'file1');
 		$file->Name = 'renamed-test-file.pdf';
+		$file->write();
 		
 		// Verify that the draft and publish virtual pages both have the corrected link
 		$this->assertContains('<img src="assets/renamed-test-file.pdf"',
