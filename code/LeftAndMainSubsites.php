@@ -124,9 +124,17 @@ class LeftAndMainSubsites extends Extension {
 		}
 		
 		// Switch to a subsite that this user can actually access.
+		$member = Member::currentUser();
+		if ($member && $member->isAdmin()) return true;	//admin can access all subsites
+				
+		// Switch to a subsite that this user can actually access.
 		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->toDropdownMap();
 		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
+			//SS_Backtrace::backtrace();
+			Debug::Show(Subsite::currentSubsiteID());
+			
 			$siteIDs = array_keys($sites);
+			Debug::Show($siteIDs[0]);
 			Subsite::changeSubsite($siteIDs[0]);
 			return true;
 		}
