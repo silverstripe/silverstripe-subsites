@@ -14,11 +14,13 @@ class SubsiteAdminTest extends SapphireTest {
      */
     function testBasicView() {
 		Subsite::$write_hostmap = false;
+		$subsite1ID = $this->objFromFixture('Subsite','domaintest1')->ID;
+
         // Open the admin area logged in as admin
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
         
         // Confirm that this URL gets you the entire page, with the edit form loaded
-        $response2 = Director::test('admin/subsites/Subsite/1/edit', null, $this->adminLoggedInSession());
+        $response2 = Director::test("admin/subsites/Subsite/$subsite1ID/edit", null, $this->adminLoggedInSession());
         $this->assertTrue(strpos($response2->getBody(), 'id="Form_EditForm_ID"') !== false, "Testing Form_EditForm_ID exists");
         $this->assertTrue(strpos($response2->getBody(), '<head') !== false, "Testing <head> exists");
     }
