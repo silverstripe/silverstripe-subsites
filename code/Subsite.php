@@ -46,7 +46,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	);
 
 	static $defaults = array(
-		'IsPublic' => 1,
+		'IsPublic' => 1
 	);
 
 	static $searchable_fields = array(
@@ -100,6 +100,14 @@ class Subsite extends DataObject implements PermissionProvider {
 				ksort($themes);
 			}
 			return $themes;
+		}
+	}
+
+	public function getLanguage() {
+		if($this->getField('Language')) {
+			return $this->getField('Language');
+		} else {
+			return i18n::get_locale();
 		}
 	}
 
