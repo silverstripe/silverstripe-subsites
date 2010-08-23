@@ -272,13 +272,13 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 * @return boolean
 	 */
 	function canEdit($member = null) {
-		if(!$member)  $member = Member::currentUser();
+		if(!$member) $member = Member::currentUser();
 		
 		// Find the sites that this user has access to
 		$goodSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain',true,'all',$member)->column('ID');
 		
 		// Return true if they have access to this object's site
-		return in_array(0, $goodSites) || in_array($this->owner->SubsiteID, $goodSites);
+		if(!(in_array(0, $goodSites) || in_array($this->owner->SubsiteID, $goodSites))) return false;
 	}
 	
 	/**
