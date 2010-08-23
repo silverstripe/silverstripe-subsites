@@ -38,13 +38,6 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$this->assertTrue(singleton('SiteTree')->getCMSFields() instanceof FieldSet);
 		$this->assertTrue(singleton('SubsitesVirtualPage')->getCMSFields() instanceof FieldSet);
 		$this->assertTrue(is_array(singleton('SiteTreeSubsites')->extraStatics()));
-		
-		$mainpage = $this->objFromFixture('SiteTree', 'home');
-		$this->objFromFixture('Member', 'admin')->logIn();
-		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canEdit());
-		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canDelete());
-		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canPublish());
-		$this->assertTrue($mainpage->getExtensionInstance('SiteTreeSubsites')->canAddChildren());
 	}
 	
 	function testErrorPageLocations() {
