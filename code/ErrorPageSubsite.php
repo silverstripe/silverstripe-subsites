@@ -13,10 +13,11 @@ class ErrorPageSubsite extends DataObjectDecorator {
 		$static_filepath = Object::get_static($this->owner->ClassName, 'static_filepath');
 		$subdomainPart = "";
 		
-		// when there's a controller get it subsite from session
-		if (Controller::has_curr()) $subsite = Subsite::currentSubsite(false);
+		// Try to get current subsite from session
+		$subsite = Subsite::currentSubsite(false);
+		
 		// since this function is called from Page class before the controller is created, we have to get subsite from domain instead
-		else {
+		if(!$subsite) {
 			$subsiteID = Subsite::getSubsiteIDForDomain();
 			if($subsiteID != 0) $subsite = DataObject::get_by_id("Subsite", $subsiteID);
 			else $subsite = null;

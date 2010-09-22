@@ -37,7 +37,7 @@ class SubsitesVirtualPage extends VirtualPage {
 				
 		$pageSelectionField->setFilterFunction(create_function('$item', 'return !($item instanceof VirtualPage);'));
 		
-		if(Controller::curr()->getRequest()) {
+		if(Controller::has_curr() && Controller::curr()->getRequest()) {
 			$subsiteID = Controller::curr()->getRequest()->getVar('CopyContentFromID_SubsiteID');
 			$pageSelectionField->setSubsiteID($subsiteID);
 		}
