@@ -38,15 +38,23 @@ class SubsitesTreeDropdownField extends TreeDropdownField {
 		return $results;
 	}
 	
-	function getsubtree() {
+	public function getsubtree(SS_HTTPRequest $request) {
 		$oldSubsiteID = Session::get('SubsiteID');
 		Session::set('SubsiteID', $this->subsiteID);
-		
-		$results = parent::getsubtree();
-		
+
+		$obj = $this->objectForKey($_REQUEST['SubtreeRootID']);
+
+		if(!$obj) user_error("Can't find database record $this->sourceObject with $this->keyField = $_REQUEST[SubtreeRootID]", E_USER_ERROR);
+
+		if($this->filterFunc) $obj->setMarkingFilterFunction($this->filterFunc);
+		else if($this->sourceObject == 'Folder') $obj->setMarkingFilter('ClassName', 'Folder');
+		$obj->markPartialTree();
+
+		$eval = '"<li id=\"selector-' . $this->name . '-$child->' . $this->keyField .  '\" class=\"$child->class" . $child->markingClasses() . "\"><a>" . $child->' . $this->labelField . ' . "</a>"';
+		$tree = $obj->getChildrenAsUL("", $eval, null, true);
+		echo substr(trim($tree), 4,-5);
+
 		Session::set('SubsiteID', $oldSubsiteID);
-		
-		return $results;
 	}
+
 }
-?>
