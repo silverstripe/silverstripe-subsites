@@ -338,9 +338,9 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 *
 	 * @return SiteTree The duplicated object.
 	 */
-	public function duplicateToSubsiteWithChildren($subsiteID = null, $isTemplate = true) {
+	public function duplicateToSubsiteWithChildren($subsiteID = null, $destParentID) {
 
-                /*$stack = array(array(0,0));
+                $stack = array(array($this->owner->ID,$destParentID));
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
@@ -348,22 +348,26 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 
 			if($children) {
 				foreach($children as $child) {
-					$childClone = $child->duplicateToSubsite($newTemplate, false);
+					$childClone = $child->duplicateToSubsite($subsiteID, false);
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}
-		}*/
+		}
+
+                /*
 		$clone = $this->owner->duplicateToSubsite($subsiteID, $isTemplate);
 
-                $clone->writeToStage('Stage');
-		$clone->publish('Stage', 'Live');
+                if($this->owner->isPublished()){
+                    $clone->writeToStage('Stage');
+                    $clone->publish('Stage', 'Live');
+                }
 
 		// only catch live status of children
-                $children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = ".$this->owner->ID, '');
-                //$this->owner->AllChildren();
+                //$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = ".$this->owner->ID, '');
+                $this->owner->AllChildren();
 
 		if($children) {
 			foreach($children as $child) {
@@ -374,6 +378,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		}
 
 		return $clone;
+                */
 	}
 
 	/**
