@@ -66,7 +66,7 @@ class SubsitesCopyAndMovePage extends SiteTree {
 		$subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 
 		$subsiteSelectionField = new DropdownField(
-			"CopyContentFromID_SubsiteID", 
+			"CopyMoveContentFromID_SubsiteID",
 			"Subsite", 
 			$subsites->toDropdownMap('ID', 'Title'),
 			($this->CopyMoveContentFromID) ? $this->CopyMoveContentFrom()->SubsiteID : Session::get('SubsiteID')
@@ -77,7 +77,7 @@ class SubsitesCopyAndMovePage extends SiteTree {
 		);
 		
 		// Setup the linking to the original page.
-		$pageSelectionField = new SubsitesTreeDropdownField(
+		$pageSelectionField = new CopyMoveSubsitesTreeDropdownField(
 			"CopyMoveContentFromID",
 			_t('VirtualPage.CHOOSE', "Choose a page to link to"), 
 			"SiteTree",
@@ -88,7 +88,7 @@ class SubsitesCopyAndMovePage extends SiteTree {
 		$pageSelectionField->setFilterFunction(create_function('$item', 'return !($item instanceof VirtualPage);'));
 		
 		if(Controller::has_curr() && Controller::curr()->getRequest()) {
-			$subsiteID = Controller::curr()->getRequest()->getVar('CopyContentFromID_SubsiteID');
+			$subsiteID = Controller::curr()->getRequest()->getVar('CopyMoveContentFromID_SubsiteID');
 			$pageSelectionField->setSubsiteID($subsiteID);
 		}
 		$fields->addFieldToTab(

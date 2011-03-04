@@ -1,0 +1,4 @@
+SiteTree hat Methode getSiteConfig()
+
+Neu anlegen eines Hauptnavigationsfolders, Abfragen der Subsite, abfragen der zugehörigen SiteConfig
+Wenn in Siteconfig bereits ein Folder, dann nicht mehr anlegen
