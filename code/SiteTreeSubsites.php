@@ -314,6 +314,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 * @param $isTemplate boolean If this is true, then the current page will be treated as the template, and MasterPageID will be set
 	 */
 	public function duplicateToSubsite($subsiteID = null, $isTemplate = true) {
+
 		if(is_object($subsiteID)) {
 			$subsite = $subsiteID;
 			$subsiteID = $subsite->ID;
@@ -326,8 +327,8 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$page->SubsiteID = $subsiteID;
 		
 		if($isTemplate) $page->MasterPageID = $this->owner->ID;
-		
-		$page->write();
+                
+                $page->write();
 
 		return $page;
 	}
@@ -340,18 +341,31 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 */
 	public function duplicateToSubsiteWithChildren($subsiteID = null, $destParentID) {
 
-                $stack = array(array($this->owner->ID,$destParentID));
+                $clone = $this->owner->duplicateToSubsite($subsiteID);
+                $clone->ParentID = $destParentID;
+                if($this->owner->isPublished()){
+                    $clone->writeToStage('Stage');
+                    $clone->publish('Stage', 'Live');
+                }
+
+                $stack = array(array($this->owner->ID,$clone->ID));
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
+			//$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
+                        $parent = DataObject::get_by_id('SiteTree', $sourceParentID);
+                        $children = $parent->AllChildren();
 
 			if($children) {
 				foreach($children as $child) {
 					$childClone = $child->duplicateToSubsite($subsiteID, false);
 					$childClone->ParentID = $destParentID;
-					$childClone->writeToStage('Stage');
-					$childClone->publish('Stage', 'Live');
+					if($child->isPublished()){
+                                            $childClone->writeToStage('Stage');
+                                            $childClone->publish('Stage', 'Live');
+                                        }else{
+                                            $childClone->write();
+                                        }
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}

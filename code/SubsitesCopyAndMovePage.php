@@ -36,6 +36,8 @@ class SubsitesCopyAndMovePage extends SiteTree {
          */
         public function canCreate() {
 
+            if(Permission::check('ADMIN')) return true;
+
             return !DataObject::get_one(get_class($this), 'SubsiteID = '.(int)Subsite::currentSubsiteID());
         }
 
@@ -126,7 +128,7 @@ class SubsitesCopyAndMovePage extends SiteTree {
 
                 if($this->CopyMoveContentFromID && self::$publish_check){
 
-                    $intranet = Subsite::currentSubsite();
+                    $currSubID = Subsite::currentSubsiteID();
 
                     $Parent = DataObject::get_by_id('SiteTree', $this->CopyMoveContentFromID);
 
@@ -135,10 +137,10 @@ class SubsitesCopyAndMovePage extends SiteTree {
 
                         if($Parent){
                             Subsite::changeSubsite($Parent->SubsiteID);
-                            $Parent->duplicateToSubsiteWithChildren($intranet->ID, $this->ID);
+                            $Parent->duplicateToSubsiteWithChildren($currSubID, $this->ID);
                             //$clone->ParentID = $this->ID;
                             //$clone->write();
-                            Subsite::changeSubsite($intranet->ID);
+                            Subsite::changeSubsite($currSubID);
                         }
 
                     }elseif($this->CopyOrMove == 2){
@@ -146,10 +148,10 @@ class SubsitesCopyAndMovePage extends SiteTree {
 
                         if($Parent){
                             Subsite::changeSubsite($Parent->SubsiteID);
-                            $Parent->moveToSubsiteWithChildren($intranet->ID);
+                            $Parent->moveToSubsiteWithChildren($currSubID);
                             $Parent->ParentID = $this->ID;
                             $Parent->write();
-                            Subsite::changeSubsite($intranet->ID);
+                            Subsite::changeSubsite($currSubID);
                         }
                     }
 
@@ -170,6 +172,10 @@ class SubsitesCopyAndMovePage extends SiteTree {
                     $this->doPublish();
                     self::$publish_check = true;
                 }
+
+                // delete all versioned SubsitesCopyAndMovePage entries
+                DB::query("DELETE FROM SiteTree_versions WHERE ClassName = 'SubsitesCopyAndMovePage';");
+                DB::query("TRUNCATE SubsitesCopyAndMovePage_versions;");
         }
 }
 class SubsitesCopyAndMovePage_Controller extends ContentController {
