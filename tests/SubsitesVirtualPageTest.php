@@ -3,7 +3,7 @@
 class SubsitesVirtualPageTest extends SapphireTest {
 	static $fixture_file = array(
 		'subsites/tests/SubsiteTest.yml',
-		'sapphire/tests/FileLinkTrackingTest.yml',
+		'subsites/tests/SubsitesVirtualPageTest.yml',
 	);
 	
 	function setUp() {
