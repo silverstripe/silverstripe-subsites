@@ -265,8 +265,7 @@ JS;
 			}
 		}
 		
-		// Only bother flushing caches if we've actually changed
-		if($subsiteID != self::currentSubsiteID()) Permission::flush_permission_cache();
+		Permission::flush_permission_cache(); 
 	}
 
 	/**
