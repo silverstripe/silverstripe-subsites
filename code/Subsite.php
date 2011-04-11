@@ -408,7 +408,7 @@ JS;
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
 	 * @param $mainSiteTitle The label to give to the main site
 	 */
-	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
+	function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
 		if(!$member) return new DataObjectSet();
