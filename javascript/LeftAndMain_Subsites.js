@@ -4,7 +4,10 @@ Behaviour.register({
 			if($('Form_AddPageOptionsForm_SubsiteID')) {
 				$('Form_AddPageOptionsForm_SubsiteID').value = this.value;
 			}
-			var request = new Ajax.Request(SiteTreeHandlers.controller_url + '/changesubsite?SubsiteID=' + this.value + '&ajax=1', {
+
+			var
+				currentLocale = ($('Form_AddPageOptionsForm_Locale')) ? $('Form_AddPageOptionsForm_Locale').value : '',
+				request = new Ajax.Request(SiteTreeHandlers.controller_url + '/changesubsite?Locale=' + currentLocale + '&SubsiteID=' + this.value + '&ajax=1', {
 				onSuccess: function(response) {
 					if ($('sitetree')) {
 						$('sitetree').innerHTML = response.responseText;
@@ -13,14 +16,14 @@ Behaviour.register({
 						$('siteTreeFilterList').reapplyIfNeeded();
 					}
 				},
-				
+
 				onFailure: function(response) {
 					errorMessage('Could not change subsite', response);
 				}
 			});
 		}
 	},
-	
+
 	'#SubsiteActions a' : {
 		onclick: function() {
 			var subsiteName = prompt('Enter the name of the new site','');
@@ -31,19 +34,19 @@ Behaviour.register({
 						var div = document.createElement('div');
 						div.innerHTML = response.responseText;
 						var newSelect = div.firstChild;
-						
+
 						while(origSelect.length > 0)
 							origSelect.remove(0);
-						
+
 						for(var j = 0; j < newSelect.length; j++) {
 							var opt = newSelect.options.item(j).cloneNode(true);
 							var newOption = document.createElement('option');
-							
+
 							/*if(opt.text)
 								newOption.text = opt.text;*/
 							if(opt.firstChild)
 								newOption.text = opt.firstChild.nodeValue;
-							
+
 							newOption.value = opt.value;
 							try {
 								origSelect.add(newOption, null);
@@ -51,7 +54,7 @@ Behaviour.register({
 								origSelect.add(newOption);
 							}
 						}
-						
+
 						statusMessage('Created ' + subsiteName, 'good');
 					},
 					onFailure: function(response) {
@@ -59,11 +62,11 @@ Behaviour.register({
 					}
 				});
 			}
-			
+
 			return false;
 		}
 	},
-	
+
 	// Subsite tab of Group editor
 	'#Form_EditForm_AccessAllSubsites' : {
 		initialize: function () {
@@ -73,9 +76,9 @@ Behaviour.register({
 				items[i].onchange = this.showHideSubsiteList;
 			}
 		},
-		
+
 		showHideSubsiteList : function () {
-			$('Form_EditForm_Subsites').parentNode.style.display = 
+			$('Form_EditForm_Subsites').parentNode.style.display =
 				Form.Element.getValue($('Form_EditForm').AccessAllSubsites)==1 ? 'none' : '';
 		}
 	}
@@ -87,7 +90,7 @@ Behaviour.register({
 		initialize: function () {
 			this.changeDetection_fieldsToIgnore.IsSubsite = true;
 		}
-	}	
+	}
 });
 
 fitToParent('ResultTable_holder');
