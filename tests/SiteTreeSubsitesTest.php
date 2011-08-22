@@ -130,6 +130,9 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		);
 	}
 	
+	/**
+	 * Similar to {@link SubsitesVirtualPageTest->testSubsiteVirtualPageCanHaveSameUrlsegmentAsOtherSubsite()}.
+	 */
 	function testTwoPagesWithSameURLOnDifferentSubsites() {
 		// Set up a couple of pages with the same URL on different subsites
 		$s1 = $this->objFromFixture('Subsite','domaintest1');

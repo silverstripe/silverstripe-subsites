@@ -105,6 +105,44 @@ class SubsitesVirtualPage extends VirtualPage {
 			$this->ExtraMeta = $this->ContentSource()->ExtraMeta ? $this->ContentSource()->ExtraMeta : $this->ExtraMeta; 
 		}
 	}
+	
+	function validURLSegment() {
+		$isValid = parent::validURLSegment();
+		
+		// Veto the validation rules if its false. In this case, some logic
+		// needs to be duplicated from parent to find out the exact reason the validation failed.
+		if(!$isValid) {
+			$IDFilter     = ($this->ID) ? "AND \"SiteTree\".\"ID\" <> $this->ID" :  null;
+			$parentFilter = null;
+
+			if(self::nested_urls()) {
+				if($this->ParentID) {
+					$parentFilter = " AND \"SiteTree\".\"ParentID\" = $this->ParentID";
+				} else {
+					$parentFilter = ' AND "SiteTree"."ParentID" = 0';
+				}
+			}
+			
+			Subsite::$disable_subsite_filter = true;
+			$existingPage = DataObject::get_one(
+				'SiteTree', 
+				"\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
+				false // disable cache, it doesn't include subsite status in the key
+			);
+			Subsite::$disable_subsite_filter = false;
+			$existingPageInSubsite = DataObject::get_one(
+				'SiteTree', 
+				"\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
+				false // disable cache, it doesn't include subsite status in the key
+			);
+
+			// If URL has been vetoed because of an existing page,
+			// be more specific and allow same URLSegments in different subsites
+			$isValid = !($existingPage && $existingPageInSubsite);
+		}
+		
+		return $isValid;
+	}
 }
 
 class SubsitesVirtualPage_Controller extends VirtualPage_Controller {

@@ -206,6 +206,44 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
 		$this->assertFalse($onLive, 'SVP has been removed from live');
 	}
+	
+	/**
+	 * Similar to {@link SiteTreeSubsitesTest->testTwoPagesWithSameURLOnDifferentSubsites()}
+	 * and {@link SiteTreeSubsitesTest->testPagesInDifferentSubsitesCanShareURLSegment()}.
+	 */
+	function testSubsiteVirtualPageCanHaveSameUrlsegmentAsOtherSubsite() {
+		Subsite::$write_hostmap = false;
+		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
+		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
+		Subsite::changeSubsite($subsite1->ID);
+		
+		$subsite1Page = $this->objFromFixture('SiteTree', 'subsite1_contactus');
+		$subsite1Page->URLSegment = 'contact-us';
+		$subsite1Page->write();
+		
+		// saving on subsite1, and linking to subsite1
+		$subsite1Vp = new SubsitesVirtualPage();
+		$subsite1Vp->CopyContentFromID = $subsite1Page->ID;
+		$subsite1Vp->SubsiteID = $subsite1->ID;
+		$subsite1Vp->write();
+		$this->assertNotEquals(
+			$subsite1Vp->URLSegment, 
+			$subsite1Page->URLSegment,
+			"Doesn't allow explicit URLSegment overrides when already existing in same subsite"
+		);
+		
+		// saving in subsite2 (which already has a page with URLSegment 'contact-us'), 
+		// but linking to a page in subsite1
+		$subsite2Vp = new SubsitesVirtualPage();
+		$subsite2Vp->CopyContentFromID = $subsite1Page->ID;
+		$subsite2Vp->SubsiteID = $subsite2->ID; 
+		$subsite2Vp->write();
+		$this->assertEquals(
+			$subsite2Vp->URLSegment, 
+			$subsite1Page->URLSegment,
+			"Does allow explicit URLSegment overrides when only existing in a different subsite"
+		);
+	}
 
 	function fixVersionNumberCache($page) {
 		$pages = func_get_args();
