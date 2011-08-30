@@ -56,7 +56,7 @@ class RelatedPageLink extends DataObject {
 	function RelatedPageAdminLink($master = false) {
 		$page = $master ? Dataobject::get_by_id("SiteTree", $this->MasterPageID) : Dataobject::get_by_id("SiteTree", $this->RelatedPageID);
 		$otherPage = $master ? Dataobject::get_by_id("SiteTree", $this->RelatedPageID) : Dataobject::get_by_id("SiteTree", $this->MasterPageID);
-		if(!$page) return;
+		if(!$page || !$otherPage) return;
 		
 		// Use cmsEditlink only when moving between different pages in the same subsite.
 		$classClause = ($page->SubsiteID == $otherPage->SubsiteID) ? ' class="cmsEditlink"' : '';
