@@ -118,6 +118,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	public function onAfterWrite() {
 		Subsite::writeHostMap();
+		parent::onAfterWrite();
 	}
 	
 	/**
