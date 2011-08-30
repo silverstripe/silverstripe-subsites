@@ -1,7 +1,13 @@
 <?php
 
 class SiteTreeSubsitesTest extends SapphireTest {
+
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+	
+	protected $extraDataObjects = array(
+		'SiteTreeSubsitesTest_ClassA',
+		'SiteTreeSubsitesTest_ClassB'
+	);
 	
 	function testPagesInDifferentSubsitesCanShareURLSegment() {
 		$subsiteMain = $this->objFromFixture('Subsite_Template', 'main');
@@ -160,4 +166,56 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$this->assertEquals($p2->ID, SiteTree::get_by_link('test-page')->ID);
 	}
 	
+	function testPageTypesBlacklistInClassDropdown() {
+		Session::set("loggedInAs", null);
+		
+		$s1 = $this->objFromFixture('Subsite','domaintest1');
+		$s2 = $this->objFromFixture('Subsite','domaintest2');
+		$page = singleton('SiteTree');
+		
+		$method = new ReflectionMethod($page, 'getClassDropdown');
+		$method->setAccessible(true);
+		
+		$s1->PageTypeBlacklist = 'SiteTreeSubsitesTest_ClassA,ErrorPage';
+		$s1->write();
+		
+		Subsite::changeSubsite($s1);
+		$this->assertArrayNotHasKey('ErrorPage', $method->invoke($page));
+		$this->assertArrayNotHasKey('SiteTreeSubsitesTest_ClassA', $method->invoke($page));
+		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', $method->invoke($page));
+
+		Subsite::changeSubsite($s2);
+		$this->assertArrayHasKey('ErrorPage', $method->invoke($page));
+		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassA', $method->invoke($page));
+		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', $method->invoke($page));
+	}
+	
+	function testPageTypesBlacklistInCMSMain() {
+		Session::set("loggedInAs", null);
+		
+		$cmsmain = new CMSMain();
+		
+		$s1 = $this->objFromFixture('Subsite','domaintest1');
+		$s2 = $this->objFromFixture('Subsite','domaintest2');
+		
+		$s1->PageTypeBlacklist = 'SiteTreeSubsitesTest_ClassA,ErrorPage';
+		$s1->write();
+
+		Subsite::changeSubsite($s1);
+		$classes = $cmsmain->PageTypes()->column('ClassName');
+		$this->assertNotContains('ErrorPage', $classes);
+		$this->assertNotContains('SiteTreeSubsitesTest_ClassA', $classes);
+		$this->assertContains('SiteTreeSubsitesTest_ClassB', $classes);
+
+		Subsite::changeSubsite($s2);
+		$classes = $cmsmain->PageTypes()->column("ClassName");
+		$this->assertContains('ErrorPage', $classes);
+		$this->assertContains('SiteTreeSubsitesTest_ClassA', $classes);
+		$this->assertContains('SiteTreeSubsitesTest_ClassB', $classes);
+	}
+	
 }
+
+class SiteTreeSubsitesTest_ClassA extends SiteTree implements TestOnly {}
+
+class SiteTreeSubsitesTest_ClassB extends SiteTree implements TestOnly {}

@@ -78,6 +78,24 @@ Behaviour.register({
 			$('Form_EditForm_Subsites').parentNode.style.display = 
 				Form.Element.getValue($('Form_EditForm').AccessAllSubsites)==1 ? 'none' : '';
 		}
+	},
+	
+	/**
+	 * Binding a visibility toggle anchor to a longer list of checkboxes.
+	 * Hidden by default, unless either the toggle checkbox, or any of the 
+	 * actual value checkboxes are selected.
+	 */
+	'a#PageTypeBlacklistToggle': {
+		onclick: function(e) {
+			jQuery('#PageTypeBlacklist').toggle();
+		}
+	},
+	
+	'#PageTypeBlacklist': {
+		initialize: function() {
+			var hasLimits = Boolean(jQuery(this).find('input:checked').length);
+			jQuery(this).toggle(hasLimits);
+		}
 	}
 });
 

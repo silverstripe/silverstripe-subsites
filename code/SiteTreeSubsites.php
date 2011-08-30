@@ -397,6 +397,18 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	function cacheKeyComponent() {
 		return 'subsite-'.Subsite::currentSubsiteID();
 	}
+	
+	/**
+	 * @param Member
+	 * @return boolean|null
+	 */
+	function canCreate($member = null) {
+		// Typically called on a singleton, so we're not using the Subsite() relation
+		$subsite = Subsite::currentSubsite();
+		if($subsite && $subsite->exists() && $subsite->PageTypeBlacklist) {
+			$blacklisted = explode(',', $subsite->PageTypeBlacklist);
+			// All subclasses need to be listed explicitly
+			if(in_array($this->owner->class, $blacklisted)) return false;
+		}
+	}
 }
-
-?>

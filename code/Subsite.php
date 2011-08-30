@@ -31,7 +31,10 @@ class Subsite extends DataObject implements PermissionProvider {
 
 		// Used to hide unfinished/private subsites from public view.
 		// If unset, will default to true
-		'IsPublic' => 'Boolean'
+		'IsPublic' => 'Boolean',
+		
+		// Comma-separated list of disallowed page types
+		'PageTypeBlacklist' => 'Text',
 	);
 	
 	static $has_one = array(
@@ -164,6 +167,13 @@ class Subsite extends DataObject implements PermissionProvider {
 			"SubsiteID", $this->ID);
 			
 		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
+		
+		$pageTypeMap = array();
+		$pageTypes = SiteTree::page_type_classes();
+		foreach($pageTypes as $pageType) {
+			$pageTypeMap[$pageType] = singleton($pageType)->i18n_singular_name();
+		}
+		asort($pageTypeMap);
 
 		$fields = new FieldSet(
 			new TabSet('Root',
@@ -178,7 +188,21 @@ class Subsite extends DataObject implements PermissionProvider {
 					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
 					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
 
-					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme)
+					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme),
+					
+					
+					new LiteralField(
+						'PageTypeBlacklistToggle',
+						sprintf(
+							'<div class="field"><a href="#" id="PageTypeBlacklistToggle">%s</a></div>',
+							_t('Subsite.PageTypeBlacklistField', 'Disallow page types?')
+						)
+					),
+					new CheckboxSetField(
+						'PageTypeBlacklist', 
+						false,
+						$pageTypeMap
+					)
 				)
 			),
 			new HiddenField('ID', '', $this->ID),
