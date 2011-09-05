@@ -5,10 +5,7 @@
  * @package subsites
  */
 class LeftAndMainSubsites extends Extension {
-	static $allowed_actions = array(
-		'changesubsite',
-	);
-	
+
 	function init() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
@@ -25,24 +22,6 @@ class LeftAndMainSubsites extends Extension {
 	
 	function updatePageOptions(&$fields) {
 		$fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
-	}
-
-
-	public function changesubsite() {
-		$id = $_REQUEST['SubsiteID'];
-
-		Subsite::changeSubsite($id==-1 ? 0 : $id);
-		
-		if ($id == '-1') Cookie::set('noSubsiteFilter', 'true', 1);
-		else Cookie::set('noSubsiteFilter', 'false', 1);
-		
-		if(Director::is_ajax()) {
-			$tree = $this->owner->SiteTreeAsUL();
-			$tree = ereg_replace('^[ \t\r\n]*<ul[^>]*>','', $tree);
-			$tree = ereg_replace('</ul[^>]*>[ \t\r\n]*$','', $tree);
-			return $tree;
-		} else
-			return array();
 	}
 	
 	public function Subsites() {

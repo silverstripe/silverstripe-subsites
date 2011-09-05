@@ -1,23 +1,7 @@
 Behaviour.register({
 	'#SubsiteActions select' : {
 		onchange: function() {
-			if($('Form_AddPageOptionsForm_SubsiteID')) {
-				$('Form_AddPageOptionsForm_SubsiteID').value = this.value;
-			}
-			var request = new Ajax.Request(SiteTreeHandlers.controller_url + '/changesubsite?SubsiteID=' + this.value + '&ajax=1', {
-				onSuccess: function(response) {
-					if ($('sitetree')) {
-						$('sitetree').innerHTML = response.responseText;
-						SiteTree.applyTo($('sitetree'));
-						$('sitetree').getTreeNodeByIdx(0).onselect();
-						$('siteTreeFilterList').reapplyIfNeeded();
-					}
-				},
-				
-				onFailure: function(response) {
-					errorMessage('Could not change subsite', response);
-				}
-			});
+			document.location.href = SiteTreeHandlers.controller_url + '?SubsiteID=' + this.value;
 		}
 	},
 	
