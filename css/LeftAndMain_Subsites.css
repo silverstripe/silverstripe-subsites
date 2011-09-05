@@ -29,7 +29,7 @@
 	font-size: 12px;
 }
 	#SubsitesSelect {
-		width: 200px;
+		max-width: 200px;
 		padding: 3px;
 	}
 
