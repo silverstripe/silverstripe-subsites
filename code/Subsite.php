@@ -460,6 +460,7 @@ JS;
 				ON \"Group\".\"ID\"=\"Permission\".\"GroupID\"
 				AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')"
 		);
+		if(!$subsites) $subsites = new DataObjectSet();
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
