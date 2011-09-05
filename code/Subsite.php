@@ -359,6 +359,19 @@ JS;
 	
 	}
 
+	/**
+	 * Checks if a member can be granted certain permissions, regardless of the subsite context.
+	 * Similar logic to {@link Permission::checkMember()}, but only returns TRUE
+	 * if the member is part of a group with the "AccessAllSubsites" flag set.
+	 * If more than one permission is passed to the method, at least one of them must
+	 * be granted for if to return TRUE.
+	 * 
+	 * @todo Allow permission inheritance through group hierarchy.
+	 * 
+	 * @param Member Member to check against. Defaults to currently logged in member
+	 * @param Array Permission code strings. Defaults to "ADMIN".
+	 * @return boolean
+	 */
 	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
@@ -433,6 +446,8 @@ JS;
 	 * @param $permCode array|string Either a single permission code or an array of permission codes.
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
 	 * @param $mainSiteTitle The label to give to the main site
+	 * @param $member
+	 * @return DataObjectSet of {@link Subsite} instances
 	 */
 	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments

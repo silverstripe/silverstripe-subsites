@@ -87,6 +87,15 @@ Group:
       Code: subsite2_group
       AccessAllSubsites: 0
       Subsites: =>Subsite_Template.subsite2
+   subsite1admins:
+      Title: subsite1admins
+      Code: subsite1admins
+      AccessAllSubsites: 0
+      Subsites: =>Subsite_Template.subsite1
+   allsubsitesauthors:
+      Title: allsubsitesauthors
+      Code: allsubsitesauthors
+      AccessAllSubsites: 1
 Permission:
    admin:
       Code: ADMIN
@@ -97,12 +106,21 @@ Permission:
    accesscmsmain2:
       Code: CMS_ACCESS_CMSMain
       GroupID: =>Group.subsite2_group
+   accesscmsmain3:
+      Code: CMS_ACCESS_CMSMain
+      GroupID: =>Group.subsite1admins
+   accesscmsmain4:
+      Code: CMS_ACCESS_CMSMain
+      GroupID: =>Group.allsubsitesauthors
    securityaccess1:
       Code: CMS_ACCESS_SecurityAdmin
       GroupID: =>Group.subsite1_group
    securityaccess2:
       Code: CMS_ACCESS_SecurityAdmin
       GroupID: =>Group.subsite2_group
+   adminsubsite1:
+      Code: ADMIN
+      GroupID: =>Group.subsite1admins
 
 Member:
    admin:
@@ -117,3 +135,9 @@ Member:
    subsite2member:
       Email: subsite2member@test.com
       Groups: =>Group.subsite2_group
+   subsite1admin:
+      Email: subsite1admin@test.com
+      Groups: =>Group.subsite1admins
+   allsubsitesauthor:
+      Email: allsubsitesauthor@test.com
+      Groups: =>Group.allsubsitesauthors

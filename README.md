@@ -67,7 +67,7 @@ This example would let you create subsites such as ''wellington.mycompany.com'' 
 
 If you would like to be able to choose any domain for your subsite, rather than subdomains off a common base, then list top-level domains in your ''set_allowed_domains()'' list.
 
-In this example, your subsite name, eg, ''silverstripe'', will be appended to a much shorter base domain, eg, ''co.nz'', or ''org''.  This would let you create subsites with domains such as ''silverstripe.org'' or ''example.co.nz''
+In this example, your subsite name (e.g. ''silverstripe''), will be appended to a much shorter base domain (e.g.  ''co.nz'', or ''org'').  This would let you create subsites with domains such as ''silverstripe.org'' or ''example.co.nz''
 
 *mysite/_config.php*
 
@@ -95,6 +95,14 @@ You can mix the two together, if you want to have some subsites hosted off subdo
 
 
 Note that every site also has a ''www.''-prefixed version of the domain available.  For example, if your subsite is accessible from ''wellington.example.org'' then it will also be accessible from '''www.wellington.example.org''.
+
+### Permissions ###
+
+Groups can be associated with one or more subsites, in which case the granted permissions
+only apply to this subsite. Even the `ADMIN` permission only grants super-user rights on certain
+subsites by default. If you want to create a super-user regardless of subsites association,
+please use the `Group.AccessAllSubsites` property ("Give this group access to all subsites"),
+together with the `ADMIN` permission.
 
 ### Access created domains
 

@@ -124,6 +124,46 @@ class SubsiteTest extends SapphireTest {
 			'Test 3',
 		), $adminSiteTitles);
 	}
+	
+	function testhasMainSitePermission() {
+		$admin = $this->objFromFixture('Member', 'admin');
+		$subsite1member = $this->objFromFixture('Member', 'subsite1member');
+		$subsite1admin = $this->objFromFixture('Member', 'subsite1admin');
+		$allsubsitesauthor = $this->objFromFixture('Member', 'allsubsitesauthor');
+		
+		$this->assertTrue(
+			Subsite::hasMainSitePermission($admin), 
+			'Default permissions granted for super-admin'
+		);
+		$this->assertTrue(
+			Subsite::hasMainSitePermission($admin, array("ADMIN")), 
+			'ADMIN permissions granted for super-admin'
+		);
+		$this->assertFalse(
+			Subsite::hasMainSitePermission($subsite1admin, array("ADMIN")), 
+			'ADMIN permissions (on main site) denied for subsite1 admin'
+		);
+		$this->assertFalse(
+			Subsite::hasMainSitePermission($subsite1admin, array("CMS_ACCESS_CMSMain")), 
+			'CMS_ACCESS_CMSMain (on main site) denied for subsite1 admin'
+		);
+		$this->assertFalse(
+			Subsite::hasMainSitePermission($allsubsitesauthor, array("ADMIN")), 
+			'ADMIN permissions (on main site) denied for CMS author with edit rights on all subsites'
+		);
+		$this->assertTrue(
+			Subsite::hasMainSitePermission($allsubsitesauthor, array("CMS_ACCESS_CMSMain")), 
+			'CMS_ACCESS_CMSMain (on main site) granted for CMS author with edit rights on all subsites'
+		);
+		$this->assertFalse(
+			Subsite::hasMainSitePermission($subsite1member, array("ADMIN")), 
+			'ADMIN (on main site) denied for subsite1 subsite1 cms author'
+		);
+		$this->assertFalse(
+			Subsite::hasMainSitePermission($subsite1member, array("CMS_ACCESS_CMSMain")), 
+			'CMS_ACCESS_CMSMain (on main site) denied for subsite1 cms author'
+		);
+	}
 
 	function testDuplicateSubsite() {
 		// get subsite1 & create page
