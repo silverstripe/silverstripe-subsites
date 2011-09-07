@@ -81,33 +81,8 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		}
 	}
 	
-	/**
-	 * Call this method before writing; the next write carried out by the system won't
-	 * set the CustomContent value
-	 */
-	function nextWriteDoesntCustomise() {
-		$this->nextWriteDoesntCustomise = true;
-	}
-	
-	protected $nextWriteDoesntCustomise = false;
-	
 	function onBeforeWrite() {
 		if(!$this->owner->ID && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
-
-		// If the content has been changed, then the page should be marked as 'custom content'
-		if(!$this->nextWriteDoesntCustomise && $this->owner->ID && $this->owner->MasterPageID && !$this->owner->CustomContent) {
-			$changed = $this->owner->getChangedFields();
-
-			foreach(self::$template_fields as $field) {
-				if(isset($changed[$field]) && $changed[$field]) {
-					$this->owner->CustomContent = true;
-					FormResponse::add("if($('Form_EditForm_CustomContent')) $('Form_EditForm_CustomContent').checked = true;");
-					break;
-				}
-			}
-		}
-		
-		$this->nextWriteDoesntCustomise = false;
 		
 		parent::onBeforeWrite();
 	}

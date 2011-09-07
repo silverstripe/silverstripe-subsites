@@ -148,9 +148,7 @@ class SubsitesVirtualPage extends VirtualPage {
 class SubsitesVirtualPage_Controller extends VirtualPage_Controller {
 	
 	function reloadContent() {
-		$this->failover->nextWriteDoesntCustomise();
 		$this->failover->copyFrom($this->failover->CopyContentFrom());
-		$this->failover->nextWriteDoesntCustomise();
 		$this->failover->write();
 		return;
 	}
