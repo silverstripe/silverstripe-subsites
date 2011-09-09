@@ -62,6 +62,10 @@ class LeftAndMainSubsites extends Extension {
 			}
 		}
 		
+		// Don't show subsite list in reports section, it doesn't have
+		// any effect there - subsites are filtered through a custom dropdown there, see SubsiteReportWrapper
+		if($this->owner instanceof ReportAdmin) return false;
+		
 		$list = $this->Subsites();
 		
 		$currentSubsiteID = Subsite::currentSubsiteID();
