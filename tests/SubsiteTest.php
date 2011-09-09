@@ -59,26 +59,33 @@ class SubsiteTest extends SapphireTest {
 	function testDomainLookup() {
 		$this->assertEquals(
 			$this->idFromFixture('Subsite','domaintest1'),
-			Subsite::getSubsiteIDForDomain('one.example.org')
+			Subsite::getSubsiteIDForDomain('one.example.org'),
+			'Full match'
 		);
 		
 		$this->assertEquals(
 			$this->idFromFixture('Subsite','domaintest1'),
-			Subsite::getSubsiteIDForDomain('one.localhost')
-		);
-
-		$this->assertEquals(
-			$this->idFromFixture('Subsite','domaintest2'),
-			Subsite::getSubsiteIDForDomain('two.mysite.com')
+			Subsite::getSubsiteIDForDomain('one.localhost'),
+			'Fuzzy match suffixed with asterisk (rule "one.*")'
 		);
 		
 		$this->assertEquals(
 			$this->idFromFixture('Subsite','domaintest2'),
-			Subsite::getSubsiteIDForDomain('other.mysite.com')
+			Subsite::getSubsiteIDForDomain('two.mysite.com'),
+			'Matches correct subsite for rule'
+		);
+		
+		$this->assertEquals(
+			$this->idFromFixture('Subsite','domaintest2'),
+			Subsite::getSubsiteIDForDomain('other.mysite.com'),
+			'Fuzzy match prefixed with asterisk (rule "*.mysite.com")'
 		);
 
-		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('other.example.com'));
-		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('two.example.com'));
+		$this->assertEquals(
+			0, 
+			Subsite::getSubsiteIDForDomain('unknown.madeup.com'),
+			"Doesn't match unknown subsite"
+		);
 		
 	}
 

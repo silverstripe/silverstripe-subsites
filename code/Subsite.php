@@ -162,7 +162,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	function getCMSFields() {
 		$domainTable = new TableField("Domains", "SubsiteDomain", 
-			array("Domain" => "Domain (use * as a wildcard)", "IsPrimary" => "Primary domain?"), 
+			array("Domain" => "Domain <small>(use * as a wildcard)</small>", "IsPrimary" => "Primary domain?"), 
 			array("Domain" => "TextField", "IsPrimary" => "CheckboxField"), 
 			"SubsiteID", $this->ID);
 			
@@ -310,10 +310,11 @@ JS;
 
 	/**
 	 * Get a matching subsite for the given host, or for the current HTTP_HOST.
+	 * Supports "fuzzy" matching of domains by placing an asterisk at the start of end of the string,
+	 * for example matching all subdomains on *.example.com with one subsite,
+	 * and all subdomains on *.example.org on another.
 	 * 
-	 * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST']
-	 * is used.
-	 *
+	 * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
 	 * @return int Subsite ID
 	 */
 	static function getSubsiteIDForDomain($host = null, $returnMainIfNotFound = true) {
