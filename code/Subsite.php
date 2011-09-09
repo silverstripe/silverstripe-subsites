@@ -133,21 +133,25 @@ class Subsite extends DataObject implements PermissionProvider {
 	}
 	
 	/**
-	 * Return the domain of this site
-	 *
+	 * Return the primary domain of this site. Tries to "normalize" the domain name,
+	 * by replacing potential wildcards.
+	 * 
 	 * @return string The full domain name of this subsite (without protocol prefix)
 	 */
 	function domain() {
 		if($this->ID) {
-			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC",
-				"", 1);
+			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
 			if($domains) {
 				$domain = $domains->First()->Domain;
 				// If there are wildcards in the primary domain (not recommended), make some
-				// educated guesses about what to replace them with
-				$domain = preg_replace("/\\.\\*\$/",".$_SERVER[HTTP_HOST]", $domain);
-				$domain = preg_replace("/^\\*\\./","subsite.", $domain);
+				// educated guesses about what to replace them with:
+				$domain = preg_replace('/\.\*$/',".$_SERVER[HTTP_HOST]", $domain);
+				// Default to "subsite." prefix for first wildcard
+				// TODO Whats the significance of "subsite" in this context?!
+				$domain = preg_replace('/^\*\./',"subsite.", $domain);
+				// *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'
 				$domain = str_replace('.www.','.', $domain);
+				
 				return $domain;
 			}
 			
