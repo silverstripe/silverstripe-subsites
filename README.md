@@ -65,6 +65,13 @@ You can mix the two together, if you want to have some subsites hosted off subdo
 
 Note that every site also has a ''www.''-prefixed version of the domain available.  For example, if your subsite is accessible from ''wellington.example.org'' then it will also be accessible from '''www.wellington.example.org''.
 
+### Strict Subdomain Matching ###
+
+The module tries to provide sensible defaults, in which it regards `example.com` and `www.example.com`
+as the same domains. In case you want to distinguish between these variations,
+set `Subsite::$strict_subdomain_matching` to TRUE. This won't affect wildcard/asterisk checks,
+but removes the ambiguity about default subdomains.
+
 ### Permissions ###
 
 Groups can be associated with one or more subsites, in which case the granted permissions

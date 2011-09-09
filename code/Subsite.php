@@ -20,6 +20,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	static $force_subsite = null;
 
 	static $write_hostmap = true;
+	
 	static $default_sort = "\"Title\" ASC";
 
 	static $db = array(
@@ -76,6 +77,13 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * are listed.
 	 */
 	protected static $allowed_themes = array();
+	
+	/**
+	 * @var Boolean If set to TRUE, don't assume 'www.example.com' and 'example.com' are the same.
+	 * Doesn't affect wildcard matching, so '*.example.com' will match 'www.example.com' (but not 'example.com')
+	 * in both TRUE or FALSE setting.
+	 */
+	static $strict_subdomain_matching = false;
 
 	static function set_allowed_domains($domain){
 		user_error('Subsite::set_allowed_domains() is deprecated; it is no longer necessary '
@@ -320,7 +328,7 @@ JS;
 	static function getSubsiteIDForDomain($host = null, $returnMainIfNotFound = true) {
 		if($host == null) $host = $_SERVER['HTTP_HOST'];
 		
-		$host = str_replace('www.','',$host);
+		if(!Subsite::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
 		$SQL_host = Convert::raw2sql($host);
 
 		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
@@ -329,7 +337,15 @@ JS;
 		
 		if($matchingDomains) {
 			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
-			if(sizeof($subsiteIDs) > 1) user_error("Multiple subsites match '$host'", E_USER_WARNING);
+			$subsiteDomains = array_unique($matchingDomains->column('Domain'));
+			if(sizeof($subsiteIDs) > 1) {
+				throw new UnexpectedValueException(sprintf(
+					"Multiple subsites match on '%s': %s",
+					$host,
+					implode(',', $subsiteDomains)
+				));
+			}
+			
 			return $subsiteIDs[0];
 		}
 		
@@ -538,7 +554,9 @@ JS;
 		if ($subsites) foreach($subsites as $subsite) {
 			$domains = $subsite->Domains();
 			if ($domains) foreach($domains as $domain) {
-				$hostmap[str_replace('www.', '', $domain->Domain)] = $subsite->domain(); 
+				$domainStr = $domain->Domain;
+				if(!Subsite::$strict_subdomain_matching) $domainStr = preg_replace('/^www\./', '', $domainStr);
+				$hostmap[$domainStr] = $subsite->domain(); 
 			}
 			if ($subsite->DefaultSite) $hostmap['default'] = $subsite->domain();
 		}

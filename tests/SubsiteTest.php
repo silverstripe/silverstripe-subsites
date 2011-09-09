@@ -1,7 +1,21 @@
 <?php
 
 class SubsiteTest extends SapphireTest {
+
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+	
+	function setUp() {
+		parent::setUp();
+		
+		$this->origStrictSubdomainMatching = Subsite::$strict_subdomain_matching;
+		Subsite::$strict_subdomain_matching = false;
+	}
+	
+	function tearDown() {
+		parent::tearDown();
+		
+		Subsite::$strict_subdomain_matching = $this->origStrictSubdomainMatching;
+	}
 
 	/**
 	 * Create a new subsite from the template and verify that all the template's pages are copied
@@ -57,28 +71,65 @@ class SubsiteTest extends SapphireTest {
 	 * Confirm that domain lookup is working
 	 */
 	function testDomainLookup() {
+		// Clear existing fixtures
+		foreach(DataObject::get('Subsite') as $subsite) $subsite->delete();
+		foreach(DataObject::get('SubsiteDomain') as $domain) $domain->delete();
+		
+		// Much more expressive than YML in this case
+		$subsite1 = $this->createSubsiteWithDomains(array(
+			'one.example.org' => true,
+			'one.*' => false,
+		));
+		$subsite2 = $this->createSubsiteWithDomains(array(
+			'two.mysite.com' => true,
+			'*.mysite.com' => false,
+			'subdomain.onmultiplesubsites.com' => false,
+		));
+		$subsite3 = $this->createSubsiteWithDomains(array(
+			'three.*' => true, // wildcards in primary domain are not recommended
+			'subdomain.unique.com' => false,
+			'*.onmultiplesubsites.com' => false,
+		));
+		
 		$this->assertEquals(
-			$this->idFromFixture('Subsite','domaintest1'),
+			$subsite3->ID,
+			Subsite::getSubsiteIDForDomain('subdomain.unique.com'),
+			'Full unique match'
+		);
+		
+		$this->assertEquals(
+			$subsite1->ID,
 			Subsite::getSubsiteIDForDomain('one.example.org'),
-			'Full match'
+			'Full match, doesn\'t complain about multiple matches within a single subsite'
+		);
+		
+		$failed = false;
+		try {
+			Subsite::getSubsiteIDForDomain('subdomain.onmultiplesubsites.com');
+		} catch(UnexpectedValueException $e) {
+			$failed = true;
+		}
+		$this->assertTrue(
+			$failed,
+			'Fails on multiple matches with wildcard vs. www across multiple subsites'
 		);
 		
 		$this->assertEquals(
-			$this->idFromFixture('Subsite','domaintest1'),
-			Subsite::getSubsiteIDForDomain('one.localhost'),
-			'Fuzzy match suffixed with asterisk (rule "one.*")'
+			$subsite1->ID,
+			Subsite::getSubsiteIDForDomain('one.unique.com'),
+			'Fuzzy match suffixed with wildcard (rule "one.*")'
 		);
 		
 		$this->assertEquals(
-			$this->idFromFixture('Subsite','domaintest2'),
+			$subsite2->ID,
 			Subsite::getSubsiteIDForDomain('two.mysite.com'),
 			'Matches correct subsite for rule'
 		);
 		
 		$this->assertEquals(
-			$this->idFromFixture('Subsite','domaintest2'),
+			$subsite2->ID,
 			Subsite::getSubsiteIDForDomain('other.mysite.com'),
-			'Fuzzy match prefixed with asterisk (rule "*.mysite.com")'
+			'Fuzzy match prefixed with wildcard (rule "*.mysite.com")'
 		);
 
 		$this->assertEquals(
@@ -87,6 +138,90 @@ class SubsiteTest extends SapphireTest {
 			"Doesn't match unknown subsite"
 		);
 		
+	}
+	
+	function testStrictSubdomainMatching() {
+		// Clear existing fixtures
+		foreach(DataObject::get('Subsite') as $subsite) $subsite->delete();
+		foreach(DataObject::get('SubsiteDomain') as $domain) $domain->delete();
+		
+		// Much more expressive than YML in this case
+		$subsite1 = $this->createSubsiteWithDomains(array(
+			'example.org' => true,
+			'example.com' => false,
+			'*.wildcard.com' => false,
+		));
+		$subsite2 = $this->createSubsiteWithDomains(array(
+			'www.example.org' => true,
+			'www.wildcard.com' => false,
+		));
+
+		Subsite::$strict_subdomain_matching = false;
+		
+		$this->assertEquals(
+			$subsite1->ID,
+			Subsite::getSubsiteIDForDomain('example.org'),
+			'Exact matches without strict checking when not using www prefix'
+		);
+		$this->assertEquals(
+			$subsite1->ID,
+			Subsite::getSubsiteIDForDomain('www.example.org'),
+			'Matches without strict checking when using www prefix, still matching first domain regardless of www prefix  (falling back to subsite primary key ordering)'
+		);
+		$this->assertEquals(
+			$subsite1->ID,
+			Subsite::getSubsiteIDForDomain('www.example.com'),
+			'Fuzzy matches without strict checking with www prefix'
+		);
+		$this->assertEquals(
+			0,
+			Subsite::getSubsiteIDForDomain('www.wildcard.com'),
+			'Doesn\'t match www prefix without strict check, even if a wildcard subdomain is in place'
+		);
+		
+		Subsite::$strict_subdomain_matching = true;
+		
+		$this->assertEquals(
+			$subsite1->ID, 
+			Subsite::getSubsiteIDForDomain('example.org'),
+			'Matches with strict checking when not using www prefix'
+		);
+		$this->assertEquals(
+			$subsite2->ID, // not 1
+			Subsite::getSubsiteIDForDomain('www.example.org'),
+			'Matches with strict checking when using www prefix'
+		);
+		$this->assertEquals(
+			0,
+			Subsite::getSubsiteIDForDomain('www.example.com'),
+			'Doesn\'t fuzzy match with strict checking when using www prefix'
+		);
+		$failed = false;
+		try {
+			Subsite::getSubsiteIDForDomain('www.wildcard.com');
+		} catch(UnexpectedValueException $e) {
+			$failed = true;
+		}
+		$this->assertTrue(
+			$failed,
+			'Fails on multiple matches with strict checking and wildcard vs. www'
+		);
+		
+	}
+	
+	protected function createSubsiteWithDomains($domains) {
+		$subsite = new Subsite();
+		$subsite->write();
+		foreach($domains as $domainStr => $isPrimary) {
+			$domain = new SubsiteDomain(array(
+				'Domain' => $domainStr, 
+				'IsPrimary' => $isPrimary,
+				'SubsiteID' => $subsite->ID
+			));
+			$domain->write();
+		}
+		
+		return $subsite;
 	}
 
 	/**
