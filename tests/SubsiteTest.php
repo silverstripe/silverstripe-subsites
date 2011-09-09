@@ -57,15 +57,25 @@ class SubsiteTest extends SapphireTest {
 	 * Confirm that domain lookup is working
 	 */
 	function testDomainLookup() {
-		$this->assertEquals($this->idFromFixture('Subsite','domaintest1'),
-			Subsite::getSubsiteIDForDomain('one.example.org'));
-		$this->assertEquals($this->idFromFixture('Subsite','domaintest1'),
-			Subsite::getSubsiteIDForDomain('one.localhost'));
+		$this->assertEquals(
+			$this->idFromFixture('Subsite','domaintest1'),
+			Subsite::getSubsiteIDForDomain('one.example.org')
+		);
+		
+		$this->assertEquals(
+			$this->idFromFixture('Subsite','domaintest1'),
+			Subsite::getSubsiteIDForDomain('one.localhost')
+		);
 
-		$this->assertEquals($this->idFromFixture('Subsite','domaintest2'),
-			Subsite::getSubsiteIDForDomain('two.mysite.com'));
-		$this->assertEquals($this->idFromFixture('Subsite','domaintest2'),
-			Subsite::getSubsiteIDForDomain('other.mysite.com'));
+		$this->assertEquals(
+			$this->idFromFixture('Subsite','domaintest2'),
+			Subsite::getSubsiteIDForDomain('two.mysite.com')
+		);
+		
+		$this->assertEquals(
+			$this->idFromFixture('Subsite','domaintest2'),
+			Subsite::getSubsiteIDForDomain('other.mysite.com')
+		);
 
 		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('other.example.com'));
 		$this->assertEquals(0, Subsite::getSubsiteIDForDomain('two.example.com'));
