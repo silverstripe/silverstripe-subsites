@@ -123,13 +123,14 @@ class SubsitesVirtualPage extends VirtualPage {
 				}
 			}
 			
+			$origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
 			Subsite::$disable_subsite_filter = true;
 			$existingPage = DataObject::get_one(
 				'SiteTree', 
 				"\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
 				false // disable cache, it doesn't include subsite status in the key
 			);
-			Subsite::$disable_subsite_filter = false;
+			Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
 			$existingPageInSubsite = DataObject::get_one(
 				'SiteTree', 
 				"\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
@@ -154,11 +155,12 @@ class SubsitesVirtualPage_Controller extends VirtualPage_Controller {
 	}
 	
 	function init(){
+		$origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
 		Subsite::$disable_subsite_filter = true;
 		
 		parent::init();
 		
-		Subsite::$disable_subsite_filter = false;
+		Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
 	}
 }
 ?>

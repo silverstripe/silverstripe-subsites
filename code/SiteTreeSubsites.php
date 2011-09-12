@@ -335,10 +335,11 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 					
 					$subsiteID = Subsite::getSubsiteIDForDomain($domain);
 					if($subsiteID == 0) continue; // We have no idea what the domain for the main site is, so cant track links to it
-					
+
+					$origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
 					Subsite::disable_subsite_filter(true);
 					$candidatePage = DataObject::get_one("SiteTree", "\"URLSegment\" = '" . urldecode( $rest). "' AND \"SubsiteID\" = " . $subsiteID, false);
-					Subsite::disable_subsite_filter(false);
+					Subsite::disable_subsite_filter($origDisableSubsiteFilter);
 					
 					if($candidatePage) {
 						$linkedPages[] = $candidatePage->ID;
