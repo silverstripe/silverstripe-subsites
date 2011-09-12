@@ -9,7 +9,7 @@ class SubsiteReportWrapper extends SS_ReportWrapper {
 	// Filtering
 	
 	function parameterFields() {
-		$subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
+		$subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true);
 		$options = $subsites->toDropdownMap('ID', 'Title');
 		
 		$subsiteField = new TreeMultiselectField('Subsites', 'Sites', $options);
