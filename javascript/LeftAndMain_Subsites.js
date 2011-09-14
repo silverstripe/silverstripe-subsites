@@ -29,6 +29,7 @@ Behaviour.register({
 	'a#PageTypeBlacklistToggle': {
 		onclick: function(e) {
 			jQuery('#PageTypeBlacklist').toggle();
+			return false;
 		}
 	},
 	
