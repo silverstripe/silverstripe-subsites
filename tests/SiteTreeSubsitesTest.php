@@ -83,19 +83,6 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$this->assertEquals($link->RelatedPageAdminLink(), '<a href="admin/show/' . $contact->ID . '" class="cmsEditlink">Contact Us</a>');
 	}
 	
-	function testPageWithVirtualPagesGetsTable() {
-		$importantpage = $this->objFromFixture('SiteTree', 'importantpage');
-		
-		$link = new SubsitesVirtualPage();
-		$link->CopyContentFromID = $importantpage->ID;
-		$link->write();
-		$link->doPublish();
-	
-		$fields = $importantpage->getCMSFields();
-		
-		$this->assertNotNull($fields->fieldByName('Root.VirtualPages'));
-	}
-	
 	function testCanEditSiteTree() {
 		$admin = $this->objFromFixture('Member', 'admin');
 		$subsite1member = $this->objFromFixture('Member', 'subsite1member');
