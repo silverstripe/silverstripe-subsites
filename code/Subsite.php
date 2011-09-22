@@ -70,6 +70,11 @@ class Subsite extends DataObject implements PermissionProvider {
 		'PrimaryDomain' => 'Primary Domain',
 		'IsPublic' => 'Active subsite',
 	);
+	
+	/**
+	 * Memory cache of accessible sites
+	 */
+	private static $_cache_accessible_sites = array();
 
 	/**
 	 * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
@@ -476,8 +481,15 @@ JS;
 		if(!$member) return new DataObjectSet();
 		if(!is_object($member)) $member = DataObject::get_by_id('Member', $member);
 
+		// Rationalise permCode argument 
 		if(is_array($permCode))	$SQL_codes = "'" . implode("', '", Convert::raw2sql($permCode)) . "'";
 		else $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
+		
+		// Cache handling
+		$cacheKey = $SQL_codes . '-' . $member->ID . '-' . $includeMainSite . '-' . $mainSiteTitle;
+		if(isset(self::$_cache_accessible_sites[$cacheKey])) {
+			return self::$_cache_accessible_sites[$cacheKey];
+		}
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
@@ -536,6 +548,8 @@ JS;
 				$subsites->insertFirst($mainSite);
 			}
 		}
+		
+		self::$_cache_accessible_sites[$cacheKey] = $subsites;
 
 		return $subsites;
 	}
@@ -611,6 +625,13 @@ JS;
 	 */
 	static function disable_subsite_filter($disabled = true) {
 		self::$disable_subsite_filter = $disabled;
+	}
+	
+	/**
+	 * Flush caches on database reset
+	 */
+	static function on_db_reset() {
+		self::$_cache_accessible_sites = array();
 	}
 }
 
