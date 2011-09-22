@@ -62,9 +62,16 @@ class LeftAndMainSubsites extends Extension {
 			}
 		}
 		
-		// Don't show subsite list in reports section, it doesn't have
-		// any effect there - subsites are filtered through a custom dropdown there, see SubsiteReportWrapper
-		if($this->owner instanceof ReportAdmin) return false;
+		// Whitelist for admin sections which are subsite aware.
+		// For example, don't show subsite list in reports section, it doesn't have
+		// any effect there - subsites are filtered through a custom dropdown there, see SubsiteReportWrapper.
+		if(!(
+			$this->owner instanceof AssetAdmin 
+			|| $this->owner instanceof SecurityAdmin 
+			|| $this->owner instanceof CMSMain)
+		) {
+			return false;
+		}
 		
 		$list = $this->Subsites();
 		
