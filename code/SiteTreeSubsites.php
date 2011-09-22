@@ -86,20 +86,6 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		
 		parent::onBeforeWrite();
 	}
-	
-	function onAfterPublish(&$original) {
-		// Publish any subsite virtual pages that might need publishing
-		$oldState = Subsite::$disable_subsite_filter;
-		Subsite::$disable_subsite_filter = true;
-		
-		$linkedPages = DataObject::get("SubsitesVirtualPage", "\"CopyContentFromID\" = {$this->owner->ID}");
-		if($linkedPages) foreach($linkedPages as $page) {
-			$page->copyFrom($page->CopyContentFrom());
-			if($page->ExistsOnLive) $page->doPublish();
-		}
-		
-		Subsite::$disable_subsite_filter = $oldState;
-	}
 
 	function updateCMSFields(&$fields) {
 		if($this->owner->MasterPageID) $fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
