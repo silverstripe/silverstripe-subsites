@@ -109,7 +109,7 @@ class SubsiteTest extends SapphireTest {
 			$this->objFromFixture('Member', 'subsite1member'));
 		$member1SiteTitles = $member1Sites->column("Title");
 		sort($member1SiteTitles);
-		$this->assertEquals(array('Subsite1 Template'), $member1SiteTitles);
+		$this->assertEquals('Subsite1 Template', $member1SiteTitles[0], 'Member can get to a subsite via a group');
 
 		$adminSites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", false, null, 
 			$this->objFromFixture('Member', 'admin'));
@@ -123,6 +123,20 @@ class SubsiteTest extends SapphireTest {
 			'Test 2',
 			'Test 3',
 		), $adminSiteTitles);
+
+		$member2Sites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", false, null, 
+			$this->objFromFixture('Member', 'subsite1member2'));
+		$member2SiteTitles = $member2Sites->column("Title");
+		sort($member2SiteTitles);
+		$this->assertEquals('Subsite1 Template', $member2SiteTitles[0], 'Member can get to subsite via a group role');
+	}
+
+	function testHasMainSitePermission() {
+		$canAccess = Subsite::hasMainSitePermission($this->objFromFixture('Member', 'subsite1member'), array("CMS_ACCESS_CMSMain"));
+		$this->assertTrue($canAccess, 'Member has access to Main site via a group');
+
+		$canAccess = Subsite::hasMainSitePermission($this->objFromFixture('Member', 'subsite1member2'), array("CMS_ACCESS_CMSMain"));
+		$this->assertTrue($canAccess, 'Member has access to Main site via a group role');
 	}
 
 	function testDuplicateSubsite() {

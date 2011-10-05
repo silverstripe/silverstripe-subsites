@@ -127,7 +127,8 @@ class LeftAndMainSubsites extends Extension {
 		$member = Member::currentUser();
 		if ($member && $member->isAdmin()) return true;	//admin can access all subsites
 				
-		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->toDropdownMap();
+		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}", true)->toDropdownMap();
+
 		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 			$siteIDs = array_keys($sites);
 			Subsite::changeSubsite($siteIDs[0]);
@@ -139,7 +140,7 @@ class LeftAndMainSubsites extends Extension {
 		foreach($menu as $candidate) {
 			if($candidate->controller != $this->owner->class) {
 					
-				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}")->toDropdownMap();
+				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}", true)->toDropdownMap();
 				if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 					$siteIDs = array_keys($sites);
 					Subsite::changeSubsite($siteIDs[0]);

@@ -75,6 +75,13 @@ SiteTree:
       Title: Contact Us (Subsite 2)
       SubsiteID: =>Subsite_Template.subsite2
 
+PermissionRoleCode:
+   roleCode1:
+      Code: CMS_ACCESS_CMSMain
+PermissionRole:
+   role1:
+      Title: role1
+      Codes: =>PermissionRoleCode.roleCode1
 Group:
    admin:
       Title: Admin
@@ -87,13 +94,18 @@ Group:
    subsite1_group:
       Title: subsite1_group
       Code: subsite1_group
-      AccessAllSubsites: 0
+      AccessAllSubsites: 1
       Subsites: =>Subsite_Template.subsite1
    subsite2_group:
       Title: subsite2_group
       Code: subsite2_group
       AccessAllSubsites: 0
       Subsites: =>Subsite_Template.subsite2
+   subsite1_group_via_role:
+      Title: subsite1_group_via_role
+      Code: subsite1_group_via_role
+      AccessAllSubsites: 1
+      Roles: =>PermissionRole.role1
 Permission:
    admin:
       Code: ADMIN
@@ -139,3 +151,6 @@ Member:
    subsite2member:
       Email: subsite2member@test.com
       Groups: =>Group.subsite2_group
+   subsite1member2:
+      Email: subsite1member2@test.com
+      Groups: =>Group.subsite1_group_via_role
