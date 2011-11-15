@@ -160,21 +160,30 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$s2 = $this->objFromFixture('Subsite','domaintest2');
 		$page = singleton('SiteTree');
 		
-		$method = new ReflectionMethod($page, 'getClassDropdown');
-		$method->setAccessible(true);
-		
 		$s1->PageTypeBlacklist = 'SiteTreeSubsitesTest_ClassA,ErrorPage';
 		$s1->write();
 		
 		Subsite::changeSubsite($s1);
-		$this->assertArrayNotHasKey('ErrorPage', $method->invoke($page));
-		$this->assertArrayNotHasKey('SiteTreeSubsitesTest_ClassA', $method->invoke($page));
-		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', $method->invoke($page));
+		$this->assertArrayNotHasKey('ErrorPage', 
+			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+		);
+		$this->assertArrayNotHasKey('SiteTreeSubsitesTest_ClassA', 
+			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+		);
+		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', 
+			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+		);
 
 		Subsite::changeSubsite($s2);
-		$this->assertArrayHasKey('ErrorPage', $method->invoke($page));
-		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassA', $method->invoke($page));
-		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', $method->invoke($page));
+		$this->assertArrayHasKey('ErrorPage', 
+			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+		);
+		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassA', 
+			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+		);
+		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', 
+			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+		);
 	}
 	
 	function testPageTypesBlacklistInCMSMain() {
