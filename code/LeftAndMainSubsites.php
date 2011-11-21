@@ -10,6 +10,16 @@ class LeftAndMainSubsites extends Extension {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
+		
+		if(isset($_REQUEST['SubsiteID'])) {
+			// Clear current page when subsite changes (or is set for the first time)
+			if(!Session::get('SubsiteID') || $_REQUEST['SubsiteID'] != Session::get('SubsiteID')) {
+				Session::clear("{$this->owner->class}.currentPage");
+			}
+			
+			// Update current subsite in session
+			Subsite::changeSubsite($_REQUEST['SubsiteID']);
+		}
 	}
 	
 	/**
