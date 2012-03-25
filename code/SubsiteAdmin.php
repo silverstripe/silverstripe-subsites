@@ -1,6 +1,4 @@
 <?php
-//@TODO Add form is not used
-//@TODO doCreate() is not used
 /**
  * Admin interface to manage and create {@link Subsite} instances.
  * 
