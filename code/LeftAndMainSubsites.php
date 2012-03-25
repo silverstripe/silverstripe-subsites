@@ -35,54 +35,10 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function Subsites() {
-		$accessPerm = 'CMS_ACCESS_'. $this->owner->class;
-		
-		switch($this->owner->class) {
-			case "AssetAdmin":
-				$subsites = Subsite::accessible_sites($accessPerm, true, "Shared files & images");
-				break;
-				
-			case "SecurityAdmin":
-				$subsites = Subsite::accessible_sites($accessPerm, true, "Groups accessing all sites");
-				if($subsites->find('ID',0)) {
-					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
-				}
-				break;
-				
-			case "CMSMain":
-				// If there's a default site then main site has no meaning
-				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1 AND \"IsPublic\"=1");
-				$subsites = Subsite::accessible_sites($accessPerm, $showMainSite);
-				break;
-				
-			default: 
-				$subsites = Subsite::accessible_sites($accessPerm);
-				break;	
-		}
-
-		return $subsites;
+        return Subsite::accessible_sites('ADMIN');
 	}
 	
 	public function SubsiteList() {
-		if ($this->owner->class == 'AssetAdmin') {
-			// See if the right decorator is there....
-			$file = new File();
-			if (!$file->hasExtension('FileSubsites')) {
-				return false;
-			}
-		}
-		
-		// Whitelist for admin sections which are subsite aware.
-		// For example, don't show subsite list in reports section, it doesn't have
-		// any effect there - subsites are filtered through a custom dropdown there, see SubsiteReportWrapper.
-		if(!(
-			$this->owner instanceof AssetAdmin 
-			|| $this->owner instanceof SecurityAdmin 
-			|| $this->owner instanceof CMSMain)
-		) {
-			return false;
-		}
-		
 		$list = $this->Subsites();
 		
 		$currentSubsiteID = Subsite::currentSubsiteID();
