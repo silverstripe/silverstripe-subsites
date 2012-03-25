@@ -3,7 +3,7 @@
 /**
  * Extension for the SiteConfig object to add subsites support
  */
-class SiteConfigSubsites extends DataObjectDecorator {		
+class SiteConfigSubsites extends DataExtension {		
 	function extraStatics() {
 		return array(
 			'has_one' => array(
@@ -20,8 +20,8 @@ class SiteConfigSubsites extends DataObjectDecorator {
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]) && !preg_match('/\.?(\'|"|`|)SubsiteID(\'|"|`|)( ?)=/', $query->where[0]))) {
-			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-			else $subsiteID = (int)Subsite::currentSubsiteID();
+			/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+			else */$subsiteID = (int)Subsite::currentSubsiteID();
 			
 			$tableName = array_shift(array_keys($query->from));
 			if($tableName != 'SiteConfig') return;

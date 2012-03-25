@@ -16,9 +16,12 @@ class LeftAndMainSubsites extends Extension {
 			if(!Session::get('SubsiteID') || $_REQUEST['SubsiteID'] != Session::get('SubsiteID')) {
 				Session::clear("{$this->owner->class}.currentPage");
 			}
-			
+            
 			// Update current subsite in session
 			Subsite::changeSubsite($_REQUEST['SubsiteID']);
+            
+            //Redirect to clear the current page
+            $this->owner->redirect('admin/pages');
 		}
 	}
 	
@@ -35,54 +38,10 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function Subsites() {
-		$accessPerm = 'CMS_ACCESS_'. $this->owner->class;
-		
-		switch($this->owner->class) {
-			case "AssetAdmin":
-				$subsites = Subsite::accessible_sites($accessPerm, true, "Shared files & images");
-				break;
-				
-			case "SecurityAdmin":
-				$subsites = Subsite::accessible_sites($accessPerm, true, "Groups accessing all sites");
-				if($subsites->find('ID',0)) {
-					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
-				}
-				break;
-				
-			case "CMSMain":
-				// If there's a default site then main site has no meaning
-				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1 AND \"IsPublic\"=1");
-				$subsites = Subsite::accessible_sites($accessPerm, $showMainSite);
-				break;
-				
-			default: 
-				$subsites = Subsite::accessible_sites($accessPerm);
-				break;	
-		}
-
-		return $subsites;
+        return Subsite::accessible_sites('ADMIN');
 	}
 	
 	public function SubsiteList() {
-		if ($this->owner->class == 'AssetAdmin') {
-			// See if the right decorator is there....
-			$file = new File();
-			if (!$file->hasExtension('FileSubsites')) {
-				return false;
-			}
-		}
-		
-		// Whitelist for admin sections which are subsite aware.
-		// For example, don't show subsite list in reports section, it doesn't have
-		// any effect there - subsites are filtered through a custom dropdown there, see SubsiteReportWrapper.
-		if(!(
-			$this->owner instanceof AssetAdmin 
-			|| $this->owner instanceof SecurityAdmin 
-			|| $this->owner instanceof CMSMain)
-		) {
-			return false;
-		}
-		
 		$list = $this->Subsites();
 		
 		$currentSubsiteID = Subsite::currentSubsiteID();
@@ -101,7 +60,22 @@ class LeftAndMainSubsites extends Extension {
 			Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 			return $output;
 		} else if($list->Count() == 1) {
-			return $list->First()->Title;
+            if($list->First()->DefaultSite==false) {
+                $output = '<select id="SubsitesSelect">';
+                $output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', '_Default Site') . "</option>";
+                foreach($list as $subsite) {
+                    $selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
+            
+                    $output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
+                }
+            
+                $output .= '</select>';
+            
+                Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
+                return $output;
+            }else {
+                return '<span>'.$list->First()->Title.'</span>';
+            }
 		}
 	}
 	
@@ -125,9 +99,11 @@ class LeftAndMainSubsites extends Extension {
 		
 		// Switch to a subsite that this user can actually access.
 		$member = Member::currentUser();
-		if ($member && $member->isAdmin()) return true;	//admin can access all subsites
-				
-		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->toDropdownMap();
+		if ($member && Permission::check('ADMIN')) {
+            return true;	//admin can access all subsites
+        }
+        
+		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->map('ID', 'Title')->toArray();
 		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 			$siteIDs = array_keys($sites);
 			Subsite::changeSubsite($siteIDs[0]);
@@ -139,7 +115,7 @@ class LeftAndMainSubsites extends Extension {
 		foreach($menu as $candidate) {
 			if($candidate->controller != $this->owner->class) {
 					
-				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}")->toDropdownMap();
+				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}")->map('ID', 'Title')->toArray();
 				if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 					$siteIDs = array_keys($sites);
 					Subsite::changeSubsite($siteIDs[0]);

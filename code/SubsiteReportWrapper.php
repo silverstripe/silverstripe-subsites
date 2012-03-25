@@ -24,7 +24,7 @@ class SubsiteReportWrapper extends SS_ReportWrapper {
 		if($fields) {
 			$fields->insertBefore($subsiteField, $fields->First()->Name());
 		} else {
-			$fields = new FieldSet($subsiteField);
+			$fields = new FieldList($subsiteField);
 		}
 		return $fields;
 	}

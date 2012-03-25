@@ -11,7 +11,7 @@ class FileSubsitesTest extends SapphireTest {
 		$this->assertEquals(' * FileTitle', $file->alternateTreeTitle());
 		$file->SubsiteID = $this->objFromFixture('Subsite', 'domaintest1')->ID;
 		$this->assertEquals('FileTitle', $file->TreeTitle());
-		$this->assertTrue(singleton('Folder')->getCMSFields() instanceof FieldSet);
+		$this->assertTrue(singleton('Folder')->getCMSFields() instanceof FieldList);
 		Subsite::changeSubsite(1);
 		$this->assertEquals($file->cacheKeyComponent(), 'subsite-1');
 	}

@@ -3,7 +3,7 @@
 /**
  * Extension for the SiteTree object to add subsites support
  */
-class SiteTreeSubsites extends SiteTreeDecorator {
+class SiteTreeSubsites extends DataExtension {
 	static $template_variables = array(
 		'((Company Name))' => 'Title'
 	);
@@ -28,7 +28,6 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 
 	
 	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'SiteTree') return null;
 		return array(
 			'has_one' => array(
 				'Subsite' => 'Subsite', // The subsite that this page belongs to
@@ -67,8 +66,8 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 
 			if (Subsite::$force_subsite) $subsiteID = Subsite::$force_subsite;
 			else {
-				if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-				else $subsiteID = (int)Subsite::currentSubsiteID();
+				/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+				else */$subsiteID = (int)Subsite::currentSubsiteID();
 			}
 			
 			// The foreach is an ugly way of getting the first key :-)
@@ -94,12 +93,18 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$subsite = $this->owner->Subsite();
 		if($subsite && $subsite->ID) {
 			$baseUrl = 'http://' . $subsite->domain() . '/';
-			$fields->removeByName('BaseUrlLabel');
-			$fields->addFieldToTab(
-				'Root.Content.Metadata',
-				new LabelField('BaseUrlLabel',$baseUrl),
-				'URLSegment'
-			);
+			$fields->removeByName('URLSegment');
+            
+            $baseLink = Controller::join_links (
+                $baseUrl,
+                (SiteTree::nested_urls() && $this->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
+            );
+            
+            $url = (strlen($baseLink) > 36) ? "..." .substr($baseLink, -32) : $baseLink;
+            $urlsegment = new SiteTreeURLSegmentField("URLSegment", $this->owner->fieldLabel('URLSegment'));
+            $urlsegment->setURLPrefix($url);
+            $urlsegment->setHelpText(SiteTree::nested_urls() && count($this->owner->Children()) ? $this->owner->fieldLabel('LinkChangeNote'): false);
+            $fields->addFieldToTab('Root.Metadata', $urlsegment, 'MetaTitle');
 		}
 		
 		$relatedCount = 0;
@@ -113,19 +118,13 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		// Related pages
 		$tab->push(new LiteralField('RelatedNote', '<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>'));
 		$tab->push(
-			$related = new ComplexTableField(
-					$this,
-					'RelatedPages',
-					'RelatedPageLink',
-					array(
-						'RelatedPageAdminLink' => 'Page',
-						'AbsoluteLink' => 'URL',
-					)
-			)
+			$related=new GridField('RelatedPages', 'Related Pages', $this->owner->RelatedPages(), GridFieldConfig_Base::create())
 		);
 		
+        $related->setModelClass('RelatedPageLink');
+        
 		// The 'show' link doesn't provide any useful info
-		$related->setPermissions(array('add', 'edit', 'delete'));
+		//$related->setPermissions(array('add', 'edit', 'delete'));
 		
 		if($reverse) {
 			$text = '<p>In addition, this page is marked as related by the following pages: </p><p>';
@@ -144,16 +143,13 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 */
 	function ReverseRelated() {
 		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
-			AND R2.\"ID\" IS NULL", '',
-			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"
-			LEFT JOIN \"RelatedPageLink\" AS R2 ON R2.\"MasterPageID\" = {$this->owner->ID}
-			AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"
-			"
-		);
+			AND R2.\"ID\" IS NULL", '')
+            ->innerJoin('SiteTree', "\"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"")
+            ->leftJoin('RelatedPageLink', "R2.\"MasterPageID\" = {$this->owner->ID} AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"", 'R2');
 	}
 	
 	function NormalRelated() {
-		$return = new DataObjectSet();
+		$return = new ArrayList();
 		$links = DataObject::get('RelatedPageLink', '"MasterPageID" = ' . $this->owner->ID);
 		if($links) foreach($links as $link) {
 			if($link->RelatedPage()->exists()) {

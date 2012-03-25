@@ -8,7 +8,7 @@ class GroupSubsitesTest extends SapphireTest {
 	function testTrivialFeatures() {
 		$this->assertTrue(is_array(singleton('GroupSubsites')->extraStatics()));
 		$this->assertTrue(is_array(singleton('GroupSubsites')->providePermissions()));
-		$this->assertTrue(singleton('Group')->getCMSFields() instanceof FieldSet);
+		$this->assertTrue(singleton('Group')->getCMSFields() instanceof FieldList);
 	}
 	
 	function testAlternateTreeTitle() {
