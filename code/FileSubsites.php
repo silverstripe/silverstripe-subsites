@@ -4,19 +4,18 @@
  *
  * @package subsites
  */
-class FileSubsites extends DataObjectDecorator {
+class FileSubsites extends DataExtension {
 	
 	// If this is set to true, all folders created will be default be
 	// considered 'global', unless set otherwise
 	static $default_root_folders_global = false;
 	
 	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'File') return null;
 		return array(
-			'has_one' => array(
-				'Subsite' => 'Subsite',
-			),
-		);
+                    'has_one' => array(
+                        'Subsite' => 'Subsite',
+                    )
+                );
 	}
 
 	/**

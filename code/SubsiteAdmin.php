@@ -14,7 +14,7 @@ class SubsiteAdmin extends ModelAdmin {
 	static $collection_controller_class = "SubsiteAdmin_CollectionController";
 }
 
-class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController {
+/*class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController {
 	function AddForm() {
 		$form = parent::AddForm();
 
@@ -83,6 +83,6 @@ class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController 
 			Director::redirect(Controller::join_links($this->Link(), $subsitess->ID , 'edit'));
 		}
 	}
-}
+}*/
 
 ?>

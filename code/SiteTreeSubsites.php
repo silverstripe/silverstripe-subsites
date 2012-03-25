@@ -3,7 +3,7 @@
 /**
  * Extension for the SiteTree object to add subsites support
  */
-class SiteTreeSubsites extends SiteTreeDecorator {
+class SiteTreeSubsites extends DataExtension {
 	static $template_variables = array(
 		'((Company Name))' => 'Title'
 	);
@@ -28,7 +28,6 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 
 	
 	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'SiteTree') return null;
 		return array(
 			'has_one' => array(
 				'Subsite' => 'Subsite', // The subsite that this page belongs to
@@ -67,8 +66,8 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 
 			if (Subsite::$force_subsite) $subsiteID = Subsite::$force_subsite;
 			else {
-				if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-				else $subsiteID = (int)Subsite::currentSubsiteID();
+				/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+				else */$subsiteID = (int)Subsite::currentSubsiteID();
 			}
 			
 			// The foreach is an ugly way of getting the first key :-)

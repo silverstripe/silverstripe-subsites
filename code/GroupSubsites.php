@@ -4,12 +4,9 @@
  *
  * @package subsites
  */
-class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
+class GroupSubsites extends DataExtension implements PermissionProvider {
 
 	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
-			if($this->owner->class != 'Group') return null;
-		}
 		return array(
 			'db' => array(
 				'AccessAllSubsites' => 'Boolean',
@@ -116,16 +113,18 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(!$query->filtersOnID()) {
 
-			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-			else $subsiteID = (int)Subsite::currentSubsiteID();
+			/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+			else */$subsiteID = (int)Subsite::currentSubsiteID();
 			
 			// Don't filter by Group_Subsites if we've already done that
 			$hasGroupSubsites = false;
-			foreach($query->from as $item) if(strpos($item, 'Group_Subsites') !== false) {
-				$hasGroupSubsites = true;
-				break;
+			foreach($query->from as $item) {
+                if((is_array($item) && strpos($item['table'], 'Group_Subsites')!==false) || (!is_array($item) && strpos($item, 'Group_Subsites')!==false)) {
+                    $hasGroupSubsites = true;
+                    break;
+                }
 			}
-			
+            
 			if(!$hasGroupSubsites) {
 				if($subsiteID) {
 					$query->leftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\" 

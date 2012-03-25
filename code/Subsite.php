@@ -344,7 +344,7 @@ JS;
 			"\"IsPrimary\" DESC", "INNER JOIN \"Subsite\" ON \"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
 			\"Subsite\".\"IsPublic\"=1");
 		
-		if($matchingDomains) {
+		if($matchingDomains && $matchingDomains->Count()>0) {
 			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
 			$subsiteDomains = array_unique($matchingDomains->column('Domain'));
 			if(sizeof($subsiteIDs) > 1) {
