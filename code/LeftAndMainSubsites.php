@@ -57,7 +57,22 @@ class LeftAndMainSubsites extends Extension {
 			Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 			return $output;
 		} else if($list->Count() == 1) {
-			return $list->First()->Title;
+            if($list->First()->DefaultSite==false) {
+                $output = '<select id="SubsitesSelect">';
+                $output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', '_Default Site') . "</option>";
+                foreach($list as $subsite) {
+                    $selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
+            
+                    $output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
+                }
+            
+                $output .= '</select>';
+            
+                Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
+                return $output;
+            }else {
+                return '<span>'.$list->First()->Title.'</span>';
+            }
 		}
 	}
 	

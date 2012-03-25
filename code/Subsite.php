@@ -146,7 +146,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	function domain() {
 		if($this->ID) {
 			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
-			if($domains) {
+			if($domains && $domains->Count()>0) {
 				$domain = $domains->First()->Domain;
 				// If there are wildcards in the primary domain (not recommended), make some
 				// educated guesses about what to replace them with:
@@ -178,10 +178,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Show the configuration fields for each subsite
 	 */
 	function getCMSFields() {
-		$domainTable = new TableField("Domains", "SubsiteDomain", 
-			array("Domain" => "Domain <small>(use * as a wildcard)</small>", "IsPrimary" => "Primary domain?"), 
-			array("Domain" => "TextField", "IsPrimary" => "CheckboxField"), 
-			"SubsiteID", $this->ID);
+		$domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
 			
 		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
 		
@@ -192,7 +189,7 @@ class Subsite extends DataObject implements PermissionProvider {
 		}
 		asort($pageTypeMap);
 
-		$fields = new FieldSet(
+		$fields = new FieldList(
 			new TabSet('Root',
 				new Tab('Configuration',
 					new HeaderField($this->getClassName() . ' configuration', 2),
@@ -238,7 +235,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	}
 
 	function getCMSActions() {
-		return new FieldSet(
+		return new FieldList(
             new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
 		);
 	}

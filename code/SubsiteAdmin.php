@@ -1,4 +1,6 @@
 <?php
+//@TODO Add form is not used
+//@TODO doCreate() is not used
 /**
  * Admin interface to manage and create {@link Subsite} instances.
  * 
@@ -6,83 +8,26 @@
  */
 class SubsiteAdmin extends ModelAdmin {
 	
-	static $managed_models = array('Subsite');
+	static $managed_models = array('Subsite', 'Subsite_Template');
 	static $url_segment = 'subsites';
 	
 	static $menu_title = "Subsites";
+    
+    public $showImportForm=false;
 	
-	static $collection_controller_class = "SubsiteAdmin_CollectionController";
-}
-
-/*class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController {
-	function AddForm() {
-		$form = parent::AddForm();
-
-		$templates = DataObject::get('Subsite_Template', '', 'Title');
-		$templateArray = array('' => "(No template)");
-		if($templates) {
-			$templateArray = $templateArray + $templates->map('ID', 'Title');
-		}
-
-		$form->Fields()->addFieldsToTab('Root.Configuration', array(
-			new DropdownField('Type', 'Type', array(
-				'subsite' => 'New site',
-				'template' => 'New template',
-			)),
-			new DropdownField('TemplateID', 'Copy structure from:', $templateArray)
-		));
+	public function getEditForm($id = null) {
+		$form = parent::getEditForm($id);
 		
+        if($this->modelClass=='Subsite') {
+            $grid=$form->Fields()->dataFieldByName('Subsite');
+            if($grid) {
+                $grid->getConfig()->addComponent(new GridFieldAddFromTemplateButton('toolbar-header-right'));
+                $grid->getConfig()->addComponent(new GridFieldAddFromTemplate());
+            }
+        }
+        
+        
 		return $form;
 	}
-	
-	function doCreate($data, $form, $request) {
-		if(isset($data['TemplateID']) && $data['TemplateID']) {
-			$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
-		} else {
-			$template = null;
-		}
-
-		// Create subsite from existing template
-		switch($data['Type']) {
-		case 'template':
-			if($template) $subsite = $template->duplicate();
-			else {
-				$subsite = new Subsite_Template();
-				$subsite->write();
-			}
-			break;
-
-		case 'subsite':
-		default:
-			if($template) $subsite = $template->createInstance($data['Title']);
-			else {
-				$subsite = new Subsite();
-				$subsite->Title = $data['Title'];
-				$subsite->write();
-			}
-			break;
-		}
-
-		$form->dataFieldByName('Domains')->setExtraData(array(
-			"SubsiteID" => $subsite->ID,
-		));
-		$form->saveInto($subsite);
-		$subsite->write();
-		
-		if(Director::is_ajax()) {
-			$recordController = new ModelAdmin_RecordController($this, $request, $subsite->ID);
-			return new SS_HTTPResponse(
-				$recordController->EditForm()->forAjaxTemplate(), 
-				200, 
-				sprintf(
-					_t('ModelAdmin.LOADEDFOREDITING', "Loaded '%s' for editing."),
-					$subsite->Title
-				)
-			);
-		} else {
-			Director::redirect(Controller::join_links($this->Link(), $subsitess->ID , 'edit'));
-		}
-	}
-}*/
-
+}
 ?>

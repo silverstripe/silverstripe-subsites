@@ -76,4 +76,14 @@ $lang['en_US']['SubsitesVirtualPage']['SINGULARNAME'] = array(
 $lang['en_US']['VirtualPage']['CHOOSE'] = 'Choose a page to link to';
 $lang['en_US']['VirtualPage']['EDITCONTENT'] = 'Click here to edit the content';
 
+
+$lang['en_US']['GridFieldAddFromTemplateButton']['AddFromTemplate']='Add New from Template';
+$lang['en_US']['GridFieldAddFromTemplate']['NewFromTemplate']='New %s from template';
+$lang['en_US']['GridFieldAddFromTemplate']['TEMPLATE_NOT_FOUND']='The selected template could not be found';
+$lang['en_US']['GridFieldAddFromTemplate']['TEMPLATE']='Template';
+
+$lang['en_US']['SubsiteDomain']['DOMAIN']='Domain';
+$lang['en_US']['SubsiteDomain']['IS_PRIMARY']='Is Primary Domain';
+
+$lang['en_US']['LeftAndMainSubsites']['DEFAULT_SITE']='Default Site';
 ?>
