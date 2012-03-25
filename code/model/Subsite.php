@@ -282,7 +282,7 @@ JS;
 			$id = self::getSubsiteIDForDomain();
 			Session::set('SubsiteID', $id);
 		}
-
+        
 		return (int)$id;
 	}
 	
@@ -342,8 +342,8 @@ JS;
 			\"Subsite\".\"IsPublic\"=1");
 		
 		if($matchingDomains && $matchingDomains->Count()>0) {
-			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
-			$subsiteDomains = array_unique($matchingDomains->column('Domain'));
+			$subsiteIDs = array_unique($matchingDomains->map('SubsiteID'));
+			$subsiteDomains = array_unique($matchingDomains->map('Domain'));
 			if(sizeof($subsiteIDs) > 1) {
 				throw new UnexpectedValueException(sprintf(
 					"Multiple subsites match on '%s': %s",
