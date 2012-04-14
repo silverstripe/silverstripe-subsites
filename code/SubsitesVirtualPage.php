@@ -41,14 +41,14 @@ class SubsitesVirtualPage extends VirtualPage {
 		);
 		
 		if(Controller::has_curr() && Controller::curr()->getRequest()) {
-			$subsiteID = Controller::curr()->getRequest()->getVar('CopyContentFromID_SubsiteID');
+			$subsiteID = Controller::curr()->getRequest()->postVar('CopyContentFromID_SubsiteID');
 			$pageSelectionField->setSubsiteID($subsiteID);
 		}
 		$fields->replaceField('CopyContentFromID', $pageSelectionField);
 		
 		// Create links back to the original object in the CMS
 		if($this->CopyContentFromID) {
-			$editLink = "admin/show/$this->CopyContentFromID/?SubsiteID=" . $this->CopyContentFrom()->SubsiteID;
+			$editLink = "admin/page/edit/show/$this->CopyContentFromID/?SubsiteID=" . $this->CopyContentFrom()->SubsiteID;
 			$linkToContent = "
 				<a class=\"cmsEditlink\" href=\"$editLink\">" . 
 				_t('VirtualPage.EDITCONTENT', 'Click here to edit the content') . 

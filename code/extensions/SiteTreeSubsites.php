@@ -37,7 +37,7 @@ class SiteTreeSubsites extends DataExtension {
 				'RelatedPages' => 'RelatedPageLink'
 			),
 			'many_many' => array(
-				'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
+				'CrossSubsiteLinkTracking' => 'SiteTree.SiteTreeID' // Stored separately, as the logic for URL rewriting is different
 			),
 			'belongs_many_many' => array(
 				'BackCrossSubsiteLinkTracking' => 'SiteTree'
