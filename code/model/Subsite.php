@@ -342,8 +342,8 @@ JS;
 			\"Subsite\".\"IsPublic\"=1");
 		
 		if($matchingDomains && $matchingDomains->Count()>0) {
-			$subsiteIDs = array_unique($matchingDomains->map('SubsiteID'));
-			$subsiteDomains = array_unique($matchingDomains->map('Domain'));
+			$subsiteIDs = array_unique($matchingDomains->map('SubsiteID')->keys());
+			$subsiteDomains = array_unique($matchingDomains->map('Domain')->keys());
 			if(sizeof($subsiteIDs) > 1) {
 				throw new UnexpectedValueException(sprintf(
 					"Multiple subsites match on '%s': %s",
@@ -505,7 +505,7 @@ JS;
 				ON \"Group\".\"ID\"=\"Permission\".\"GroupID\"
 				AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')"
 		);
-		if(!$subsites) $subsites = new DataObjectSet();
+		if(!$subsites) $subsites = new ArrayList();
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
@@ -536,13 +536,16 @@ JS;
 		}
 
 		// Include the main site
-		if(!$subsites) $subsites = new DataObjectSet();
+		if(!$subsites) $subsites = new ArrayList();
 		if($includeMainSite) {
 			if(!is_array($permCode)) $permCode = array($permCode);
 			if(self::hasMainSitePermission($member, $permCode)) {
+                $subsites=$subsites->toArray();
+                
 				$mainSite = new Subsite();
 				$mainSite->Title = $mainSiteTitle;
-				$subsites->insertFirst($mainSite);
+				array_unshift($subsites, $mainSite);
+                $subsites=ArrayList::create($subsites);
 			}
 		}
 		

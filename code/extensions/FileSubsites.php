@@ -51,9 +51,9 @@ class FileSubsites extends DataExtension {
 
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
-				$where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
-				$query->where[] = $where;
-				break;
+                $where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
+                $query->where[] = $where;
+                break;
 			}
 			
 			$isCounting = strpos($query->select[0], 'COUNT') !== false;

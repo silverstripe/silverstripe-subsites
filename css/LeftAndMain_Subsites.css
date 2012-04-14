@@ -24,18 +24,18 @@
 			padding: 3px;
 		}
 
+.cms-login-status.subsites {
+    padding-bottom: 7px;
+}
+
 #SubsitesSelect,
 #SubsitesSelect option {
 	font-size: 12px;
 }
 	#SubsitesSelect {
-		max-width: 200px;
+        width: 171px;
 		padding: 3px;
 	}
-
-#top #MainMenu #Menu-help {
-	margin-right: 260px;
-}
 
 #AddSubsiteLink {
 	display: block;

@@ -93,12 +93,18 @@ class SiteTreeSubsites extends DataExtension {
 		$subsite = $this->owner->Subsite();
 		if($subsite && $subsite->ID) {
 			$baseUrl = 'http://' . $subsite->domain() . '/';
-			$fields->removeByName('BaseUrlLabel');
-			$fields->addFieldToTab(
-				'Root.Content.Metadata',
-				new LabelField('BaseUrlLabel',$baseUrl),
-				'URLSegment'
-			);
+			$fields->removeByName('URLSegment');
+            
+            $baseLink = Controller::join_links (
+                $baseUrl,
+                (SiteTree::nested_urls() && $this->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
+            );
+            
+            $url = (strlen($baseLink) > 36) ? "..." .substr($baseLink, -32) : $baseLink;
+            $urlsegment = new SiteTreeURLSegmentField("URLSegment", $this->owner->fieldLabel('URLSegment'));
+            $urlsegment->setURLPrefix($url);
+            $urlsegment->setHelpText(SiteTree::nested_urls() && count($this->owner->Children()) ? $this->owner->fieldLabel('LinkChangeNote'): false);
+            $fields->addFieldToTab('Root.Metadata', $urlsegment, 'MetaTitle');
 		}
 		
 		$relatedCount = 0;

@@ -57,7 +57,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 			$fields->findOrMakeTab('Root.Subsites',_t('GroupSubsites.SECURITYTABTITLE','Subsites'));
 
 			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true);
-			$subsiteMap = $subsites->toDropdownMap();
+			$subsiteMap = $subsites->map();
 			
 			// Interface is different if you have the rights to modify subsite group values on
 			// all subsites

@@ -19,7 +19,7 @@
 			<% end_control %>
 		</div>
         
-        <div class="cms-login-status">
+        <div class="cms-login-status subsites">
             $SubsiteList
         </div>
 	</div>
