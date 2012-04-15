@@ -158,7 +158,7 @@ class SiteTreeSubsites extends DataExtension {
 	}
 	
 	function NormalRelated() {
-		$return = new DataObjectSet();
+		$return = new ArrayList();
 		$links = DataObject::get('RelatedPageLink', '"MasterPageID" = ' . $this->owner->ID);
 		if($links) foreach($links as $link) {
 			if($link->RelatedPage()->exists()) {

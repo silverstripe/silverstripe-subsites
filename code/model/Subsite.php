@@ -470,12 +470,12 @@ JS;
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
 	 * @param $mainSiteTitle The label to give to the main site
 	 * @param $member
-	 * @return DataObjectSet of {@link Subsite} instances
+	 * @return DataList of {@link Subsite} instances
 	 */
 	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
-		if(!$member) return new DataObjectSet();
+		if(!$member) return new ArrayList();
 		if(!is_object($member)) $member = DataObject::get_by_id('Member', $member);
 
 		// Rationalise permCode argument 
