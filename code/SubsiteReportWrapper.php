@@ -4,7 +4,7 @@
  * Creates a subsite-aware version of another report.
  * Pass another report (or its classname) into the constructor.
  */
-abstract class SubsiteReportWrapper extends SS_ReportWrapper {
+class SubsiteReportWrapper extends SS_ReportWrapper {
 	///////////////////////////////////////////////////////////////////////////////////////////
 	// Filtering
 	
