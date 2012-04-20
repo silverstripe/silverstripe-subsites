@@ -338,7 +338,7 @@ JS;
 		$SQL_host = Convert::raw2sql($host);
 
 		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
-			"\"IsPrimary\" DESC", "INNER JOIN \"Subsite\" ON \"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
+			"\"IsPrimary\" DESC")->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
 			\"Subsite\".\"IsPublic\"=1");
 		
 		if($matchingDomains && $matchingDomains->Count()>0) {
@@ -493,39 +493,22 @@ JS;
 		$subsites = DataObject::get(
 			'Subsite',
 			"\"Subsite\".\"Title\" != ''",
-			'',
-			"LEFT JOIN \"Group_Subsites\" 
-				ON \"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"
-			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\"
-				OR \"Group\".\"AccessAllSubsites\" = 1
-			INNER JOIN \"Group_Members\" 
-				ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
-				AND \"Group_Members\".\"MemberID\" = $member->ID
-			INNER JOIN \"Permission\" 
-				ON \"Group\".\"ID\"=\"Permission\".\"GroupID\"
-				AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')"
-		);
+			'')->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+            ->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
+            ->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
+            ->innerJoin('Permission', "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')");
+        
 		if(!$subsites) $subsites = new ArrayList();
 
 		$rolesSubsites = DataObject::get(
 			'Subsite',
 			"\"Subsite\".\"Title\" != ''",
-			'',
-			"LEFT JOIN \"Group_Subsites\" 
-				ON \"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"
-			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\"
-				OR \"Group\".\"AccessAllSubsites\" = 1
-			INNER JOIN \"Group_Members\" 
-				ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
-				AND \"Group_Members\".\"MemberID\" = $member->ID
-			INNER JOIN \"Group_Roles\"
-				ON \"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"
-			INNER JOIN \"PermissionRole\"
-				ON \"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"
-			INNER JOIN \"PermissionRoleCode\"
-				ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
-				AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'ADMIN')"
-		);
+			'')->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
+			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
+			->innerJoin('Group_Roles', "\"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"")
+			->innerJoin('PermissionRole', "\"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"")
+			->innerJoin('PermissionRoleCode', "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'ADMIN')");
 
 		if(!$subsites && $rolesSubsites) return $rolesSubsites;
 
@@ -593,10 +576,10 @@ JS;
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Return the FieldSet that will build the search form in the CMS
+	 * Return the FieldList that will build the search form in the CMS
 	 */
 	function adminSearchFields() {
-		return new FieldSet(
+		return new FieldList(
 			new TextField('Name', 'Sub-site name')
 		);
 	}

@@ -47,8 +47,8 @@ class RelatedPageLink extends DataObject {
 				
 		$pageSelectionField->setFilterFunction(create_function('$item', 'return $item->ClassName != "VirtualPage";'));
 		
-		if($subsites->Count()) $fields = new FieldSet($subsiteSelectionField, $pageSelectionField);
-		else $fields = new FieldSet($pageSelectionField);
+		if($subsites->Count()) $fields = new FieldList($subsiteSelectionField, $pageSelectionField);
+		else $fields = new FieldList($pageSelectionField);
 		
 		return $fields;
 	}

@@ -30,7 +30,7 @@ class FileSubsites extends DataExtension {
 	/**
 	 * Add subsites-specific fields to the folder editor.
 	 */
-	function updateCMSFields(FieldSet &$fields) {
+	function updateCMSFields(FieldList $fields) {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
 			$dropdownValues = ($sites) ? $sites->toDropdownMap() : array();
