@@ -118,19 +118,13 @@ class SiteTreeSubsites extends DataExtension {
 		// Related pages
 		$tab->push(new LiteralField('RelatedNote', '<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>'));
 		$tab->push(
-			$related = new ComplexTableField(
-					$this,
-					'RelatedPages',
-					'RelatedPageLink',
-					array(
-						'RelatedPageAdminLink' => 'Page',
-						'AbsoluteLink' => 'URL',
-					)
-			)
+			$related=new GridField('RelatedPages', 'Related Pages', $this->owner->RelatedPages(), GridFieldConfig_Base::create())
 		);
 		
+        $related->setModelClass('RelatedPageLink');
+        
 		// The 'show' link doesn't provide any useful info
-		$related->setPermissions(array('add', 'edit', 'delete'));
+		//$related->setPermissions(array('add', 'edit', 'delete'));
 		
 		if($reverse) {
 			$text = '<p>In addition, this page is marked as related by the following pages: </p><p>';
@@ -149,12 +143,9 @@ class SiteTreeSubsites extends DataExtension {
 	 */
 	function ReverseRelated() {
 		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
-			AND R2.\"ID\" IS NULL", '',
-			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"
-			LEFT JOIN \"RelatedPageLink\" AS R2 ON R2.\"MasterPageID\" = {$this->owner->ID}
-			AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"
-			"
-		);
+			AND R2.\"ID\" IS NULL", '')
+            ->innerJoin('SiteTree', "\"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"")
+            ->leftJoin('RelatedPageLink', "R2.\"MasterPageID\" = {$this->owner->ID} AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"", 'R2');
 	}
 	
 	function NormalRelated() {

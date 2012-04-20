@@ -16,6 +16,11 @@ class RelatedPageLink extends DataObject {
 		// bind a has_many to.
 		'MasterPage' => 'SiteTree',
 	);
+    
+    public static $summary_fields=array(
+                                        'RelatedPageAdminLink' => 'Page',
+                                        'AbsoluteLink' => 'URL',
+                                    );
 	
 	function getCMSFields() {
 		$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
