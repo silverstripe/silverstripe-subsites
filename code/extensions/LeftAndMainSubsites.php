@@ -16,9 +16,12 @@ class LeftAndMainSubsites extends Extension {
 			if(!Session::get('SubsiteID') || $_REQUEST['SubsiteID'] != Session::get('SubsiteID')) {
 				Session::clear("{$this->owner->class}.currentPage");
 			}
-			
+            
 			// Update current subsite in session
 			Subsite::changeSubsite($_REQUEST['SubsiteID']);
+            
+            //Redirect to clear the current page
+            $this->owner->redirect('admin/pages');
 		}
 	}
 	
