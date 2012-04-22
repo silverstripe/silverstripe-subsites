@@ -56,3 +56,7 @@
 body.SubsiteAdmin .right form #URL .fieldgroup * {
 	font-size: 11px;
 }
+
+.cms-add-form #PageType li .class-SubsitesVirtualPage, .class-SubsitesVirtualPage a .jstree-pageicon {
+    background-position: 0 -32px !important;
+}
