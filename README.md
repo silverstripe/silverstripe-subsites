@@ -6,7 +6,7 @@ The subsites module allows multiple websites to run from a single installation o
 
 ## Requirements
 
-*  SilverStripe 2.3
+*  SilverStripe 3.0
 
 ## Installation
 
