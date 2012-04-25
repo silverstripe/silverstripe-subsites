@@ -178,7 +178,11 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Show the configuration fields for each subsite
 	 */
 	function getCMSFields() {
-		$domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
+        if($this->ID!=0) {
+            $domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
+        }else {
+            $domainTable = new LiteralField('Domains', '<p>'._t('Subsite.DOMAINSAVEFIRST', '_You can only add domains after saving for the first time').'</p>');
+        }
 			
 		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
 		
@@ -472,7 +476,7 @@ JS;
 	 * @param $member
 	 * @return DataList of {@link Subsite} instances
 	 */
-	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
+	function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
 		if(!$member) return new ArrayList();
@@ -490,20 +494,18 @@ JS;
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
-		$subsites = DataObject::get(
-			'Subsite',
-			"\"Subsite\".\"Title\" != ''",
-			'')->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+		$subsites = DataList::create('Subsite')
+			->where("\"Subsite\".\"Title\" != ''")
+			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
             ->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
             ->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
             ->innerJoin('Permission', "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')");
         
 		if(!$subsites) $subsites = new ArrayList();
 
-		$rolesSubsites = DataObject::get(
-			'Subsite',
-			"\"Subsite\".\"Title\" != ''",
-			'')->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+		$rolesSubsites = DataList::create('Subsite')
+			->where("\"Subsite\".\"Title\" != ''")
+			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
 			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
 			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
 			->innerJoin('Group_Roles', "\"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"")
@@ -534,6 +536,7 @@ JS;
 		
 		self::$_cache_accessible_sites[$cacheKey] = $subsites;
 
+        
 		return $subsites;
 	}
 	

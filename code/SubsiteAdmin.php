@@ -13,8 +13,8 @@ class SubsiteAdmin extends ModelAdmin {
     
     public $showImportForm=false;
 	
-	public function getEditForm($id = null) {
-		$form = parent::getEditForm($id);
+	public function getEditForm($id = null, $fields = null) {
+		$form = parent::getEditForm($id, $fields);
 		
         if($this->modelClass=='Subsite') {
             $grid=$form->Fields()->dataFieldByName('Subsite');

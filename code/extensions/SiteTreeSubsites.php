@@ -61,7 +61,7 @@ class SiteTreeSubsites extends DataExtension {
 		
 		// Don't run on delete queries, since they are always tied to
 		// a specific ID.
-		if ($query->delete) return;
+		if ($query->getDelete()) return;
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		// if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
@@ -74,10 +74,10 @@ class SiteTreeSubsites extends DataExtension {
 			}
 			
 			// The foreach is an ugly way of getting the first key :-)
-			foreach($query->from as $tableName => $info) {
+			foreach($query->getFrom() as $tableName => $info) {
 				// The tableName should be SiteTree or SiteTree_Live...
 				if(strpos($tableName,'SiteTree') === false) break;
-				$query->where[] = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
+				$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
 				break;
 			}
 		}
@@ -89,7 +89,7 @@ class SiteTreeSubsites extends DataExtension {
 		parent::onBeforeWrite();
 	}
 
-	function updateCMSFields(&$fields) {
+	function updateCMSFields(FieldList $fields) {
 		if($this->owner->MasterPageID) $fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
 		
 		// replace readonly link prefix
@@ -100,7 +100,7 @@ class SiteTreeSubsites extends DataExtension {
             
             $baseLink = Controller::join_links (
                 $baseUrl,
-                (SiteTree::nested_urls() && $this->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
+                (SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
             );
             
             $url = (strlen($baseLink) > 36) ? "..." .substr($baseLink, -32) : $baseLink;

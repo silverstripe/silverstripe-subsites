@@ -14,6 +14,7 @@ en_US:
     Subsite:
         PLURALNAME: "Subsits"
         SINGULARNAME: "Subsite"
+        DOMAINSAVEFIRST: "You can only add domains after saving for the first time"
     SubsiteDomain:
         PLURALNAME: "Subsite Domains"
         SINGULARNAME: "Subsite Domain"

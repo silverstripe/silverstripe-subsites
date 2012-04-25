@@ -20,9 +20,11 @@ class SiteConfigSubsites extends DataExtension {
 			/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
 			else */$subsiteID = (int)Subsite::currentSubsiteID();
 			
-			$tableName = array_shift(array_keys($query->from));
+            $froms=$query->getFrom();
+            $froms=array_keys($froms);
+			$tableName = array_shift($froms);
 			if($tableName != 'SiteConfig') return;
-			$query->where[] = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
+			$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
 		}
 	}
 
