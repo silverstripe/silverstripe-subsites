@@ -45,7 +45,8 @@ class FileSubsites extends DataExtension {
 	 */
 	function augmentSQL(SQLQuery &$query) {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
-		if(!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0])) {
+        //@TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
+		if(!array_key_exists('SiteTree_ImageTracking', $query->from) && (!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0]))) {
 			/*if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
 			else */$subsiteID = (int) Subsite::currentSubsiteID();
 
