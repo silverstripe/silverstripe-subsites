@@ -41,7 +41,10 @@ class SiteTreeSubsites extends DataExtension {
 			),
 			'belongs_many_many' => array(
 				'BackCrossSubsiteLinkTracking' => 'SiteTree'
-			)
+			),
+            'many_many_extraFields' => array(
+                "CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
+            )
 		);
 	}
 	
