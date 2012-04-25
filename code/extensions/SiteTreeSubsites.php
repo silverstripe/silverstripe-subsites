@@ -27,26 +27,26 @@ class SiteTreeSubsites extends DataExtension {
 	}
 
 	
-	function extraStatics() {
-		return array(
-			'has_one' => array(
-				'Subsite' => 'Subsite', // The subsite that this page belongs to
-				'MasterPage' => 'SiteTree',// Optional; the page that is the content master
-			),
-			'has_many' => array(
-				'RelatedPages' => 'RelatedPageLink'
-			),
-			'many_many' => array(
-				'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
-			),
-			'belongs_many_many' => array(
-				'BackCrossSubsiteLinkTracking' => 'SiteTree'
-			),
-            'many_many_extraFields' => array(
-                "CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
-            )
-		);
-	}
+	public static $has_one=array(
+                                'Subsite' => 'Subsite', // The subsite that this page belongs to
+                                'MasterPage' => 'SiteTree',// Optional; the page that is the content master
+                            );
+    
+	public static $has_many=array(
+                                'RelatedPages' => 'RelatedPageLink'
+                            );
+    
+	public static $many_many=array(
+                                    'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
+                                );
+    
+	public static $belongs_many_many=array(
+                                            'BackCrossSubsiteLinkTracking' => 'SiteTree'
+                                        );
+    
+    public static $many_many_extraFields=array(
+                                                "CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
+                                            );
 	
 	function isMainSite() {
 		if($this->owner->SubsiteID == 0) return true;
