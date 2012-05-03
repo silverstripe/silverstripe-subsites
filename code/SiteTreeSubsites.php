@@ -227,6 +227,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 * @param $isTemplate boolean If this is true, then the current page will be treated as the template, and MasterPageID will be set
 	 */
 	public function duplicateToSubsite($subsiteID = null, $isTemplate = true) {
+
 		if(is_object($subsiteID)) {
 			$subsite = $subsiteID;
 			$subsiteID = $subsite->ID;
@@ -239,10 +240,106 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$page->SubsiteID = $subsiteID;
 		
 		if($isTemplate) $page->MasterPageID = $this->owner->ID;
-		
-		$page->write();
+                
+                $page->write();
 
 		return $page;
+	}
+        
+        /**
+	 * Duplicates each child of this node recursively and returns the
+	 * duplicate node.
+	 *
+	 * @return SiteTree The duplicated object.
+	 */
+	public function duplicateToSubsiteWithChildren($subsiteID = null, $destParentID) {
+
+                $clone = $this->owner->duplicateToSubsite($subsiteID);
+                $clone->ParentID = $destParentID;
+                if($this->owner->isPublished()){
+                    $clone->writeToStage('Stage');
+                    $clone->publish('Stage', 'Live');
+                }
+
+                $stack = array(array($this->owner->ID,$clone->ID));
+		while(count($stack) > 0) {
+			list($sourceParentID, $destParentID) = array_pop($stack);
+
+			//$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
+                        $parent = DataObject::get_by_id('SiteTree', $sourceParentID);
+                        $children = $parent->AllChildren();
+
+			if($children) {
+				foreach($children as $child) {
+					$childClone = $child->duplicateToSubsite($subsiteID, false);
+					$childClone->ParentID = $destParentID;
+					if($child->isPublished()){
+                                            $childClone->writeToStage('Stage');
+                                            $childClone->publish('Stage', 'Live');
+                                        }else{
+                                            $childClone->write();
+                                        }
+					array_push($stack, array($child->ID, $childClone->ID));
+				}
+			}
+		}
+
+                /*
+		$clone = $this->owner->duplicateToSubsite($subsiteID, $isTemplate);
+
+                if($this->owner->isPublished()){
+                    $clone->writeToStage('Stage');
+                    $clone->publish('Stage', 'Live');
+                }
+
+		// only catch live status of children
+                //$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = ".$this->owner->ID, '');
+                $this->owner->AllChildren();
+
+		if($children) {
+			foreach($children as $child) {
+				$childClone = $child->duplicateToSubsiteWithChildren($subsiteID, $isTemplate);
+				$childClone->ParentID = $clone->ID;
+				$childClone->write();
+			}
+		}
+
+		return $clone;
+                */
+	}
+
+	/**
+	 * move this page to other subsite
+	 * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
+	 * @param $isTemplate boolean If this is true, then the current page will be treated as the template, and MasterPageID will be set
+	 */
+	public function moveToSubsite($subsiteID = null) {
+		$this->owner->SubsiteID = $subsiteID;
+
+		$this->owner->write();
+
+		return $this;
+	}
+
+        /**
+	 * moves each child of this node recursively and returns the
+	 * moved node.
+	 *
+	 * @return SiteTree The duplicated object.
+	 */
+	public function moveToSubsiteWithChildren($subsiteID = null) {
+		$this->owner->moveToSubsite($subsiteID);
+
+		$children = $this->owner->AllChildren();
+
+		if($children) {
+			foreach($children as $child) {
+				$child->moveToSubsiteWithChildren($subsiteID);
+				$child->write();
+			}
+		}
+
+		return $this;
 	}
 
 	/**
