@@ -43,21 +43,21 @@ class FileSubsites extends DataExtension {
 	function augmentSQL(SQLQuery &$query) {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
         //@TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
-		if(!array_key_exists('SiteTree_ImageTracking', $query->from) && (!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0]))) {
+		if(!array_key_exists('SiteTree_ImageTracking', $query->getFrom()) && (!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0]))) {
 			/*if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
 			else */$subsiteID = (int) Subsite::currentSubsiteID();
 
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->from as $tableName => $info) {
                 $where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
-                $query->where[] = $where;
+                $query->addWhere($where);
                 break;
 			}
 			
 			$isCounting = strpos($query->select[0], 'COUNT') !== false;
 
 			// Ordering when deleting or counting doesn't apply
-			if(!$query->delete && !$isCounting) {
+			if(!$query->getDelete() && !$isCounting) {
 				$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
 			}
 		}

@@ -472,7 +472,7 @@ JS;
 	 * @param $member
 	 * @return DataList of {@link Subsite} instances
 	 */
-	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
+	function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
 		if(!$member) return new ArrayList();
