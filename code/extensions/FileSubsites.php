@@ -30,7 +30,7 @@ class FileSubsites extends DataExtension {
 	function updateCMSFields(FieldList $fields) {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-			$dropdownValues = ($sites) ? $sites->map()->toArray() : array();
+			$dropdownValues = ($sites) ? $sites->map() : array();
 			$dropdownValues[0] = 'All sites';
 			ksort($dropdownValues);
 			if($sites)$fields->push(new DropdownField("SubsiteID", "Subsite", $dropdownValues));
@@ -48,17 +48,18 @@ class FileSubsites extends DataExtension {
 			else */$subsiteID = (int) Subsite::currentSubsiteID();
 
 			// The foreach is an ugly way of getting the first key :-)
-			foreach($query->from as $tableName => $info) {
+			foreach($query->getFrom() as $tableName => $info) {
                 $where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
                 $query->addWhere($where);
                 break;
 			}
 			
-			$isCounting = strpos($query->select[0], 'COUNT') !== false;
+            $sect=array_values($query->getSelect());
+			$isCounting = strpos($sect[0], 'COUNT') !== false;
 
 			// Ordering when deleting or counting doesn't apply
 			if(!$query->getDelete() && !$isCounting) {
-				$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
+				$query->addOrderBy("\"SubsiteID\"");
 			}
 		}
 	}

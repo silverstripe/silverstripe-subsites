@@ -125,7 +125,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
             
 			if(!$hasGroupSubsites) {
 				if($subsiteID) {
-					$query->leftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\" 
+					$query->addLeftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\" 
 						= \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
 					$query->addWhere("(\"Group_Subsites\".\"SubsiteID\" IS NOT NULL OR
 						\"Group\".\"AccessAllSubsites\" = 1)");

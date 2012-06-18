@@ -490,20 +490,18 @@ JS;
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
-		$subsites = DataObject::get(
-			'Subsite',
-			"\"Subsite\".\"Title\" != ''",
-			'')->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+		$subsites = DataList::create('Subsite')
+			->where("\"Subsite\".\"Title\" != ''")
+			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
             ->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
             ->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
             ->innerJoin('Permission', "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')");
         
 		if(!$subsites) $subsites = new ArrayList();
 
-		$rolesSubsites = DataObject::get(
-			'Subsite',
-			"\"Subsite\".\"Title\" != ''",
-			'')->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+		$rolesSubsites = DataList::create('Subsite')
+			->where("\"Subsite\".\"Title\" != ''")
+			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
 			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
 			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
 			->innerJoin('Group_Roles', "\"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"")
@@ -534,6 +532,7 @@ JS;
 		
 		self::$_cache_accessible_sites[$cacheKey] = $subsites;
 
+        
 		return $subsites;
 	}
 	
