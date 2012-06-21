@@ -89,7 +89,7 @@ class SiteTreeSubsites extends DataExtension {
 		parent::onBeforeWrite();
 	}
 
-	function updateCMSFields(&$fields) {
+	function updateCMSFields(FieldList $fields) {
 		if($this->owner->MasterPageID) $fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
 		
 		// replace readonly link prefix

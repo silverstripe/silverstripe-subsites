@@ -49,7 +49,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 		}
 	}
 	
-	function updateCMSFields(&$fields) {
+	function updateCMSFields(FieldList $fields) {
 		if($this->owner->canEdit() ){
 			// i18n tab
 			$fields->findOrMakeTab('Root.Subsites',_t('GroupSubsites.SECURITYTABTITLE','Subsites'));
