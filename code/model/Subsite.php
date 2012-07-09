@@ -178,7 +178,11 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Show the configuration fields for each subsite
 	 */
 	function getCMSFields() {
-		$domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
+        if($this->ID!=0) {
+            $domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
+        }else {
+            $domainTable = new LiteralField('Domains', '<p>'._t('Subsite.DOMAINSAVEFIRST', '_You can only add domains after saving for the first time').'</p>');
+        }
 			
 		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
 		
@@ -318,7 +322,7 @@ JS;
 	/**
 	 * @todo Possible security issue, don't grant edit permissions to everybody.
 	 */
-	function canEdit($member = null) {
+	function canEdit() {
 		return true;
 	}
 
@@ -425,8 +429,8 @@ JS;
 	/**
 	 * Duplicate this subsite
 	 */
-	function duplicate($doWrite = true) {
-		$newTemplate = parent::duplicate($doWrite);
+	function duplicate() {
+		$newTemplate = parent::duplicate();
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);

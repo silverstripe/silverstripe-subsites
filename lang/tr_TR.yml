@@ -15,6 +15,7 @@ tr_TR:
     Subsite:
         PLURALNAME: "Alt Siteler"
         SINGULARNAME: "Alt Site"
+        DOMAINSAVEFIRST: "You can only add domains after saving for the first time"
     SubsiteDomain:
         PLURALNAME: "Subsite Domains"
         SINGULARNAME: "Subsite Domain"
