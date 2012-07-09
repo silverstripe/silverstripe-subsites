@@ -100,7 +100,7 @@ class SiteTreeSubsites extends DataExtension {
             
             $baseLink = Controller::join_links (
                 $baseUrl,
-                (SiteTree::nested_urls() && $this->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
+                (SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
             );
             
             $url = (strlen($baseLink) > 36) ? "..." .substr($baseLink, -32) : $baseLink;
