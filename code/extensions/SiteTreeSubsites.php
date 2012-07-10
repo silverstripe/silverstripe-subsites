@@ -28,25 +28,25 @@ class SiteTreeSubsites extends DataExtension {
 
 	
 	public static $has_one=array(
-                                'Subsite' => 'Subsite', // The subsite that this page belongs to
-                                'MasterPage' => 'SiteTree',// Optional; the page that is the content master
-                            );
-    
+		'Subsite' => 'Subsite', // The subsite that this page belongs to
+		'MasterPage' => 'SiteTree',// Optional; the page that is the content master
+	);
+	
 	public static $has_many=array(
-                                'RelatedPages' => 'RelatedPageLink'
-                            );
-    
+		'RelatedPages' => 'RelatedPageLink'
+	);
+	
 	public static $many_many=array(
-                                    'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
-                                );
-    
+		'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
+	);
+	
 	public static $belongs_many_many=array(
-                                            'BackCrossSubsiteLinkTracking' => 'SiteTree'
-                                        );
-    
-    public static $many_many_extraFields=array(
-                                                "CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
-                                            );
+		'BackCrossSubsiteLinkTracking' => 'SiteTree'
+	);
+	
+	public static $many_many_extraFields=array(
+		"CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
+	);
 	
 	function isMainSite() {
 		if($this->owner->SubsiteID == 0) return true;
@@ -97,17 +97,17 @@ class SiteTreeSubsites extends DataExtension {
 		if($subsite && $subsite->ID) {
 			$baseUrl = 'http://' . $subsite->domain() . '/';
 			$fields->removeByName('URLSegment');
-            
-            $baseLink = Controller::join_links (
-                $baseUrl,
-                (SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
-            );
-            
-            $url = (strlen($baseLink) > 36) ? "..." .substr($baseLink, -32) : $baseLink;
-            $urlsegment = new SiteTreeURLSegmentField("URLSegment", $this->owner->fieldLabel('URLSegment'));
-            $urlsegment->setURLPrefix($url);
-            $urlsegment->setHelpText(SiteTree::nested_urls() && count($this->owner->Children()) ? $this->owner->fieldLabel('LinkChangeNote'): false);
-            $fields->addFieldToTab('Root.Metadata', $urlsegment, 'MetaTitle');
+			
+			$baseLink = Controller::join_links (
+				$baseUrl,
+				(SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
+			);
+			
+			$url = (strlen($baseLink) > 36) ? "..." .substr($baseLink, -32) : $baseLink;
+			$urlsegment = new SiteTreeURLSegmentField("URLSegment", $this->owner->fieldLabel('URLSegment'));
+			$urlsegment->setURLPrefix($url);
+			$urlsegment->setHelpText(SiteTree::nested_urls() && count($this->owner->Children()) ? $this->owner->fieldLabel('LinkChangeNote'): false);
+			$fields->addFieldToTab('Root.Metadata', $urlsegment, 'MetaTitle');
 		}
 		
 		$relatedCount = 0;
@@ -124,8 +124,8 @@ class SiteTreeSubsites extends DataExtension {
 			$related=new GridField('RelatedPages', 'Related Pages', $this->owner->RelatedPages(), GridFieldConfig_Base::create())
 		);
 		
-        $related->setModelClass('RelatedPageLink');
-        
+		$related->setModelClass('RelatedPageLink');
+		
 		// The 'show' link doesn't provide any useful info
 		//$related->setPermissions(array('add', 'edit', 'delete'));
 		
@@ -147,8 +147,8 @@ class SiteTreeSubsites extends DataExtension {
 	function ReverseRelated() {
 		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
 			AND R2.\"ID\" IS NULL", '')
-            ->innerJoin('SiteTree', "\"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"")
-            ->leftJoin('RelatedPageLink', "R2.\"MasterPageID\" = {$this->owner->ID} AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"", 'R2');
+			->innerJoin('SiteTree', "\"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"")
+			->leftJoin('RelatedPageLink', "R2.\"MasterPageID\" = {$this->owner->ID} AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"", 'R2');
 	}
 	
 	function NormalRelated() {

@@ -5,9 +5,9 @@
  */
 class SiteConfigSubsites extends DataExtension {		
 	public static $has_one=array(
-                                'Subsite' => 'Subsite', // The subsite that this page belongs to
-                            );
-    
+		'Subsite' => 'Subsite', // The subsite that this page belongs to
+	);
+	
 	
 	/**
 	 * Update any requests to limit the results to the current site
@@ -20,8 +20,8 @@ class SiteConfigSubsites extends DataExtension {
 			/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
 			else */$subsiteID = (int)Subsite::currentSubsiteID();
 			
-            $froms=$query->getFrom();
-            $froms=array_keys($froms);
+			$froms=$query->getFrom();
+			$froms=array_keys($froms);
 			$tableName = array_shift($froms);
 			if($tableName != 'SiteConfig') return;
 			$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");

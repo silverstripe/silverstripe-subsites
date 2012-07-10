@@ -11,9 +11,9 @@ class FileSubsites extends DataExtension {
 	static $default_root_folders_global = false;
 	
 	public static $has_one=array(
-                                'Subsite' => 'Subsite',
-                            );
-    
+		'Subsite' => 'Subsite',
+	);
+	
 
 	/**
 	 * Amends the CMS tree title for folders in the Files & Images section.
@@ -42,19 +42,19 @@ class FileSubsites extends DataExtension {
 	 */
 	function augmentSQL(SQLQuery &$query) {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
-        //@TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
+		//@TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
 		if(!array_search('SiteTree_ImageTracking', $query->getFrom())===false && (!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0]))) {
 			/*if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
 			else */$subsiteID = (int) Subsite::currentSubsiteID();
 
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->getFrom() as $tableName => $info) {
-                $where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
-                $query->addWhere($where);
-                break;
+				$where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
+				$query->addWhere($where);
+				break;
 			}
 			
-            $sect=array_values($query->getSelect());
+			$sect=array_values($query->getSelect());
 			$isCounting = strpos($sect[0], 'COUNT') !== false;
 
 			// Ordering when deleting or counting doesn't apply

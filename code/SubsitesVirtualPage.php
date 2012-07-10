@@ -12,11 +12,11 @@ class SubsitesVirtualPage extends VirtualPage {
 		
 		$subsites = DataObject::get('Subsite');
 		if(!$subsites) {
-            $subsites = new ArrayList();
-        }else {
-            $subsites=ArrayList::create($subsites->toArray());
-        }
-        
+			$subsites = new ArrayList();
+		}else {
+			$subsites=ArrayList::create($subsites->toArray());
+		}
+		
 		$subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 
 		$subsiteSelectionField = new DropdownField(
@@ -61,8 +61,8 @@ class SubsitesVirtualPage extends VirtualPage {
 			);
 			$linkToContentLabelField->setAllowHTML(true);
 		}
-        
-        
+		
+		
 		$fields->addFieldToTab('Root.Metadata', new TextField('CustomMetaTitle', 'Title (overrides inherited value from the source)'), 'MetaTitle');
 		$fields->addFieldToTab('Root.Metadata', new TextareaField('CustomMetaKeywords', 'Keywords (overrides inherited value from the source)'), 'MetaKeywords');
 		$fields->addFieldToTab('Root.Metadata', new TextareaField('CustomMetaDescription', 'Description (overrides inherited value from the source)'), 'MetaDescription');
@@ -116,7 +116,7 @@ class SubsitesVirtualPage extends VirtualPage {
 		// Veto the validation rules if its false. In this case, some logic
 		// needs to be duplicated from parent to find out the exact reason the validation failed.
 		if(!$isValid) {
-			$IDFilter     = ($this->ID) ? "AND \"SiteTree\".\"ID\" <> $this->ID" :  null;
+			$IDFilter = ($this->ID) ? "AND \"SiteTree\".\"ID\" <> $this->ID" :  null;
 			$parentFilter = null;
 
 			if(self::nested_urls()) {
