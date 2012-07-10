@@ -16,12 +16,12 @@ class LeftAndMainSubsites extends Extension {
 			if(!Session::get('SubsiteID') || $_REQUEST['SubsiteID'] != Session::get('SubsiteID')) {
 				Session::clear("{$this->owner->class}.currentPage");
 			}
-            
+			
 			// Update current subsite in session
 			Subsite::changeSubsite($_REQUEST['SubsiteID']);
-            
-            //Redirect to clear the current page
-            $this->owner->redirect('admin/pages');
+			
+			//Redirect to clear the current page
+			$this->owner->redirect('admin/pages');
 		}
 	}
 	
@@ -38,7 +38,7 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function Subsites() {
-        return Subsite::accessible_sites('ADMIN');
+		return Subsite::accessible_sites('ADMIN');
 	}
 	
 	public function SubsiteList() {
@@ -60,22 +60,22 @@ class LeftAndMainSubsites extends Extension {
 			Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 			return $output;
 		} else if($list->Count() == 1) {
-            if($list->First()->DefaultSite==false) {
-                $output = '<select id="SubsitesSelect">';
-                $output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', '_Default Site') . "</option>";
-                foreach($list as $subsite) {
-                    $selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
-            
-                    $output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
-                }
-            
-                $output .= '</select>';
-            
-                Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
-                return $output;
-            }else {
-                return '<span>'.$list->First()->Title.'</span>';
-            }
+			if($list->First()->DefaultSite==false) {
+				$output = '<select id="SubsitesSelect">';
+				$output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', '_Default Site') . "</option>";
+				foreach($list as $subsite) {
+					$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
+			
+					$output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
+				}
+			
+				$output .= '</select>';
+			
+				Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
+				return $output;
+			}else {
+				return '<span>'.$list->First()->Title.'</span>';
+			}
 		}
 	}
 	
@@ -100,9 +100,9 @@ class LeftAndMainSubsites extends Extension {
 		// Switch to a subsite that this user can actually access.
 		$member = Member::currentUser();
 		if ($member && Permission::check('ADMIN')) {
-            return true;	//admin can access all subsites
-        }
-        
+			return true;	//admin can access all subsites
+		}
+		
 		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->map('ID', 'Title')->toArray();
 		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 			$siteIDs = array_keys($sites);

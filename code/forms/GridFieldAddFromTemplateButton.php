@@ -18,13 +18,13 @@ class GridFieldAddFromTemplateButton implements GridField_HTMLProvider {
 }
 
 class GridFieldAddFromTemplate extends GridFieldDetailForm {
-    public function getURLHandlers($gridField) {
-        return array(
-                    'newFromTemplate'=>'newFromTemplate',
-                );
-    }
-    
-    public function newFromTemplate($gridField, $request) {
+	public function getURLHandlers($gridField) {
+		return array(
+					'newFromTemplate'=>'newFromTemplate',
+				);
+	}
+	
+	public function newFromTemplate($gridField, $request) {
 		$controller = $gridField->getForm()->Controller();
 
 		if(is_numeric($request->param('ID'))) {
@@ -38,15 +38,15 @@ class GridFieldAddFromTemplate extends GridFieldDetailForm {
 		$handler->setTemplate($this->template);
 
 		return $handler->handleRequest($request, DataModel::inst());
-    }
+	}
 }
 
 class GridFieldAddFromTemplate_ItemRequest extends GridFieldDetailForm_ItemRequest {
 	public function Link($action = null) {
 		return $this->gridField->Link('newFromTemplate');
 	}
-    
-    function edit($request) {
+	
+	function edit($request) {
 		$controller = $this->getToplevelController();
 		$form = $this->NewFromTemplateForm($this->gridField, $request);
 
@@ -65,34 +65,34 @@ class GridFieldAddFromTemplate_ItemRequest extends GridFieldDetailForm_ItemReque
 			));	
 		}
 	}
-    
-    public function NewFromTemplateForm() {
-        $templates=DataObject::get('Subsite_Template');
-        
-        $fields=new FieldList(
-                                new DropdownField('TemplateID', _t('GridFieldAddFromTemplate.TEMPLATE', '_Template'), $templates->map('ID', 'Name'))
-                            );
-        
-        $actions=new FieldList(
-                                FormAction::create('doCreateFromTemplate', _t('GridFieldDetailsForm.Create', 'Create'))->setUseButtonTag(true)->addExtraClass('ss-ui-action-constructive')->setAttribute('data-icon', 'add')
-                            );
-        
-        // Add a Cancel link which is a button-like link and link back to one level up.
-        $curmbs = $this->Breadcrumbs();
-        if($curmbs && $curmbs->count()>=2){
-            $one_level_up = $curmbs->offsetGet($curmbs->count()-2);
-            $text = "
-            <a class=\"crumb ss-ui-button ss-ui-action-destructive cms-panel-link ui-corner-all\" href=\"".$one_level_up->Link."\">
-                Cancel
-            </a>";
-            $actions->push(new LiteralField('cancelbutton', $text));
-        }
-        
-        $validator=new RequiredFields('TemplateID');
-        
-        $form=new Form($this, 'NewFromTemplateForm', $fields, $actions, $validator);
-        
-        // TODO Coupling with CMS
+	
+	public function NewFromTemplateForm() {
+		$templates=DataObject::get('Subsite_Template');
+		
+		$fields=new FieldList(
+								new DropdownField('TemplateID', _t('GridFieldAddFromTemplate.TEMPLATE', '_Template'), $templates->map('ID', 'Name'))
+							);
+		
+		$actions=new FieldList(
+								FormAction::create('doCreateFromTemplate', _t('GridFieldDetailsForm.Create', 'Create'))->setUseButtonTag(true)->addExtraClass('ss-ui-action-constructive')->setAttribute('data-icon', 'add')
+							);
+		
+		// Add a Cancel link which is a button-like link and link back to one level up.
+		$curmbs = $this->Breadcrumbs();
+		if($curmbs && $curmbs->count()>=2){
+			$one_level_up = $curmbs->offsetGet($curmbs->count()-2);
+			$text = "
+			<a class=\"crumb ss-ui-button ss-ui-action-destructive cms-panel-link ui-corner-all\" href=\"".$one_level_up->Link."\">
+				Cancel
+			</a>";
+			$actions->push(new LiteralField('cancelbutton', $text));
+		}
+		
+		$validator=new RequiredFields('TemplateID');
+		
+		$form=new Form($this, 'NewFromTemplateForm', $fields, $actions, $validator);
+		
+		// TODO Coupling with CMS
 		$toplevelController = $this->getToplevelController();
 		if($toplevelController && $toplevelController instanceof LeftAndMain) {
 			// Always show with base template (full width, no other panels), 
@@ -107,24 +107,24 @@ class GridFieldAddFromTemplate_ItemRequest extends GridFieldDetailForm_ItemReque
 			// e.g. page/edit/show/6/ vs. page/edit/EditForm/field/MyGridField/....
 			$form->Backlink = $toplevelController->Link();
 		}
-        
-        return $form;
-    }
-    
-    public function doCreateFromTemplate($data, Form $form) {
-        $template=DataObject::get_by_id('Subsite_Template', intval($data['TemplateID']));
-        
-        if($template) {
-            $subsite=$template->createInstance($data['Title']);
-            $subsite->write();
-            
-            $this->record($subsite);
-            return $this->redirect(parent::Link()); 
-        }else {
-            $form->sessionMessage(_t('GridFieldAddFromTemplate.TEMPLATE_NOT_FOUND', '_The selected template could not be found'), 'bad');
-            return $this->redirectBack();
-        }
-    }
+		
+		return $form;
+	}
+	
+	public function doCreateFromTemplate($data, Form $form) {
+		$template=DataObject::get_by_id('Subsite_Template', intval($data['TemplateID']));
+		
+		if($template) {
+			$subsite=$template->createInstance($data['Title']);
+			$subsite->write();
+			
+			$this->record($subsite);
+			return $this->redirect(parent::Link()); 
+		}else {
+			$form->sessionMessage(_t('GridFieldAddFromTemplate.TEMPLATE_NOT_FOUND', '_The selected template could not be found'), 'bad');
+			return $this->redirectBack();
+		}
+	}
 
 	/**
 	 * CMS-specific functionality: Passes through navigation breadcrumbs
@@ -138,10 +138,10 @@ class GridFieldAddFromTemplate_ItemRequest extends GridFieldDetailForm_ItemReque
 		if(!$this->popupController->hasMethod('Breadcrumbs')) return;
 
 		$items = $this->popupController->Breadcrumbs($unlinked);
-        $items->push(new ArrayData(array(
-            'Title' => sprintf(_t('GridFieldAddFromTemplate.NewFromTemplate', 'New %s from template'), $this->record->singular_name()),
-            'Link' => false
-        )));	
+		$items->push(new ArrayData(array(
+			'Title' => sprintf(_t('GridFieldAddFromTemplate.NewFromTemplate', 'New %s from template'), $this->record->singular_name()),
+			'Link' => false
+		)));	
 		
 		return $items;
 	}

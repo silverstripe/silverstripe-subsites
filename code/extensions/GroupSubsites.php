@@ -7,16 +7,16 @@
 class GroupSubsites extends DataExtension implements PermissionProvider {
 
 	public static $db=array(
-                            'AccessAllSubsites' => 'Boolean'
-                        );
-    
+		'AccessAllSubsites' => 'Boolean'
+	);
+	
 	public static $many_many=array(
-                                    'Subsites' => 'Subsite'
-                                );
-    
+		'Subsites' => 'Subsite'
+	);
+	
 	public static $defaults=array(
-                                'AccessAllSubsites' => true
-                            );
+		'AccessAllSubsites' => true
+	);
 	
 	
 	/**
@@ -117,12 +117,12 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 			// Don't filter by Group_Subsites if we've already done that
 			$hasGroupSubsites = false;
 			foreach($query->getFrom() as $item) {
-                if((is_array($item) && strpos($item['table'], 'Group_Subsites')!==false) || (!is_array($item) && strpos($item, 'Group_Subsites')!==false)) {
-                    $hasGroupSubsites = true;
-                    break;
-                }
+				if((is_array($item) && strpos($item['table'], 'Group_Subsites')!==false) || (!is_array($item) && strpos($item, 'Group_Subsites')!==false)) {
+					$hasGroupSubsites = true;
+					break;
+				}
 			}
-            
+			
 			if(!$hasGroupSubsites) {
 				if($subsiteID) {
 					$query->addLeftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\" 
@@ -135,7 +135,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 			}
 			
 			// WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected (e.g. SQL Server)
-            $select=$query->getSelect();
+			$select=$query->getSelect();
 			if(isset($select[0]) && !$select[0] == 'COUNT(*)') {
 				$query->orderby = "\"AccessAllSubsites\" DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
 			}

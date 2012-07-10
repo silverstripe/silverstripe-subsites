@@ -9,11 +9,11 @@ class SubsiteDomain extends DataObject {
  		"Subsite" => "Subsite",
 	);
 	
-    public static $summary_fields=array(
-                                        'Domain'=>'Domain',
-                                        'IsPrimary'=>'Is Primary Domain'
-                                    );
-    
+	public static $summary_fields=array(
+		'Domain'=>'Domain',
+		'IsPrimary'=>'Is Primary Domain'
+	);
+	
 	/**
 	 * Whenever a Subsite Domain is written, rewrite the hostmap
 	 *
@@ -22,11 +22,11 @@ class SubsiteDomain extends DataObject {
 	public function onAfterWrite() {
 		Subsite::writeHostMap();
 	}
-    
-    public function getCMSFields() {
-        return new FieldList(
-                            new TextField('Domain', _t('SubsiteDomain.DOMAIN', '_Domain'), null, 255),
-                            new CheckboxField('IsPrimary', _t('SubsiteDomain.IS_PRIMARY', '_Is Primary Domain'))
-                        );
-    }
+	
+	public function getCMSFields() {
+		return new FieldList(
+							new TextField('Domain', _t('SubsiteDomain.DOMAIN', '_Domain'), null, 255),
+							new CheckboxField('IsPrimary', _t('SubsiteDomain.IS_PRIMARY', '_Is Primary Domain'))
+						);
+	}
 }
