@@ -322,7 +322,7 @@ JS;
 	/**
 	 * @todo Possible security issue, don't grant edit permissions to everybody.
 	 */
-	function canEdit() {
+	function canEdit($member = false) {
 		return true;
 	}
 
@@ -429,8 +429,8 @@ JS;
 	/**
 	 * Duplicate this subsite
 	 */
-	function duplicate() {
-		$newTemplate = parent::duplicate();
+	function duplicate($doWrite = true) {
+		$newTemplate = parent::duplicate($doWrite);
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
@@ -476,7 +476,7 @@ JS;
 	 * @param $member
 	 * @return DataList of {@link Subsite} instances
 	 */
-	function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
+	public static function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
 		if(!$member) return new ArrayList();
