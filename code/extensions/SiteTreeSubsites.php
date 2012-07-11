@@ -96,18 +96,15 @@ class SiteTreeSubsites extends DataExtension {
 		$subsite = $this->owner->Subsite();
 		if($subsite && $subsite->ID) {
 			$baseUrl = 'http://' . $subsite->domain() . '/';
-			$fields->removeByName('URLSegment');
 			
 			$baseLink = Controller::join_links (
 				$baseUrl,
 				(SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
 			);
 			
-			$url = (strlen($baseLink) > 36) ? "..." .substr($baseLink, -32) : $baseLink;
-			$urlsegment = new SiteTreeURLSegmentField("URLSegment", $this->owner->fieldLabel('URLSegment'));
+			$url = (strlen($baseLink) > 36 ? "..." .substr($baseLink, -32) : $baseLink);
+			$urlsegment = $fields->dataFieldByName('URLSegment');
 			$urlsegment->setURLPrefix($url);
-			$urlsegment->setHelpText(SiteTree::nested_urls() && count($this->owner->Children()) ? $this->owner->fieldLabel('LinkChangeNote'): false);
-			$fields->addFieldToTab('Root.Metadata', $urlsegment, 'MetaTitle');
 		}
 		
 		$relatedCount = 0;
@@ -119,7 +116,8 @@ class SiteTreeSubsites extends DataExtension {
 		$tabName = $relatedCount ? 'Related (' . $relatedCount . ')' : 'Related';
 		$tab = $fields->findOrMakeTab('Root.Related', $tabName);
 		// Related pages
-		$tab->push(new LiteralField('RelatedNote', '<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>'));
+		$tab->push(new LiteralField('RelatedNote',
+			'<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>'));
 		$tab->push(
 			$related=new GridField('RelatedPages', 'Related Pages', $this->owner->RelatedPages(), GridFieldConfig_Base::create())
 		);
@@ -231,16 +229,25 @@ class SiteTreeSubsites extends DataExtension {
 			$subsiteID = $subsite->ID;
 		} else $subsite = DataObject::get_by_id('Subsite', $subsiteID);
 		
+        $oldSubsite=Subsite::currentSubsiteID();
+        if($subsiteID) {
+            Subsite::changeSubsite($subsiteID);
+        }else {
+            $subsiteID=$oldSubsite;
+        }
+        
 		$page = $this->owner->duplicate(false);
 
 		$page->CheckedPublicationDifferences = $page->AddedToStage = true;
-		$subsiteID = ($subsiteID ? $subsiteID : Subsite::currentSubsiteID());
+		$subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
 		$page->SubsiteID = $subsiteID;
 		
 		if($isTemplate) $page->MasterPageID = $this->owner->ID;
 		
 		$page->write();
-
+        
+        Subsite::changeSubsite($oldSubsite);
+        
 		return $page;
 	}
 

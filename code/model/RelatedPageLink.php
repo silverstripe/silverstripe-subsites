@@ -27,14 +27,14 @@ class RelatedPageLink extends DataObject {
 		if(!$subsites) $subsites = new ArrayList();
 
 		if(Subsite::hasMainSitePermission(null, array("CMS_ACCESS_CMSMain"))) {
-			$subsites->push(new ArrayData(array('Title' => 'Main site', "\"ID\"" => 0)));
+			$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", true);
 		}
 	
 		if($subsites->Count()) {
 			$subsiteSelectionField = new DropdownField(
 				"CopyContentFromID_SubsiteID", 
 				"Subsite", 
-				$subsites->toDropdownMap('ID', 'Title'),
+				$subsites->map('ID', 'Title'),
 				($this->CopyContentFromID) ? $this->CopyContentFrom()->SubsiteID : Session::get('SubsiteID')
 			);
 		}

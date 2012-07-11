@@ -33,7 +33,7 @@ class SubsiteTest extends SapphireTest {
 	
 		// Publish all the pages in the template, testing that DataObject::get only returns pages from the chosen subsite
 		$pages = DataObject::get("SiteTree");
-		$totalPages = $pages->TotalItems();
+		$totalPages = $pages->Count();
 		foreach($pages as $page) {
 			$this->assertEquals($template->ID, $page->SubsiteID);
 			$page->publish('Stage', 'Live');
@@ -52,7 +52,7 @@ class SubsiteTest extends SapphireTest {
 		$subsite->activate();
 	
 		$siteHome = DataObject::get_one('SiteTree', "\"URLSegment\" = 'home'");
-		$this->assertNotNull($siteHome);
+        $this->assertNotEquals($siteHome, false, 'Home Page for subsite not found');
 		$this->assertEquals($subsite->ID, $siteHome->SubsiteID,
 			'createInstance() copies existing pages retaining the same URLSegment'
 		);

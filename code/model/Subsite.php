@@ -322,7 +322,7 @@ JS;
 	/**
 	 * @todo Possible security issue, don't grant edit permissions to everybody.
 	 */
-	function canEdit() {
+	function canEdit($member = false) {
 		return true;
 	}
 
@@ -403,7 +403,7 @@ JS;
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
-		if(!$member && $member !== FALSE) $member = Member::currentMember();
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
 
 		if(!$member) return false;
 		
@@ -429,8 +429,8 @@ JS;
 	/**
 	 * Duplicate this subsite
 	 */
-	function duplicate() {
-		$newTemplate = parent::duplicate();
+	function duplicate($doWrite = true) {
+		$newTemplate = parent::duplicate($doWrite);
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
@@ -476,7 +476,7 @@ JS;
 	 * @param $member
 	 * @return DataList of {@link Subsite} instances
 	 */
-	function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
+	public static function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
 		if(!$member) return new ArrayList();
@@ -661,9 +661,17 @@ class Subsite_Template extends Subsite {
 			if($children) {
 				foreach($children as $child) {
 					$childClone = $child->duplicateToSubsite($intranet);
+                    
+                    //Change to destination subsite
+                    self::changeSubsite($intranet->ID);
+                    
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');
+                    
+                    //Change Back to this subsite
+                    self::changeSubsite($this->ID);
+                    
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}

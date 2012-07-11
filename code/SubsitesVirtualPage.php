@@ -63,10 +63,10 @@ class SubsitesVirtualPage extends VirtualPage {
 		}
 		
 		
-		$fields->addFieldToTab('Root.Metadata', new TextField('CustomMetaTitle', 'Title (overrides inherited value from the source)'), 'MetaTitle');
-		$fields->addFieldToTab('Root.Metadata', new TextareaField('CustomMetaKeywords', 'Keywords (overrides inherited value from the source)'), 'MetaKeywords');
-		$fields->addFieldToTab('Root.Metadata', new TextareaField('CustomMetaDescription', 'Description (overrides inherited value from the source)'), 'MetaDescription');
-		$fields->addFieldToTab('Root.Metadata', new TextField('CustomExtraMeta', 'Custom Meta Tags (overrides inherited value from the source)'), 'ExtraMeta');
+		$fields->addFieldToTab('Root.Main', new TextField('CustomMetaTitle', 'Title (overrides inherited value from the source)'), 'MetaTitle');
+		$fields->addFieldToTab('Root.Main', new TextareaField('CustomMetaKeywords', 'Keywords (overrides inherited value from the source)'), 'MetaKeywords');
+		$fields->addFieldToTab('Root.Main', new TextareaField('CustomMetaDescription', 'Description (overrides inherited value from the source)'), 'MetaDescription');
+		$fields->addFieldToTab('Root.Main', new TextField('CustomExtraMeta', 'Custom Meta Tags (overrides inherited value from the source)'), 'ExtraMeta');
 		
 		return $fields;
 	}

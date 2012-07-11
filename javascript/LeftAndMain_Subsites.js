@@ -14,8 +14,8 @@
 				
 				var ref=this;
 				$('#Form_ItemEditForm_AccessAllSubsites input').change(function() {
-																			ref.showHideSubsiteList();
-																		});
+					ref.showHideSubsiteList();
+				});
 			},
 			
 			showHideSubsiteList: function () {
@@ -42,11 +42,10 @@
 				
 				//Bind listener
 				$('a#PageTypeBlacklistToggle').click(function(e) {
-																	jQuery('#PageTypeBlacklist').toggle();
-																	
-																	e.stopPropagation();
-																	return false;
-																});
+					jQuery('#PageTypeBlacklist').toggle();
+					e.stopPropagation();
+					return false;
+				});
 			}
 		});
 	});

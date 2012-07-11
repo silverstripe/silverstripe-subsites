@@ -15,11 +15,11 @@ class GroupSubsitesTest extends SapphireTest {
 		$group = new Group();
 		$group->Title = 'The A Team';
 		$group->AccessAllSubsites = true;
-		$this->assertEquals($group->TreeTitle(), 'The A Team <i>(global group)</i>');
+		$this->assertEquals($group->getTreeTitle(), 'The A Team <i>(global group)</i>');
 		$group->AccessAllSubsites = false;
 		$group->write();
 		$group->Subsites()->add($this->objFromFixture('Subsite', 'domaintest1'));
 		$group->Subsites()->add($this->objFromFixture('Subsite', 'domaintest2'));
-		$this->assertEquals($group->TreeTitle(), 'The A Team <i>(Test 1, Test 2)</i>');
+		$this->assertEquals($group->getTreeTitle(), 'The A Team <i>(Test 1, Test 2)</i>');
 	}
 }

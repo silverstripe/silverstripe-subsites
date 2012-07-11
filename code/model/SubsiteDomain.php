@@ -25,8 +25,8 @@ class SubsiteDomain extends DataObject {
 	
 	public function getCMSFields() {
 		return new FieldList(
-							new TextField('Domain', _t('SubsiteDomain.DOMAIN', '_Domain'), null, 255),
-							new CheckboxField('IsPrimary', _t('SubsiteDomain.IS_PRIMARY', '_Is Primary Domain'))
-						);
+			new TextField('Domain', _t('SubsiteDomain.DOMAIN', '_Domain'), null, 255),
+			new CheckboxField('IsPrimary', _t('SubsiteDomain.IS_PRIMARY', '_Is Primary Domain'))
+		);
 	}
 }

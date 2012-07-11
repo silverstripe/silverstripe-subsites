@@ -164,25 +164,27 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$s1->write();
 		
 		Subsite::changeSubsite($s1);
+		$settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
 		$this->assertArrayNotHasKey('ErrorPage', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayNotHasKey('SiteTreeSubsitesTest_ClassA', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 
 		Subsite::changeSubsite($s2);
+		$settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
 		$this->assertArrayHasKey('ErrorPage', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassA', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 	}
 	

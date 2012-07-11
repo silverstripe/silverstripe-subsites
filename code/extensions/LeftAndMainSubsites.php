@@ -38,7 +38,35 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function Subsites() {
-		return Subsite::accessible_sites('ADMIN');
+		$accessPerm = 'CMS_ACCESS_'. $this->owner->class;
+		switch($this->owner->class) {
+			case "AssetAdmin":
+				$subsites = Subsite::accessible_sites($accessPerm, true, "Shared files & images");
+				break;
+				
+			case "SecurityAdmin":
+				$subsites = Subsite::accessible_sites($accessPerm, true, "Groups accessing all sites");
+				if($subsites->find('ID',0)) {
+					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
+				}
+				break;
+				
+			case "CMSMain":
+				// If there's a default site then main site has no meaning
+				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1 AND \"IsPublic\"=1");
+				$subsites = Subsite::accessible_sites($accessPerm, $showMainSite);
+				break;
+				
+			case "SubsiteAdmin":
+				$subsites = Subsite::accessible_sites('ADMIN', true);
+				break;
+
+			default: 
+				$subsites = Subsite::accessible_sites($accessPerm);
+				break;	
+		}
+
+		return $subsites;
 	}
 	
 	public function SubsiteList() {
