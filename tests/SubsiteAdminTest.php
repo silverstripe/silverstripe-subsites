@@ -20,8 +20,8 @@ class SubsiteAdminTest extends SapphireTest {
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
         
         // Confirm that this URL gets you the entire page, with the edit form loaded
-        $response2 = Director::test("admin/subsites/Subsite/$subsite1ID/edit", null, $this->adminLoggedInSession());
-        $this->assertTrue(strpos($response2->getBody(), 'id="Form_EditForm_ID"') !== false, "Testing Form_EditForm_ID exists");
+        $response2 = Director::test("admin/subsites/Subsite/EditForm/field/Subsite/item/$subsite1ID/edit", null, $this->adminLoggedInSession());
+        $this->assertTrue(strpos($response2->getBody(), 'id="Form_ItemEditForm_ID"') !== false, "Testing Form_ItemEditForm_ID exists");
         $this->assertTrue(strpos($response2->getBody(), '<head') !== false, "Testing <head> exists");
     }
 	
