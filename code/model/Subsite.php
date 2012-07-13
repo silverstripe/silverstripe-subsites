@@ -661,9 +661,17 @@ class Subsite_Template extends Subsite {
 			if($children) {
 				foreach($children as $child) {
 					$childClone = $child->duplicateToSubsite($intranet);
+                    
+                    //Change to destination subsite
+                    self::changeSubsite($intranet->ID);
+                    
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');
+                    
+                    //Change Back to this subsite
+                    self::changeSubsite($this->ID);
+                    
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}
