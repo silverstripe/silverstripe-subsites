@@ -403,7 +403,7 @@ JS;
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
-		if(!$member && $member !== FALSE) $member = Member::currentMember();
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
 
 		if(!$member) return false;
 		

@@ -101,8 +101,8 @@ class SubsiteAdminTest extends SapphireTest {
 		foreach($cmsMain->Subsites() as $subsite) {
 			$ids[$subsite->ID] = true;
 		}	
-
-		$this->assertTrue($subsite->adminSearchFields() instanceof FieldList);
+		
+		$this->assertTrue(Subsite::adminSearchFields() instanceof FieldList);
 		$this->assertArrayHasKey(0, $ids, "Main site accessible");
 		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','main'), $ids, "Site with no groups inaccesible");
 		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','subsite1'), $ids, "Subsite1 Template inaccessible");
