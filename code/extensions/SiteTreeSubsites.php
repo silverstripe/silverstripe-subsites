@@ -90,7 +90,7 @@ class SiteTreeSubsites extends DataExtension {
 	}
 
 	function updateCMSFields(FieldList $fields) {
-		if($this->owner->MasterPageID) $fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
+		if($this->owner->MasterPageID) $fields->addFieldToTab('Root.Main', new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2), 'Title');
 		
 		// replace readonly link prefix
 		$subsite = $this->owner->Subsite();
@@ -245,9 +245,9 @@ class SiteTreeSubsites extends DataExtension {
 		if($isTemplate) $page->MasterPageID = $this->owner->ID;
 		
 		$page->write();
-        
-        Subsite::changeSubsite($oldSubsite);
-        
+		
+		Subsite::changeSubsite($oldSubsite);
+		
 		Subsite::changeSubsite($oldSubsite);
 
 		return $page;
