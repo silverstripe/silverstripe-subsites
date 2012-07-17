@@ -229,13 +229,13 @@ class SiteTreeSubsites extends DataExtension {
 			$subsiteID = $subsite->ID;
 		} else $subsite = DataObject::get_by_id('Subsite', $subsiteID);
 		
-        $oldSubsite=Subsite::currentSubsiteID();
-        if($subsiteID) {
-            Subsite::changeSubsite($subsiteID);
-        }else {
-            $subsiteID=$oldSubsite;
-        }
-        
+		$oldSubsite=Subsite::currentSubsiteID();
+		if($subsiteID) {
+			Subsite::changeSubsite($subsiteID);
+		}else {
+			$subsiteID=$oldSubsite;
+		}
+
 		$page = $this->owner->duplicate(false);
 
 		$page->CheckedPublicationDifferences = $page->AddedToStage = true;
@@ -248,6 +248,8 @@ class SiteTreeSubsites extends DataExtension {
         
         Subsite::changeSubsite($oldSubsite);
         
+		Subsite::changeSubsite($oldSubsite);
+
 		return $page;
 	}
 

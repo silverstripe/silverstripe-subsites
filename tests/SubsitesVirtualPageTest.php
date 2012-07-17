@@ -232,9 +232,9 @@ class SubsitesVirtualPageTest extends SapphireTest {
 			"Doesn't allow explicit URLSegment overrides when already existing in same subsite"
 		);
 		
-        //Change to subsite 2
-        Subsite::changeSubsite($subsite2->ID);
-        
+		//Change to subsite 2
+		Subsite::changeSubsite($subsite2->ID);
+
 		// saving in subsite2 (which already has a page with URLSegment 'contact-us'), 
 		// but linking to a page in subsite1
 		$subsite2Vp = new SubsitesVirtualPage();

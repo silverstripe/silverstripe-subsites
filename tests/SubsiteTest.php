@@ -52,7 +52,7 @@ class SubsiteTest extends SapphireTest {
 		$subsite->activate();
 	
 		$siteHome = DataObject::get_one('SiteTree', "\"URLSegment\" = 'home'");
-        $this->assertNotEquals($siteHome, false, 'Home Page for subsite not found');
+		$this->assertNotEquals($siteHome, false, 'Home Page for subsite not found');
 		$this->assertEquals($subsite->ID, $siteHome->SubsiteID,
 			'createInstance() copies existing pages retaining the same URLSegment'
 		);

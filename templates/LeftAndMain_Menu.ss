@@ -18,10 +18,10 @@
 				</span>
 			<% end_control %>
 		</div>
-        
-        <div class="cms-login-status subsites">
-            $SubsiteList
-        </div>
+
+		<div class="cms-login-status subsites">
+			$SubsiteList
+		</div>
 	</div>
 		
 	<div class="cms-panel-content center">
