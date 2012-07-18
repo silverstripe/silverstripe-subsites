@@ -19,8 +19,8 @@ class SubsiteAdmin extends ModelAdmin {
 		if($this->modelClass=='Subsite') {
 			$grid=$form->Fields()->dataFieldByName('Subsite');
 			if($grid) {
-				$grid->getConfig()->addComponent(new GridFieldAddFromTemplateButton('toolbar-header-right'));
-				$grid->getConfig()->addComponent(new GridFieldAddFromTemplate());
+				$grid->getConfig()->removeComponentsByType('GridFieldDetailForm');
+				$grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());
 			}
 		}
 		
