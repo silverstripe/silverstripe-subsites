@@ -60,16 +60,19 @@ SiteTree:
       Title: Important Page
       SubsiteID: =>Subsite_Template.main
    subsite1_home:
-      Title: Home (Subsite 1)
+      Title: Home
       SubsiteID: =>Subsite_Template.subsite1
    subsite1_contactus:
-      Title: Contact Us (Subsite 1)
+      Title: Contact Us
+      SubsiteID: =>Subsite_Template.subsite1
+   subsite1_staff:
+      Title: Staff
       SubsiteID: =>Subsite_Template.subsite1
    subsite2_home:
-      Title: Home (Subsite 2)
+      Title: Home
       SubsiteID: =>Subsite_Template.subsite2
    subsite2_contactus:
-      Title: Contact Us (Subsite 2)
+      Title: Contact Us
       SubsiteID: =>Subsite_Template.subsite2
 
 Group:

@@ -4,24 +4,19 @@
  *
  * @package subsites
  */
-class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
+class GroupSubsites extends DataExtension implements PermissionProvider {
 
-	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics')) {
-			if($this->owner->class != 'Group') return null;
-		}
-		return array(
-			'db' => array(
-				'AccessAllSubsites' => 'Boolean',
-			),
-			'many_many' => array(
-				'Subsites' => 'Subsite',
-			),
-			'defaults' => array(
-				'AccessAllSubsites' => 1,
-			),
-		);
-	}
+	public static $db=array(
+		'AccessAllSubsites' => 'Boolean'
+	);
+	
+	public static $many_many=array(
+		'Subsites' => 'Subsite'
+	);
+	
+	public static $defaults=array(
+		'AccessAllSubsites' => true
+	);
 	
 	
 	/**
@@ -54,13 +49,13 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		}
 	}
 	
-	function updateCMSFields(&$fields) {
+	function updateCMSFields(FieldList $fields) {
 		if($this->owner->canEdit() ){
 			// i18n tab
 			$fields->findOrMakeTab('Root.Subsites',_t('GroupSubsites.SECURITYTABTITLE','Subsites'));
 
 			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true);
-			$subsiteMap = $subsites->toDropdownMap();
+			$subsiteMap = $subsites->map();
 			
 			// Interface is different if you have the rights to modify subsite group values on
 			// all subsites
@@ -116,29 +111,32 @@ class GroupSubsites extends DataObjectDecorator implements PermissionProvider {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if(!$query->filtersOnID()) {
 
-			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-			else $subsiteID = (int)Subsite::currentSubsiteID();
+			/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+			else */$subsiteID = (int)Subsite::currentSubsiteID();
 			
 			// Don't filter by Group_Subsites if we've already done that
 			$hasGroupSubsites = false;
-			foreach($query->from as $item) if(strpos($item, 'Group_Subsites') !== false) {
-				$hasGroupSubsites = true;
-				break;
+			foreach($query->getFrom() as $item) {
+				if((is_array($item) && strpos($item['table'], 'Group_Subsites')!==false) || (!is_array($item) && strpos($item, 'Group_Subsites')!==false)) {
+					$hasGroupSubsites = true;
+					break;
+				}
 			}
 			
 			if(!$hasGroupSubsites) {
 				if($subsiteID) {
-					$query->leftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\" 
+					$query->addLeftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\" 
 						= \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
-					$query->where[] = "(\"Group_Subsites\".\"SubsiteID\" IS NOT NULL OR
-						\"Group\".\"AccessAllSubsites\" = 1)";
+					$query->addWhere("(\"Group_Subsites\".\"SubsiteID\" IS NOT NULL OR
+						\"Group\".\"AccessAllSubsites\" = 1)");
 				} else {
-					$query->where[] = "\"Group\".\"AccessAllSubsites\" = 1";
+					$query->addWhere("\"Group\".\"AccessAllSubsites\" = 1");
 				}
 			}
 			
 			// WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected (e.g. SQL Server)
-			if(!$query->select[0] == 'COUNT(*)') {
+			$select=$query->getSelect();
+			if(isset($select[0]) && !$select[0] == 'COUNT(*)') {
 				$query->orderby = "\"AccessAllSubsites\" DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
 			}
 		}
