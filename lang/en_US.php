@@ -53,13 +53,13 @@ $lang['en_US']['SubsiteDomain']['SINGULARNAME'] = array(
 	50,
 	'Singular name of the object, used in dropdowns and to generally identify a single object in the interface'
 );
-$lang['en_US']['Subsite_Template']['PLURALNAME'] = array(
-	'Subsite Templats',
+$lang['en_US']['Subsite']['PLURALNAME'] = array(
+	'Subsites',
 	50,
 	'Pural name of the object, used in dropdowns and to generally identify a collection of this object in the interface'
 );
-$lang['en_US']['Subsite_Template']['SINGULARNAME'] = array(
-	'Subsite Template',
+$lang['en_US']['Subsite']['SINGULARNAME'] = array(
+	'Subsite',
 	50,
 	'Singular name of the object, used in dropdowns and to generally identify a single object in the interface'
 );

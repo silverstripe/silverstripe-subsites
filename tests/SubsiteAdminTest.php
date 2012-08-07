@@ -64,12 +64,12 @@ class SubsiteAdminTest extends SapphireTest {
         $form = $cont->AddSubsiteForm();
         $source = $form->dataFieldByName('TemplateID')->getSource();
         
-        $templateIDs = $this->allFixtureIDs('Subsite_Template');
+        $templateIDs = $this->allFixtureIDs('Subsite');
         foreach($templateIDs as $templateID) {
             $this->assertArrayHasKey($templateID, $source);
         }
         
-        $templateObj = $this->objFromFixture('Subsite_Template','main');
+        $templateObj = $this->objFromFixture('Subsite','main');
         $this->assertEquals($templateObj->Title, $source[$templateObj->ID], "Template dropdown isn't listing Title values");
 
         $response = $form->testSubmission('addintranet', array(
@@ -104,9 +104,9 @@ class SubsiteAdminTest extends SapphireTest {
 
 		$this->assertTrue($subsite->adminSearchFields() instanceof FieldSet);
 		$this->assertArrayHasKey(0, $ids, "Main site accessible");
-		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','main'), $ids, "Site with no groups inaccesible");
-		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','subsite1'), $ids, "Subsite1 Template inaccessible");
-		$this->assertArrayHasKey($this->idFromFixture('Subsite_Template','subsite2'), $ids, "Subsite2 Template inaccessible");
+		$this->assertArrayHasKey($this->idFromFixture('Subsite','main'), $ids, "Site with no groups inaccesible");
+		$this->assertArrayHasKey($this->idFromFixture('Subsite','subsite1'), $ids, "Subsite1 Template inaccessible");
+		$this->assertArrayHasKey($this->idFromFixture('Subsite','subsite2'), $ids, "Subsite2 Template inaccessible");
 	}
 
 	

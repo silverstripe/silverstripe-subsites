@@ -4,29 +4,7 @@
  * Extension for the SiteTree object to add subsites support
  */
 class SiteTreeSubsites extends SiteTreeDecorator {
-	static $template_variables = array(
-		'((Company Name))' => 'Title'
-	);
-	
-	static $template_fields = array(
-		"URLSegment",
-		"Title",
-		"MenuTitle",
-		"Content",
-		"MetaTitle",
-		"MetaDescription",
-		"MetaKeywords",
-	);
 
-	/**
-	 * Set the fields that will be copied from the template.
-	 * Note that ParentID and Sort are implied.
-	 */
-	static function set_template_fields($fieldList) {
-		self::$template_fields = $fieldList;
-	}
-
-	
 	function extraStatics() {
 		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'SiteTree') return null;
 		return array(
@@ -224,9 +202,8 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	/**
 	 * Create a duplicate of this page and save it to another subsite
 	 * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
-	 * @param $isTemplate boolean If this is true, then the current page will be treated as the template, and MasterPageID will be set
 	 */
-	public function duplicateToSubsite($subsiteID = null, $isTemplate = true) {
+	public function duplicateToSubsite($subsiteID = null) {
 		if(is_object($subsiteID)) {
 			$subsite = $subsiteID;
 			$subsiteID = $subsite->ID;
@@ -237,9 +214,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$page->CheckedPublicationDifferences = $page->AddedToStage = true;
 		$subsiteID = ($subsiteID ? $subsiteID : Subsite::currentSubsiteID());
 		$page->SubsiteID = $subsiteID;
-		
-		if($isTemplate) $page->MasterPageID = $this->owner->ID;
-		
+		$page->MasterPageID = $this->owner->ID;
 		$page->write();
 
 		return $page;

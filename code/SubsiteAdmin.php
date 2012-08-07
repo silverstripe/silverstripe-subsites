@@ -18,49 +18,30 @@ class SubsiteAdmin_CollectionController extends ModelAdmin_CollectionController 
 	function AddForm() {
 		$form = parent::AddForm();
 
-		$templates = DataObject::get('Subsite_Template', '', 'Title');
-		$templateArray = array('' => "(No template)");
-		if($templates) {
-			$templateArray = $templateArray + $templates->map('ID', 'Title');
+		$subsites = DataObject::get('Subsite', '', 'Title');
+		$subsiteMap = array('' => "(No template)", -1 => '(Main Site)');
+		if($subsites) {
+			$subsiteMap = $subsiteMap + $subsites->map('ID', 'Title');
 		}
 
 		$form->Fields()->addFieldsToTab('Root.Configuration', array(
-			new DropdownField('Type', 'Type', array(
-				'subsite' => 'New site',
-				'template' => 'New template',
-			)),
-			new DropdownField('TemplateID', 'Copy structure from:', $templateArray)
+			new DropdownField('TemplateID', 'Copy structure from:', $subsiteMap)
 		));
 		
 		return $form;
 	}
 	
 	function doCreate($data, $form, $request) {
-		if(isset($data['TemplateID']) && $data['TemplateID']) {
-			$template = DataObject::get_by_id('Subsite_Template', $data['TemplateID']);
+		if(isset($data['TemplateID']) && $data['TemplateID'] == -1) {
+			// Copy from main site. Hacky as it relies on ID=0
+			// in order to query the main site (which is technically not contained in a Subsite record)
+			$mainsite = new Subsite();
+			$subsite = $mainsite->duplicate();
+		} elseif(isset($data['TemplateID']) && $data['TemplateID']) {
+			$template = DataObject::get_by_id('Subsite', $data['TemplateID']);
+			$subsite = $template->duplicate();
 		} else {
-			$template = null;
-		}
-
-		// Create subsite from existing template
-		switch($data['Type']) {
-		case 'template':
-			if($template) $subsite = $template->duplicate();
-			else {
-				$subsite = new Subsite_Template();
-				$subsite->write();
-			}
-			break;
-
-		case 'subsite':
-		default:
-			if($template) $subsite = $template->createInstance($data['Title']);
-			else {
-				$subsite = new Subsite();
-				$subsite->Title = $data['Title'];
-				$subsite->write();
-			}
-			break;
+			$subsite = new Subsite();
 		}
 
 		$form->dataFieldByName('Domains')->setExtraData(array(

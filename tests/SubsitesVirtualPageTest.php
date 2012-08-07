@@ -30,7 +30,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 	function testVirtualPageFromAnotherSubsite() {
 		Subsite::$write_hostmap = false;
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite = $this->objFromFixture('Subsite', 'subsite2');
 		
 		Subsite::changeSubsite($subsite->ID);
 		Subsite::$disable_subsite_filter = false;
@@ -55,7 +55,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 	function testCustomMetadata() {
 		Subsite::$write_hostmap = false;
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		$subsite = $this->objFromFixture('Subsite', 'main');
 		
 		Subsite::changeSubsite($subsite->ID);
 		
@@ -172,19 +172,19 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		StaticPublisher::$disable_realtime = true;
 		
 		// Go to main site, get parent page
-		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		$subsite = $this->objFromFixture('Subsite', 'main');
 		Subsite::changeSubsite($subsite->ID);
 		$page = $this->objFromFixture('SiteTree', 'importantpage');
 		
 		// Create two SVPs on other subsites
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite1');
+		$subsite = $this->objFromFixture('Subsite', 'subsite1');
 		Subsite::changeSubsite($subsite->ID);
 		$vp1 = new SubsitesVirtualPage();
 		$vp1->CopyContentFromID = $page->ID;
 		$vp1->write();
 		$vp1->doPublish();
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite = $this->objFromFixture('Subsite', 'subsite2');
 		Subsite::changeSubsite($subsite->ID);
 		$vp2 = new SubsitesVirtualPage();
 		$vp2->CopyContentFromID = $page->ID;
@@ -192,7 +192,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$vp2->doPublish();
 		
 		// Switch back to main site, unpublish source
-		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		$subsite = $this->objFromFixture('Subsite', 'main');
 		Subsite::changeSubsite($subsite->ID);
 		$page = $this->objFromFixture('SiteTree', 'importantpage');
 		$page->doUnpublish();
@@ -201,7 +201,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
 		$this->assertFalse($onLive, 'SVP has been removed from live');
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite = $this->objFromFixture('Subsite', 'subsite2');
 		Subsite::changeSubsite($vp2->SubsiteID);
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
 		$this->assertFalse($onLive, 'SVP has been removed from live');
@@ -213,8 +213,8 @@ class SubsitesVirtualPageTest extends SapphireTest {
 	 */
 	function testSubsiteVirtualPageCanHaveSameUrlsegmentAsOtherSubsite() {
 		Subsite::$write_hostmap = false;
-		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
-		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+		$subsite2 = $this->objFromFixture('Subsite', 'subsite2');
 		Subsite::changeSubsite($subsite1->ID);
 		
 		$subsite1Page = $this->objFromFixture('SiteTree', 'subsite1_contactus');

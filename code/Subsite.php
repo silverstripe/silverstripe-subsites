@@ -429,13 +429,13 @@ JS;
 	 * Duplicate this subsite
 	 */
 	function duplicate() {
-		$newTemplate = parent::duplicate();
+		$duplicate = parent::duplicate();
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
 
 		/*
-		 * Copy data from this template to the given subsite. Does this using an iterative depth-first search.
+		 * Copy data from this object to the given subsite. Does this using an iterative depth-first search.
 		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
 		 * issues with having to check whether or not the new parents have been added to the site tree
 		 * when a page, etc, is duplicated
@@ -443,12 +443,11 @@ JS;
 		$stack = array(array(0,0));
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
-
 			$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {
-					$childClone = $child->duplicateToSubsite($newTemplate, false);
+					$childClone = $child->duplicateToSubsite($duplicate, false);
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');
@@ -459,7 +458,7 @@ JS;
 
 		self::changeSubsite($oldSubsiteID);
 
-		return $newTemplate;
+		return $duplicate;
 	}
 
 
@@ -467,7 +466,7 @@ JS;
 	 * Return the subsites that the current user can access.
 	 * Look for one of the given permission codes on the site.
 	 *
-	 * Sites and Templates will only be included if they have a Title
+	 * Sites will only be included if they have a Title
 	 *
 	 * @param $permCode array|string Either a single permission code or an array of permission codes.
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
@@ -490,8 +489,6 @@ JS;
 		if(isset(self::$_cache_accessible_sites[$cacheKey])) {
 			return self::$_cache_accessible_sites[$cacheKey];
 		}
-
-		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
 		$subsites = DataObject::get(
 			'Subsite',
@@ -634,58 +631,3 @@ JS;
 		self::$_cache_accessible_sites = array();
 	}
 }
-
-/**
- * An instance of subsite that can be duplicated to provide a quick way to create new subsites.
- *
- * @package subsites
- */
-class Subsite_Template extends Subsite {
-	/**
-	 * Create an instance of this template, with the given title & domain
-	 */
-	function createInstance($title, $domain = null) {
-		$intranet = Object::create('Subsite');
-		$intranet->Title = $title;
-		$intranet->TemplateID = $this->ID;
-		$intranet->write();
-		
-		if($domain) {
-			$intranetDomain = Object::create('SubsiteDomain');
-			$intranetDomain->SubsiteID = $intranet->ID;
-			$intranetDomain->Domain = $domain;
-			$intranetDomain->write();
-		}
-
-		$oldSubsiteID = Session::get('SubsiteID');
-		self::changeSubsite($this->ID);
-
-		/*
-		 * Copy site content from this template to the given subsite. Does this using an iterative depth-first search.
-		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
-		 * issues with having to check whether or not the new parents have been added to the site tree
-		 * when a page, etc, is duplicated
-		 */
-		$stack = array(array(0,0));
-		while(count($stack) > 0) {
-			list($sourceParentID, $destParentID) = array_pop($stack);
-
-			$children = Versioned::get_by_stage('SiteTree', 'Live', "\"ParentID\" = $sourceParentID", '');
-
-			if($children) {
-				foreach($children as $child) {
-					$childClone = $child->duplicateToSubsite($intranet);
-					$childClone->ParentID = $destParentID;
-					$childClone->writeToStage('Stage');
-					$childClone->publish('Stage', 'Live');
-					array_push($stack, array($child->ID, $childClone->ID));
-				}
-			}
-		}
-
-		self::changeSubsite($oldSubsiteID);
-
-		return $intranet;
-	}
-}
-?>

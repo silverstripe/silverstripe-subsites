@@ -10,8 +10,8 @@ class SiteTreeSubsitesTest extends SapphireTest {
 	);
 	
 	function testPagesInDifferentSubsitesCanShareURLSegment() {
-		$subsiteMain = $this->objFromFixture('Subsite_Template', 'main');
-		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
+		$subsiteMain = $this->objFromFixture('Subsite', 'main');
+		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
 		
 		$pageMain = new SiteTree();
 		$pageMain->URLSegment = 'testpage';
@@ -90,8 +90,8 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$mainpage = $this->objFromFixture('SiteTree', 'home');
 		$subsite1page = $this->objFromFixture('SiteTree', 'subsite1_home');
 		$subsite2page = $this->objFromFixture('SiteTree', 'subsite2_home');
-		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
-		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+		$subsite2 = $this->objFromFixture('Subsite', 'subsite2');
 	
 		// Cant pass member as arguments to canEdit() because of GroupSubsites
 		Session::set("loggedInAs", $admin->ID);

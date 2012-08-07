@@ -24,12 +24,12 @@ class SubsiteTest extends SapphireTest {
 		Subsite::$write_hostmap = false;
 		
 		// Create the instance
-		$template = $this->objFromFixture('Subsite_Template', 'main');
+		$template = $this->objFromFixture('Subsite', 'main');
 	
 		// Test that changeSubsite is working
 		Subsite::changeSubsite($template->ID);
-	
-		$tmplHome = DataObject::get_one('SiteTree', "\"URLSegment\" = 'home'");
+		$tmplStaff = $this->objFromFixture('Page','staff');
+		$tmplHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
 	
 		// Publish all the pages in the template, testing that DataObject::get only returns pages from the chosen subsite
 		$pages = DataObject::get("SiteTree");
@@ -38,20 +38,16 @@ class SubsiteTest extends SapphireTest {
 			$this->assertEquals($template->ID, $page->SubsiteID);
 			$page->publish('Stage', 'Live');
 		}
-		
+
 		// Create a new site
-		$subsite = $template->createInstance('My Site', 'something.test.com');
+		$subsite = $template->duplicate();
 	
 		// Check title
-		$this->assertEquals($subsite->Title, 'My Site');
+		$this->assertEquals($subsite->Title, $template->Title);
 		
-		// Check that domain generation is working
-		$this->assertEquals('something.test.com', $subsite->domain());
-	
 		// Another test that changeSubsite is working
 		$subsite->activate();
-	
-		$siteHome = DataObject::get_one('SiteTree', "\"URLSegment\" = 'home'");
+		$siteHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
 		$this->assertNotNull($siteHome);
 		$this->assertEquals($subsite->ID, $siteHome->SubsiteID,
 			'createInstance() copies existing pages retaining the same URLSegment'
@@ -59,8 +55,7 @@ class SubsiteTest extends SapphireTest {
 		$this->assertEquals($siteHome->MasterPageID, $tmplHome->ID, 'Check master page value');
 		
 		// Check linking of child pages
-		$tmplStaff = $this->objFromFixture('SiteTree','staff');
-		$siteStaff = DataObject::get_one('SiteTree', "\"URLSegment\" = '" . Convert::raw2sql($tmplStaff->URLSegment) . "'");
+		$siteStaff = DataObject::get_one('Page', "\"URLSegment\" = '" . Convert::raw2sql($tmplStaff->URLSegment) . "'");
 		$this->assertEquals($siteStaff->MasterPageID, $tmplStaff->ID);
 		
 		Subsite::changeSubsite(0);
