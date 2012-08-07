@@ -1,0 +1,40 @@
+tr_TR:
+    SubsiteAdmin:
+        MENUTITLE: "Alt Siteler"
+    GroupSubsites:
+        ACCESSALL: "All subsites"
+        ACCESSONLY: "Only these subsites"
+        ACCESSRADIOTITLE: "Give this group access to"
+        SECURITYTABTITLE: "Alt Siteler"
+        SECURITYACCESS: "Alt sitelere İYS erişimini kısıtla"
+    ModelAdmin:
+        LOADEDFOREDITING: "Loaded \'%s\' for editing."
+    RelatedPageLink:
+        PLURALNAME: "Related Page Links"
+        SINGULARNAME: "Related Page Link"
+    Subsite:
+        PLURALNAME: "Alt Siteler"
+        SINGULARNAME: "Alt Site"
+        DOMAINSAVEFIRST: "You can only add domains after saving for the first time"
+    SubsiteDomain:
+        PLURALNAME: "Subsite Domains"
+        SINGULARNAME: "Subsite Domain"
+        DOMAIN: "Domain"
+        IS_PRIMARY: "Is Primary Domain"
+    Subsite_Template:
+        PLURALNAME: "Subsite Templats"
+        SINGULARNAME: "Subsite Template"
+    SubsitesVirtualPage:
+        PLURALNAME: "Alt Site Sanal Sayfalar"
+        SINGULARNAME: "Alt Site Sanal Sayfa"
+    VirtualPage:
+        CHOOSE: "İzleyene bağlantı vermek için bir sayfa seçiniz: "
+        EDITCONTENT: "İçeriği düzenlemek için tıklayınız"
+    GridFieldAddFromTemplateButton:
+        AddFromTemplate: "Add New from Template"
+    GridFieldAddFromTemplate:
+        NewFromTemplate: "New %s from template"
+        TEMPLATE_NOT_FOUND: "The selected template could not be found"
+        TEMPLATE: "Template"
+    LeftAndMainSubsites:
+        DEFAULT_SITE: "Default Site"

@@ -3,14 +3,11 @@
 /**
  * Extension for the SiteConfig object to add subsites support
  */
-class SiteConfigSubsites extends DataObjectDecorator {		
-	function extraStatics() {
-		return array(
-			'has_one' => array(
-				'Subsite' => 'Subsite', // The subsite that this page belongs to
-			)
-		);
-	}
+class SiteConfigSubsites extends DataExtension {		
+	public static $has_one=array(
+		'Subsite' => 'Subsite', // The subsite that this page belongs to
+	);
+	
 	
 	/**
 	 * Update any requests to limit the results to the current site
@@ -20,12 +17,14 @@ class SiteConfigSubsites extends DataObjectDecorator {
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]) && !preg_match('/\.?(\'|"|`|)SubsiteID(\'|"|`|)( ?)=/', $query->where[0]))) {
-			if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-			else $subsiteID = (int)Subsite::currentSubsiteID();
+			/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+			else */$subsiteID = (int)Subsite::currentSubsiteID();
 			
-			$tableName = array_shift(array_keys($query->from));
+			$froms=$query->getFrom();
+			$froms=array_keys($froms);
+			$tableName = array_shift($froms);
 			if($tableName != 'SiteConfig') return;
-			$query->where[] = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
+			$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
 		}
 	}
 

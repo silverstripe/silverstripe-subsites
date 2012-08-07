@@ -41,8 +41,8 @@ class SiteTreeSubsitesTest extends SapphireTest {
 	
 	function testBasicSanity() {
 		$this->assertTrue(singleton('SiteTree')->getSiteConfig() instanceof SiteConfig);
-		$this->assertTrue(singleton('SiteTree')->getCMSFields() instanceof FieldSet);
-		$this->assertTrue(singleton('SubsitesVirtualPage')->getCMSFields() instanceof FieldSet);
+		$this->assertTrue(singleton('SiteTree')->getCMSFields() instanceof FieldList);
+		$this->assertTrue(singleton('SubsitesVirtualPage')->getCMSFields() instanceof FieldList);
 		$this->assertTrue(is_array(singleton('SiteTreeSubsites')->extraStatics()));
 	}
 	
@@ -58,7 +58,7 @@ class SiteTreeSubsitesTest extends SapphireTest {
 	}
 	
 	function testRelatedPages() {
-		$this->assertTrue(singleton('RelatedPageLink')->getCMSFields() instanceof FieldSet);
+		$this->assertTrue(singleton('RelatedPageLink')->getCMSFields() instanceof FieldList);
 		
 		$importantpage = $this->objFromFixture('SiteTree', 'importantpage');
 		$contact = $this->objFromFixture('SiteTree', 'contact');
@@ -68,13 +68,13 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$link->RelatedPageID = $contact->ID;
 		$link->write();
 		$importantpage->RelatedPages()->add($link);
-		$this->assertTrue(singleton('SiteTree')->getCMSFields() instanceof FieldSet);
+		$this->assertTrue(singleton('SiteTree')->getCMSFields() instanceof FieldList);
 		
 		$this->assertEquals($importantpage->NormalRelated()->Count(), 1);
 		$this->assertEquals($contact->ReverseRelated()->Count(), 1);
 		
-		$this->assertTrue($importantpage->getCMSFields() instanceof FieldSet);
-		$this->assertTrue($contact->getCMSFields() instanceof FieldSet);
+		$this->assertTrue($importantpage->getCMSFields() instanceof FieldList);
+		$this->assertTrue($contact->getCMSFields() instanceof FieldList);
 		
 		$this->assertEquals($importantpage->canView(), $link->canView());
 		$this->assertEquals($importantpage->canEdit(), $link->canEdit());
@@ -164,25 +164,27 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$s1->write();
 		
 		Subsite::changeSubsite($s1);
+		$settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
 		$this->assertArrayNotHasKey('ErrorPage', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayNotHasKey('SiteTreeSubsitesTest_ClassA', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 
 		Subsite::changeSubsite($s2);
+		$settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
 		$this->assertArrayHasKey('ErrorPage', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassA', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 		$this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB', 
-			$page->getCMSFields()->dataFieldByName('ClassName')->getSource()
+			$settingsFields
 		);
 	}
 	

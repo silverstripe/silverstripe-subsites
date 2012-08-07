@@ -146,7 +146,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	function domain() {
 		if($this->ID) {
 			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
-			if($domains) {
+			if($domains && $domains->Count()>0) {
 				$domain = $domains->First()->Domain;
 				// If there are wildcards in the primary domain (not recommended), make some
 				// educated guesses about what to replace them with:
@@ -178,10 +178,11 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Show the configuration fields for each subsite
 	 */
 	function getCMSFields() {
-		$domainTable = new TableField("Domains", "SubsiteDomain", 
-			array("Domain" => "Domain <small>(use * as a wildcard)</small>", "IsPrimary" => "Primary domain?"), 
-			array("Domain" => "TextField", "IsPrimary" => "CheckboxField"), 
-			"SubsiteID", $this->ID);
+		if($this->ID!=0) {
+			$domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
+		}else {
+			$domainTable = new LiteralField('Domains', '<p>'._t('Subsite.DOMAINSAVEFIRST', '_You can only add domains after saving for the first time').'</p>');
+		}
 			
 		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
 		
@@ -192,7 +193,7 @@ class Subsite extends DataObject implements PermissionProvider {
 		}
 		asort($pageTypeMap);
 
-		$fields = new FieldSet(
+		$fields = new FieldList(
 			new TabSet('Root',
 				new Tab('Configuration',
 					new HeaderField($this->getClassName() . ' configuration', 2),
@@ -238,8 +239,8 @@ class Subsite extends DataObject implements PermissionProvider {
 	}
 
 	function getCMSActions() {
-		return new FieldSet(
-            new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
+		return new FieldList(
+			new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
 		);
 	}
 
@@ -285,7 +286,7 @@ JS;
 			$id = self::getSubsiteIDForDomain();
 			Session::set('SubsiteID', $id);
 		}
-
+		
 		return (int)$id;
 	}
 	
@@ -321,7 +322,7 @@ JS;
 	/**
 	 * @todo Possible security issue, don't grant edit permissions to everybody.
 	 */
-	function canEdit() {
+	function canEdit($member = false) {
 		return true;
 	}
 
@@ -341,12 +342,12 @@ JS;
 		$SQL_host = Convert::raw2sql($host);
 
 		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
-			"\"IsPrimary\" DESC", "INNER JOIN \"Subsite\" ON \"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
+			"\"IsPrimary\" DESC")->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
 			\"Subsite\".\"IsPublic\"=1");
 		
-		if($matchingDomains) {
-			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
-			$subsiteDomains = array_unique($matchingDomains->column('Domain'));
+		if($matchingDomains && $matchingDomains->Count()>0) {
+			$subsiteIDs = array_unique($matchingDomains->map('SubsiteID')->keys());
+			$subsiteDomains = array_unique($matchingDomains->map('Domain')->keys());
 			if(sizeof($subsiteIDs) > 1) {
 				throw new UnexpectedValueException(sprintf(
 					"Multiple subsites match on '%s': %s",
@@ -402,7 +403,7 @@ JS;
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
-		if(!$member && $member !== FALSE) $member = Member::currentMember();
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
 
 		if(!$member) return false;
 		
@@ -428,8 +429,8 @@ JS;
 	/**
 	 * Duplicate this subsite
 	 */
-	function duplicate() {
-		$newTemplate = parent::duplicate();
+	function duplicate($doWrite = true) {
+		$newTemplate = parent::duplicate($doWrite);
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
@@ -473,12 +474,12 @@ JS;
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
 	 * @param $mainSiteTitle The label to give to the main site
 	 * @param $member
-	 * @return DataObjectSet of {@link Subsite} instances
+	 * @return DataList of {@link Subsite} instances
 	 */
-	function accessible_sites($permCode, $includeMainSite = false, $mainSiteTitle = "Main site", $member = null) {
+	public static function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
-		if(!$member) return new DataObjectSet();
+		if(!$member) return new ArrayList();
 		if(!is_object($member)) $member = DataObject::get_by_id('Member', $member);
 
 		// Rationalise permCode argument 
@@ -493,42 +494,23 @@ JS;
 
 		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
 
-		$subsites = DataObject::get(
-			'Subsite',
-			"\"Subsite\".\"Title\" != ''",
-			'',
-			"LEFT JOIN \"Group_Subsites\" 
-				ON \"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"
-			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\"
-				OR \"Group\".\"AccessAllSubsites\" = 1
-			INNER JOIN \"Group_Members\" 
-				ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
-				AND \"Group_Members\".\"MemberID\" = $member->ID
-			INNER JOIN \"Permission\" 
-				ON \"Group\".\"ID\"=\"Permission\".\"GroupID\"
-				AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')"
-		);
-		if(!$subsites) $subsites = new DataObjectSet();
+		$subsites = DataList::create('Subsite')
+			->where("\"Subsite\".\"Title\" != ''")
+			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
+			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
+			->innerJoin('Permission', "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')");
+		
+		if(!$subsites) $subsites = new ArrayList();
 
-		$rolesSubsites = DataObject::get(
-			'Subsite',
-			"\"Subsite\".\"Title\" != ''",
-			'',
-			"LEFT JOIN \"Group_Subsites\" 
-				ON \"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"
-			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\"
-				OR \"Group\".\"AccessAllSubsites\" = 1
-			INNER JOIN \"Group_Members\" 
-				ON \"Group_Members\".\"GroupID\"=\"Group\".\"ID\"
-				AND \"Group_Members\".\"MemberID\" = $member->ID
-			INNER JOIN \"Group_Roles\"
-				ON \"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"
-			INNER JOIN \"PermissionRole\"
-				ON \"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"
-			INNER JOIN \"PermissionRoleCode\"
-				ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
-				AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'ADMIN')"
-		);
+		$rolesSubsites = DataList::create('Subsite')
+			->where("\"Subsite\".\"Title\" != ''")
+			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
+			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
+			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
+			->innerJoin('Group_Roles', "\"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"")
+			->innerJoin('PermissionRole', "\"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"")
+			->innerJoin('PermissionRoleCode', "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'ADMIN')");
 
 		if(!$subsites && $rolesSubsites) return $rolesSubsites;
 
@@ -539,18 +521,22 @@ JS;
 		}
 
 		// Include the main site
-		if(!$subsites) $subsites = new DataObjectSet();
+		if(!$subsites) $subsites = new ArrayList();
 		if($includeMainSite) {
 			if(!is_array($permCode)) $permCode = array($permCode);
 			if(self::hasMainSitePermission($member, $permCode)) {
+				$subsites=$subsites->toArray();
+				
 				$mainSite = new Subsite();
 				$mainSite->Title = $mainSiteTitle;
-				$subsites->insertFirst($mainSite);
+				array_unshift($subsites, $mainSite);
+				$subsites=ArrayList::create($subsites);
 			}
 		}
 		
 		self::$_cache_accessible_sites[$cacheKey] = $subsites;
 
+		
 		return $subsites;
 	}
 	
@@ -593,10 +579,10 @@ JS;
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Return the FieldSet that will build the search form in the CMS
+	 * Return the FieldList that will build the search form in the CMS
 	 */
 	function adminSearchFields() {
-		return new FieldSet(
+		return new FieldList(
 			new TextField('Name', 'Sub-site name')
 		);
 	}
@@ -674,10 +660,16 @@ class Subsite_Template extends Subsite {
 
 			if($children) {
 				foreach($children as $child) {
+					//Change to destination subsite
+					self::changeSubsite($intranet->ID);
 					$childClone = $child->duplicateToSubsite($intranet);
+
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');
+
+					//Change Back to this subsite
+					self::changeSubsite($this->ID);
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}

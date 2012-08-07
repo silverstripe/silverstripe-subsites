@@ -1,5 +1,5 @@
 <?php
-class ErrorPageSubsite extends DataObjectDecorator {
+class ErrorPageSubsite extends DataExtension {
 	
 	/**
 	 * Alter file path to generated a static (static) error page file to handle error page template on different sub-sites 

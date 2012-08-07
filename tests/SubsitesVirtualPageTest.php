@@ -199,12 +199,12 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		
 		Subsite::changeSubsite($vp1->SubsiteID);
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
-		$this->assertFalse($onLive, 'SVP has been removed from live');
+		$this->assertNull($onLive, 'SVP has been removed from live');
 		
 		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
 		Subsite::changeSubsite($vp2->SubsiteID);
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
-		$this->assertFalse($onLive, 'SVP has been removed from live');
+		$this->assertNull($onLive, 'SVP has been removed from live');
 	}
 	
 	/**
@@ -217,8 +217,8 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
 		Subsite::changeSubsite($subsite1->ID);
 		
-		$subsite1Page = $this->objFromFixture('SiteTree', 'subsite1_contactus');
-		$subsite1Page->URLSegment = 'contact-us';
+		$subsite1Page = $this->objFromFixture('SiteTree', 'subsite1_staff');
+		$subsite1Page->URLSegment = 'staff';
 		$subsite1Page->write();
 		
 		// saving on subsite1, and linking to subsite1
@@ -232,6 +232,9 @@ class SubsitesVirtualPageTest extends SapphireTest {
 			"Doesn't allow explicit URLSegment overrides when already existing in same subsite"
 		);
 		
+		//Change to subsite 2
+		Subsite::changeSubsite($subsite2->ID);
+
 		// saving in subsite2 (which already has a page with URLSegment 'contact-us'), 
 		// but linking to a page in subsite1
 		$subsite2Vp = new SubsitesVirtualPage();

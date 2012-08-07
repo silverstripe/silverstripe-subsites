@@ -17,19 +17,24 @@ class RelatedPageLink extends DataObject {
 		'MasterPage' => 'SiteTree',
 	);
 	
+	public static $summary_fields=array(
+		'RelatedPageAdminLink' => 'Page',
+		'AbsoluteLink' => 'URL',
+	);
+	
 	function getCMSFields() {
 		$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
-		if(!$subsites) $subsites = new DataObjectSet();
+		if(!$subsites) $subsites = new ArrayList();
 
 		if(Subsite::hasMainSitePermission(null, array("CMS_ACCESS_CMSMain"))) {
-			$subsites->push(new ArrayData(array('Title' => 'Main site', "\"ID\"" => 0)));
+			$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", true);
 		}
 	
 		if($subsites->Count()) {
 			$subsiteSelectionField = new DropdownField(
 				"CopyContentFromID_SubsiteID", 
 				"Subsite", 
-				$subsites->toDropdownMap('ID', 'Title'),
+				$subsites->map('ID', 'Title'),
 				($this->CopyContentFromID) ? $this->CopyContentFrom()->SubsiteID : Session::get('SubsiteID')
 			);
 		}
@@ -47,8 +52,8 @@ class RelatedPageLink extends DataObject {
 				
 		$pageSelectionField->setFilterFunction(create_function('$item', 'return $item->ClassName != "VirtualPage";'));
 		
-		if($subsites->Count()) $fields = new FieldSet($subsiteSelectionField, $pageSelectionField);
-		else $fields = new FieldSet($pageSelectionField);
+		if($subsites->Count()) $fields = new FieldList($subsiteSelectionField, $pageSelectionField);
+		else $fields = new FieldList($pageSelectionField);
 		
 		return $fields;
 	}

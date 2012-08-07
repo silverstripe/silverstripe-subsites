@@ -4,20 +4,16 @@
  *
  * @package subsites
  */
-class FileSubsites extends DataObjectDecorator {
+class FileSubsites extends DataExtension {
 	
 	// If this is set to true, all folders created will be default be
 	// considered 'global', unless set otherwise
 	static $default_root_folders_global = false;
 	
-	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'File') return null;
-		return array(
-			'has_one' => array(
-				'Subsite' => 'Subsite',
-			),
-		);
-	}
+	public static $has_one=array(
+		'Subsite' => 'Subsite',
+	);
+	
 
 	/**
 	 * Amends the CMS tree title for folders in the Files & Images section.
@@ -31,13 +27,16 @@ class FileSubsites extends DataObjectDecorator {
 	/**
 	 * Add subsites-specific fields to the folder editor.
 	 */
-	function updateCMSFields(FieldSet &$fields) {
+	function updateCMSFields(FieldList $fields) {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-			$dropdownValues = ($sites) ? $sites->toDropdownMap() : array();
+			$dropdownValues = array();
 			$dropdownValues[0] = 'All sites';
+			foreach ($sites as $site) {
+				$dropDownValues[$site->ID] = $site->Title;
+			}
 			ksort($dropdownValues);
-			if($sites)$fields->addFieldToTab('Root.Details', new DropdownField("SubsiteID", "Subsite", $dropdownValues));
+			if($sites)$fields->push(new DropdownField("SubsiteID", "Subsite", $dropdownValues));
 		}
 	}
 
@@ -46,22 +45,24 @@ class FileSubsites extends DataObjectDecorator {
 	 */
 	function augmentSQL(SQLQuery &$query) {
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
-		if(!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0])) {
-			if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
-			else $subsiteID = (int) Subsite::currentSubsiteID();
+		//@TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
+		if(!array_search('SiteTree_ImageTracking', $query->getFrom())===false && (!$query->where || !preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $query->where[0]))) {
+			/*if($context = DataObject::context_obj()) $subsiteID = (int) $context->SubsiteID;
+			else */$subsiteID = (int) Subsite::currentSubsiteID();
 
 			// The foreach is an ugly way of getting the first key :-)
-			foreach($query->from as $tableName => $info) {
+			foreach($query->getFrom() as $tableName => $info) {
 				$where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
-				$query->where[] = $where;
+				$query->addWhere($where);
 				break;
 			}
 			
-			$isCounting = strpos($query->select[0], 'COUNT') !== false;
+			$sect=array_values($query->getSelect());
+			$isCounting = strpos($sect[0], 'COUNT') !== false;
 
 			// Ordering when deleting or counting doesn't apply
-			if(!$query->delete && !$isCounting) {
-				$query->orderby = "\"SubsiteID\"" . ($query->orderby ? ', ' : '') . $query->orderby;
+			if(!$query->getDelete() && !$isCounting) {
+				$query->addOrderBy("\"SubsiteID\"");
 			}
 		}
 	}
@@ -86,7 +87,7 @@ class FileSubsites extends DataObjectDecorator {
 		$this->owner->write();
 	}
 
-	function canEdit() {
+	function canEdit($member = null) {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
 		$subsiteID = Session::get('SubsiteID');
 		if($subsiteID&&$subsiteID == $this->owner->SubsiteID) {
@@ -108,5 +109,4 @@ class FileSubsites extends DataObjectDecorator {
 	}
 	
 }
-
 

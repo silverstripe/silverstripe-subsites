@@ -15,6 +15,8 @@ Object::add_extension('LeftAndMain', 'ControllerSubsites');
 Object::add_extension('Group', 'GroupSubsites');
 Object::add_extension('File', 'FileSubsites');
 Object::add_extension('ErrorPage', 'ErrorPageSubsite');
-if (class_exists('SiteConfig')) Object::add_extension('SiteConfig', 'SiteConfigSubsites');
+Object::add_extension('SiteConfig', 'SiteConfigSubsites');
 
+
+SS_Report::add_excluded_reports('SubsiteReportWrapper');
 ?>

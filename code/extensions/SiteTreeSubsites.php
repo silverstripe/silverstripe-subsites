@@ -3,7 +3,7 @@
 /**
  * Extension for the SiteTree object to add subsites support
  */
-class SiteTreeSubsites extends SiteTreeDecorator {
+class SiteTreeSubsites extends DataExtension {
 	static $template_variables = array(
 		'((Company Name))' => 'Title'
 	);
@@ -27,24 +27,26 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	}
 
 	
-	function extraStatics() {
-		if(!method_exists('DataObjectDecorator', 'load_extra_statics') && $this->owner->class != 'SiteTree') return null;
-		return array(
-			'has_one' => array(
-				'Subsite' => 'Subsite', // The subsite that this page belongs to
-				'MasterPage' => 'SiteTree',// Optional; the page that is the content master
-			),
-			'has_many' => array(
-				'RelatedPages' => 'RelatedPageLink'
-			),
-			'many_many' => array(
-				'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
-			),
-			'belongs_many_many' => array(
-				'BackCrossSubsiteLinkTracking' => 'SiteTree'
-			)
-		);
-	}
+	public static $has_one=array(
+		'Subsite' => 'Subsite', // The subsite that this page belongs to
+		'MasterPage' => 'SiteTree',// Optional; the page that is the content master
+	);
+	
+	public static $has_many=array(
+		'RelatedPages' => 'RelatedPageLink'
+	);
+	
+	public static $many_many=array(
+		'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
+	);
+	
+	public static $belongs_many_many=array(
+		'BackCrossSubsiteLinkTracking' => 'SiteTree'
+	);
+	
+	public static $many_many_extraFields=array(
+		"CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
+	);
 	
 	function isMainSite() {
 		if($this->owner->SubsiteID == 0) return true;
@@ -59,7 +61,7 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		
 		// Don't run on delete queries, since they are always tied to
 		// a specific ID.
-		if ($query->delete) return;
+		if ($query->getDelete()) return;
 		
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		// if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
@@ -67,15 +69,15 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 
 			if (Subsite::$force_subsite) $subsiteID = Subsite::$force_subsite;
 			else {
-				if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-				else $subsiteID = (int)Subsite::currentSubsiteID();
+				/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+				else */$subsiteID = (int)Subsite::currentSubsiteID();
 			}
 			
 			// The foreach is an ugly way of getting the first key :-)
-			foreach($query->from as $tableName => $info) {
+			foreach($query->getFrom() as $tableName => $info) {
 				// The tableName should be SiteTree or SiteTree_Live...
 				if(strpos($tableName,'SiteTree') === false) break;
-				$query->where[] = "\"$tableName\".\"SubsiteID\" IN ($subsiteID)";
+				$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
 				break;
 			}
 		}
@@ -87,19 +89,22 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		parent::onBeforeWrite();
 	}
 
-	function updateCMSFields(&$fields) {
-		if($this->owner->MasterPageID) $fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
+	function updateCMSFields(FieldList $fields) {
+		if($this->owner->MasterPageID) $fields->addFieldToTab('Root.Main', new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2), 'Title');
 		
 		// replace readonly link prefix
 		$subsite = $this->owner->Subsite();
 		if($subsite && $subsite->ID) {
 			$baseUrl = 'http://' . $subsite->domain() . '/';
-			$fields->removeByName('BaseUrlLabel');
-			$fields->addFieldToTab(
-				'Root.Content.Metadata',
-				new LabelField('BaseUrlLabel',$baseUrl),
-				'URLSegment'
+			
+			$baseLink = Controller::join_links (
+				$baseUrl,
+				(SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
 			);
+			
+			$url = (strlen($baseLink) > 36 ? "..." .substr($baseLink, -32) : $baseLink);
+			$urlsegment = $fields->dataFieldByName('URLSegment');
+			$urlsegment->setURLPrefix($url);
 		}
 		
 		$relatedCount = 0;
@@ -111,21 +116,16 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 		$tabName = $relatedCount ? 'Related (' . $relatedCount . ')' : 'Related';
 		$tab = $fields->findOrMakeTab('Root.Related', $tabName);
 		// Related pages
-		$tab->push(new LiteralField('RelatedNote', '<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>'));
+		$tab->push(new LiteralField('RelatedNote',
+			'<p>You can list pages here that are related to this page.<br />When this page is updated, you will get a reminder to check whether these related pages need to be updated as well.</p>'));
 		$tab->push(
-			$related = new ComplexTableField(
-					$this,
-					'RelatedPages',
-					'RelatedPageLink',
-					array(
-						'RelatedPageAdminLink' => 'Page',
-						'AbsoluteLink' => 'URL',
-					)
-			)
+			$related=new GridField('RelatedPages', 'Related Pages', $this->owner->RelatedPages(), GridFieldConfig_Base::create())
 		);
 		
+		$related->setModelClass('RelatedPageLink');
+		
 		// The 'show' link doesn't provide any useful info
-		$related->setPermissions(array('add', 'edit', 'delete'));
+		//$related->setPermissions(array('add', 'edit', 'delete'));
 		
 		if($reverse) {
 			$text = '<p>In addition, this page is marked as related by the following pages: </p><p>';
@@ -144,16 +144,13 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	 */
 	function ReverseRelated() {
 		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
-			AND R2.\"ID\" IS NULL", '',
-			"INNER JOIN \"SiteTree\" ON \"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"
-			LEFT JOIN \"RelatedPageLink\" AS R2 ON R2.\"MasterPageID\" = {$this->owner->ID}
-			AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"
-			"
-		);
+			AND R2.\"ID\" IS NULL", '')
+			->innerJoin('SiteTree', "\"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"")
+			->leftJoin('RelatedPageLink', "R2.\"MasterPageID\" = {$this->owner->ID} AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"", 'R2');
 	}
 	
 	function NormalRelated() {
-		$return = new DataObjectSet();
+		$return = new ArrayList();
 		$links = DataObject::get('RelatedPageLink', '"MasterPageID" = ' . $this->owner->ID);
 		if($links) foreach($links as $link) {
 			if($link->RelatedPage()->exists()) {
@@ -232,15 +229,24 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 			$subsiteID = $subsite->ID;
 		} else $subsite = DataObject::get_by_id('Subsite', $subsiteID);
 		
+		$oldSubsite=Subsite::currentSubsiteID();
+		if($subsiteID) {
+			Subsite::changeSubsite($subsiteID);
+		}else {
+			$subsiteID=$oldSubsite;
+		}
+
 		$page = $this->owner->duplicate(false);
 
 		$page->CheckedPublicationDifferences = $page->AddedToStage = true;
-		$subsiteID = ($subsiteID ? $subsiteID : Subsite::currentSubsiteID());
+		$subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
 		$page->SubsiteID = $subsiteID;
 		
 		if($isTemplate) $page->MasterPageID = $this->owner->ID;
 		
 		$page->write();
+
+		Subsite::changeSubsite($oldSubsite);
 
 		return $page;
 	}
