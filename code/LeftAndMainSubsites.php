@@ -6,6 +6,8 @@
  */
 class LeftAndMainSubsites extends Extension {
 
+	static $allowed_actions = array('CopyToSubsite');
+
 	function init() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
@@ -21,7 +23,7 @@ class LeftAndMainSubsites extends Extension {
 			Subsite::changeSubsite($_REQUEST['SubsiteID']);
 		}
 	}
-	
+
 	/**
 	 * Set the title of the CMS tree
 	 */
@@ -164,8 +166,11 @@ class LeftAndMainSubsites extends Extension {
 			FormResponse::status_message('Saved, please update related pages.', 'good');
 		}
 	}
-}
-	
-	
 
-?>
+	function copytosubsite($data, $form) {
+		$page = DataObject::get_by_id('SiteTree', $data['ID']);
+		$subsite = DataObject::get_by_id('Subsite', $data['CopyToSubsiteID']);
+		$newPage = $page->duplicateToSubsite($subsite->ID, true);
+		return $this->owner->redirect(Controller::join_links($this->owner->Link('show'), $newPage->ID));
+	}
+}

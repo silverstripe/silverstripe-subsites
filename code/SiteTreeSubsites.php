@@ -66,7 +66,69 @@ class SiteTreeSubsites extends SiteTreeDecorator {
 	}
 
 	function updateCMSFields(&$fields) {
-		if($this->owner->MasterPageID) $fields->insertFirst(new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2));
+		$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
+		$subsitesMap = array();
+		if($subsites && $subsites->Count()) {
+			$subsitesMap = $subsites->toDropdownMap('ID', 'Title');
+			unset($subsitesMap[$this->owner->SubsiteID]);
+		} 
+
+		// Master page notice
+		if($this->owner->MasterPageID) {
+			$masterPage = $this->owner->MasterPage();
+			$masterNoteField = new LiteralField(
+				'MasterLink',
+				sprintf(
+					_t(
+						'SiteTreeSubsites.MasterLinkNote',
+						'<p>This page\'s content is copied from the <a href="%s" target="_blank">%s</a> master page (<a href="%s">edit</a>)</p>'
+					),
+					$masterPage->AbsoluteLink(), 
+					$masterPage->Title,
+					Controller::join_links(
+						singleton('CMSMain')->Link('show'),
+						$masterPage->ID
+					)
+				)
+			);
+			$fields->addFieldToTab('Root.Content.Main',$masterNoteField);
+		} 
+
+		// Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
+		$isDefaultSubsite = $this->owner->SubsiteID == 0 || $this->owner->Subsite()->DefaultSite;
+		if($isDefaultSubsite && $subsitesMap) {
+			$fields->addFieldToTab(
+				'Root.Content.Main',
+				new DropdownField(
+					"CopyToSubsiteID", 
+					_t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"), 
+					$subsitesMap,
+					''
+				)
+			);
+			$fields->addFieldToTab(
+				'Root.Content.Main',
+				$copyAction = new InlineFormAction(
+					"copytosubsite", 
+					_t('SiteTreeSubsites.CopyAction', "Copy")
+				)
+			);
+			$copyAction->includeDefaultJS(false);
+		} else {
+			$defaultSubsite = DataObject::get_one('Subsite', '"DefaultSite" = 1');
+			if($defaultSubsite) {
+				$fields->addFieldToTab('Root.Content.Main',
+					$masterPageField = new SubsitesTreeDropdownField(
+						"MasterPageID", 
+						_t('VirtualPage.MasterPage', "Master page"), 
+						"SiteTree",
+						"ID",
+						"MenuTitle"
+					)
+				);
+				$masterPageField->setSubsiteID($defaultSubsite->ID);
+			}
+		}
 		
 		// replace readonly link prefix
 		$subsite = $this->owner->Subsite();
