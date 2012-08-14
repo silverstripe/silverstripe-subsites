@@ -3,6 +3,8 @@ SubsitesTreeDropdownField.prototype = {
 	
 	subsiteID: function() {
 		var subsiteSel = $$('#CopyContentFromID_SubsiteID select')[0];
+		if(!subsiteSel) return;
+		
 		subsiteSel.onchange = (function() {
 			this.createTreeNode(true);
 			this.ajaxGetTree((function(response) {
