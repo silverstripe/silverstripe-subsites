@@ -245,7 +245,9 @@ class SiteTreeSubsites extends DataExtension {
 		if($isTemplate) $page->MasterPageID = $this->owner->ID;
 		
 		$page->write();
-
+		
+		Subsite::changeSubsite($oldSubsite);
+		
 		Subsite::changeSubsite($oldSubsite);
 
 		return $page;
