@@ -12,16 +12,18 @@ class LeftAndMainSubsites extends Extension {
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
 		
 		if(isset($_REQUEST['SubsiteID'])) {
-			// Clear current page when subsite changes (or is set for the first time)
-			if(!Session::get('SubsiteID') || $_REQUEST['SubsiteID'] != Session::get('SubsiteID')) {
-				Session::clear("{$this->owner->class}.currentPage");
-			}
-			
 			// Update current subsite in session
 			Subsite::changeSubsite($_REQUEST['SubsiteID']);
 			
-			//Redirect to clear the current page
-			$this->owner->redirect('admin/pages');
+			if($this->owner->getRequest()->param('Action')!='AddForm' && !($this->owner instanceof CMSPageAddController)) {
+				// Clear current page when subsite changes (or is set for the first time)
+				if(!Session::get('SubsiteID') || $_REQUEST['SubsiteID'] != Session::get('SubsiteID')) {
+					Session::clear("{$this->owner->class}.currentPage");
+				}
+				
+				//Redirect to clear the current page
+				$this->owner->redirect('admin/pages');
+			}
 		}
 	}
 	
