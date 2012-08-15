@@ -76,6 +76,8 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	private static $_cache_accessible_sites = array();
 
+	private static $_cache_subsite_for_domain = array();
+
 	/**
 	 * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
 	 * Corresponds to subfolder names within the /themes folder. By default, all themes contained in this folder
@@ -89,6 +91,11 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * in both TRUE or FALSE setting.
 	 */
 	static $strict_subdomain_matching = false;
+
+	/**
+	 * @var boolean Respects the IsPublic flag when retrieving subsites
+	 */
+	static $check_is_public = true;
 
 	static function set_allowed_domains($domain){
 		user_error('Subsite::set_allowed_domains() is deprecated; it is no longer necessary '
@@ -334,15 +341,22 @@ JS;
 	 * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
 	 * @return int Subsite ID
 	 */
-	static function getSubsiteIDForDomain($host = null, $returnMainIfNotFound = true) {
+	static function getSubsiteIDForDomain($host = null, $checkPermissions = true) {
 		if($host == null) $host = $_SERVER['HTTP_HOST'];
-		
-		if(!Subsite::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
-		$SQL_host = Convert::raw2sql($host);
 
-		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
-			"\"IsPrimary\" DESC", "INNER JOIN \"Subsite\" ON \"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
-			\"Subsite\".\"IsPublic\"=1");
+		if(!Subsite::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
+
+		$cacheKey = implode('_', array($host, Member::currentUserID(), Subsite::$check_is_public));
+		if(isset(self::$_cache_subsite_for_domain[$cacheKey])) return self::$_cache_subsite_for_domain[$cacheKey];
+
+		$SQL_host = Convert::raw2sql($host);
+		$joinFilter = self::$check_is_public ? "AND \"Subsite\".\"IsPublic\"=1" : '';
+		$matchingDomains = DataObject::get(
+			"SubsiteDomain", 
+			"'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
+			"\"IsPrimary\" DESC", 
+			"INNER JOIN \"Subsite\" ON \"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" $joinFilter"
+		);
 		
 		if($matchingDomains) {
 			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
@@ -355,16 +369,18 @@ JS;
 				));
 			}
 			
-			return $subsiteIDs[0];
+			$subsiteID = $subsiteIDs[0];
+		} else if($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
+			// Check for a 'default' subsite
+			$subsiteID = $default->ID;
+		} else {
+			// Default subsite id = 0, the main site
+			$subsiteID = 0;
 		}
 		
-		// Check for a 'default' subsite
-		if ($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
-			return $default->ID;
-		}
+		self::$_cache_subsite_for_domain[$cacheKey] = $subsiteID;
 		
-		// Default subsite id = 0, the main site
-		return 0;
+		return $subsiteID;
 	}
 
 	function getMembersByPermission($permissionCodes = array('ADMIN')){
@@ -629,5 +645,6 @@ JS;
 	 */
 	static function on_db_reset() {
 		self::$_cache_accessible_sites = array();
+		self::$_cache_subsite_for_domain = array();
 	}
 }

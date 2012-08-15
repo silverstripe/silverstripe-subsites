@@ -53,7 +53,7 @@ class LeftAndMainSubsites extends Extension {
 				
 			case "CMSMain":
 				// If there's a default site then main site has no meaning
-				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1 AND \"IsPublic\"=1");
+				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1");
 				$subsites = Subsite::accessible_sites($accessPerm, $showMainSite);
 				break;
 				
