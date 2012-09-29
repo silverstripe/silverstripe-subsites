@@ -1,0 +1,16 @@
+{
+	"name": "silverstripe/subsites",
+	"description": "The subsites module allows multiple websites to run from a single installation of SilverStripe, and share users, content, and assets between them.",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "subsites"],
+	"authors": [
+	{
+		"name": "Ingo Schommer",
+		"email": "ingo@silverstripe.com"
+	}
+	],
+	"require":
+	{
+		"silverstripe/framework": "3.*"
+	}
+}
