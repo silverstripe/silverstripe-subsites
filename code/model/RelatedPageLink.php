@@ -65,7 +65,7 @@ class RelatedPageLink extends DataObject {
 		
 		// Use cmsEditlink only when moving between different pages in the same subsite.
 		$classClause = ($page->SubsiteID == $otherPage->SubsiteID) ? ' class="cmsEditlink"' : '';
-		return '<a href="admin/show/' . $page->ID . "\"$classClause>" . Convert::raw2xml($page->Title) . '</a>';
+		return '<a href="admin/pages/edit/show/' . $page->ID . "\"$classClause>" . Convert::raw2xml($page->Title) . '</a>';
 	}
 
 	function AbsoluteLink($master = false) {
