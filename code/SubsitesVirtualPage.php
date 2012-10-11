@@ -167,4 +167,3 @@ class SubsitesVirtualPage_Controller extends VirtualPage_Controller {
 		Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
 	}
 }
-?>

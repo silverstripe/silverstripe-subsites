@@ -19,4 +19,3 @@ Object::add_extension('SiteConfig', 'SiteConfigSubsites');
 
 
 SS_Report::add_excluded_reports('SubsiteReportWrapper');
-?>

@@ -27,4 +27,3 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 	}
 
 }
-?>

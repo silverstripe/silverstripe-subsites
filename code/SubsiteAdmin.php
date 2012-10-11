@@ -28,4 +28,3 @@ class SubsiteAdmin extends ModelAdmin {
 		return $form;
 	}
 }
-?>

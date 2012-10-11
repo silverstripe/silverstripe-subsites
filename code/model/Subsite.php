@@ -680,4 +680,3 @@ class Subsite_Template extends Subsite {
 		return $intranet;
 	}
 }
-?>
