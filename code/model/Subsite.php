@@ -578,15 +578,6 @@ JS;
 	// CMS ADMINISTRATION HELPERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Return the FieldList that will build the search form in the CMS
-	 */
-	function adminSearchFields() {
-		return new FieldList(
-			new TextField('Name', 'Sub-site name')
-		);
-	}
-
 	function providePermissions() {
 		return array(
 			'SUBSITE_ASSETS_CREATE_SUBSITE' => array(
