@@ -149,7 +149,7 @@ class LeftAndMainSubsites extends Extension {
 					Subsite::changeSubsite($siteIDs[0]);
 					$cClass = $candidate->controller;
 					$cObj = new $cClass();
-					Director::redirect($cObj->Link());
+					$this->owner->redirect($cObj->Link());
 					return null;
 				}
 			}
