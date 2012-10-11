@@ -163,13 +163,14 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	function augmentNewSiteTreeItem(&$item) {
-		$item->SubsiteID = isset($_POST['SubsiteID']) ? $_POST['SubsiteID'] : Subsite::currentSubsiteID();	
+		$item->SubsiteID = isset($_POST['SubsiteID']) ? $_POST['SubsiteID'] : Subsite::currentSubsiteID();
 	}
 	
 	function onAfterSave($record) {
 		if($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
-			FormResponse::status_message('Saved, please update related pages.', 'good');
+			$this->owner->response->addHeader('X-Status', rawurlencode(_t('LeftAndMainSubsites.Saved', 'Saved, please update related pages.')));
 		}
 	}
+
 }
 
