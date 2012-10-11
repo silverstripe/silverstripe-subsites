@@ -131,7 +131,9 @@ class LeftAndMainSubsites extends Extension {
 			return true;	//admin can access all subsites
 		}
 		
-		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->map('ID', 'Title')->toArray();
+		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}")->map('ID', 'Title');
+		if(is_object($sites)) $sites = $sites->toArray();
+
 		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 			$siteIDs = array_keys($sites);
 			Subsite::changeSubsite($siteIDs[0]);
@@ -142,20 +144,21 @@ class LeftAndMainSubsites extends Extension {
 		$menu = CMSMenu::get_menu_items();
 		foreach($menu as $candidate) {
 			if($candidate->controller != $this->owner->class) {
-					
-				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}")->map('ID', 'Title')->toArray();
+				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}")->map('ID', 'Title');
+				if(is_object($sites)) $sites = $sites->toArray();
+
 				if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
 					$siteIDs = array_keys($sites);
 					Subsite::changeSubsite($siteIDs[0]);
 					$cClass = $candidate->controller;
 					$cObj = new $cClass();
-					$this->owner->redirect($cObj->Link());
+					Director::redirect($cObj->Link());
 					return null;
 				}
 			}
 		}
 		
-		// If all of those fail, you really don't have access to the CMS		
+		// If all of those fail, you really don't have access to the CMS
 		return null;
 	}
 	
@@ -169,7 +172,4 @@ class LeftAndMainSubsites extends Extension {
 		}
 	}
 }
-	
-	
 
-?>
