@@ -308,8 +308,7 @@ JS;
 			}
 		}
 		
-		// Only bother flushing caches if we've actually changed
-		if($subsiteID != self::currentSubsiteID()) Permission::flush_permission_cache();
+		Permission::flush_permission_cache(); 
 	}
 
 	/**
@@ -413,6 +412,7 @@ JS;
 		$SQL_perms = join("','", $SQLa_perm);
 		$memberID = (int)$member->ID;
 		
+		// Count this user's groups which can access the main site
 		$groupCount = DB::query("
 			SELECT COUNT(\"Permission\".\"ID\")
 			FROM \"Permission\"
@@ -422,8 +422,21 @@ JS;
 			AND \"MemberID\" = {$memberID}
 		")->value();
 
-		return ($groupCount > 0);
-
+		// Count this user's groups which have a role that can access the main site
+		$roleCount = DB::query("
+			SELECT COUNT(\"PermissionRoleCode\".\"ID\")
+			FROM \"Group\"
+			INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Group\".\"ID\"
+			INNER JOIN \"Group_Roles\" ON \"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"
+			INNER JOIN \"PermissionRole\" ON \"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"
+			INNER JOIN \"PermissionRoleCode\" ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
+			WHERE \"PermissionRoleCode\".\"Code\" IN ('$SQL_perms')
+			AND \"Group\".\"AccessAllSubsites\" = 1
+			AND \"MemberID\" = {$memberID}
+		")->value();
+		
+		// There has to be at least one that allows access.
+		return ($groupCount + $roleCount > 0);
 	}
 
 	/**
@@ -514,14 +527,14 @@ JS;
 
 		if(!$subsites && $rolesSubsites) return $rolesSubsites;
 
+		$subsites = new ArrayList($subsites->toArray());
+
 		if($rolesSubsites) foreach($rolesSubsites as $subsite) {
-			if(!$subsites->containsIDs(array($subsite->ID))) {
+			if(!$subsites->find('ID', $subsite->ID)) {
 				$subsites->push($subsite);
 			}
 		}
 
-		// Include the main site
-		if(!$subsites) $subsites = new ArrayList();
 		if($includeMainSite) {
 			if(!is_array($permCode)) $permCode = array($permCode);
 			if(self::hasMainSitePermission($member, $permCode)) {
@@ -535,7 +548,6 @@ JS;
 		}
 		
 		self::$_cache_accessible_sites[$cacheKey] = $subsites;
-
 		
 		return $subsites;
 	}

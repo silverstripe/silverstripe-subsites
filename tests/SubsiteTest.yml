@@ -39,6 +39,9 @@ SubsiteDomain:
       IsPrimary: 1
       
 SiteTree:
+   mainSubsitePage:
+      Title: MainSubsitePage
+      SubsiteID: 0
    home:
       Title: Home
       SubsiteID: =>Subsite_Template.main
@@ -75,10 +78,21 @@ SiteTree:
       Title: Contact Us
       SubsiteID: =>Subsite_Template.subsite2
 
+PermissionRoleCode:
+   roleCode1:
+      Code: CMS_ACCESS_CMSMain
+PermissionRole:
+   role1:
+      Title: role1
+      Codes: =>PermissionRoleCode.roleCode1
 Group:
    admin:
       Title: Admin
       Code: admin
+      AccessAllSubsites: 1
+   editor:
+      Title: Editor
+      Code: editor
       AccessAllSubsites: 1
    subsite1_group:
       Title: subsite1_group
@@ -99,10 +113,24 @@ Group:
       Title: allsubsitesauthors
       Code: allsubsitesauthors
       AccessAllSubsites: 1
+   subsite1_group_via_role:
+      Title: subsite1_group_via_role
+      Code: subsite1_group_via_role
+      AccessAllSubsites: 1
+      Roles: =>PermissionRole.role1
 Permission:
    admin:
       Code: ADMIN
       GroupID: =>Group.admin
+   editor1:
+      Code: CMS_ACCESS_CMSMain
+      GroupID: =>Group.editor
+   editor2:
+      Code: SITETREE_VIEW_ALL
+      GroupID: =>Group.editor
+   editor3:
+      Code: VIEW_DRAFT_CONTENT
+      GroupID: =>Group.editor
    accesscmsmain1:
       Code: CMS_ACCESS_CMSMain
       GroupID: =>Group.subsite1_group
@@ -132,6 +160,12 @@ Member:
       Email: admin@test.com
       Password: rangi
       Groups: =>Group.admin
+   editor:
+      FirstName: Editor
+      Surname: User
+      Email: editor@test.com
+      Password: rangi
+      Groups: =>Group.editor
    subsite1member:
       Email: subsite1member@test.com
       Groups: =>Group.subsite1_group
@@ -144,3 +178,6 @@ Member:
    allsubsitesauthor:
       Email: allsubsitesauthor@test.com
       Groups: =>Group.allsubsitesauthors
+   subsite1member2:
+      Email: subsite1member2@test.com
+      Groups: =>Group.subsite1_group_via_role
