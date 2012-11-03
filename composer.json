@@ -1,0 +1,17 @@
+{
+	"name": "silverstripe/subsites",
+	"description": "Run multiple sites from a single SilverStripe install.",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "subsites", "multisite"],
+	"authors": [
+	{
+		"name": "Sam Minnee",
+		"email": "sam@silverstripe.com"
+	}
+	],
+	"require":
+	{
+		"silverstripe/framework": "3.*",
+		"silverstripe/cms": "3.*"
+	}
+}
