@@ -273,13 +273,13 @@ JS;
 	 *
 	 * You can simulate subsite access without creating virtual hosts by appending ?SubsiteID=<ID> to the request.
 	 *
-	 * @todo Pass $request object from controller so we don't have to rely on $_REQUEST
+	 * @todo Pass $request object from controller so we don't have to rely on $_GET
 	 *
 	 * @param boolean $cache
 	 * @return int ID of the current subsite instance
 	 */
 	static function currentSubsiteID() {
-		if(isset($_REQUEST['SubsiteID'])) $id = (int)$_REQUEST['SubsiteID'];
+		if(isset($_GET['SubsiteID'])) $id = (int)$_GET['SubsiteID'];
 		else $id = Session::get('SubsiteID');
 
 		if($id === NULL) {
