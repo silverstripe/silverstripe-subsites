@@ -1,6 +1,6 @@
 <?php
 
-class GroupSubsitesTest extends SapphireTest {
+class GroupSubsitesTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 	
 	protected $requireDefaultRecordsFrom = array('GroupSubsites');

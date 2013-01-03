@@ -1,6 +1,6 @@
 <?php
 
-class SubsitesVirtualPageTest extends SapphireTest {
+class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	static $fixture_file = array(
 		'subsites/tests/SubsiteTest.yml',
 		'subsites/tests/SubsitesVirtualPageTest.yml',
@@ -14,6 +14,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		fwrite($fh, str_repeat('x',1000000));
 		fclose($fh);
 	}
+
 	function tearDown() {
 		parent::tearDown();
 		$testFiles = array(

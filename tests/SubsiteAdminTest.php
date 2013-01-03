@@ -1,6 +1,6 @@
 <?php
 
-class SubsiteAdminTest extends SapphireTest {
+class SubsiteAdminTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
     function adminLoggedInSession() {

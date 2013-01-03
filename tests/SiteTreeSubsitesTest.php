@@ -1,6 +1,6 @@
 <?php
 
-class SiteTreeSubsitesTest extends SapphireTest {
+class SiteTreeSubsitesTest extends BaseSubsiteTest {
 
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 	

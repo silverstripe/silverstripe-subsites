@@ -1,6 +1,6 @@
 <?php
 
-class SiteConfigSubsitesTest extends SapphireTest {
+class SiteConfigSubsitesTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 	
 	function testEachSubsiteHasAUniqueSiteConfig() {
