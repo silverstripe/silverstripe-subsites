@@ -35,7 +35,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		Subsite::changeSubsite($subsite->ID);
 		Subsite::$disable_subsite_filter = false;
 		
-		$linky = $this->objFromFixture('SiteTree', 'linky');
+		$linky = $this->objFromFixture('Page', 'linky');
 		
 		$svp = new SubsitesVirtualPage();
 		$svp->CopyContentFromID = $linky->ID;
@@ -59,7 +59,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		
 		Subsite::changeSubsite($subsite->ID);
 		
-		$orig = $this->objFromFixture('SiteTree', 'linky');
+		$orig = $this->objFromFixture('Page', 'linky');
 		
 		$svp = new SubsitesVirtualPage();
 		$svp->CopyContentFromID = $orig->ID;
@@ -174,7 +174,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		// Go to main site, get parent page
 		$subsite = $this->objFromFixture('Subsite', 'main');
 		Subsite::changeSubsite($subsite->ID);
-		$page = $this->objFromFixture('SiteTree', 'importantpage');
+		$page = $this->objFromFixture('Page', 'importantpage');
 		
 		// Create two SVPs on other subsites
 		$subsite = $this->objFromFixture('Subsite', 'subsite1');
@@ -194,7 +194,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		// Switch back to main site, unpublish source
 		$subsite = $this->objFromFixture('Subsite', 'main');
 		Subsite::changeSubsite($subsite->ID);
-		$page = $this->objFromFixture('SiteTree', 'importantpage');
+		$page = $this->objFromFixture('Page', 'importantpage');
 		$page->doUnpublish();
 		
 		Subsite::changeSubsite($vp1->SubsiteID);
@@ -217,7 +217,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$subsite2 = $this->objFromFixture('Subsite', 'subsite2');
 		Subsite::changeSubsite($subsite1->ID);
 		
-		$subsite1Page = $this->objFromFixture('SiteTree', 'subsite1_contactus');
+		$subsite1Page = $this->objFromFixture('Page', 'subsite1_contactus');
 		$subsite1Page->URLSegment = 'contact-us';
 		$subsite1Page->write();
 		

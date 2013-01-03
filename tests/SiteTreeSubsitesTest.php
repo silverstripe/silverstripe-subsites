@@ -60,8 +60,8 @@ class SiteTreeSubsitesTest extends SapphireTest {
 	function testRelatedPages() {
 		$this->assertTrue(singleton('RelatedPageLink')->getCMSFields() instanceof FieldSet);
 		
-		$importantpage = $this->objFromFixture('SiteTree', 'importantpage');
-		$contact = $this->objFromFixture('SiteTree', 'contact');
+		$importantpage = $this->objFromFixture('Page', 'importantpage');
+		$contact = $this->objFromFixture('Page', 'contact');
 		
 		$link = new RelatedPageLink();
 		$link->MasterPageID = $importantpage->ID;
@@ -87,9 +87,9 @@ class SiteTreeSubsitesTest extends SapphireTest {
 		$admin = $this->objFromFixture('Member', 'admin');
 		$subsite1member = $this->objFromFixture('Member', 'subsite1member');
 		$subsite2member = $this->objFromFixture('Member', 'subsite2member');
-		$mainpage = $this->objFromFixture('SiteTree', 'home');
-		$subsite1page = $this->objFromFixture('SiteTree', 'subsite1_home');
-		$subsite2page = $this->objFromFixture('SiteTree', 'subsite2_home');
+		$mainpage = $this->objFromFixture('Page', 'home');
+		$subsite1page = $this->objFromFixture('Page', 'subsite1_home');
+		$subsite2page = $this->objFromFixture('Page', 'subsite2_home');
 		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
 		$subsite2 = $this->objFromFixture('Subsite', 'subsite2');
 	
