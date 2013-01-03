@@ -1,6 +1,6 @@
 <?php
 
-class SubsitesVirtualPageTest extends SapphireTest {
+class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	static $fixture_file = array(
 		'subsites/tests/SubsiteTest.yml',
 		'subsites/tests/SubsitesVirtualPageTest.yml',
@@ -14,6 +14,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		fwrite($fh, str_repeat('x',1000000));
 		fclose($fh);
 	}
+
 	function tearDown() {
 		parent::tearDown();
 		$testFiles = array(
@@ -30,12 +31,12 @@ class SubsitesVirtualPageTest extends SapphireTest {
 	function testVirtualPageFromAnotherSubsite() {
 		Subsite::$write_hostmap = false;
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite = $this->objFromFixture('Subsite', 'subsite2');
 		
 		Subsite::changeSubsite($subsite->ID);
 		Subsite::$disable_subsite_filter = false;
 		
-		$linky = $this->objFromFixture('SiteTree', 'linky');
+		$linky = $this->objFromFixture('Page', 'linky');
 		
 		$svp = new SubsitesVirtualPage();
 		$svp->CopyContentFromID = $linky->ID;
@@ -55,11 +56,11 @@ class SubsitesVirtualPageTest extends SapphireTest {
 	function testCustomMetadata() {
 		Subsite::$write_hostmap = false;
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		$subsite = $this->objFromFixture('Subsite', 'main');
 		
 		Subsite::changeSubsite($subsite->ID);
 		
-		$orig = $this->objFromFixture('SiteTree', 'linky');
+		$orig = $this->objFromFixture('Page', 'linky');
 		
 		$svp = new SubsitesVirtualPage();
 		$svp->CopyContentFromID = $orig->ID;
@@ -86,7 +87,7 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		touch(Director::baseFolder() . '/assets/testscript-test-file.pdf');
 
 		// Publish the source page
-		$page = $this->objFromFixture('Page', 'page1');
+		$page = $this->objFromFixture('SiteTree', 'page1');
 		$this->assertTrue($page->doPublish());
 
 		// Create a virtual page from it, and publish that
@@ -172,19 +173,19 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		StaticPublisher::$disable_realtime = true;
 		
 		// Go to main site, get parent page
-		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		$subsite = $this->objFromFixture('Subsite', 'main');
 		Subsite::changeSubsite($subsite->ID);
-		$page = $this->objFromFixture('SiteTree', 'importantpage');
+		$page = $this->objFromFixture('Page', 'importantpage');
 		
 		// Create two SVPs on other subsites
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite1');
+		$subsite = $this->objFromFixture('Subsite', 'subsite1');
 		Subsite::changeSubsite($subsite->ID);
 		$vp1 = new SubsitesVirtualPage();
 		$vp1->CopyContentFromID = $page->ID;
 		$vp1->write();
 		$vp1->doPublish();
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite = $this->objFromFixture('Subsite', 'subsite2');
 		Subsite::changeSubsite($subsite->ID);
 		$vp2 = new SubsitesVirtualPage();
 		$vp2->CopyContentFromID = $page->ID;
@@ -192,16 +193,16 @@ class SubsitesVirtualPageTest extends SapphireTest {
 		$vp2->doPublish();
 		
 		// Switch back to main site, unpublish source
-		$subsite = $this->objFromFixture('Subsite_Template', 'main');
+		$subsite = $this->objFromFixture('Subsite', 'main');
 		Subsite::changeSubsite($subsite->ID);
-		$page = $this->objFromFixture('SiteTree', 'importantpage');
+		$page = $this->objFromFixture('Page', 'importantpage');
 		$page->doUnpublish();
 		
 		Subsite::changeSubsite($vp1->SubsiteID);
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
 		$this->assertNull($onLive, 'SVP has been removed from live');
 		
-		$subsite = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite = $this->objFromFixture('Subsite', 'subsite2');
 		Subsite::changeSubsite($vp2->SubsiteID);
 		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
 		$this->assertNull($onLive, 'SVP has been removed from live');
@@ -213,11 +214,11 @@ class SubsitesVirtualPageTest extends SapphireTest {
 	 */
 	function testSubsiteVirtualPageCanHaveSameUrlsegmentAsOtherSubsite() {
 		Subsite::$write_hostmap = false;
-		$subsite1 = $this->objFromFixture('Subsite_Template', 'subsite1');
-		$subsite2 = $this->objFromFixture('Subsite_Template', 'subsite2');
+		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+		$subsite2 = $this->objFromFixture('Subsite', 'subsite2');
 		Subsite::changeSubsite($subsite1->ID);
 		
-		$subsite1Page = $this->objFromFixture('SiteTree', 'subsite1_staff');
+		$subsite1Page = $this->objFromFixture('Page', 'subsite1_staff');
 		$subsite1Page->URLSegment = 'staff';
 		$subsite1Page->write();
 		

@@ -76,6 +76,8 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	private static $_cache_accessible_sites = array();
 
+	private static $_cache_subsite_for_domain = array();
+
 	/**
 	 * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
 	 * Corresponds to subfolder names within the /themes folder. By default, all themes contained in this folder
@@ -89,6 +91,11 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * in both TRUE or FALSE setting.
 	 */
 	static $strict_subdomain_matching = false;
+
+	/**
+	 * @var boolean Respects the IsPublic flag when retrieving subsites
+	 */
+	static $check_is_public = true;
 
 	static function set_allowed_domains($domain){
 		user_error('Subsite::set_allowed_domains() is deprecated; it is no longer necessary '
@@ -240,7 +247,7 @@ class Subsite extends DataObject implements PermissionProvider {
 
 	function getCMSActions() {
 		return new FieldList(
-			new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
+            new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
 		);
 	}
 
@@ -286,7 +293,7 @@ JS;
 			$id = self::getSubsiteIDForDomain();
 			Session::set('SubsiteID', $id);
 		}
-		
+
 		return (int)$id;
 	}
 	
@@ -334,19 +341,25 @@ JS;
 	 * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
 	 * @return int Subsite ID
 	 */
-	static function getSubsiteIDForDomain($host = null, $returnMainIfNotFound = true) {
+	static function getSubsiteIDForDomain($host = null, $checkPermissions = true) {
 		if($host == null) $host = $_SERVER['HTTP_HOST'];
-		
-		if(!Subsite::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
-		$SQL_host = Convert::raw2sql($host);
 
-		$matchingDomains = DataObject::get("SubsiteDomain", "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
-			"\"IsPrimary\" DESC")->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND
-			\"Subsite\".\"IsPublic\"=1");
+		if(!Subsite::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
+
+		$cacheKey = implode('_', array($host, Member::currentUserID(), Subsite::$check_is_public));
+		if(isset(self::$_cache_subsite_for_domain[$cacheKey])) return self::$_cache_subsite_for_domain[$cacheKey];
+
+		$SQL_host = Convert::raw2sql($host);
+		$joinFilter = self::$check_is_public ? "AND \"Subsite\".\"IsPublic\"=1" : '';
+		$matchingDomains = DataObject::get(
+			"SubsiteDomain", 
+			"'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
+			"\"IsPrimary\" DESC"
+		)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");;
 		
-		if($matchingDomains && $matchingDomains->Count()>0) {
-			$subsiteIDs = array_unique($matchingDomains->map('SubsiteID')->keys());
-			$subsiteDomains = array_unique($matchingDomains->map('Domain')->keys());
+		if($matchingDomains && $matchingDomains->Count()) {
+			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
+			$subsiteDomains = array_unique($matchingDomains->column('Domain'));
 			if(sizeof($subsiteIDs) > 1) {
 				throw new UnexpectedValueException(sprintf(
 					"Multiple subsites match on '%s': %s",
@@ -355,16 +368,18 @@ JS;
 				));
 			}
 			
-			return $subsiteIDs[0];
+			$subsiteID = $subsiteIDs[0];
+		} else if($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
+			// Check for a 'default' subsite
+			$subsiteID = $default->ID;
+		} else {
+			// Default subsite id = 0, the main site
+			$subsiteID = 0;
 		}
 		
-		// Check for a 'default' subsite
-		if ($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
-			return $default->ID;
-		}
+		self::$_cache_subsite_for_domain[$cacheKey] = $subsiteID;
 		
-		// Default subsite id = 0, the main site
-		return 0;
+		return $subsiteID;
 	}
 
 	function getMembersByPermission($permissionCodes = array('ADMIN')){
@@ -434,7 +449,7 @@ JS;
 			AND \"Group\".\"AccessAllSubsites\" = 1
 			AND \"MemberID\" = {$memberID}
 		")->value();
-		
+
 		// There has to be at least one that allows access.
 		return ($groupCount + $roleCount > 0);
 	}
@@ -443,13 +458,13 @@ JS;
 	 * Duplicate this subsite
 	 */
 	function duplicate($doWrite = true) {
-		$newTemplate = parent::duplicate($doWrite);
+		$duplicate = parent::duplicate($doWrite);
 
 		$oldSubsiteID = Session::get('SubsiteID');
 		self::changeSubsite($this->ID);
 
 		/*
-		 * Copy data from this template to the given subsite. Does this using an iterative depth-first search.
+		 * Copy data from this object to the given subsite. Does this using an iterative depth-first search.
 		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
 		 * issues with having to check whether or not the new parents have been added to the site tree
 		 * when a page, etc, is duplicated
@@ -457,15 +472,19 @@ JS;
 		$stack = array(array(0,0));
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
-
 			$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {
-					$childClone = $child->duplicateToSubsite($newTemplate, false);
+					self::changeSubsite($duplicate->ID); //Change to destination subsite
+					
+					$childClone = $child->duplicateToSubsite($duplicate, false);
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');
+
+					self::changeSubsite($this->ID); //Change Back to this subsite
+
 					array_push($stack, array($child->ID, $childClone->ID));
 				}
 			}
@@ -473,7 +492,7 @@ JS;
 
 		self::changeSubsite($oldSubsiteID);
 
-		return $newTemplate;
+		return $duplicate;
 	}
 
 
@@ -481,7 +500,7 @@ JS;
 	 * Return the subsites that the current user can access.
 	 * Look for one of the given permission codes on the site.
 	 *
-	 * Sites and Templates will only be included if they have a Title
+	 * Sites will only be included if they have a Title
 	 *
 	 * @param $permCode array|string Either a single permission code or an array of permission codes.
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
@@ -505,15 +524,13 @@ JS;
 			return self::$_cache_accessible_sites[$cacheKey];
 		}
 
-		$templateClassList = "'" . implode("', '", ClassInfo::subclassesFor("Subsite_Template")) . "'";
-
 		$subsites = DataList::create('Subsite')
 			->where("\"Subsite\".\"Title\" != ''")
 			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
 			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
 			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
 			->innerJoin('Permission', "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'ADMIN')");
-		
+
 		if(!$subsites) $subsites = new ArrayList();
 
 		$rolesSubsites = DataList::create('Subsite')
@@ -548,7 +565,7 @@ JS;
 		}
 		
 		self::$_cache_accessible_sites[$cacheKey] = $subsites;
-		
+
 		return $subsites;
 	}
 	
@@ -621,65 +638,6 @@ JS;
 	 */
 	static function on_db_reset() {
 		self::$_cache_accessible_sites = array();
-	}
-}
-
-/**
- * An instance of subsite that can be duplicated to provide a quick way to create new subsites.
- *
- * @package subsites
- */
-class Subsite_Template extends Subsite {
-	/**
-	 * Create an instance of this template, with the given title & domain
-	 */
-	function createInstance($title, $domain = null) {
-		$intranet = Object::create('Subsite');
-		$intranet->Title = $title;
-		$intranet->TemplateID = $this->ID;
-		$intranet->write();
-		
-		if($domain) {
-			$intranetDomain = Object::create('SubsiteDomain');
-			$intranetDomain->SubsiteID = $intranet->ID;
-			$intranetDomain->Domain = $domain;
-			$intranetDomain->write();
-		}
-
-		$oldSubsiteID = Session::get('SubsiteID');
-		self::changeSubsite($this->ID);
-
-		/*
-		 * Copy site content from this template to the given subsite. Does this using an iterative depth-first search.
-		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
-		 * issues with having to check whether or not the new parents have been added to the site tree
-		 * when a page, etc, is duplicated
-		 */
-		$stack = array(array(0,0));
-		while(count($stack) > 0) {
-			list($sourceParentID, $destParentID) = array_pop($stack);
-
-			$children = Versioned::get_by_stage('SiteTree', 'Live', "\"ParentID\" = $sourceParentID", '');
-
-			if($children) {
-				foreach($children as $child) {
-					//Change to destination subsite
-					self::changeSubsite($intranet->ID);
-					$childClone = $child->duplicateToSubsite($intranet);
-
-					$childClone->ParentID = $destParentID;
-					$childClone->writeToStage('Stage');
-					$childClone->publish('Stage', 'Live');
-
-					//Change Back to this subsite
-					self::changeSubsite($this->ID);
-					array_push($stack, array($child->ID, $childClone->ID));
-				}
-			}
-		}
-
-		self::changeSubsite($oldSubsiteID);
-
-		return $intranet;
+		self::$_cache_subsite_for_domain = array();
 	}
 }

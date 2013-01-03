@@ -3,7 +3,7 @@ File:
    file1:
       Filename: assets/testscript-test-file.pdf
 
-Page:   
+SiteTree:   
    page1:
       Title: page1
       URLSegment: page1

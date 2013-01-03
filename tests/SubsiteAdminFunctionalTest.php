@@ -17,7 +17,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest {
 		$this->get('admin');
 		$this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site');
 
-		$mainSubsite = $this->objFromFixture('Subsite_Template', 'main');
+		$mainSubsite = $this->objFromFixture('Subsite', 'main');
 		$this->get("admin/pages?SubsiteID={$mainSubsite->ID}&ajax=1");
 		$this->get('admin');
 		$this->assertEquals(Subsite::currentSubsiteID(), $mainSubsite->ID, 'Can access the subsite');
@@ -35,7 +35,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest {
 		$this->get('admin');
 		$this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site');
 
-		$mainSubsite = $this->objFromFixture('Subsite_Template', 'main');
+		$mainSubsite = $this->objFromFixture('Subsite', 'main');
 		$this->get("admin/pages?SubsiteID={$mainSubsite->ID}&ajax=1");
 		$this->get('admin');
 		$this->assertEquals(Subsite::currentSubsiteID(), $mainSubsite->ID, 'Can access the subsite');

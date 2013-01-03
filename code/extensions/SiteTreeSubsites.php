@@ -4,45 +4,23 @@
  * Extension for the SiteTree object to add subsites support
  */
 class SiteTreeSubsites extends DataExtension {
-	static $template_variables = array(
-		'((Company Name))' => 'Title'
-	);
-	
-	static $template_fields = array(
-		"URLSegment",
-		"Title",
-		"MenuTitle",
-		"Content",
-		"MetaTitle",
-		"MetaDescription",
-		"MetaKeywords",
-	);
-
-	/**
-	 * Set the fields that will be copied from the template.
-	 * Note that ParentID and Sort are implied.
-	 */
-	static function set_template_fields($fieldList) {
-		self::$template_fields = $fieldList;
-	}
-
 	
 	public static $has_one=array(
-		'Subsite' => 'Subsite', // The subsite that this page belongs to
-		'MasterPage' => 'SiteTree',// Optional; the page that is the content master
+				'Subsite' => 'Subsite', // The subsite that this page belongs to
+				'MasterPage' => 'SiteTree',// Optional; the page that is the content master
 	);
 	
 	public static $has_many=array(
-		'RelatedPages' => 'RelatedPageLink'
+				'RelatedPages' => 'RelatedPageLink'
 	);
 	
 	public static $many_many=array(
-		'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
+				'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
 	);
 	
 	public static $belongs_many_many=array(
-		'BackCrossSubsiteLinkTracking' => 'SiteTree'
-	);
+				'BackCrossSubsiteLinkTracking' => 'SiteTree'
+		);
 	
 	public static $many_many_extraFields=array(
 		"CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
@@ -90,7 +68,69 @@ class SiteTreeSubsites extends DataExtension {
 	}
 
 	function updateCMSFields(FieldList $fields) {
-		if($this->owner->MasterPageID) $fields->addFieldToTab('Root.Main', new HeaderField('This page\'s content is copied from a master page: ' . $this->owner->MasterPage()->Title, 2), 'Title');
+		$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
+		$subsitesMap = array();
+		if($subsites && $subsites->Count()) {
+			$subsitesMap = $subsites->map('ID', 'Title');
+			unset($subsitesMap[$this->owner->SubsiteID]);
+		} 
+
+		// Master page notice
+		if($this->owner->MasterPageID) {
+			$masterPage = $this->owner->MasterPage();
+			$masterNoteField = new LiteralField(
+				'MasterLink',
+				sprintf(
+					_t(
+						'SiteTreeSubsites.MasterLinkNote',
+						'<p>This page\'s content is copied from the <a href="%s" target="_blank">%s</a> master page (<a href="%s">edit</a>)</p>'
+					),
+					$masterPage->AbsoluteLink(), 
+					$masterPage->Title,
+					Controller::join_links(
+						singleton('CMSMain')->Link('show'),
+						$masterPage->ID
+					)
+				)
+			);
+			$fields->addFieldToTab('Root.Main',$masterNoteField);
+		} 
+
+		// Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
+		$isDefaultSubsite = $this->owner->SubsiteID == 0 || $this->owner->Subsite()->DefaultSite;
+		if($isDefaultSubsite && $subsitesMap) {
+			$fields->addFieldToTab(
+				'Root.Main',
+				new DropdownField(
+					"CopyToSubsiteID", 
+					_t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"), 
+					$subsitesMap,
+					''
+				)
+			);
+			$fields->addFieldToTab(
+				'Root.Main',
+				$copyAction = new InlineFormAction(
+					"copytosubsite", 
+					_t('SiteTreeSubsites.CopyAction', "Copy")
+				)
+			);
+			$copyAction->includeDefaultJS(false);
+		} else {
+			$defaultSubsite = DataObject::get_one('Subsite', '"DefaultSite" = 1');
+			if($defaultSubsite) {
+				$fields->addFieldToTab('Root.Main',
+					$masterPageField = new SubsitesTreeDropdownField(
+						"MasterPageID", 
+						_t('VirtualPage.MasterPage', "Master page"), 
+						"SiteTree",
+						"ID",
+						"MenuTitle"
+					)
+				);
+				$masterPageField->setSubsiteID($defaultSubsite->ID);
+			}
+		}
 		
 		// replace readonly link prefix
 		$subsite = $this->owner->Subsite();
@@ -221,9 +261,8 @@ class SiteTreeSubsites extends DataExtension {
 	/**
 	 * Create a duplicate of this page and save it to another subsite
 	 * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
-	 * @param $isTemplate boolean If this is true, then the current page will be treated as the template, and MasterPageID will be set
 	 */
-	public function duplicateToSubsite($subsiteID = null, $isTemplate = true) {
+	public function duplicateToSubsite($subsiteID = null) {
 		if(is_object($subsiteID)) {
 			$subsite = $subsiteID;
 			$subsiteID = $subsite->ID;
@@ -241,9 +280,7 @@ class SiteTreeSubsites extends DataExtension {
 		$page->CheckedPublicationDifferences = $page->AddedToStage = true;
 		$subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
 		$page->SubsiteID = $subsiteID;
-		
-		if($isTemplate) $page->MasterPageID = $this->owner->ID;
-		
+		$page->MasterPageID = $this->owner->ID;
 		$page->write();
 
 		Subsite::changeSubsite($oldSubsite);

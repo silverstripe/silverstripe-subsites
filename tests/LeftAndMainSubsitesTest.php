@@ -2,6 +2,17 @@
 class LeftAndMainSubsitesTest extends FunctionalTest {
 	
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+
+	/**
+	 * Avoid subsites filtering on fixture fetching.
+	 */
+	function objFromFixture($class, $id) {
+		Subsite::disable_subsite_filter(true);
+		$obj = parent::objFromFixture($class, $id);
+		Subsite::disable_subsite_filter(false);		
+
+		return $obj;
+	}
 	
 	function testAlternateAccessCheck() {
 		$admin = $this->objFromFixture("Member","admin");

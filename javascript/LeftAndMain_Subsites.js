@@ -48,5 +48,13 @@
 				});
 			}
 		});
+
+		$('.cms-edit-form input[name=action_copytosubsite]').entwine({
+			onclick: function(e) {
+				var form = this.closest('form');
+				form.trigger('submit', [this]);
+			}
+		});
+
 	});
 })(jQuery);

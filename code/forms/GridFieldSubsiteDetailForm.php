@@ -19,7 +19,7 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
 		$form=parent::ItemEditForm();
 		
 		if($this->record->ID == 0) {
-			$templates = Subsite_Template::get()->sort('Title');
+			$templates = Subsite::get()->sort('Title');
 			$templateArray = array();
 			if($templates) {
 				$templateArray = $templates->map('ID', 'Title');
@@ -35,9 +35,9 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
 		$new_record = $this->record->ID == 0;
 		
 		if($new_record && isset($data['TemplateID']) && !empty($data['TemplateID'])) {
-			$template = Subsite_Template::get()->byID(intval($data['TemplateID']));
+			$template = Subsite::get()->byID(intval($data['TemplateID']));
 			if($template) {
-				$this->record=$template->createInstance($data['Title']);
+				$this->record = $template->duplicate();
 			}
 		}
 		

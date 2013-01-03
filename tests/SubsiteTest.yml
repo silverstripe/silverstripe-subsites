@@ -1,11 +1,10 @@
-Subsite_Template:
+Subsite:
    main:
       Title: Template
    subsite1:
       Title: Subsite1 Template
    subsite2:
       Title: Subsite2 Template
-Subsite:
    domaintest1:
       Title: Test 1
    domaintest2:
@@ -14,10 +13,10 @@ Subsite:
       Title: Test 3
 SubsiteDomain:
    subsite1:
-      SubsiteID: =>Subsite_Template.subsite1
+      SubsiteID: =>Subsite.subsite1
       Domain: subsite1.*
    subsite2:
-      SubsiteID: =>Subsite_Template.subsite2
+      SubsiteID: =>Subsite.subsite2
       Domain: subsite2.*
    dt1a:
       SubsiteID: =>Subsite.domaintest1
@@ -37,46 +36,45 @@ SubsiteDomain:
       SubsiteID: =>Subsite.domaintest3
       Domain: three.*
       IsPrimary: 1
-      
-SiteTree:
+Page:
    mainSubsitePage:
       Title: MainSubsitePage
       SubsiteID: 0
    home:
       Title: Home
-      SubsiteID: =>Subsite_Template.main
+      SubsiteID: =>Subsite.main
    about:
       Title: About
-      SubsiteID: =>Subsite_Template.main
+      SubsiteID: =>Subsite.main
    linky:
        Title: Linky
        MetaTitle: Linky
-       SubsiteID: =>Subsite_Template.main
+       SubsiteID: =>Subsite.main
    staff:
       Title: Staff
-      ParentID: =>SiteTree.about
-      SubsiteID: =>Subsite_Template.main
+      ParentID: =>Page.about
+      SubsiteID: =>Subsite.main
    contact:
       Title: Contact Us
-      SubsiteID: =>Subsite_Template.main
+      SubsiteID: =>Subsite.main
    importantpage:
       Title: Important Page
-      SubsiteID: =>Subsite_Template.main
+      SubsiteID: =>Subsite.main
    subsite1_home:
-      Title: Home
-      SubsiteID: =>Subsite_Template.subsite1
+      Title: Home (Subsite 1)
+      SubsiteID: =>Subsite.subsite1
    subsite1_contactus:
-      Title: Contact Us
-      SubsiteID: =>Subsite_Template.subsite1
+      Title: Contact Us (Subsite 1)
+      SubsiteID: =>Subsite.subsite1
    subsite1_staff:
       Title: Staff
-      SubsiteID: =>Subsite_Template.subsite1
+      SubsiteID: =>Subsite.subsite1
    subsite2_home:
-      Title: Home
-      SubsiteID: =>Subsite_Template.subsite2
+      Title: Home (Subsite 2)
+      SubsiteID: =>Subsite.subsite2
    subsite2_contactus:
-      Title: Contact Us
-      SubsiteID: =>Subsite_Template.subsite2
+      Title: Contact Us (Subsite 2)
+      SubsiteID: =>Subsite.subsite2
 
 PermissionRoleCode:
    roleCode1:
@@ -98,17 +96,17 @@ Group:
       Title: subsite1_group
       Code: subsite1_group
       AccessAllSubsites: 0
-      Subsites: =>Subsite_Template.subsite1
+      Subsites: =>Subsite.subsite1
    subsite2_group:
       Title: subsite2_group
       Code: subsite2_group
       AccessAllSubsites: 0
-      Subsites: =>Subsite_Template.subsite2
+      Subsites: =>Subsite.subsite2
    subsite1admins:
       Title: subsite1admins
       Code: subsite1admins
       AccessAllSubsites: 0
-      Subsites: =>Subsite_Template.subsite1
+      Subsites: =>Subsite.subsite1
    allsubsitesauthors:
       Title: allsubsitesauthors
       Code: allsubsitesauthors

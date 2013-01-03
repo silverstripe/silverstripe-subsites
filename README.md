@@ -101,6 +101,27 @@ Not all themes might be suitable or adapted for all subsites. You can optionally
 	:::php
 	Subsite::set_allowed_themes(array('blackcandy','mytheme'));
 
+### Public display of a subsite
+
+By default, each subsite is available to the public (= not logged-in),
+provided a correct host mapping is set up. A subsite can be marked as non-public
+in its settings, in which case it only shows if a user with CMS permissions is logged in.
+This is useful to create and check subsites on a live system before publishing them.
+
+Please note that you need to filter for this manually in your own queries:
+
+	$publicSubsites = DataObject::get(
+		'Subsite',
+		Subsite::$check_is_public ? '"IsPublic"=1' : '';
+	);
+
+To ensure the logged-in status of a member is carried across to subdomains,
+you also need to configure PHP session cookies to be set
+for all subdomains:
+
+	// Example matching subsite1.example.org and www.example.org
+	Session::set_cookie_domain('.example.org');
+
 ## Screenshots
 
 ![](docs/en/_images/subsites-module-adminscreenshot-new.png)
