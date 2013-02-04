@@ -13,6 +13,8 @@ class SubsiteAdmin extends ModelAdmin {
 	
 	public $showImportForm=false;
 
+	static $tree_class = 'Subsite';
+
 	public function getEditForm($id = null, $fields = null) {
 		$form = parent::getEditForm($id, $fields);
 
