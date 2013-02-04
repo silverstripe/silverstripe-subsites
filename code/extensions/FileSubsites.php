@@ -30,13 +30,13 @@ class FileSubsites extends DataExtension {
 	function updateCMSFields(FieldList $fields) {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-			$dropdownValues = array();
-			$dropdownValues[0] = 'All sites';
+			$values = array();
+			$values[0] = 'All sites';
 			foreach ($sites as $site) {
-				$dropDownValues[$site->ID] = $site->Title;
+				$values[$site->ID] = $site->Title;
 			}
-			ksort($dropdownValues);
-			if($sites)$fields->push(new DropdownField("SubsiteID", "Subsite", $dropdownValues));
+			ksort($values);
+			if($sites)$fields->push(new DropdownField('SubsiteID', 'Subsite', $values));
 		}
 	}
 

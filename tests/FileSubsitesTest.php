@@ -53,6 +53,21 @@ class FileSubsitesTest extends BaseSubsiteTest {
 		$file->onAfterUpload();
 		$this->assertEquals($folder->SubsiteID, $file->SubsiteID);
 	}
-	
+
+	function testSubsitesFolderDropdown() {
+		$this->objFromFixture('Member', 'admin')->logIn();
+
+		$file = new Folder();
+
+		$this->assertEquals(array(
+			'Main site',
+			'Template',
+			'Subsite1 Template',
+			'Subsite2 Template',
+			'Test 1',
+			'Test 2',
+			'Test 3'
+		), $file->getCMSFields()->dataFieldByName('SubsiteID')->getSource());
+	}
 	
 }
