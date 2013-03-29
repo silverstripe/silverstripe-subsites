@@ -1,5 +1,7 @@
 # Subsites Module
 
+[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-subsites.png?branch=master)](http://travis-ci.org/silverstripe/silverstripe-subsites)
+
 ## Introduction
 
 The subsites module allows multiple websites to run from a single installation of SilverStripe, and share users, content, and assets between them. A useful way to think of its use is where you have a business with a global headquarters and four branches in various countries. The subsites module allows the five offices to use a single SilverStripe installation, and have information from the headquarters flow down into the branches. The branches can have separate users/admins, and information that is individual. The website templates can also be different.
