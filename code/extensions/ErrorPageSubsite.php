@@ -10,7 +10,7 @@ class ErrorPageSubsite extends DataExtension {
 	 * opening ErrorPage in the CMS and publish ErrorPage causes static error page to get generated incorrectly. 
 	 */
 	function alternateFilepathForErrorcode($statusCode, $locale = null) {
-		$static_filepath = Object::get_static($this->owner->ClassName, 'static_filepath');
+		$static_filepath = Config::inst()->get($this->owner->ClassName, 'static_filepath');
 		$subdomainPart = "";
 		
 		// Try to get current subsite from session
