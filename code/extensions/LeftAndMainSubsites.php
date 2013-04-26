@@ -23,7 +23,7 @@ class LeftAndMainSubsites extends Extension {
 			Subsite::changeSubsite($_GET['SubsiteID']);
 			
 			//Redirect to clear the current page
-			return $this->owner->redirect('admin/pages');
+			return $this->owner->redirect('admin/');
 		}
 
 		// Set subsite ID based on currently shown record
