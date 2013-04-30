@@ -188,7 +188,7 @@ class Subsite extends DataObject implements PermissionProvider {
 		if($this->ID!=0) {
 			$domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
 		}else {
-			$domainTable = new LiteralField('Domains', '<p>'._t('Subsite.DOMAINSAVEFIRST', '_You can only add domains after saving for the first time').'</p>');
+			$domainTable = new LiteralField('Domains', '<p>'._t('Subsite.DOMAINSAVEFIRST', 'You can only add domains after saving for the first time').'</p>');
 		}
 			
 		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
