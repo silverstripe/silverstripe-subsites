@@ -48,7 +48,6 @@ Page:
       SubsiteID: =>Subsite.main
    linky:
        Title: Linky
-       MetaTitle: Linky
        SubsiteID: =>Subsite.main
    staff:
       Title: Staff
