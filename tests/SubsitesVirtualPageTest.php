@@ -170,7 +170,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	}
 	
 	function testUnpublishingParentPageUnpublishesSubsiteVirtualPages() {
-		StaticPublisher::$disable_realtime = true;
+		Config::inst()->update('StaticPublisher', 'disable_realtime', true);
 		
 		// Go to main site, get parent page
 		$subsite = $this->objFromFixture('Subsite', 'main');
