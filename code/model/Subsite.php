@@ -310,8 +310,9 @@ JS;
 		
 		// Set locale
 		if (is_object($subsite) && $subsite->Language != '') {
-			if (isset(i18n::$likely_subtags[$subsite->Language])) {
-				i18n::set_locale(i18n::$likely_subtags[$subsite->Language]);
+			$locale = i18n::get_locale_from_lang($subsite->Language);
+			if($locale) {
+				i18n::set_locale($locale);
 			}
 		}
 		
