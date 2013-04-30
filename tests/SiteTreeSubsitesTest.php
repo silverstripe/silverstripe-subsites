@@ -52,7 +52,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		Subsite::changeSubsite($subsite1->ID);
 		$path = ErrorPage::get_filepath_for_errorcode(500);
 		
-		$static_path = Object::get_static('ErrorPage', 'static_filepath');
+		$static_path = Config::inst()->get('ErrorPage', 'static_filepath');
 		$expected_path = $static_path . '/error-500-'.$subsite1->domain().'.html';
 		$this->assertEquals($expected_path, $path);
 	}
