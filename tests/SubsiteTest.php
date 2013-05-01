@@ -53,14 +53,8 @@ class SubsiteTest extends BaseSubsiteTest {
 		$this->assertEquals($subsite->ID, $siteHome->SubsiteID,
 			'createInstance() copies existing pages retaining the same URLSegment'
 		);
-		$this->assertEquals($siteHome->MasterPageID, $tmplHome->ID, 'Check master page value');
-		
-		// Check linking of child pages
-		$siteStaff = DataObject::get_one('Page', "\"URLSegment\" = '" . Convert::raw2sql($tmplStaff->URLSegment) . "'");
-		$this->assertEquals($siteStaff->MasterPageID, $tmplStaff->ID);
 		
 		Subsite::changeSubsite(0);
-		
 	}
 	
 	/**
@@ -239,14 +233,11 @@ class SubsiteTest extends BaseSubsiteTest {
 		$_SERVER['HTTP_HOST'] = "mysite.example.org";
 		$this->assertEquals('three.mysite.example.org', 
 			$this->objFromFixture('Subsite','domaintest3')->domain());
-			
-			
+
 		$this->assertEquals($_SERVER['HTTP_HOST'], singleton('Subsite')->PrimaryDomain);
 		$this->assertEquals('http://'.$_SERVER['HTTP_HOST'].Director::baseURL(), singleton('Subsite')->absoluteBaseURL());
 
-
 		$_SERVER['HTTP_HOST'] = $originalHTTPHost;
-
 	}
 	
 	/**

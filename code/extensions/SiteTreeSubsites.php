@@ -92,13 +92,13 @@ class SiteTreeSubsites extends DataExtension {
 		$subsite = $this->owner->Subsite();
 		if($subsite && $subsite->ID) {
 			$baseUrl = 'http://' . $subsite->domain() . '/';
-			
 			$baseLink = Controller::join_links (
 				$baseUrl,
 				(SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
 			);
 			
 			$url = (strlen($baseLink) > 36 ? "..." .substr($baseLink, -32) : $baseLink);
+
 			$urlsegment = $fields->dataFieldByName('URLSegment');
 			$urlsegment->setURLPrefix($url);
 		}
