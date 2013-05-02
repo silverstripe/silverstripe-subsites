@@ -19,7 +19,7 @@
 			<% end_with %>
 		</div>
 
-		<div class="cms-login-status subsites">
+		<div class="cms-subsites">
 			$SubsiteList
 		</div>
 	</div>

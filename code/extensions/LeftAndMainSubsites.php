@@ -85,7 +85,8 @@ class LeftAndMainSubsites extends Extension {
 		$currentSubsiteID = Subsite::currentSubsiteID();
 		
 		if($list->Count() > 1) {
-			$output = '<select id="SubsitesSelect">';
+			$output = '<div class="field dropdown">';
+			$output .= '<select id="SubsitesSelect">';
 		
 			foreach($list as $subsite) {
 				$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
@@ -93,13 +94,14 @@ class LeftAndMainSubsites extends Extension {
 				$output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
 			}
 		
-			$output .= '</select>';
+			$output .= '</select></div>';
 		
 			Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 			return $output;
 		} else if($list->Count() == 1) {
 			if($list->First()->DefaultSite==false) {
-				$output = '<select id="SubsitesSelect">';
+				$output = '<div class="field dropdown">';
+				$output .= '<select id="SubsitesSelect">';
 				$output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', '_Default Site') . "</option>";
 				foreach($list as $subsite) {
 					$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
@@ -107,7 +109,7 @@ class LeftAndMainSubsites extends Extension {
 					$output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
 		}
 			
-				$output .= '</select>';
+				$output .= '</select></div>';
 			
 				Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 				return $output;
