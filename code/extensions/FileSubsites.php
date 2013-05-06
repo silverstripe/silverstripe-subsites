@@ -10,10 +10,9 @@ class FileSubsites extends DataExtension {
 	// considered 'global', unless set otherwise
 	static $default_root_folders_global = false;
 	
-	public static $has_one=array(
+	private static $has_one=array(
 		'Subsite' => 'Subsite',
 	);
-	
 
 	/**
 	 * Amends the CMS tree title for folders in the Files & Images section.

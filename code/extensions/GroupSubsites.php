@@ -6,19 +6,18 @@
  */
 class GroupSubsites extends DataExtension implements PermissionProvider {
 
-	public static $db=array(
+	private static $db = array(
 		'AccessAllSubsites' => 'Boolean'
 	);
-	
-	public static $many_many=array(
+
+	private static $many_many = array(
 		'Subsites' => 'Subsite'
 	);
-	
-	public static $defaults=array(
+
+	private static $defaults = array(
 		'AccessAllSubsites' => true
 	);
-	
-	
+
 	/**
 	 * Migrations for GroupSubsites data.
 	 */

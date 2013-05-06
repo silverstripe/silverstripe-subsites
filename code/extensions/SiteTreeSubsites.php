@@ -4,19 +4,19 @@
  * Extension for the SiteTree object to add subsites support
  */
 class SiteTreeSubsites extends DataExtension {
-	
-	public static $has_one=array(
+
+	private static $has_one = array(
 		'Subsite' => 'Subsite', // The subsite that this page belongs to
 	);
-	
-	public static $many_many=array(
+
+	private static $many_many = array(
 		'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
 	);
-	
-	public static $many_many_extraFields=array(
+
+	private static $many_many_extraFields = array(
 		"CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
 	);
-	
+
 	function isMainSite() {
 		if($this->owner->SubsiteID == 0) return true;
 		return false;

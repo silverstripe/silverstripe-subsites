@@ -21,9 +21,9 @@ class Subsite extends DataObject implements PermissionProvider {
 
 	static $write_hostmap = true;
 	
-	static $default_sort = "\"Title\" ASC";
+	private static $default_sort = "\"Title\" ASC";
 
-	static $db = array(
+	private static $db = array(
 		'Title' => 'Varchar(255)',
 		'RedirectURL' => 'Varchar(255)',
 		'DefaultSite' => 'Boolean',
@@ -38,22 +38,22 @@ class Subsite extends DataObject implements PermissionProvider {
 		'PageTypeBlacklist' => 'Text',
 	);
 	
-	static $has_one = array(
+	private static $has_one = array(
 	);
 	
-	static $has_many = array(
+	private static $has_many = array(
 		'Domains' => 'SubsiteDomain',
 	);
 	
-	static $belongs_many_many = array(
+	private static $belongs_many_many = array(
 		"Groups" => "Group",
 	);
 
-	static $defaults = array(
+	private static $defaults = array(
 		'IsPublic' => 1
 	);
 
-	static $searchable_fields = array(
+	private static $searchable_fields = array(
 		'Title' => array(
 			'title' => 'Subsite Name'
 		),
@@ -65,7 +65,7 @@ class Subsite extends DataObject implements PermissionProvider {
 		),	
 	);
 
-	static $summary_fields = array(
+	private static $summary_fields = array(
 		'Title' => 'Subsite Name',
 		'PrimaryDomain' => 'Primary Domain',
 		'IsPublic' => 'Active subsite',

@@ -6,7 +6,7 @@
  */
 class LeftAndMainSubsites extends Extension {
 
-	static $allowed_actions = array('CopyToSubsite');
+	private static $allowed_actions = array('CopyToSubsite');
 
 	function init() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');

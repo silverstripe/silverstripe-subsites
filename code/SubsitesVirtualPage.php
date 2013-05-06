@@ -3,7 +3,7 @@ class SubsitesVirtualPage extends VirtualPage {
 
 	private static $description = 'Displays the content of a page on another subsite';
 
-	public static $db = array(
+	private static $db = array(
 		'CustomMetaTitle' => 'Varchar(255)',
 		'CustomMetaKeywords' => 'Varchar(255)',
 		'CustomMetaDescription' => 'Text',

@@ -1,19 +1,21 @@
 <?php
 
 class SubsiteDomain extends DataObject {
-	static $db = array(
+
+	private static $db = array(
 		"Domain" => "Varchar(255)",
 		"IsPrimary" => "Boolean",
 	);
-	static $has_one = array(
+
+	private static $has_one = array(
  		"Subsite" => "Subsite",
 	);
-	
-	public static $summary_fields=array(
+
+	private static $summary_fields=array(
 		'Domain'=>'Domain',
 		'IsPrimary'=>'Is Primary Domain'
 	);
-	
+
 	/**
 	 * Whenever a Subsite Domain is written, rewrite the hostmap
 	 *
