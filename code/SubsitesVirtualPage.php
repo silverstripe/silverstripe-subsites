@@ -122,7 +122,7 @@ class SubsitesVirtualPage extends VirtualPage {
 			$IDFilter = ($this->ID) ? "AND \"SiteTree\".\"ID\" <> $this->ID" :  null;
 			$parentFilter = null;
 
-			if(self::nested_urls()) {
+			if(Config::inst()->get('SiteTree', 'nested_urls')) {
 				if($this->ParentID) {
 					$parentFilter = " AND \"SiteTree\".\"ParentID\" = $this->ParentID";
 				} else {

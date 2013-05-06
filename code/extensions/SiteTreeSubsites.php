@@ -90,11 +90,12 @@ class SiteTreeSubsites extends DataExtension {
 
 		// replace readonly link prefix
 		$subsite = $this->owner->Subsite();
+		$nested_urls_enabled = Config::inst()->get('SiteTree', 'nested_urls');
 		if($subsite && $subsite->ID) {
 			$baseUrl = 'http://' . $subsite->domain() . '/';
 			$baseLink = Controller::join_links (
 				$baseUrl,
-				(SiteTree::nested_urls() && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
+				($nested_urls_enabled && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
 			);
 			
 			$url = (strlen($baseLink) > 36 ? "..." .substr($baseLink, -32) : $baseLink);
