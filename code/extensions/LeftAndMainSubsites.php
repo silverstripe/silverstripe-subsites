@@ -102,7 +102,7 @@ class LeftAndMainSubsites extends Extension {
 			if($list->First()->DefaultSite==false) {
 				$output = '<div class="field dropdown">';
 				$output .= '<select id="SubsitesSelect">';
-				$output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', '_Default Site') . "</option>";
+				$output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', 'Default site') . "</option>";
 				foreach($list as $subsite) {
 					$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
 			
