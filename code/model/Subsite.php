@@ -83,7 +83,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Corresponds to subfolder names within the /themes folder. By default, all themes contained in this folder
 	 * are listed.
 	 */
-	protected static $allowed_themes = array();
+	private static $allowed_themes = array();
 	
 	/**
 	 * @var Boolean If set to TRUE, don't assume 'www.example.com' and 'example.com' are the same.
