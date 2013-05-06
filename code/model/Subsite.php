@@ -11,15 +11,15 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * @var boolean $disable_subsite_filter If enabled, bypasses the query decoration
 	 * to limit DataObject::get*() calls to a specific subsite. Useful for debugging.
 	 */
-	private static $disable_subsite_filter = false;
+	static $disable_subsite_filter = false;
 	
 	/**
 	 * Allows you to force a specific subsite ID, or comma separated list of IDs.
 	 * Only works for reading. An object cannot be written to more than 1 subsite.
 	 */
-	private static $force_subsite = null;
+	static $force_subsite = null;
 
-	private static $write_hostmap = true;
+	static $write_hostmap = true;
 	
 	private static $default_sort = "\"Title\" ASC";
 
@@ -90,12 +90,12 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Doesn't affect wildcard matching, so '*.example.com' will match 'www.example.com' (but not 'example.com')
 	 * in both TRUE or FALSE setting.
 	 */
-	private static $strict_subdomain_matching = false;
+	static $strict_subdomain_matching = false;
 
 	/**
 	 * @var boolean Respects the IsPublic flag when retrieving subsites
 	 */
-	private static $check_is_public = true;
+	static $check_is_public = true;
 
 	static function set_allowed_domains($domain){
 		user_error('Subsite::set_allowed_domains() is deprecated; it is no longer necessary '
