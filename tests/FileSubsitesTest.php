@@ -59,15 +59,18 @@ class FileSubsitesTest extends BaseSubsiteTest {
 
 		$file = new Folder();
 
+		$source = $file->getCMSFields()->dataFieldByName('SubsiteID')->getSource();
+		asort($source);
+
 		$this->assertEquals(array(
 			'Main site',
-			'Template',
 			'Subsite1 Template',
 			'Subsite2 Template',
+			'Template',
 			'Test 1',
 			'Test 2',
 			'Test 3'
-		), $file->getCMSFields()->dataFieldByName('SubsiteID')->getSource());
+		), $source);
 	}
 	
 }
