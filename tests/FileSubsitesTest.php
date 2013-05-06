@@ -64,9 +64,9 @@ class FileSubsitesTest extends BaseSubsiteTest {
 
 		$this->assertEquals(array(
 			'Main site',
+			'Template',
 			'Subsite1 Template',
 			'Subsite2 Template',
-			'Template',
 			'Test 1',
 			'Test 2',
 			'Test 3'
