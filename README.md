@@ -13,9 +13,10 @@ The subsites module allows multiple websites to run from a single installation o
 ## Installation
 
 *  Create necessary tables by visiting `http://<yoursite>/dev/build` (you should see a `Subsite` table created, among other things). You don't need to run this command for every subsite.
-*  Login to the CMS as an administrator.  You should now see a "Subsites" entry on the main menu.
-*  Create a new subsite, giving it a name and a subdomain.  The subdomain will determine the URL of your website.  For example, if your site is running on `http://localhost/mysite`, and you set the subdomain to "subsite", then your subsite will be accessible on `http://subsite.localhost/mysite`
-*  Once you have created and saved your new subsite, go back to the "Site Content" section.  In the top-right, there should be a dropdown listing the two subsites - "Main site" is the original site that you had before you installed the subsites module.  Select your new subsite, and the site content tree will be updated.  It should be empty at this stage.
+*  Login to the CMS as an administrator.  You should now see a "Subsites" entry on the main menu, access that section now.
+*  Hit the "Add Subsite" button to create a new subsite.
+*  Once you've created a subsite, you'll see a "Create Subsite Domain" button, hit that button to enter a domain or subdomain for your subsite. This will determine the URL of your website.  For example, if your site is running on `http://localhost/mysite`, and you set the subdomain to "subsite", then your subsite will be accessible on `http://subsite.localhost/mysite`
+*  Go to the "Pages" section of the CMS.  In the top-left above the menu, you'll see a dropdown listing the two subsites - "Main site" is the original site that you had before you installed the subsites module.  Select your new subsite, and the site content tree will be changed.  It should be empty at this stage.
 *  Add a page - change its title to "Home", and its URL Segment will be changed to "home".  Save the page.
 *  Update your DNS and, if necessary, your webserver configuration, so that your subdomain will point to the SilverStripe installation on your webserver.  Visit this new subdomain.  You should see the new subsite homepage.
 
