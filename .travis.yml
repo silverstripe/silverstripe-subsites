@@ -7,8 +7,6 @@ php:
 
 env:
  - DB=MYSQL CORE_RELEASE=3.0
- - DB=MYSQL CORE_RELEASE=3.1
- - DB=PGSQL CORE_RELEASE=master
 
 matrix:
   include:
