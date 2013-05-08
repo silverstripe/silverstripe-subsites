@@ -48,23 +48,35 @@ class LeftAndMainSubsites extends Extension {
 	}
 	
 	public function Subsites() {
-		$accessPerm = 'CMS_ACCESS_'. $this->owner->class;
+		// figure out what permission the controller needs
+		// Subsite::accessible_sites() expects something, so if there's no permission
+		// then fallback to using CMS_ACCESS_LeftAndMain.
+		$permission = 'CMS_ACCESS_' . $this->owner->class;
+		$available = Permission::get_codes(false);
+		if(!isset($available[$permission])) {
+			$permission = $this->owner->stat('required_permission_codes');
+			if(!$permission) {
+				$permission = 'CMS_ACCESS_LeftAndMain';
+			}
+		}
+
 		switch($this->owner->class) {
 			case "AssetAdmin":
-				$subsites = Subsite::accessible_sites($accessPerm, true, "Shared files & images");
+				$subsites = Subsite::accessible_sites($permission, true, "Shared files & images");
 				break;
 				
 			case "SecurityAdmin":
-				$subsites = Subsite::accessible_sites($accessPerm, true, "Groups accessing all sites");
+				$subsites = Subsite::accessible_sites($permission, true, "Groups accessing all sites");
 				if($subsites->find('ID',0)) {
 					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
 				}
 				break;
 				
 			case "CMSMain":
+			case "CMSPagesController":
 				// If there's a default site then main site has no meaning
 				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1");
-				$subsites = Subsite::accessible_sites($accessPerm, $showMainSite);
+				$subsites = Subsite::accessible_sites($permission, $showMainSite);
 				break;
 				
 			case "SubsiteAdmin":
@@ -72,7 +84,7 @@ class LeftAndMainSubsites extends Extension {
 				break;
 
 			default: 
-				$subsites = Subsite::accessible_sites($accessPerm);
+				$subsites = Subsite::accessible_sites($permission);
 				break;	
 		}
 
@@ -81,9 +93,8 @@ class LeftAndMainSubsites extends Extension {
 	
 	public function SubsiteList() {
 		$list = $this->Subsites();
-		
 		$currentSubsiteID = Subsite::currentSubsiteID();
-		
+
 		if($list->Count() > 1) {
 			$output = '<div class="field dropdown">';
 			$output .= '<select id="SubsitesSelect">';
@@ -98,7 +109,7 @@ class LeftAndMainSubsites extends Extension {
 		
 			Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 			return $output;
-		} else if($list->Count() == 1) {
+		} elseif($list->Count() == 1) {
 			if($list->First()->DefaultSite==false) {
 				$output = '<div class="field dropdown">';
 				$output .= '<select id="SubsitesSelect">';
@@ -107,15 +118,15 @@ class LeftAndMainSubsites extends Extension {
 					$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
 			
 					$output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
-		}
-			
+				}
+
 				$output .= '</select></div>';
-			
+
 				Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 				return $output;
-			}else {
+			} else {
 				return '<span>'.$list->First()->Title.'</span>';
-	}
+			}
 		}
 	}
 	
