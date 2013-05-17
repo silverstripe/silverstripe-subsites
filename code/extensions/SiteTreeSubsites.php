@@ -212,13 +212,74 @@ class SiteTreeSubsites extends DataExtension {
 		Session::set('SubsiteID', null);
 	}
 	
-	function alternateAbsoluteLink() {
+	function alternateAbsoluteLink($action = null) {
 		// Generate the existing absolute URL and replace the domain with the subsite domain.
 		// This helps deal with Link() returning an absolute URL.
-		$url = Director::absoluteURL($this->owner->Link());
+		$url = Director::absoluteURL($this->owner->Link($action));
 		if($this->owner->SubsiteID) {
 			$url = preg_replace('/\/\/[^\/]+\//', '//' .  $this->owner->Subsite()->domain() . '/', $url);
 		}
+		return $url;
+	}
+
+	/**
+	 * Find the domain that's most similar to the $url within this page's Subsite Domains.
+	 */
+	function getMostSimilarDomain($url) {
+		$domain = parse_url($url, PHP_URL_HOST);
+		$chosenSubsiteDomain = null;
+		$domainsRelation = $this->owner->Subsite()->Domains();
+
+		if (!$this->owner->SubsiteID) return $domain;
+
+		// There is just one domain.
+		if ($domainsRelation->count()==1) return $domainsRelation->First();
+
+		// Start matching from entire CMS domain, in each step peel off one leftmost element.
+		while ($domain) {
+
+			foreach ($domainsRelation->sort('IsPrimary DESC') as $subsiteDomain) {
+				// Similarity algorithm currently does not support wildcards.
+				if (strpos($subsiteDomain->Domain, '*')!==false) continue;
+
+				if (preg_match("/$domain\$/", $subsiteDomain->Domain)) {
+					// Match!
+					$chosenSubsiteDomain = $subsiteDomain->Domain;
+					break;
+				}
+			}
+
+			if ($chosenSubsiteDomain) break;
+
+			// Peel off leftmost element.
+			$domainExploded = explode('.', $domain);
+			array_shift($domainExploded);
+			$domain = implode('.', $domainExploded);
+		}
+
+		if ($chosenSubsiteDomain) {
+			return $chosenSubsiteDomain;
+		} else {
+			// Fall back to primary.
+			return $domainsRelation->sort('IsPrimary DESC')->First()->Domain;
+		}
+	}
+
+	/**
+	 * Replace the subsite domain with the subsite domain most specifically matching the CMS domain, so previews can
+	 * go through a channel as similar to CMS as possible.
+	 *
+	 * E.g.: Let's say the subsite is at sub.co.nz. The CMS is at cms.me.org.nz and using SSL cert CN=*.me.org.nz.
+	 * To get the previews working with this cert we cannot use sub.co.nz, so we add a new domain to the subsite:
+	 * sub-cms.me.org.nz. It will automatically override sub.co.nz as more similar to cms.me.org.nz in previews.
+	 */
+	function alternatePreviewLink($action = null) {
+		$url = $this->owner->AbsoluteLink(); // Default link.
+		$domain = $this->getMostSimilarDomain(Director::protocolAndHost());
+
+		// Inject the domain.
+		if ($domain) $url = preg_replace('/\/\/[^\/]+\//', '//' .  $domain . '/', $url);
+
 		return $url;
 	}
 	
