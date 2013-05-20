@@ -185,6 +185,20 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		$this->assertContains('SiteTreeSubsitesTest_ClassA', $classes);
 		$this->assertContains('SiteTreeSubsitesTest_ClassB', $classes);
 	}
+
+	function testGetMostSimilarDomain() {
+		$page = $this->objFromFixture('Page', 'similaritytest_home');
+
+		$domain = $page->getMostSimilarDomain('http://x.b.com/sub/');
+		$this->assertEquals($domain, 'b.b.com', 'x.b.com matches non-primary b.b.com before a.a.com.');
+
+		$domain = $page->getMostSimilarDomain('http://x.x.xxx/sub/');
+		$this->assertEquals($domain, 'a.a.com', 'Completely unrelated URL matches primary domain.');
+
+		$page = $this->objFromFixture('Page', 'similaritytest_nosubsite');
+		$domain = $page->getMostSimilarDomain('http://x.x.xxx/sub/');
+		$this->assertEquals($domain, 'x.x.xxx', 'Page with no subsite simply returns the URL as matching.');
+	}
 	
 }
 

@@ -11,6 +11,8 @@ Subsite:
       Title: Test 2
    domaintest3:
       Title: Test 3
+   similaritytest:
+      Title: Similarity
 SubsiteDomain:
    subsite1:
       SubsiteID: =>Subsite.subsite1
@@ -36,6 +38,13 @@ SubsiteDomain:
       SubsiteID: =>Subsite.domaintest3
       Domain: three.*
       IsPrimary: 1
+   st1:
+      SubsiteID: =>Subsite.similaritytest
+      Domain: a.a.com
+      IsPrimary: 1
+   st2:
+      SubsiteID: =>Subsite.similaritytest
+      Domain: b.b.com
 Page:
    mainSubsitePage:
       Title: MainSubsitePage
@@ -74,6 +83,11 @@ Page:
    subsite2_contactus:
       Title: Contact Us (Subsite 2)
       SubsiteID: =>Subsite.subsite2
+   similaritytest_home:
+      Title: Home (Similarity test)
+      SubsiteID: =>Subsite.similaritytest
+   similaritytest_nosubsite:
+      Title: Nosubsite (Similarity test)
 
 PermissionRoleCode:
    roleCode1:
