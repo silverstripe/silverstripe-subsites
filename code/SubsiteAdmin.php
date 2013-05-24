@@ -11,6 +11,8 @@ class SubsiteAdmin extends ModelAdmin {
 	private static $url_segment = 'subsites';
 	
 	private static $menu_title = "Subsites";
+
+	private static $menu_icon = "subsites/images/subsites.png";
 	
 	public $showImportForm=false;
 
