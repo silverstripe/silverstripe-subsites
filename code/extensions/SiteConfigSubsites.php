@@ -3,7 +3,7 @@
 /**
  * Extension for the SiteConfig object to add subsites support
  */
-class SiteConfigSubsites extends DataExtension {		
+class SiteConfigSubsites extends DataExtension {
 
 	private static $has_one = array(
 		'Subsite' => 'Subsite', // The subsite that this page belongs to
@@ -37,5 +37,9 @@ class SiteConfigSubsites extends DataExtension {
 	 */
 	function cacheKeyComponent() {
 		return 'subsite-'.Subsite::currentSubsiteID();
+	}
+
+	function updateCMSFields(FieldList $fields) {
+		$fields->push(new HiddenField('SubsiteID','SubsiteID', Subsite::currentSubsiteID()));
 	}
 }
