@@ -211,7 +211,7 @@ class SiteTreeSubsites extends DataExtension {
 		// Need to set the SubsiteID to null incase we've been in the CMS
 		Session::set('SubsiteID', null);
 	}
-	
+
 	function alternateAbsoluteLink() {
 		// Generate the existing absolute URL and replace the domain with the subsite domain.
 		// This helps deal with Link() returning an absolute URL.
@@ -221,7 +221,30 @@ class SiteTreeSubsites extends DataExtension {
 		}
 		return $url;
 	}
-	
+
+	/**
+	 * Use the CMS domain for iframed CMS previews to prevent single-origin violations
+	 * and SSL cert problems.
+	 */
+	function alternatePreviewLink($action = null) {
+		$url = Director::absoluteURL($this->owner->Link());
+		if($this->owner->SubsiteID) {
+			$url = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
+		}
+		return $url;
+	}
+
+	/**
+	 * Inject the subsite ID into the content so it can be used by frontend scripts.
+	 */
+	function MetaTags(&$tags) {
+		if($this->owner->SubsiteID) {
+			$tags .= "<meta name=\"x-subsite-id\" content=\"" . $this->owner->SubsiteID . "\" />\n";
+		}
+
+		return $tags;
+	}
+
 	function augmentSyncLinkTracking() {
 		// Set LinkTracking appropriately
 		$links = HTTP::getLinksIn($this->owner->Content);
