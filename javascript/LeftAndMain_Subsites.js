@@ -57,4 +57,49 @@
 		});
 
 	});
+
+	$.entwine('ss.preview', function($){
+
+		$('.cms-preview').entwine({
+
+			/**
+			 * Update links and forms with GET/POST SubsiteID param, so we remaing on the current subsite.
+			 * The initial link for the iframe comes from SiteTreeSubsites::alternatePreviewLink.
+			 *
+			 * This is done so we can use the CMS domain for displaying previews so we prevent single-origin
+			 * violations and SSL cert problems that come up when iframing content from a different URL.
+			 */
+			onafterIframeAdjustedForPreview: function(event, doc) {
+				var subsiteId = $(doc).find('meta[name=x-subsite-id]').attr('content');
+
+				if (!subsiteId) return;
+
+				// Inject the SubsiteID into internal links.
+				$(doc).find('a').each(function() {
+					var href = $(this).attr('href');
+
+					if (!href.match(/^http:\/\//)) {
+
+						$(this).attr('href', $.path.addSearchParams(href, {
+							'SubsiteID': subsiteId
+						}));
+
+					}
+				});
+
+				// Inject the SubsiteID as a hidden input into all forms submitting to the local site.
+				$(doc).find('form').each(function() {
+
+					if (!$(this).attr('action').match(/^http:\/\//)) {
+						$(doc).find('form').append('<input type=hidden name="SubsiteID" value="' + subsiteId + '" >');
+					}
+
+				});
+
+			}
+
+		});
+
+	});
+
 })(jQuery);
