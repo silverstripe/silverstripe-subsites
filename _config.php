@@ -7,6 +7,7 @@
 
 SiteTree::add_extension('SiteTreeSubsites');
 ContentController::add_extension('ControllerSubsites');
+CMSPageAddController::add_extension('CMSPageAddControllerExtension');
 LeftAndMain::add_extension('LeftAndMainSubsites');
 LeftAndMain::add_extension('ControllerSubsites');
 
