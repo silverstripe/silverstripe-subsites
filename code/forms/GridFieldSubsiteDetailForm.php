@@ -4,6 +4,14 @@ class GridFieldSubsiteDetailForm extends GridFieldDetailForm {
 }
 
 class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest {
+
+	private static $allowed_actions = array(
+		'edit',
+		'view',
+		'ItemEditForm',
+		'doSave'
+	);
+
 	/**
 	 * Builds an item edit form.  The arguments to getCMSFields() are the popupController and
 	 * popupFormName, however this is an experimental API and may change.

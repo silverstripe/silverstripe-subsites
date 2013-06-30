@@ -3,6 +3,7 @@
  * @package subsites
  */
 class ControllerSubsites extends Extension {
+
 	function controllerAugmentInit(){
 		if($subsite = Subsite::currentSubsite()){
 			if($theme = $subsite->Theme)
@@ -16,5 +17,3 @@ class ControllerSubsites extends Extension {
 		}
 	}
 }
-
-?>

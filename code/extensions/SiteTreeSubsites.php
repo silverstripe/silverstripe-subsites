@@ -31,7 +31,7 @@ class SiteTreeSubsites extends DataExtension {
 		// Don't run on delete queries, since they are always tied to
 		// a specific ID.
 		if ($query->getDelete()) return;
-		
+
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		// if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
 		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]))) {
@@ -198,8 +198,10 @@ class SiteTreeSubsites extends DataExtension {
 	 * Called by ContentController::init();
 	 */
 	static function contentcontrollerInit($controller) {
+
 		// Need to set the SubsiteID to null incase we've been in the CMS
-		Session::set('SubsiteID', null);
+		// if (!isset($_GET['SubsiteID'])) Session::set('SubsiteID', null);
+
 		$subsite = Subsite::currentSubsite();
 		if($subsite && $subsite->Theme) SSViewer::set_theme(Subsite::currentSubsite()->Theme);
 	}
@@ -208,8 +210,9 @@ class SiteTreeSubsites extends DataExtension {
 	 * Called by ModelAsController::init();
 	 */
 	static function modelascontrollerInit($controller) {
+
 		// Need to set the SubsiteID to null incase we've been in the CMS
-		Session::set('SubsiteID', null);
+		// if (!isset($_GET['SubsiteID'])) Session::set('SubsiteID', null);
 	}
 
 	function alternateAbsoluteLink() {
