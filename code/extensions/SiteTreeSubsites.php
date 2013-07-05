@@ -198,18 +198,8 @@ class SiteTreeSubsites extends DataExtension {
 	 * Called by ContentController::init();
 	 */
 	static function contentcontrollerInit($controller) {
-		// Need to set the SubsiteID to null incase we've been in the CMS
-		Session::set('SubsiteID', null);
 		$subsite = Subsite::currentSubsite();
 		if($subsite && $subsite->Theme) SSViewer::set_theme(Subsite::currentSubsite()->Theme);
-	}
-	
-	/**
-	 * Called by ModelAsController::init();
-	 */
-	static function modelascontrollerInit($controller) {
-		// Need to set the SubsiteID to null incase we've been in the CMS
-		Session::set('SubsiteID', null);
 	}
 
 	function alternateAbsoluteLink() {
