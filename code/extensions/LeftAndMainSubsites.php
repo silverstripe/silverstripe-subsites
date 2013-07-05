@@ -9,6 +9,10 @@ class LeftAndMainSubsites extends Extension {
 	private static $allowed_actions = array('CopyToSubsite');
 
 	function init() {
+
+		//Use the session variable for current subsite in the CMS only
+		Subsite::$use_session_subsiteid = true;
+
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');

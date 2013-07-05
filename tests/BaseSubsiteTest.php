@@ -1,5 +1,12 @@
 <?php
 class BaseSubsiteTest extends SapphireTest {
+
+	function setUp() {
+		parent::setUp();
+
+		Subsite::$use_session_subsiteid = true;
+	}
+
 	/**
 	 * Avoid subsites filtering on fixture fetching.
 	 */

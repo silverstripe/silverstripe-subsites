@@ -8,6 +8,15 @@
 class Subsite extends DataObject implements PermissionProvider {
 
 	/**
+	 * @var $use_session_subsiteid Boolean Set to TRUE when using the CMS and FALSE
+	 * when browsing the frontend of a website. 
+	 * 
+	 * @todo Remove flag once the Subsite CMS works without session state,
+	 * similarly to the Translatable module.
+	 */
+	public static $use_session_subsiteid = false;
+
+	/**
 	 * @var boolean $disable_subsite_filter If enabled, bypasses the query decoration
 	 * to limit DataObject::get*() calls to a specific subsite. Useful for debugging.
 	 */
@@ -286,19 +295,25 @@ JS;
 	 * @return int ID of the current subsite instance
 	 */
 	static function currentSubsiteID() {
-		if(isset($_GET['SubsiteID'])) $id = (int)$_GET['SubsiteID'];
-		else $id = Session::get('SubsiteID');
+		$id = NULL;
+
+		if(isset($_GET['SubsiteID'])) {
+			$id = (int)$_GET['SubsiteID'];
+		}
+		else if (Subsite::$use_session_subsiteid) {
+			$id = Session::get('SubsiteID');
+		} 
 
 		if($id === NULL) {
 			$id = self::getSubsiteIDForDomain();
-			Session::set('SubsiteID', $id);
 		}
 
 		return (int)$id;
 	}
 	
 	/**
-	 * Switch to another subsite.
+	 * Switch to another subsite through storing the subsite identifier in the current PHP session.
+	 * Only takes effect when {@link Subsite::$use_session_subsiteid} is set to TRUE.
 	 *
 	 * @param int|Subsite $subsite Either the ID of the subsite, or the subsite object itself
 	 */
