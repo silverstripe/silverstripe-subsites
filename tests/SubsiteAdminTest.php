@@ -24,69 +24,6 @@ class SubsiteAdminTest extends BaseSubsiteTest {
 		$this->assertTrue(strpos($response2->getBody(), 'id="Form_ItemEditForm_ID"') !== false, "Testing Form_ItemEditForm_ID exists");
         $this->assertTrue(strpos($response2->getBody(), '<head') !== false, "Testing <head> exists");
     }
-	
-	/**
-	 * Test searching for an intranet
-	 */
-	function XXtestIntranetSearch() {
-		$cont = new SubsiteAdmin();
-		$cont->pushCurrent();
-        $cont->setSession($this->adminLoggedInSession());
-		
-		// Check that the logged-in member has the correct permissions
-		$this->assertTrue(Permission::check('ADMIN') ? true : false);
-
-		$form = $cont->SearchForm();
-		
-		$searches = array(
-			array('Name' => 'Other'),
-		);
-		
-		foreach($searches as $search) {
-			$response = $form->testAjaxSubmission('getResults', $search);
-            $links = $response->getLinks();
-            foreach($links as $link) {
-                $this->assertTrue(preg_match('/^admin\/subsites\/show\/[0-9]+$/', $link['href']) == 1, "Search result links bad.");
-            }
-		}
-		
-		$cont->popCurrent();
-	}
-    
-    /**
-     * Test the intranet creation form.
-     */
-    function XXtestIntranetCreation() {
-  		$cont = new SubsiteAdmin();
-        $cont->pushCurrent();
-        $cont->setSession($this->adminLoggedInSession());
-        
-        $form = $cont->AddSubsiteForm();
-        $source = $form->dataFieldByName('TemplateID')->getSource();
-        
-        $templateIDs = $this->allFixtureIDs('Subsite');
-        foreach($templateIDs as $templateID) {
-            $this->assertArrayHasKey($templateID, $source);
-        }
-        
-        $templateObj = $this->objFromFixture('Subsite','main');
-        $this->assertEquals($templateObj->Title, $source[$templateObj->ID], "Template dropdown isn't listing Title values");
-
-        $response = $form->testSubmission('addintranet', array(
-            'Name' => 'Test Intranet',
-            'Domain' => 'test.example.com',
-            'TemplateID' => 1,
-            'AdminEmail' => '',
-            'AdminName' => '',
-        ));
-
-        $this->assertTrue(true == preg_match('/admin\/subsites\/show\/([0-9]+)/i', $response->getHeader('Location'), $matches), "Intranet creation dowsn't redirect to new view");
-        
-        $newIntranet = DataObject::get_by_id("Subsite", $matches[1]);
-        $this->assertEquals('Test Intranet', $newIntranet->Title, "New intranet not created properly.");
-        
-        $cont->popCurrent();
-  }
 
 	
 	/**
