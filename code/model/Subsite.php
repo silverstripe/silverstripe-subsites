@@ -143,6 +143,15 @@ class Subsite extends DataObject implements PermissionProvider {
 		}
 	}
 
+	public function validate() {
+		$result = parent::validate();
+		if(!$this->Title) {
+			$result->error(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
+		}
+		
+		return $result;
+	}
+
 	/**
 	 * Whenever a Subsite is written, rewrite the hostmap
 	 *

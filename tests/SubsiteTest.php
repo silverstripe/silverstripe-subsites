@@ -200,7 +200,9 @@ class SubsiteTest extends BaseSubsiteTest {
 	}
 	
 	protected function createSubsiteWithDomains($domains) {
-		$subsite = new Subsite();
+		$subsite = new Subsite(array(
+			'Title' => 'My Subsite'
+		));
 		$subsite->write();
 		foreach($domains as $domainStr => $isPrimary) {
 			$domain = new SubsiteDomain(array(
