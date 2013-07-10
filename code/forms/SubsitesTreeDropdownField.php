@@ -6,6 +6,10 @@
  * @package subsites
  */
 class SubsitesTreeDropdownField extends TreeDropdownField {
+
+	private static $allowed_actions = array(
+		'tree'
+	);
 	
 	protected $subsiteID = 0;
 	
