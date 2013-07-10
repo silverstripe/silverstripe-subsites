@@ -40,33 +40,13 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
 	
 	function doSave($data, $form) {
 		$new_record = $this->record->ID == 0;
-		
 		if($new_record && isset($data['TemplateID']) && !empty($data['TemplateID'])) {
 			$template = Subsite::get()->byID(intval($data['TemplateID']));
 			if($template) {
 				$this->record = $template->duplicate();
 			}
 		}
-		
-		try {
-			$form->saveInto($this->record);
-			$this->record->write();
-			$this->gridField->getList()->add($this->record);
-		} catch(ValidationException $e) {
-			$form->sessionMessage($e->getResult()->message(), 'bad');
-			return Controller::curr()->redirectBack();
-		}
 
-		// TODO Save this item into the given relationship
-
-		$message = sprintf(
-			_t('GridFieldDetailForm.Saved', 'Saved %s %s'),
-			$this->record->singular_name(),
-			'<a href="' . $this->Link('edit') . '">"' . htmlspecialchars($this->record->Title, ENT_QUOTES) . '"</a>'
-		);
-		
-		$form->sessionMessage($message, 'good');
-
-		return Controller::curr()->redirect($this->Link());
+		return parent::doSave($data, $form);
 	}
 }
