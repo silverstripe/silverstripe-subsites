@@ -2,7 +2,7 @@
 	$.entwine('ss', function($) {
 		$('.TreeDropdownField').entwine({
 			subsiteID: function() {
-				var subsiteSel = $$('#CopyContentFromID_SubsiteID select')[0];
+				var subsiteSel = $('#CopyContentFromID_SubsiteID select')[0];
 				if(!subsiteSel) return;
 				
 				subsiteSel.onchange = (function() {
