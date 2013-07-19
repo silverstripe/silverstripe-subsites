@@ -36,6 +36,9 @@ class Subsite extends DataObject implements PermissionProvider {
 		
 		// Comma-separated list of disallowed page types
 		'PageTypeBlacklist' => 'Text',
+        
+        // analytics code field (https://github.com/silverstripe/silverstripe-subsites/issues/18)
+        'AnalyticsCode' => 'Text',
 	);
 	
 	private static $has_one = array(
@@ -227,7 +230,8 @@ class Subsite extends DataObject implements PermissionProvider {
 						'PageTypeBlacklist', 
 						false,
 						$pageTypeMap
-					)
+					),
+                    new TextAreaField('AnalyticsCode', 'Subsite analytics code')
 				)
 			),
 			new HiddenField('ID', '', $this->ID),
