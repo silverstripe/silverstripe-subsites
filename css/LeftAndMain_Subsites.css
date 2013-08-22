@@ -81,3 +81,11 @@ body.SubsiteAdmin .right form #URL .fieldgroup * {
 .cms-add-form #PageType li .class-SubsitesVirtualPage, .class-SubsitesVirtualPage a .jstree-pageicon {
 	background-position: 0 -32px !important;
 }
+
+.subsites-move-dropdown{
+	display:none;
+}
+
+#Root_DetailsView .subsites-move-dropdown{
+	display:block;
+}

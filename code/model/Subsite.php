@@ -219,7 +219,7 @@ class Subsite extends DataObject implements PermissionProvider {
 		asort($pageTypeMap);
 
 		$fields = new FieldList(
-			new TabSet('Root',
+			$subsiteTabs = new TabSet('Root',
 				new Tab('Configuration',
 					new HeaderField($this->getClassName() . ' configuration', 2),
 					new TextField('Title', 'Name of subsite:', $this->Title),
@@ -251,6 +251,8 @@ class Subsite extends DataObject implements PermissionProvider {
 			new HiddenField('ID', '', $this->ID),
 			new HiddenField('IsSubsite', '', 1)
 		);
+
+		$subsiteTabs->addExtraClass('subsite-model');
 
 		$this->extend('updateCMSFields', $fields);
 		return $fields;

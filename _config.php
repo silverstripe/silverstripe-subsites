@@ -17,3 +17,12 @@ ErrorPage::add_extension('ErrorPageSubsite');
 SiteConfig::add_extension('SiteConfigSubsites');
 
 SS_Report::add_excluded_reports('SubsiteReportWrapper');
+
+//Display in cms menu
+AssetAdmin::add_extension('SubsiteMenuExtension');
+SecurityAdmin::add_extension('SubsiteMenuExtension');
+CMSMain::add_extension('SubsiteMenuExtension');
+CMSPagesController::add_extension('SubsiteMenuExtension');
+SubsiteAdmin::add_extension('SubsiteMenuExtension');
+CMSSettingsController::add_extension('SubsiteMenuExtension');
+
