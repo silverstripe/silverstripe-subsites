@@ -29,4 +29,18 @@ class SubsiteAdmin extends ModelAdmin {
 
 		return $form;
 	}
+
+	public function getResponseNegotiator() {
+		$negotiator = parent::getResponseNegotiator();
+		$self = $this;
+		// Register a new callback
+		$negotiator->setCallback('SubsiteList', function() use(&$self) {
+			return $self->SubsiteList();
+		});
+		return $negotiator;
+	}
+
+	public function SubsiteList() {
+		return $this->renderWith('SubsiteList');
+	}
 }
