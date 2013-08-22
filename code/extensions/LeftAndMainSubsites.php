@@ -51,6 +51,9 @@ class LeftAndMainSubsites extends Extension {
 		$fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
 	}
 	
+	/*
+	 * Returns a list of the subsites accessible to the current user
+	 */
 	public function Subsites() {
 		// figure out what permission the controller needs
 		// Subsite::accessible_sites() expects something, so if there's no permission
@@ -64,76 +67,74 @@ class LeftAndMainSubsites extends Extension {
 			}
 		}
 
-		switch($this->owner->class) {
-			case "AssetAdmin":
-				$subsites = Subsite::accessible_sites($permission, true, "Shared files & images");
-				break;
-				
-			case "SecurityAdmin":
-				$subsites = Subsite::accessible_sites($permission, true, "Groups accessing all sites");
-				if($subsites->find('ID',0)) {
-					$subsites->push(new ArrayData(array('Title' => 'All groups', 'ID' => -1)));
-				}
-				break;
-				
-			case "CMSMain":
-			case "CMSPagesController":
-				// If there's a default site then main site has no meaning
-				$showMainSite = !DataObject::get_one('Subsite',"\"DefaultSite\"=1");
-				$subsites = Subsite::accessible_sites($permission, $showMainSite);
-				break;
-				
-			case "SubsiteAdmin":
-				$subsites = Subsite::accessible_sites('ADMIN', true);
-				break;
-
-			default: 
-				$subsites = Subsite::accessible_sites($permission);
-				break;	
-		}
-
-		return $subsites;
+		return Subsite::accessible_sites($permission);
 	}
-	
-	public function SubsiteList() {
+
+	/*
+	 * Generates a list of subsites with the data needed to 
+	 * produce a dropdown site switcher
+	 * @return ArrayList
+	 */
+
+	public function ListSubsites(){
 		$list = $this->Subsites();
 		$currentSubsiteID = Subsite::currentSubsiteID();
 
-		if($list->Count() > 1) {
-			$output = '<div class="field dropdown">';
-			$output .= '<select id="SubsitesSelect">';
-		
-			foreach($list as $subsite) {
-				$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
-		
-				$output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
-			}
-		
-			$output .= '</select></div>';
-		
-			Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
-			return $output;
-		} elseif($list->Count() == 1) {
-			if($list->First()->DefaultSite==false) {
-				$output = '<div class="field dropdown">';
-				$output .= '<select id="SubsitesSelect">';
-				$output .= "\n<option value=\"0\">". _t('LeftAndMainSubsites.DEFAULT_SITE', 'Default site') . "</option>";
-				foreach($list as $subsite) {
-					$selected = $subsite->ID == $currentSubsiteID ? ' selected="selected"' : '';
-			
-					$output .= "\n<option value=\"{$subsite->ID}\"$selected>". Convert::raw2xml($subsite->Title) . "</option>";
-				}
-
-				$output .= '</select></div>';
-
-				Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
-				return $output;
-			} else {
-				return '<span>'.$list->First()->Title.'</span>';
-			}
+		if($list == null || $list->Count() == 1 && $list->First()->DefaultSite == true){
+			return false;
 		}
-	}
+
+		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
+
+		$output = new ArrayList();
+
+		foreach($list as $subsite) {
+			$CurrentState = $subsite->ID == $currentSubsiteID ? 'selected' : '';
 	
+			$output->push(new ArrayData(array(
+				'CurrentState' => $CurrentState,
+				'ID' => $subsite->ID,
+				'Title' => Convert::raw2xml($subsite->Title)
+			)));
+		}
+
+		return $output;
+	}
+
+	/*
+	 * Returns a subset of the main menu, filtered by admins that have 
+	 * a subsiteCMSShowInMenu method returning true
+	 *
+	 * @return ArrayList
+	 */
+	public function SubsiteMainMenu(){
+		if(Subsite::currentSubsiteID() == 0){
+			return $this->owner->MainMenu();
+		}
+		// loop main menu items, add all items that have subsite support
+		$mainMenu = $this->owner->MainMenu();
+		$subsitesMenu = new ArrayList();
+
+		foreach($mainMenu as $menuItem){
+
+			$controllerName = $menuItem->MenuItem->controller;
+
+			if(class_exists($controllerName)){
+				$controller = singleton($controllerName);
+
+				if($controller->hasMethod('subsiteCMSShowInMenu') && $controller->subsiteCMSShowInMenu()){
+					$subsitesMenu->push($menuItem);
+				}
+			}
+
+			if($menuItem->Code == 'Help'){
+				$subsitesMenu->push($menuItem);
+			}
+
+		}
+		return $subsitesMenu;
+	}
+
 	public function CanAddSubsites() {
 		return Permission::check("ADMIN", "any", null, "all");
 	}
