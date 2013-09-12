@@ -41,36 +41,21 @@ site (ie, create, edit, view.)
 Groups can have access to all sites, or to one or more specific subsites. If you have different staff in charge of each
 subsite, you probably want to create a separate group for each subsite.
 
-The dropdown in the upper left corner of the CMS indicates which subsite you are currently on. While you are in the
-Security section of the CMS, the selection in the subsites dropdown defines what groups you see in the left-hand pane.
+The dropdown in the upper left corner of the CMS indicates which subsite you are currently on. 
 
-![Group subsites dropdown](_images/group-subsites-dropdown.jpg)
+![Group subsites dropdown](_images/subsites-dropdown.png)
 
-The choices are:
-
- * Groups accessing all sites
- * [your main site]
- * [a specific subsite]
- * All groups - i.e., all above combined
-
-Once you make a selection from the dropdown, you see the appropriate groups in the *Security* section. In the Security
-section, click a group and go to its *Subsites* tab to assign the subsites to which the group has access. Click *Only
+Once you make a selection from the dropdown, you see the appropriate groups in the *Security* section. In the Security section, click a group and go to its *Subsites* tab to assign the subsites to which the group has access. Click *Only
 these subsites* to reveal a checklist of all available sites.
 
-![Group subsites access](_images/group-subsites-access.jpg)
+![Group subsites access](_images/group-subsites-access.png)
 
 ## Copying subsites
-Duplicating subsites can be useful if you want to create several subsites based on the same general site structure. You
-can set up a collection of pages, files, and images and use it as a template. When you create a new subsite, instead of
-starting from scratch you can copy it all from your existing subsite. This will copy all pages, files and images from
-that subsite into your new subsite.
+Duplicating subsites can be useful if you want to create several subsites based on the same general site structure. You can set up a collection of pages, files, and images and use it as a template. When you create a new subsite, instead of starting from scratch you can copy it all from your existing subsite. This will copy all pages, files and images from that subsite into your new subsite.
 
-To create a new subsite template, create a new subsite described above under "Creating subsites" but don't add any
-domains. Add a name that will make it easy to see that it is a template. Select the new template from the subsites
-dropdown in the upper right and create the pages and add the files and images you'd like to become part of the
+To create a new subsite template, create a new subsite described above under "Creating subsites" but don't add any domains. Add a name that will make it easy to see that it is a template. Select the new template from the subsites dropdown in the upper right and create the pages and add the files and images you'd like to become part of the
 template.
 
-When you create a new subsite, you can now choose to Copy structure from your template. All your pages, files and
-images will be copied over to your new subsite.
+When you create a new subsite, you can now choose to Copy structure from your template. All your pages, files and images will be copied over to your new subsite.
 
 ![Group subsites dropdown](_images/copy-structure.jpg)

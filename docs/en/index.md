@@ -7,4 +7,4 @@ same templates, or each use different ones.
 This document assumes that you have full admin rights for your site.
 
  1. [Setting up subsites](set_up)
- 1. [Working with subsites](working)
+ 1. [Working with subsites](working_with)

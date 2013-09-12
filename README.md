@@ -70,18 +70,12 @@ Note that every site also has a ''www.''-prefixed version of the domain availabl
 
 ### Strict Subdomain Matching ###
 
-The module tries to provide sensible defaults, in which it regards `example.com` and `www.example.com`
-as the same domains. In case you want to distinguish between these variations,
-set `Subsite::$strict_subdomain_matching` to TRUE. This won't affect wildcard/asterisk checks,
-but removes the ambiguity about default subdomains.
+The module tries to provide sensible defaults, in which it regards `example.com` and `www.example.com` as the same domains. In case you want to distinguish between these variations, set `Subsite::$strict_subdomain_matching` to TRUE. This won't affect wildcard/asterisk checks, but removes the ambiguity about default subdomains.
 
 ### Permissions ###
 
 Groups can be associated with one or more subsites, in which case the granted permissions
-only apply to this subsite. Even the `ADMIN` permission only grants super-user rights on certain
-subsites by default. If you want to create a super-user regardless of subsites association,
-please use the `Group.AccessAllSubsites` property ("Give this group access to all subsites"),
-together with the `ADMIN` permission.
+only apply to this subsite. Even the `ADMIN` permission only grants super-user rights on certain subsites by default. If you want to create a super-user regardless of subsites association, please use the `Group.AccessAllSubsites` property ("Give this group access to all subsites"), together with the `ADMIN` permission.
 
 ### Access created domains
 
@@ -103,6 +97,65 @@ Not all themes might be suitable or adapted for all subsites. You can optionally
 
 	:::php
 	Subsite::set_allowed_themes(array('blackcandy','mytheme'));
+
+### Enable Subsite support on DataObjects
+To make your DataObject subsite aware, include a SubsiteID on your DataObject. eg:
+
+*MyDataObject.php*
+
+	:::php
+	private static $has_one = array(
+		'Subsite' => 'Subsite'
+	);
+
+Include the current SubsiteID as a hidden field on getCMSFields, or updateCMSFields. eg:
+
+*MyDataObject.php*
+
+	:::php
+	public function getCMSFields() {
+		$fields = parent::getCMSFields();
+		if(class_exists('Subsite')){
+			$fields->push(new HiddenField('SubsiteID','SubsiteID', Subsite::currentSubsiteID()));
+		}
+		return $fields;
+	}
+
+To limit your admin gridfields to the current Subsite records, you can do something like this:
+
+*MyAdmin.php*
+
+	:::php
+	public function getEditForm($id = null, $fields = null){
+		$form = parent::getEditForm($id, $fields);
+		
+		$gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass));
+		if(class_exists('Subsite')){
+			$list = $gridField->getList()->filter(array('SubsiteID'=>Subsite::currentSubsiteID()));
+			$gridField->setList($list);
+		}
+
+		return $form;
+	}
+
+### Enable menu support for custom areas in subsites
+
+Custom admin areas, by default, will not show in the menu of a subsite. Not all admins are adapted for or appropriate to show within a subsite. If your admin does have subsite support, or is intentionally global, you can enable the show in menu option either by applying:
+
+*mysite/_config.php*
+
+	:::php
+	MyAdmin::add_extension('SubsiteMenuExtension');
+
+or by defining the subsiteCMSShowInMenu function in your admin:
+
+*MyAdmin.php*
+
+	:::php
+	public function subsiteCMSShowInMenu(){
+		return true;
+	}
+
 
 ### Public display of a subsite
 
@@ -127,5 +180,4 @@ for all subdomains:
 
 ## Screenshots
 
-![](docs/en/_images/subsites-module-adminscreenshot-new.png)
-![](docs/en/_images/subsites-module-admindropdown.png)
+![](docs/en/_images/subsites-module-adminscreenshot.png)

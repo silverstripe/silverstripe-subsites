@@ -2,10 +2,9 @@
 
 ## Managing content across subsites
 
-When you are in the *Pages* or *Files* sections of the CMS, select a subsite from the dropdown in the upper left to
-display the content for that site in the site tree.
+Select a subsite from the dropdown in the upper left to display the content for that site in the site tree.
 
-![Subsites dropdown](_images/subsites-dropdown.jpg)
+![Subsites dropdown](_images/subsites-dropdown.png)
 
 ## Subsites virtual pages
 
