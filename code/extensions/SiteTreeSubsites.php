@@ -25,8 +25,9 @@ class SiteTreeSubsites extends DataExtension {
 	/**
 	 * Update any requests to limit the results to the current site
 	 */
-	function augmentSQL(SQLQuery &$query) {
+	function augmentSQL(SQLQuery &$query, DataQuery &$dataQuery = null) {
 		if(Subsite::$disable_subsite_filter) return;
+		if($dataQuery->getQueryParam('Subsite.filter') === false) return;
 		
 		// Don't run on delete queries, since they are always tied to
 		// a specific ID.
