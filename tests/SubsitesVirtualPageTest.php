@@ -137,6 +137,53 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		$this->assertFalse($vp->IsModifiedOnStage);
 	}
 	
+	/**
+	 * This test ensures published Subsites Virtual Pages immediately reflect updates
+	 * to their published target pages. Note - this has to happen when the virtual page
+	 * is in a different subsite to the page you are editing and republishing,
+	 * otherwise the test will pass falsely due to current subsite ID being the same.
+	 */
+	function testPublishedSubsiteVirtualPagesUpdateIfTargetPageUpdates()
+	{
+		// create page
+		$p = new Page();
+		$p->Content = 'Content';
+		$p->Title = 'Title';
+		$p->writeToStage('Stage');
+		$p->publish('Stage', 'Live');
+		$this->assertTrue($p->ExistsOnLive);
+		
+		// change to subsite
+		$subsite = $this->objFromFixture('Subsite', 'subsite2');
+		Subsite::changeSubsite($subsite->ID);
+		Subsite::$disable_subsite_filter = false;
+		
+		// create svp in subsite
+		$svp = new SubsitesVirtualPage();
+		$svp->CopyContentFromID = $p->ID;
+		$svp->writeToStage('Stage');
+		$svp->publish('Stage', 'Live');
+		$this->assertEquals($svp->SubsiteID, $subsite->ID);
+		$this->assertTrue($svp->ExistsOnLive);
+		
+		// change back to original subsite ("Main site")
+		Subsite::changeSubsite(0);
+		
+		// update original page
+		$p->Title = 'New Title';
+		// "save & publish"
+		$p->writeToStage('Stage');
+		$p->publish('Stage', 'Live');
+		$this->assertNotEquals($p->SubsiteID, $subsite->ID);
+		
+		// reload SVP from database
+		// can't use DO::get by id because caches.
+		$svpdb = $svp->get()->byID($svp->ID);
+		
+		// ensure title changed
+		$this->assertEquals($svpdb->Title, $p->Title); 
+	}
+	
 	function testUnpublishingParentPageUnpublishesSubsiteVirtualPages() {
 		Config::inst()->update('StaticPublisher', 'disable_realtime', true);
 		
