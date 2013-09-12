@@ -646,12 +646,8 @@ JS;
 	}
 
 	static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "") {
-		$oldState = self::$disable_subsite_filter;
-		self::$disable_subsite_filter = true;
 		$result = DataObject::get($className, $filter, $sort, $join, $limit);
-		// conversion to ArrayList forces immediate evaluation, respecting subsite filter setting
-		$result = ArrayList::create($result->toArray());
-		self::$disable_subsite_filter = $oldState;
+		$result = $result->setDataQueryParam('Subsite.filter', false);
 		return $result;
 	}
 
