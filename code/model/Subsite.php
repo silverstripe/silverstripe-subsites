@@ -39,7 +39,7 @@ class Subsite extends DataObject implements PermissionProvider {
 		'Theme' => 'Varchar',
 		'Language' => 'Varchar(6)',
 		// analytics code field (https://github.com/silverstripe/silverstripe-subsites/issues/18) 
-        'AnalyticsCode' => 'Text',  
+		'AnalyticsCode' => 'Text',  
 
 		// Used to hide unfinished/private subsites from public view.
 		// If unset, will default to true
@@ -270,7 +270,7 @@ class Subsite extends DataObject implements PermissionProvider {
 
 	function getCMSActions() {
 		return new FieldList(
-            new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
+			new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
 		);
 	}
 

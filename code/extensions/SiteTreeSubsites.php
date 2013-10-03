@@ -235,7 +235,7 @@ class SiteTreeSubsites extends DataExtension {
 
 		// get analytics code (if any) & add to output
 		$Subsite = Subsite::get()->byID($this->owner->SubsiteID);
-		if($Subsite->AnalyticsCode) {
+		if($Subsite && property_exists($Subsite, 'AnalyticsCode') && strlen($Subsite->AnalyticsCode) >0 )  {
 			$tags .= $Subsite->AnalyticsCode;
 		}
 
