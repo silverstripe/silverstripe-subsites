@@ -233,6 +233,12 @@ class SiteTreeSubsites extends DataExtension {
 			$tags .= "<meta name=\"x-subsite-id\" content=\"" . $this->owner->SubsiteID . "\" />\n";
 		}
 
+		// get analytics code (if any) & add to output
+		$Subsite = Subsite::get()->byID($this->owner->SubsiteID);
+		if($Subsite->AnalyticsCode) {
+			$tags .= $Subsite->AnalyticsCode;
+		}
+
 		return $tags;
 	}
 
