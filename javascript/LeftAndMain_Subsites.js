@@ -58,7 +58,7 @@
 		 */
 		$('.cms-container .cms-menu-list li a').entwine({
 			onclick: function(e) {
-				$('.cms-container').subsiteFetchPjaxFragment('admin/subsites/', 'SubsiteList');
+				$('.cms-container').subsiteFetchPjaxFragment('SubsiteXHRController', 'SubsiteList');
 				this._super(e);
 			}
 		});
@@ -68,7 +68,7 @@
 		 */
 		$('.cms-container .SubsiteAdmin .cms-edit-form fieldset.ss-gridfield').entwine({
 			onreload: function(e) {
-				$('.cms-container').subsiteFetchPjaxFragment('admin/subsites/', 'SubsiteList');
+				$('.cms-container').subsiteFetchPjaxFragment('SubsiteXHRController', 'SubsiteList');
 				this._super(e);
 			}
 		});
@@ -81,7 +81,7 @@
 		 */
 		$('.cms-container .cms-content-fields .subsite-model').entwine({
 			onadd: function(e) {
-				$('.cms-container').subsiteFetchPjaxFragment('admin/subsites/', 'SubsiteList');
+				$('.cms-container').subsiteFetchPjaxFragment('SubsiteXHRController', 'SubsiteList');
 				this._super(e);
 			}
 		});
