@@ -310,10 +310,9 @@ JS;
 
 		if(isset($_GET['SubsiteID'])) {
 			$id = (int)$_GET['SubsiteID'];
-		}
-		else if (Subsite::$use_session_subsiteid) {
+		} else if (Subsite::$use_session_subsiteid) {
 			$id = Session::get('SubsiteID');
-		} 
+		}
 
 		if($id === NULL) {
 			$id = self::getSubsiteIDForDomain();
@@ -522,12 +521,64 @@ JS;
 		return $duplicate;
 	}
 
+	/**
+	 * Return all subsites, regardless of permissions (augmented with main site).
+	 *
+	 * @return SS_List List of {@link Subsite} objects (DataList or ArrayList).
+	 */
+	public static function all_sites($includeMainSite = true, $mainSiteTitle = "Main site") {
+		$subsites = Subsite::get();
+
+		if($includeMainSite) {
+			$subsites = $subsites->toArray();
+
+			$mainSite = new Subsite();
+			$mainSite->Title = $mainSiteTitle;
+			array_unshift($subsites, $mainSite);
+
+			$subsites = ArrayList::create($subsites);
+		}
+
+		return $subsites;
+	}
+
+	/*
+	 * Returns an ArrayList of the subsites accessible to the current user.
+	 * It's enough for any section to be accessible for the site to be included.
+	 *
+	 * @return ArrayList of {@link Subsite} instances.
+	 */
+	public static function all_accessible_sites($includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
+		// Rationalise member arguments
+		if(!$member) $member = Member::currentUser();
+		if(!$member) return new ArrayList();
+		if(!is_object($member)) $member = DataObject::get_by_id('Member', $member);
+
+		$subsites = new ArrayList();
+
+		// Collect subsites for all sections.
+		$menu = CMSMenu::get_viewable_menu_items();
+		foreach($menu as $candidate) {
+			if ($candidate->controller) {
+				$accessibleSites = singleton($candidate->controller)->sectionSites(
+					$includeMainSite,
+					$mainSiteTitle,
+					$member
+				);
+
+				// Replace existing keys so no one site appears twice.
+				$subsites->merge($accessibleSites);
+			}
+		}
+
+		$subsites->removeDuplicates();
+
+		return $subsites;
+	}
 
 	/**
-	 * Return the subsites that the current user can access.
-	 * Look for one of the given permission codes on the site.
-	 *
-	 * Sites will only be included if they have a Title
+	 * Return the subsites that the current user can access by given permission.
+	 * Sites will only be included if they have a Title.
 	 *
 	 * @param $permCode array|string Either a single permission code or an array of permission codes.
 	 * @param $includeMainSite If true, the main site will be included if appropriate.
