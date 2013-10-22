@@ -241,7 +241,29 @@ class SubsiteTest extends BaseSubsiteTest {
 
 		$_SERVER['HTTP_HOST'] = $originalHTTPHost;
 	}
-	
+
+	function testAllSites() {
+		$subsites = Subsite::all_sites();
+		$this->assertDOSEquals(array(
+			array('Title' =>'Main site'),
+			array('Title' =>'Template'),
+			array('Title' =>'Subsite1 Template'),
+			array('Title' =>'Subsite2 Template'),
+			array('Title' =>'Test 1'),
+			array('Title' =>'Test 2'),
+			array('Title' =>'Test 3')
+		), $subsites, 'Lists all subsites');
+	}
+
+	function testAllAccessibleSites() {
+		$member = $this->objFromFixture('Member', 'subsite1member');
+
+		$subsites = Subsite::all_accessible_sites(true, 'Main site', $member);
+		$this->assertDOSEquals(array(
+			array('Title' =>'Subsite1 Template')
+		), $subsites, 'Lists member-accessible sites.');
+	}
+
 	/**
 	 * Test Subsite::accessible_sites()
 	 */

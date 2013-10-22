@@ -1,7 +1,7 @@
 <?php
 /**
  * Decorator designed to add subsites support to LeftAndMain
- * 
+ *
  * @package subsites
  */
 class LeftAndMainSubsites extends Extension {
@@ -9,26 +9,9 @@ class LeftAndMainSubsites extends Extension {
 	private static $allowed_actions = array('CopyToSubsite');
 
 	function init() {
-
-		//Use the session variable for current subsite in the CMS only
-		Subsite::$use_session_subsiteid = true;
-
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
-		
-		if(isset($_GET['SubsiteID'])) {
-			// Clear current page when subsite changes (or is set for the first time)
-			if(!Session::get('SubsiteID') || $_GET['SubsiteID'] != Session::get('SubsiteID')) {
-				Session::clear("{$this->owner->class}.currentPage");
-			}
-			
-			// Update current subsite in session
-			Subsite::changeSubsite($_GET['SubsiteID']);
-			
-			//Redirect to clear the current page
-			return $this->owner->redirect('admin/');
-		}
 
 		// Set subsite ID based on currently shown record
 		$req = $this->owner->getRequest();
@@ -50,24 +33,61 @@ class LeftAndMainSubsites extends Extension {
 	function updatePageOptions(&$fields) {
 		$fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
 	}
-	
-	/*
-	 * Returns a list of the subsites accessible to the current user
+
+	/**
+	 * Find all subsites accessible for current user on this controller.
+	 *
+	 * @return ArrayList of {@link Subsite} instances.
 	 */
-	public function Subsites() {
-		// figure out what permission the controller needs
-		// Subsite::accessible_sites() expects something, so if there's no permission
-		// then fallback to using CMS_ACCESS_LeftAndMain.
-		$permission = 'CMS_ACCESS_' . $this->owner->class;
-		$available = Permission::get_codes(false);
-		if(!isset($available[$permission])) {
-			$permission = $this->owner->stat('required_permission_codes');
-			if(!$permission) {
-				$permission = 'CMS_ACCESS_LeftAndMain';
+	function sectionSites($includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
+		// Rationalise member arguments
+		if(!$member) $member = Member::currentUser();
+		if(!$member) return new ArrayList();
+		if(!is_object($member)) $member = DataObject::get_by_id('Member', $member);
+
+		// Collect permissions - honour the LeftAndMain::required_permission_codes, current model requires
+		// us to check if the user satisfies ALL permissions. Code partly copied from LeftAndMain::canView.
+		$codes = array();
+		$extraCodes = Config::inst()->get($this->owner->class, 'required_permission_codes');
+		if($extraCodes !== false) {
+			if($extraCodes) $codes = array_merge($codes, (array)$extraCodes);
+			else $codes[] = "CMS_ACCESS_{$this->owner->class}";
+		} else {
+			// Check overriden - all subsites accessible.
+			return Subsite::all_sites();
+		}
+
+		// Find subsites satisfying all permissions for the Member.
+		$codesPerSite = array();
+		$sitesArray = array();
+		foreach ($codes as $code) {
+			$sites = Subsite::accessible_sites($code, $includeMainSite, $mainSiteTitle, $member);
+			foreach ($sites as $site) {
+				// Build the structure for checking how many codes match.
+				$codesPerSite[$site->ID][$code] = true;
+
+				// Retain Subsite objects for later.
+				$sitesArray[$site->ID] = $site;
 			}
 		}
 
-		return Subsite::accessible_sites($permission);
+		// Find sites that satisfy all codes conjuncitvely.
+		$accessibleSites = new ArrayList();
+		foreach ($codesPerSite as $siteID => $siteCodes) {
+			if (count($siteCodes)==count($codes)) {
+				$accessibleSites->push($sitesArray[$siteID]);
+			}
+		}
+
+		return $accessibleSites;
+	}
+
+	/*
+	 * Returns a list of the subsites accessible to the current user.
+	 * It's enough for any section to be accessible for the section to be included.
+	 */
+	public function Subsites() {
+		return Subsite::all_accessible_sites();
 	}
 
 	/*
@@ -101,38 +121,26 @@ class LeftAndMainSubsites extends Extension {
 		return $output;
 	}
 
-	/*
-	 * Returns a subset of the main menu, filtered by admins that have 
-	 * a subsiteCMSShowInMenu method returning true
-	 *
-	 * @return ArrayList
-	 */
-	public function SubsiteMainMenu(){
+	public function alternateMenuDisplayCheck($controllerName) {
+		if(!class_exists($controllerName)){
+			return false;
+		}
+
+		// Check subsite support.
 		if(Subsite::currentSubsiteID() == 0){
-			return $this->owner->MainMenu();
-		}
-		// loop main menu items, add all items that have subsite support
-		$mainMenu = $this->owner->MainMenu();
-		$subsitesMenu = new ArrayList();
-
-		foreach($mainMenu as $menuItem){
-
-			$controllerName = $menuItem->MenuItem->controller;
-
-			if(class_exists($controllerName)){
-				$controller = singleton($controllerName);
-
-				if($controller->hasMethod('subsiteCMSShowInMenu') && $controller->subsiteCMSShowInMenu()){
-					$subsitesMenu->push($menuItem);
-				}
+			// Main site always supports everything.
+			return true;
+		} else {
+			$controller = singleton($controllerName);
+			if($controller->hasMethod('subsiteCMSShowInMenu') && $controller->subsiteCMSShowInMenu()){
+				return true;
 			}
-
-			if($menuItem->Code == 'Help'){
-				$subsitesMenu->push($menuItem);
-			}
-
 		}
-		return $subsitesMenu;
+
+		// It's not necessary to check access permissions here. Framework calls canView on the controller,
+		// which in turn uses the Permission API which is augmented by our GroupSubsites.
+
+		return false;
 	}
 
 	public function CanAddSubsites() {
@@ -140,58 +148,88 @@ class LeftAndMainSubsites extends Extension {
 	}
 
 	/**
-	 * Alternative security checker for LeftAndMain.
-	 * If security isn't found, then it will switch to a subsite where we do have access.
+	 * Do some pre-flight checks if a subsite switch is needed.
+	 * We redirect the user to something accessible if the current section/subsite is forbidden.
 	 */
-	public function alternateAccessCheck() {
+	public function onBeforeInit() {
+		// We are accessing the CMS, so we need to let Subsites know we will be using the session.
+		Subsite::$use_session_subsiteid = true;
+
+		// Do not try to be smart for AJAX requests.
+		if ($this->owner->request->isAjax()) {
+			return;
+		}
+
+		// Catch forced subsite changes that need to cause CMS reloads.
+		if(isset($_GET['SubsiteID'])) {
+			// Clear current page when subsite changes (or is set for the first time)
+			if(!Session::get('SubsiteID') || $_GET['SubsiteID'] != Session::get('SubsiteID')) {
+				Session::clear("{$this->owner->class}.currentPage");
+			}
+
+			// Update current subsite in session
+			Subsite::changeSubsite($_GET['SubsiteID']);
+
+			//Redirect to clear the current page
+			return $this->owner->redirect('admin/');
+		}
+
 		$className = $this->owner->class;
 
-		// Switch to the subsite of the current page
+		// Transparently switch to the subsite of the current page.
 		if ($this->owner->class == 'CMSMain' && $currentPage = $this->owner->currentPage()) {
 			if (Subsite::currentSubsiteID() != $currentPage->SubsiteID) {
 				Subsite::changeSubsite($currentPage->SubsiteID);
 			}
 		}
-		
-		// Switch to a subsite that this user can actually access.
-		$member = Member::currentUser();
-		if($member && Permission::checkMember($member, 'ADMIN')) return true; // admin can access all subsites
-				
-		$sites = Subsite::accessible_sites("CMS_ACCESS_{$this->owner->class}", true)->map('ID', 'Title');
-		if(is_object($sites)) $sites = $sites->toArray();
 
-		if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
-			$siteIDs = array_keys($sites);
-			Subsite::changeSubsite($siteIDs[0]);
-			return true;
+		// If we can view current URL there is nothing to do.
+		if ($this->owner->canView()) {
+			return;
 		}
-		
-		// Switch to a different top-level menu item
+
+		// Admin can access everything, no point in checking.
+		$member = Member::currentUser();
+		if($member && Permission::checkMember($member, 'ADMIN')) return;
+
+		// Check if we have access to current section on the current subsite.
+		$accessibleSites = $this->owner->sectionSites($member);
+		if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
+			// Current section can be accessed on the current site, all good.
+			return;
+		}
+
+		// If the current section is not accessible, try at least to stick to the same subsite.
 		$menu = CMSMenu::get_menu_items();
 		foreach($menu as $candidate) {
-			if($candidate->controller != $this->owner->class) {
-				$sites = Subsite::accessible_sites("CMS_ACCESS_{$candidate->controller}", true)->map('ID', 'Title');
-				if(is_object($sites)) $sites = $sites->toArray();
-					
-				if($sites && !isset($sites[Subsite::currentSubsiteID()])) {
-					$siteIDs = array_keys($sites);
-					Subsite::changeSubsite($siteIDs[0]);
-					$cClass = $candidate->controller;
-					$cObj = new $cClass();
-					$this->owner->redirect($cObj->Link());
-					return null;
+			if($candidate->controller && $candidate->controller!=$this->owner->class) {
+
+				$accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
+				if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
+					// Section is accessible, redirect there.
+					$this->owner->redirect(singleton($candidate->controller)->Link());
+					return;
 				}
 			}
 		}
-		
-		// If all of those fail, you really don't have access to the CMS		
-		return null;
+
+		// Finally, if no section is available, move to any other permitted subsite.
+		foreach($menu as $candidate) {
+			if($candidate->controller) {
+				$accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
+				if ($accessibleSites->count()) {
+					Subsite::changeSubsite($accessibleSites->First()->ID);
+					$this->owner->redirect(singleton($candidate->controller)->Link());
+					return;
+				}
+			}
+		}
 	}
-	
+
 	function augmentNewSiteTreeItem(&$item) {
 		$item->SubsiteID = isset($_POST['SubsiteID']) ? $_POST['SubsiteID'] : Subsite::currentSubsiteID();	
 	}
-	
+
 	function onAfterSave($record) {
 		if($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
 			$this->owner->response->addHeader('X-Status', rawurlencode(_t('LeftAndMainSubsites.Saved', 'Saved, please update related pages.')));
