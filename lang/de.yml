@@ -1,0 +1,39 @@
+de:
+  SubsiteAdmin:
+    MENUTITLE: "Subsites"
+  GroupSubsites:
+    ACCESSALL: "Alle Subsites"
+    ACCESSONLY: "Nur diese Subsites"
+    ACCESSRADIOTITLE: "Dieser Gruppe Zugriff geben auf"
+    SECURITYTABTITLE: "Subsites"
+  ModelAdmin:
+    LOADEDFOREDITING: "'%s' geladen zur Bearbeitung."
+  RelatedPageLink:
+    PLURALNAME: "Links zu abhängigen Seiten"
+    SINGULARNAME: "Link zu abhängigen Seiten"
+  Subsite:
+    PLURALNAME: "Subsites"
+    SINGULARNAME: "Subsite"
+    DOMAINSAVEFIRST: "Domains können erst nach dem ersten Speichern hinzugefügt werden"
+  SubsiteDomain:
+    PLURALNAME: "Subsite Domains"
+    SINGULARNAME: "Subsite Domain"
+    DOMAIN: "Domain"
+    IS_PRIMARY: "Ist primäre Domain"
+  Subsite_Template:
+    PLURALNAME: "Subsite Templates"
+    SINGULARNAME: "Subsite Templates"
+  SubsitesVirtualPage:
+    PLURALNAME: "Subsites Virtuelle Seiten"
+    SINGULARNAME: "Subsites Virtuelle Seite"
+  VirtualPage:
+    CHOOSE: "Verknüpfte Seite auswählen"
+    EDITCONTENT: "Inhalt der verknüpften Seite bearbeiten"
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: "Neu hinzufügen von Template"
+  GridFieldAddFromTemplate:
+    NewFromTemplate: "Neue %s von Template"
+    TEMPLATE_NOT_FOUND: "Das ausgewählte Template konnte nicht gefunden werden"
+    TEMPLATE: "Template"
+  LeftAndMainSubsites:
+    DEFAULT_SITE: "Standard Site"

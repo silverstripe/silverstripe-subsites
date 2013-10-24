@@ -1,0 +1,23 @@
+fi:
+  SubsiteAdmin:
+    MENUTITLE: "Alasivustot"
+  GroupSubsites:
+    ACCESSALL: "Kaikki alasivustot"
+    ACCESSONLY: "Vain nämä alasivustot"
+    ACCESSRADIOTITLE: "Anna tälle ryhmälle pääsy kohteeseen"
+  ModelAdmin:
+    LOADEDFOREDITING: "'%s' ladattu muokattavaksi"
+  Subsite:
+    SINGULARNAME: "Alasivusto"
+  SubsiteDomain:
+    DOMAIN: "Domain"
+    IS_PRIMARY: "On päädomain"
+  VirtualPage:
+    CHOOSE: "Valitse linkitettävä sivu"
+    EDITCONTENT: "Napsauta tästä muokataksesi sisältöä"
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: "Lisää uusi sivupohjasta"
+  GridFieldAddFromTemplate:
+    TEMPLATE: "Sivupohja"
+  LeftAndMainSubsites:
+    DEFAULT_SITE: "Oletussivusto"
