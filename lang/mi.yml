@@ -1,0 +1,39 @@
+mi:
+  SubsiteAdmin:
+    MENUTITLE: "Ngā pae iti"
+  GroupSubsites:
+    ACCESSALL: "Ngā pae iti katoa"
+    ACCESSONLY: "Ko ēnei pae iti anake"
+    ACCESSRADIOTITLE: "Tukuna tēnei rōpū kia uru ki"
+    SECURITYTABTITLE: "Ngā pae iti"
+  ModelAdmin:
+    LOADEDFOREDITING: "Kua utaina a '%s' mō te whakatika."
+  RelatedPageLink:
+    PLURALNAME: "Ngā Hononga Whārangi Pāhono"
+    SINGULARNAME: "Hononga Whārangi Pāhono"
+  Subsite:
+    PLURALNAME: "Ngā pae iti"
+    SINGULARNAME: "Pae iti"
+    DOMAINSAVEFIRST: "Ka taea noa iho te tāpiri rohe i muri i te tiakinga tuatahitanga"
+  SubsiteDomain:
+    PLURALNAME: "Ngā Rohe Pae Iti"
+    SINGULARNAME: "Rohe Pae Iti"
+    DOMAIN: "Rohe"
+    IS_PRIMARY: "Ko Te Rohe Matua"
+  Subsite_Template:
+    PLURALNAME: "Ngā Tātauira Pae iti"
+    SINGULARNAME: "Tātauira Pae Iti"
+  SubsitesVirtualPage:
+    PLURALNAME: "Ngā Whārangi Mariko Pae Iti"
+    SINGULARNAME: "Whārangi Mariko Pae Iti"
+  VirtualPage:
+    CHOOSE: "Kōwhiria he whārangi hei hononga atu"
+    EDITCONTENT: "Pāwhiri ki konei hei whakatika i ngā ihirangi"
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: "Tāpiri Hōu mai i te Tātauira"
+  GridFieldAddFromTemplate:
+    NewFromTemplate: "%s hou mai i te tātauira"
+    TEMPLATE_NOT_FOUND: "Kāore i kitea te tātauira i tīpakohia"
+    TEMPLATE: "Tātauira"
+  LeftAndMainSubsites:
+    DEFAULT_SITE: "Pae Taunoa"

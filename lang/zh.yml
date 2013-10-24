@@ -1,0 +1,39 @@
+zh:
+  SubsiteAdmin:
+    MENUTITLE: "多个子网站"
+  GroupSubsites:
+    ACCESSALL: "所有子网站"
+    ACCESSONLY: "仅这些子网站"
+    ACCESSRADIOTITLE: "准许该群进入"
+    SECURITYTABTITLE: "多个子网站"
+  ModelAdmin:
+    LOADEDFOREDITING: "载入 '%s' 进行编辑。"
+  RelatedPageLink:
+    PLURALNAME: "多个相关页面链接"
+    SINGULARNAME: "相关页面链接"
+  Subsite:
+    PLURALNAME: "多个子网站"
+    SINGULARNAME: "子网站"
+    DOMAINSAVEFIRST: "您只可在首次保存后添加域名"
+  SubsiteDomain:
+    PLURALNAME: "多个子网站域名"
+    SINGULARNAME: "子网站域名"
+    DOMAIN: "域名"
+    IS_PRIMARY: "是主域名"
+  Subsite_Template:
+    PLURALNAME: "多个子网站模板"
+    SINGULARNAME: "子网站模板"
+  SubsitesVirtualPage:
+    PLURALNAME: "多个子网站虚拟页面"
+    SINGULARNAME: "子网站虚拟页面"
+  VirtualPage:
+    CHOOSE: "选择链接页面"
+    EDITCONTENT: "点击此处以编辑内容"
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: "从模板中取出新加入"
+  GridFieldAddFromTemplate:
+    NewFromTemplate: "取自模板的新 %s"
+    TEMPLATE_NOT_FOUND: "无法找到选定的模板"
+    TEMPLATE: "模板"
+  LeftAndMainSubsites:
+    DEFAULT_SITE: "默认网站"

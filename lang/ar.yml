@@ -1,0 +1,39 @@
+ar:
+  SubsiteAdmin:
+    MENUTITLE: "مواقع فرعية"
+  GroupSubsites:
+    ACCESSALL: "كل المواقع الفرعية"
+    ACCESSONLY: "فقط هذه المواقع الفرعية"
+    ACCESSRADIOTITLE: "امنح هذه المجموعة تصريح الولوج إلى"
+    SECURITYTABTITLE: "مواقع فرعية"
+  ModelAdmin:
+    LOADEDFOREDITING: "النسب المئوية ’%’ المحملة للتحرير"
+  RelatedPageLink:
+    PLURALNAME: "روابط الصفحة المتعلقة"
+    SINGULARNAME: "رابط صفحة متعلق"
+  Subsite:
+    PLURALNAME: "مواقع فرعية"
+    SINGULARNAME: "موقع فرعي"
+    DOMAINSAVEFIRST: "يمكنك إضافة نطاقات فقط بعد الحفظ لأول مرة"
+  SubsiteDomain:
+    PLURALNAME: "نطاقات موقع فرعي"
+    SINGULARNAME: "نطاق موقع فرعي"
+    DOMAIN: "نطاق"
+    IS_PRIMARY: "هو نطاق أساسي"
+  Subsite_Template:
+    PLURALNAME: "قوالب موقع فرعي"
+    SINGULARNAME: "قالب موقع فرعي"
+  SubsitesVirtualPage:
+    PLURALNAME: "الصفحات الإفتراضية للمواقع الفرعية"
+    SINGULARNAME: "الصفحة الإفتراضية للمواقع الفرعية"
+  VirtualPage:
+    CHOOSE: "اختر صفحة للربط"
+    EDITCONTENT: "انقر هنا لتحرير المحتوى"
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: "اضف جديد من القالب"
+  GridFieldAddFromTemplate:
+    NewFromTemplate: "نسب مئوية % جديدة من قالب"
+    TEMPLATE_NOT_FOUND: "لا يمكن إيجاد القالب المُختار"
+    TEMPLATE: "قالب"
+  LeftAndMainSubsites:
+    DEFAULT_SITE: "موقع افتراضي"
