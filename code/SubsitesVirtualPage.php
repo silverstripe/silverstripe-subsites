@@ -24,7 +24,7 @@ class SubsitesVirtualPage extends VirtualPage {
 
 		$subsiteSelectionField = new DropdownField(
 			"CopyContentFromID_SubsiteID", 
-			"Subsite", 
+			_t('SubsitesVirtualPage.SubsiteField',"Subsite"), 
 			$subsites->map('ID', 'Title'),
 			($this->CopyContentFromID) ? $this->CopyContentFrom()->SubsiteID : Session::get('SubsiteID')
 		);
@@ -66,12 +66,50 @@ class SubsitesVirtualPage extends VirtualPage {
 		}
 		
 		
-		$fields->addFieldToTab('Root.Main', new TextField('CustomMetaTitle', 'Title (overrides inherited value from the source)'), 'MetaTitle');
-		$fields->addFieldToTab('Root.Main', new TextareaField('CustomMetaKeywords', 'Keywords (overrides inherited value from the source)'), 'MetaKeywords');
-		$fields->addFieldToTab('Root.Main', new TextareaField('CustomMetaDescription', 'Description (overrides inherited value from the source)'), 'MetaDescription');
-		$fields->addFieldToTab('Root.Main', new TextField('CustomExtraMeta', 'Custom Meta Tags (overrides inherited value from the source)'), 'ExtraMeta');
+		$fields->addFieldToTab(
+			'Root.Main', 
+			TextField::create(
+				'CustomMetaTitle', 
+				$this->fieldLabel('CustomMetaTitle')
+			)->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')), 
+			'MetaTitle'
+		);
+		$fields->addFieldToTab(
+			'Root.Main', 
+			TextareaField::create(
+				'CustomMetaKeywords', 
+				$this->fieldLabel('CustomMetaTitle')
+			)->setDescription(_t('SubsitesVirtualPage.OverrideNote')), 
+			'MetaKeywords'
+		);
+		$fields->addFieldToTab(
+			'Root.Main', 
+			TextareaField::create(
+				'CustomMetaDescription', 
+				$this->fieldLabel('CustomMetaTitle')
+			)->setDescription(_t('SubsitesVirtualPage.OverrideNote')), 
+			'MetaDescription'
+		);
+		$fields->addFieldToTab(
+			'Root.Main', 
+			TextField::create(
+				'CustomExtraMeta', 
+				$this->fieldLabel('CustomMetaTitle')
+			)->setDescription(_t('SubsitesVirtualPage.OverrideNote')), 
+			'ExtraMeta'
+		);
 		
 		return $fields;
+	}
+
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		$labels['CustomMetaTitle'] = _t('Subsite.CustomMetaTitle','Title');
+		$labels['CustomMetaKeywords'] = _t('Subsite.CustomMetaKeywords','Keywords');
+		$labels['CustomMetaDescription'] = _t('Subsite.CustomMetaDescription','Description');
+		$labels['CustomExtraMeta'] = _t('Subsite.CustomExtraMeta','Custom Meta Tags');
+
+		return $labels;
 	}
 	
 	public function getVirtualFields() {

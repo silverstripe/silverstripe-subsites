@@ -12,8 +12,8 @@ class SubsiteDomain extends DataObject {
 	);
 
 	private static $summary_fields=array(
-		'Domain'=>'Domain',
-		'IsPrimary'=>'Is Primary Domain'
+		'Domain',
+		'IsPrimary',
 	);
 
 	/**
@@ -27,8 +27,16 @@ class SubsiteDomain extends DataObject {
 	
 	public function getCMSFields() {
 		return new FieldList(
-			new TextField('Domain', _t('SubsiteDomain.DOMAIN', 'Domain'), null, 255),
-			new CheckboxField('IsPrimary', _t('SubsiteDomain.IS_PRIMARY', 'Is Primary Domain'))
+			new TextField('Domain', $this->fieldLabel('Domain'), null, 255),
+			new CheckboxField('IsPrimary', $this->fieldLabel('IsPrimary'))
 		);
+	}
+
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		$labels['Domain'] = _t('SubsiteDomain.DOMAIN', 'Domain');
+		$labels['IsPrimary'] = _t('SubsiteDomain.IS_PRIMARY', 'Is Primary Domain');
+
+		return $labels;
 	}
 }

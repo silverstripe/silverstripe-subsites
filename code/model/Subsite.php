@@ -63,23 +63,11 @@ class Subsite extends DataObject implements PermissionProvider {
 	);
 
 	private static $searchable_fields = array(
-		'Title' => array(
-			'title' => 'Subsite Name'
-		),
-		'Domains.Domain' => array(
-			'title' => 'Domain name'
-		),
-		'IsPublic' => array(
-			'title' => 'Active subsite',
-		),	
+		'Title',
+		'Domains.Domain',
+		'IsPublic',	
 	);
 
-	private static $summary_fields = array(
-		'Title' => 'Subsite Name',
-		'PrimaryDomain' => 'Primary Domain',
-		'IsPublic' => 'Active subsite',
-	);
-	
 	/**
 	 * Memory cache of accessible sites
 	 */
@@ -204,12 +192,24 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	function getCMSFields() {
 		if($this->ID!=0) {
-			$domainTable = new GridField("Domains", "Domains", $this->Domains(), GridFieldConfig_RecordEditor::create(10));
+			$domainTable = new GridField(
+				"Domains", 
+				_t('Subsite.DomainsListTitle',"Domains"), 
+				$this->Domains(), 
+				GridFieldConfig_RecordEditor::create(10)
+			);
 		}else {
-			$domainTable = new LiteralField('Domains', '<p>'._t('Subsite.DOMAINSAVEFIRST', 'You can only add domains after saving for the first time').'</p>');
+			$domainTable = new LiteralField(
+				'Domains', 
+				'<p>'._t('Subsite.DOMAINSAVEFIRST', 'You can only add domains after saving for the first time').'</p>'
+			);
 		}
 			
-		$languageSelector = new DropdownField('Language', 'Language', i18n::get_common_locales());
+		$languageSelector = new DropdownField(
+			'Language', 
+			$this->fieldLabel('Language'),
+			i18n::get_common_locales()
+		);
 		
 		$pageTypeMap = array();
 		$pageTypes = SiteTree::page_type_classes();
@@ -220,18 +220,22 @@ class Subsite extends DataObject implements PermissionProvider {
 
 		$fields = new FieldList(
 			$subsiteTabs = new TabSet('Root',
-				new Tab('Configuration',
+				new Tab(
+					'Configuration',
+					_t('Subsite.TabTitleConfig', 'Configuration'),
 					new HeaderField($this->getClassName() . ' configuration', 2),
-					new TextField('Title', 'Name of subsite:', $this->Title),
+					new TextField('Title', $this->fieldLabel('Title'), $this->Title),
 					
-					new HeaderField("Domains for this subsite"),
+					new HeaderField(
+						_t('Subsite.DomainsHeadline',"Domains for this subsite")
+					),
 					$domainTable,
 					$languageSelector,
 					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
-					new CheckboxField('DefaultSite', 'Default site', $this->DefaultSite),
-					new CheckboxField('IsPublic', 'Enable public access', $this->IsPublic),
+					new CheckboxField('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
+					new CheckboxField('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
 
-					new DropdownField('Theme','Theme', $this->allowedThemes(), $this->Theme),
+					new DropdownField('Theme',$this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme),
 					
 					
 					new LiteralField(
@@ -258,6 +262,29 @@ class Subsite extends DataObject implements PermissionProvider {
 		return $fields;
 	}
 
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		$labels['Title'] = _t('Subsites.TitleFieldLabel', 'Subsite Name');
+		$labels['RedirectURL'] = _t('Subsites.RedirectURLFieldLabel', 'Redirect URL');
+		$labels['DefaultSite'] = _t('Subsites.DefaultSiteFieldLabel', 'Default site');
+		$labels['Theme'] = _t('Subsites.ThemeFieldLabel', 'Theme');
+		$labels['Language'] = _t('Subsites.LanguageFieldLabel', 'Language');
+		$labels['IsPublic'] = _t('Subsites.IsPublicFieldLabel', 'Enable public access');
+		$labels['PageTypeBlacklist'] = _t('Subsites.PageTypeBlacklistFieldLabel', 'Page Type Blacklist');
+		$labels['Domains.Domain'] = _t('Subsites.DomainFieldLabel', 'Domain');
+		$labels['PrimaryDomain'] = _t('Subsites.PrimaryDomainFieldLabel', 'Primary Domain');
+
+		return $labels;
+	}
+
+	public function summaryFields() {
+		return array(
+			'Title' => $this->fieldLabel('Title'),
+			'PrimaryDomain' => $this->fieldLabel('PrimaryDomain'),
+			'IsPublic' => _t('Subsite.IsPublicHeaderField','Active subsite'),
+		);
+	}
+
 	/**
 	 * @todo getClassName is redundant, already stored as a database field?
 	 */
@@ -267,15 +294,25 @@ class Subsite extends DataObject implements PermissionProvider {
 
 	function getCMSActions() {
 		return new FieldList(
-            new FormAction('callPageMethod', "Create copy", null, 'adminDuplicate')
+            new FormAction(
+            	'callPageMethod', 
+            	_t('Subsite.ButtonLabelCopy',"Create copy"), 
+            	null, 
+            	'adminDuplicate'
+            )
 		);
 	}
 
 	function adminDuplicate() {
 		$newItem = $this->duplicate();
-		$JS_title = Convert::raw2js($this->Title);
+		$message = _t(
+			'Subsite.CopyMessage',
+			'Created a copy of {title}',
+			array('title' => Convert::raw2js($this->Title))
+		);
+		
 		return <<<JS
-			statusMessage('Created a copy of $JS_title', 'good');
+			statusMessage($message, 'good');
 			$('Form_EditForm').loadURLFromServer('admin/subsites/show/$newItem->ID');
 JS;
 	}

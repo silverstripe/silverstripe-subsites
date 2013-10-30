@@ -112,8 +112,8 @@ class SiteTreeSubsites extends DataExtension {
 		if(!$sc) {
 			$sc = new SiteConfig();
 			$sc->SubsiteID = $this->owner->SubsiteID;
-			$sc->Title = 'Your Site Name';
-			$sc->Tagline = 'your tagline here';
+			$sc->Title = _t('Subsite.SiteConfigTitle','Your Site Name');
+			$sc->Tagline = _t('Subsite.SiteConfigSubtitle','Your tagline here');
 			$sc->write();
 		}
 		return $sc;

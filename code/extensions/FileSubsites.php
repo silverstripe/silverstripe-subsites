@@ -30,21 +30,26 @@ class FileSubsites extends DataExtension {
 		if($this->owner instanceof Folder) {
 			$sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
 			$values = array();
-			$values[0] = 'All sites';
+			$values[0] = _t('FileSubsites.AllSitesDropdownOpt','All sites');
 			foreach ($sites as $site) {
 				$values[$site->ID] = $site->Title;
 			}
 			ksort($values);
 			if($sites){
 				//Dropdown needed to move folders between subsites
-				$fields->push($dropdown = new DropdownField('SubsiteID', 'Subsite', $values));
+				$dropdown = new DropdownField(
+					'SubsiteID', 
+					_t('FileSubsites.SubsiteFieldLabel','Subsite'), 
+					$values
+				);
+				$dropdown->addExtraClass('subsites-move-dropdown');
+				$fields->push($dropdown);
 				$fields->push(new LiteralField(
 					'Message', 
 					'<p class="message notice">'.
 					_t('ASSETADMIN.SUBSITENOTICE', 'Folders and files created in the main site are accessible by all subsites.')
 					.'</p>'
 				));
-				$dropdown->addExtraClass('subsites-move-dropdown');
 			}
 		}
 	}

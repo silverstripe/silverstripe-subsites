@@ -105,7 +105,6 @@ class SubsiteAdminFunctionalTest extends FunctionalTest {
 		// Check forbidden site, on a section that's not allowed on any other subsite
 		$this->getAndFollowAll("admin/assets/?SubsiteID=0");
 		$this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Is redirected to first permitted subsite.');
-		var_dump($this->mainSession->lastUrl());
 		$this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(), 'Is not denied access');
 
 		// Check the standalone XHR controller.

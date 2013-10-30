@@ -12,7 +12,11 @@ class SubsiteReportWrapper extends SS_ReportWrapper {
 		$subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true);
 		$options = $subsites->toDropdownMap('ID', 'Title');
 		
-		$subsiteField = new TreeMultiselectField('Subsites', 'Sites', $options);
+		$subsiteField = new TreeMultiselectField(
+			'Subsites', 
+			_t('SubsiteReportWrapper.ReportDropdown', 'Sites'), 
+			$options
+		);
 		$subsiteField->setValue(array_keys($options));
 
 		// We don't need to make the field editable if only one subsite is available

@@ -1,1 +1,1 @@
-<a href="$NewFromTemplateLink" class="action ss-ui-action-constructive ss-ui-button ui-button ui-widget ui-state-default ui-corner-all new new-link" data-icon="add"><% _t('GridFieldAddFromTemplateButton.AddFromTemplate', '_Add New from Template') %></a>
+<a href="$NewFromTemplateLink" class="action ss-ui-action-constructive ss-ui-button ui-button ui-widget ui-state-default ui-corner-all new new-link" data-icon="add"><% _t('GridFieldAddFromTemplateButton.AddFromTemplate', 'Add New from Template') %></a>

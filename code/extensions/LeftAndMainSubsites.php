@@ -40,6 +40,10 @@ class LeftAndMainSubsites extends Extension {
 	 * @return ArrayList of {@link Subsite} instances.
 	 */
 	function sectionSites($includeMainSite = true, $mainSiteTitle = "Main site", $member = null) {
+		if($mainSiteTitle == 'Main site') {
+			$mainSiteTitle = _t('Subsites.MainSiteTitle', 'Main site');
+		}
+
 		// Rationalise member arguments
 		if(!$member) $member = Member::currentUser();
 		if(!$member) return new ArrayList();
