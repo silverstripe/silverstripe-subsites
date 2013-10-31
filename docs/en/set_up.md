@@ -58,4 +58,13 @@ template.
 
 When you create a new subsite, you can now choose to Copy structure from your template. All your pages, files and images will be copied over to your new subsite.
 
-![Group subsites dropdown](_images/copy-structure.jpg)
+![Copy subsite structure](_images/copy-structure.jpg)
+
+## Disable particular page types from a subsite
+Sometimes, you will have two or more websites that are very similar, but have some small differences. For example, a head office and its 3 satellite offices may have 4 subsites, but only the head office site will have a "Company News" section on the site. In this instance, you can still use the subsites module, and use the 'Disallow page types' ability to remove certain page types from being created on subsites.
+
+To do this, you create a subsite as you normally would, and when editing the subsite, click on the 'Disallow page types?' link. Then, select the page types you wish to remove from this subsite. Note that this process is exactly the same when editing an existing subsite, you just select the subsite you want to remove page types from instead of creating a new subsite.
+![Disallow page types screenshot](_images/disallow-page-types.png)
+
+Now, whenever someone wants to create a new page on the subsite (the 'London Branch' subsite in this case), they will not be able to select the page types you've selected, as you can see below. Note that this restriction doesn't affect full administrators, and admins needs to login to the subsite domain directly (e.g. http://london.site.com/admin/, not http://site.com/admin).
+![Disallow page types result screenshot](_images/disallow-page-types-result.png)
