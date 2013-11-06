@@ -1,39 +1,82 @@
 mi:
   SubsiteAdmin:
-    MENUTITLE: "Ngā pae iti"
-  GroupSubsites:
-    ACCESSALL: "Ngā pae iti katoa"
-    ACCESSONLY: "Ko ēnei pae iti anake"
-    ACCESSRADIOTITLE: "Tukuna tēnei rōpū kia uru ki"
-    SECURITYTABTITLE: "Ngā pae iti"
-  ModelAdmin:
-    LOADEDFOREDITING: "Kua utaina a '%s' mō te whakatika."
-  RelatedPageLink:
-    PLURALNAME: "Ngā Hononga Whārangi Pāhono"
-    SINGULARNAME: "Hononga Whārangi Pāhono"
-  Subsite:
-    PLURALNAME: "Ngā pae iti"
-    SINGULARNAME: "Pae iti"
-    DOMAINSAVEFIRST: "Ka taea noa iho te tāpiri rohe i muri i te tiakinga tuatahitanga"
-  SubsiteDomain:
-    PLURALNAME: "Ngā Rohe Pae Iti"
-    SINGULARNAME: "Rohe Pae Iti"
-    DOMAIN: "Rohe"
-    IS_PRIMARY: "Ko Te Rohe Matua"
-  Subsite_Template:
-    PLURALNAME: "Ngā Tātauira Pae iti"
-    SINGULARNAME: "Tātauira Pae Iti"
-  SubsitesVirtualPage:
-    PLURALNAME: "Ngā Whārangi Mariko Pae Iti"
-    SINGULARNAME: "Whārangi Mariko Pae Iti"
-  VirtualPage:
-    CHOOSE: "Kōwhiria he whārangi hei hononga atu"
-    EDITCONTENT: "Pāwhiri ki konei hei whakatika i ngā ihirangi"
+    MENUTITLE: Ngā pae iti
+  SubsiteXHRController:
+    MENUTITLE: ManaXHRPaeiti
+  LeftAndMain_Menu:
+    ASSETADMIN:
+      SUBSITENOTICE: 'Ka taea ngā kōpaki me ngā kōnae kua hangaia i te pae matua te uru mā ngā pae iti katoa.'
+    ss:
+      Hello: Tēnā koe
+      LOGOUT: 'Takiputa'
+    Permissions:
+      PERMISSIONS_CATEGORY: 'Ngā tūnga me ngā whakaaetanga uru'
+    Subsite:
+      ButtonLabelCopy: 'Hanga tārua'
+      COPYSTRUCTURE: 'Tāurutia te hanganga mai i:'
+      CopyMessage: 'I hangaia he tārua o {title}'
+      CustomExtraMeta: 'Ngā Tūtohu Meta Ritenga'
+      CustomMetaDescription: Whakaahuatanga
+      CustomMetaKeywords: Ngā kupumatua
+      CustomMetaTitle: Taitara
+      DOMAINSAVEFIRST: 'Ka taea noa iho te tāpiri rohe i muri i te tiakinga tuatahitanga'
+      DomainsHeadline: 'Ngā rohe mō tēnei pae iti'
+      DomainsListTitle: Ngā Rohe
+      IsPublicHeaderField: 'Pae iti hohe'
+      MANAGE_ASSETS: 'Whakahaere rawa mō ngā pae iti'
+      MANAGE_ASSETS_HELP: 'Te āheinga ki te tīpako i te pae iti nōna tētahi kōpaki rawa. Ka hiahiatia te "Urunga ki ngā Kōnae me ngā Atahanga"'
+      NOTEMPLATE: 'Kāore he tātauira'
+      PLURALNAME: Ngā pae iti
+      PageTypeBlacklistField: 'Me whakakāhore ngā momo whārangi?'
+      SINGULARNAME: Pae iti
+      SiteConfigSubtitle: 'Tō rārangi tautuhinga ki konei'
+      SiteConfigTitle: 'Tō Ingoa Pae'
+      TabTitleConfig: Whirihoranga
+      ValidateTitle: 'Tāurua he "Taitara"'
+    VirtualPage:
+      CHOOSE: 'Kōwhiria he whārangi hei hononga atu'
+      EDITCONTENT: 'Pāwhiri ki konei hei whakatika i ngā ihirangi'
+  FileSubsites:
+    AllSitesDropdownOpt: 'Ngā pae katoa'
+    SubsiteFieldLabel: Pae iti
   GridFieldAddFromTemplateButton:
-    AddFromTemplate: "Tāpiri Hōu mai i te Tātauira"
-  GridFieldAddFromTemplate:
-    NewFromTemplate: "%s hou mai i te tātauira"
-    TEMPLATE_NOT_FOUND: "Kāore i kitea te tātauira i tīpakohia"
-    TEMPLATE: "Tātauira"
+    AddFromTemplate: 'Tāpiri Hōu mai i te Tātauira'
+  GroupSubsites:
+    ACCESSALL: 'Ngā pae iti katoa'
+    ACCESSONLY: 'Ko ēnei pae iti anake'
+    ACCESSRADIOTITLE: 'Tukuna tēnei rōpū kia uru ki'
+    GlobalGroup: 'Rōpū Hurinoa'
+    MANAGE_SUBSITES: 'Whakahaere pae iti mō ngā rōpū'
+    MANAGE_SUBSITES_HELP: 'Te āheinga ki te whakawhāiti whakaaetanga mō tētahi rōpū ki tētahi neke atu rānei o ngā pae iti.'
+    SECURITYTABTITLE: Ngā pae iti
   LeftAndMainSubsites:
-    DEFAULT_SITE: "Pae Taunoa"
+    Saved: 'Kua tiakina, whakahoutia ngā whārangi pāhono.'
+  SiteTree:
+    PLURALNAME: Ngā Whārangi
+    SINGULARNAME: Whārangi
+  SiteTreeSubsites:
+    CopyAction: Tārua
+    CopyToSubsite: 'Tāruatia te whārangi ki te pae iti'
+  SubsiteDomain:
+    DOMAIN: Rohe
+    IS_PRIMARY: 'Ko Te Rohe Matua'
+    PLURALNAME: 'Ngā Rohe Pae Iti'
+    SINGULARNAME: 'Rohe Pae Iti'
+  SubsiteReportWrapper:
+    ReportDropdown: Ngā Pae
+  Subsites:
+    DefaultSiteFieldLabel: 'Pae taunoa'
+    DomainFieldLabel: Rohe
+    IsPublicFieldLabel: 'Whakahohe urunga tūmatatanui'
+    LanguageFieldLabel: Reo
+    MainSiteTitle: 'Pae matua'
+    PageTypeBlacklistFieldLabel: 'Rārangirāhui Momo Whārangi'
+    PrimaryDomainFieldLabel: 'Rohe Matua'
+    RedirectURLFieldLabel: 'Tukua anō te URL'
+    ThemeFieldLabel: Kaupapa
+    TitleFieldLabel: 'Ingoa Pae Iti'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Ka whakaatu i ngā ihirangi o tētahi whārangi ki tētahi atu pae iti'
+    PLURALNAME: 'Ngā Whārangi Taketake'
+    SINGULARNAME: 'Whārangi Mariko Pae Iti'
+    SubsiteField: Pae iti

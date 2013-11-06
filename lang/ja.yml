@@ -1,39 +1,17 @@
 ja:
   SubsiteAdmin:
-    MENUTITLE: "サブサイト"
-  GroupSubsites:
-    ACCESSALL: "全てのサブサイト"
-    ACCESSONLY: "これらのサブサイトのみ"
-    ACCESSRADIOTITLE: "このグループに選択先へのアクセス権を与える"
-    SECURITYTABTITLE: "サブサイト"
-  ModelAdmin:
-    LOADEDFOREDITING: "編集のため'%s'をロードしました。"
-  RelatedPageLink:
-    PLURALNAME: "関連ページリンク"
-    SINGULARNAME: "関連ページリンク"
-  Subsite:
-    PLURALNAME: "サブサイト"
-    SINGULARNAME: "サブサイト"
-    DOMAINSAVEFIRST: "一度保存するとドメインが追加できます"
-  SubsiteDomain:
-    PLURALNAME: "サブサイトのドメイン"
-    SINGULARNAME: "サブサイトのドメイン"
-    DOMAIN: "ドメイン"
-    IS_PRIMARY: "プライマリドメイン"
-  Subsite_Template:
-    PLURALNAME: "サブサイトテンプレート"
-    SINGULARNAME: "サブサイトテンプレート"
-  SubsitesVirtualPage:
-    PLURALNAME: "サブサイトの仮想ページ"
-    SINGULARNAME: "サブサイトの仮想ページ"
-  VirtualPage:
-    CHOOSE: "ページを選択してリンクを設定"
-    EDITCONTENT: "ここをクリックしてコンテンツを編集"
+    MENUTITLE: サブサイト
   GridFieldAddFromTemplateButton:
-    AddFromTemplate: "テンプレートから新しく追加"
-  GridFieldAddFromTemplate:
-    NewFromTemplate: "テンプレートからの新しい%s"
-    TEMPLATE_NOT_FOUND: "選択したテンプレートが見つかりませんでした"
-    TEMPLATE: "テンプレート"
-  LeftAndMainSubsites:
-    DEFAULT_SITE: "デフォルトサイト"
+    AddFromTemplate: 'テンプレートから新しく追加'
+  GroupSubsites:
+    ACCESSALL: '全てのサブサイト'
+    ACCESSONLY: 'これらのサブサイトのみ'
+    ACCESSRADIOTITLE: 'このグループに選択先へのアクセス権を与える'
+    SECURITYTABTITLE: サブサイト
+  SubsiteDomain:
+    DOMAIN: ドメイン
+    IS_PRIMARY: 'プライマリドメイン'
+    PLURALNAME: 'サブサイトのドメイン'
+    SINGULARNAME: 'サブサイトのドメイン'
+  SubsitesVirtualPage:
+    SINGULARNAME: 'サブサイトの仮想ページ'

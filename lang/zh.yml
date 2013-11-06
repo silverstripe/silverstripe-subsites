@@ -1,39 +1,82 @@
 zh:
   SubsiteAdmin:
-    MENUTITLE: "多个子网站"
-  GroupSubsites:
-    ACCESSALL: "所有子网站"
-    ACCESSONLY: "仅这些子网站"
-    ACCESSRADIOTITLE: "准许该群进入"
-    SECURITYTABTITLE: "多个子网站"
-  ModelAdmin:
-    LOADEDFOREDITING: "载入 '%s' 进行编辑。"
-  RelatedPageLink:
-    PLURALNAME: "多个相关页面链接"
-    SINGULARNAME: "相关页面链接"
-  Subsite:
-    PLURALNAME: "多个子网站"
-    SINGULARNAME: "子网站"
-    DOMAINSAVEFIRST: "您只可在首次保存后添加域名"
-  SubsiteDomain:
-    PLURALNAME: "多个子网站域名"
-    SINGULARNAME: "子网站域名"
-    DOMAIN: "域名"
-    IS_PRIMARY: "是主域名"
-  Subsite_Template:
-    PLURALNAME: "多个子网站模板"
-    SINGULARNAME: "子网站模板"
-  SubsitesVirtualPage:
-    PLURALNAME: "多个子网站虚拟页面"
-    SINGULARNAME: "子网站虚拟页面"
-  VirtualPage:
-    CHOOSE: "选择链接页面"
-    EDITCONTENT: "点击此处以编辑内容"
+    MENUTITLE: 多个子网站
+  SubsiteXHRController:
+    MENUTITLE: 子网站 XHR 控制器
+  LeftAndMain_Menu:
+    ASSETADMIN:
+      SUBSITENOTICE: '主网站上创建的文件夹和文件可以被所有子网站访问。'
+    ss:
+      Hello: 您好
+      LOGOUT: '退出'
+    Permissions:
+      PERMISSIONS_CATEGORY: '角色和访问权限'
+    Subsite:
+      ButtonLabelCopy: '创建副本'
+      COPYSTRUCTURE: '复制结构来自：'
+      CopyMessage: '已创建一个 {title} 的副本'
+      CustomExtraMeta: '自定义 Meta 标签'
+      CustomMetaDescription: 说明
+      CustomMetaKeywords: 关键词
+      CustomMetaTitle: 标题
+      DOMAINSAVEFIRST: '只有当您第一次保存后，才能添加域名'
+      DomainsHeadline: '这个子网站的域名'
+      DomainsListTitle: 域名
+      IsPublicHeaderField: '活跃的子网站'
+      MANAGE_ASSETS: '为子网站管理资源'
+      MANAGE_ASSETS_HELP: '能够选择资源文件夹所属的子网站。要求“文件和图片的访问权。”'
+      NOTEMPLATE: '没有模板'
+      PLURALNAME: 子网站
+      PageTypeBlacklistField: '禁止页面类型？'
+      SINGULARNAME: 子网站
+      SiteConfigSubtitle: '您的标语在这里'
+      SiteConfigTitle: '您的网站名称'
+      TabTitleConfig: 配置
+      ValidateTitle: '请添加一个“标题”'
+    VirtualPage:
+      CHOOSE: '选择一个页面以链接到'
+      EDITCONTENT: '点击这里来编辑内容'
+  FileSubsites:
+    AllSitesDropdownOpt: '所有网站'
+    SubsiteFieldLabel: 子网站
   GridFieldAddFromTemplateButton:
-    AddFromTemplate: "从模板中取出新加入"
-  GridFieldAddFromTemplate:
-    NewFromTemplate: "取自模板的新 %s"
-    TEMPLATE_NOT_FOUND: "无法找到选定的模板"
-    TEMPLATE: "模板"
+    AddFromTemplate: '从模板中取出新加入'
+  GroupSubsites:
+    ACCESSALL: '所有子网站'
+    ACCESSONLY: '仅这些子网站'
+    ACCESSRADIOTITLE: '准许该群进入'
+    GlobalGroup: '全局小组'
+    MANAGE_SUBSITES: '管理小组的子网站'
+    MANAGE_SUBSITES_HELP: '能够将权限限制在一个小组、一个或多个子网站。'
+    SECURITYTABTITLE: 多个子网站
   LeftAndMainSubsites:
-    DEFAULT_SITE: "默认网站"
+    Saved: '已保存，请更新相关的页面。'
+  SiteTree:
+    PLURALNAME: 页面
+    SINGULARNAME: 页面
+  SiteTreeSubsites:
+    CopyAction: 复制
+    CopyToSubsite: '将页面复制到子网站'
+  SubsiteDomain:
+    DOMAIN: 域名
+    IS_PRIMARY: '是主域名'
+    PLURALNAME: '多个子网站域名'
+    SINGULARNAME: '子网站域名'
+  SubsiteReportWrapper:
+    ReportDropdown: 网站
+  Subsites:
+    DefaultSiteFieldLabel: '默认网站'
+    DomainFieldLabel: 域名
+    IsPublicFieldLabel: '启用公共访问权'
+    LanguageFieldLabel: 语言
+    MainSiteTitle: '主网站'
+    PageTypeBlacklistFieldLabel: '页面类型黑名单'
+    PrimaryDomainFieldLabel: '主域名'
+    RedirectURLFieldLabel: '重定向 URL'
+    ThemeFieldLabel: 主题
+    TitleFieldLabel: '子网站名称'
+  SubsitesVirtualPage:
+    DESCRIPTION: '显示另一个子网站上一个页面的内容'
+    PLURALNAME: '基本页面'
+    SINGULARNAME: '子网站虚拟页面'
+    SubsiteField: 子网站

@@ -1,36 +1,17 @@
 pl_PL:
   SubsiteAdmin:
-    MENUTITLE: "Podwitryny"
-  GroupSubsites:
-    ACCESSALL: "Wszystkie podwitryny"
-    ACCESSONLY: "Tylko te podwitryny"
-    ACCESSRADIOTITLE: "Daj tej grupie dostęp do"
-    SECURITYTABTITLE: "Podwitryny"
-  ModelAdmin:
-    LOADEDFOREDITING: "Załadowano '%s' do edycji."
-  Subsite:
-    PLURALNAME: "Podwitryny"
-    SINGULARNAME: "Podwitryna"
-    DOMAINSAVEFIRST: "Możesz dodać domeny dopiero po pierwszym zapisie"
-  SubsiteDomain:
-    PLURALNAME: "Domeny podwitryny"
-    SINGULARNAME: "Domena podwitryny"
-    DOMAIN: "Domena"
-    IS_PRIMARY: "Ma priorytet?"
-  Subsite_Template:
-    PLURALNAME: "Szablony"
-    SINGULARNAME: "Szablon"
-  SubsitesVirtualPage:
-    PLURALNAME: "Wirtualne strony dla podwitryn"
-    SINGULARNAME: "Wirtualna strona dla podwitryn"
-  VirtualPage:
-    CHOOSE: "Wybierz stronę docelową do zlinkowania"
-    EDITCONTENT: "Kliknij tutaj aby edytować zawartość"
+    MENUTITLE: Podwitryny
   GridFieldAddFromTemplateButton:
-    AddFromTemplate: "Dodaj nową na podstawie szablonu"
-  GridFieldAddFromTemplate:
-    NewFromTemplate: "Nowa %s z szablonu"
-    TEMPLATE_NOT_FOUND: "Wybrany szablon nie został znaleziony"
-    TEMPLATE: "Szablon"
-  LeftAndMainSubsites:
-    DEFAULT_SITE: "Domyślna podwitryna"
+    AddFromTemplate: 'Dodaj nową na podstawie szablonu'
+  GroupSubsites:
+    ACCESSALL: 'Wszystkie podwitryny'
+    ACCESSONLY: 'Tylko te podwitryny'
+    ACCESSRADIOTITLE: 'Daj tej grupie dostęp do'
+    SECURITYTABTITLE: Podwitryny
+  SubsiteDomain:
+    DOMAIN: Domena
+    IS_PRIMARY: 'Ma priorytet?'
+    PLURALNAME: 'Domeny podwitryny'
+    SINGULARNAME: 'Domena podwitryny'
+  SubsitesVirtualPage:
+    SINGULARNAME: 'Wirtualna strona dla podwitryn'

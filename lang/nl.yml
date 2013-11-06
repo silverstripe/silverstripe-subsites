@@ -1,39 +1,17 @@
 nl:
   SubsiteAdmin:
-    MENUTITLE: "Subsites"
-  GroupSubsites:
-    ACCESSALL: "Alle subsites"
-    ACCESSONLY: "Alleen deze subsites"
-    ACCESSRADIOTITLE: "Geef deze groep rechten aan"
-    SECURITYTABTITLE: "Subsites"
-  ModelAdmin:
-    LOADEDFOREDITING: "'%s' is klaar voor aanpassingen"
-  RelatedPageLink:
-    PLURALNAME: "Gerelateerde Pagina Links"
-    SINGULARNAME: "Gerelateerde Pagina Link"
-  Subsite:
-    PLURALNAME: "Subsites"
-    SINGULARNAME: "Subsite"
-    DOMAINSAVEFIRST: "Je kan pas een domein toevoegen na opslaan"
-  SubsiteDomain:
-    PLURALNAME: "Subsite Domeinen"
-    SINGULARNAME: "Subsite Domein"
-    DOMAIN: "Domein"
-    IS_PRIMARY: "Is Primaire domein"
-  Subsite_Template:
-    PLURALNAME: "Subsite Templates"
-    SINGULARNAME: "Subsite Template"
-  SubsitesVirtualPage:
-    PLURALNAME: "Subsites Virtuele paginas"
-    SINGULARNAME: "Subsites Virtuele pagina"
-  VirtualPage:
-    CHOOSE: "Kies een pagina om naar te linken"
-    EDITCONTENT: "Klik hier om inhoud aan te passen"
+    MENUTITLE: Subsites
   GridFieldAddFromTemplateButton:
-    AddFromTemplate: "Nieuwe toevegen vanaf template"
-  GridFieldAddFromTemplate:
-    NewFromTemplate: "Nieuw %s in template"
-    TEMPLATE_NOT_FOUND: "De gekozen template is niet gevonden"
-    TEMPLATE: "Template"
-  LeftAndMainSubsites:
-    DEFAULT_SITE: "Standaard Site"
+    AddFromTemplate: 'Nieuwe toevegen vanaf template'
+  GroupSubsites:
+    ACCESSALL: 'Alle subsites'
+    ACCESSONLY: 'Alleen deze subsites'
+    ACCESSRADIOTITLE: 'Geef deze groep rechten aan'
+    SECURITYTABTITLE: Subsites
+  SubsiteDomain:
+    DOMAIN: Domein
+    IS_PRIMARY: 'Is Primaire domein'
+    PLURALNAME: 'Subsite Domeinen'
+    SINGULARNAME: 'Subsite Domein'
+  SubsitesVirtualPage:
+    SINGULARNAME: 'Subsites Virtuele pagina'
