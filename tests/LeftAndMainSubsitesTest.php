@@ -66,4 +66,23 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 		
 	}
 
+	function testShouldChangeSubsite() {
+		$l = new LeftAndMain();
+		Config::inst()->nest();
+
+		Config::inst()->update('CMSPageEditController', 'treats_subsite_0_as_global', false);
+		$this->assertTrue($l->shouldChangeSubsite('CMSPageEditController', 0, 5));
+		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 0, 0));
+		$this->assertTrue($l->shouldChangeSubsite('CMSPageEditController', 1, 5));
+		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 1, 1));
+
+		Config::inst()->update('CMSPageEditController', 'treats_subsite_0_as_global', true);
+		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 0, 5));
+		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 0, 0));
+		$this->assertTrue($l->shouldChangeSubsite('CMSPageEditController', 1, 5));
+		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 1, 1));
+
+		Config::inst()->unnest();
+	}
+
 }

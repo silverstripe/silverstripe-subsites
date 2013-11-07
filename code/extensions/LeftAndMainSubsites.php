@@ -8,18 +8,17 @@ class LeftAndMainSubsites extends Extension {
 
 	private static $allowed_actions = array('CopyToSubsite');
 
+	/**
+	 * Normally SubsiteID=0 on a DataObject means it is only accessible from the special "main site".
+	 * However in some situations SubsiteID=0 will be understood as a "globally accessible" object in which
+	 * case this property is set to true (i.e. in AssetAdmin).
+	 */
+	private static $treats_subsite_0_as_global = false;
+
 	function init() {
 		Requirements::css('subsites/css/LeftAndMain_Subsites.css');
 		Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
 		Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
-
-		// Set subsite ID based on currently shown record
-		$req = $this->owner->getRequest();
-		$id = $req->param('ID');
-		if($id && is_numeric($id)) {
-			$record = DataObject::get_by_id($this->owner->stat('tree_class'), $id);
-			if($record) Session::set('SubsiteID', $record->SubsiteID);
-		}
 	}
 
 	/**
@@ -152,6 +151,15 @@ class LeftAndMainSubsites extends Extension {
 	}
 
 	/**
+	 * Helper for testing if the subsite should be adjusted.
+	 */
+	public function shouldChangeSubsite($adminClass, $recordSubsiteID, $currentSubsiteID) {
+		if (Config::inst()->get($adminClass, 'treats_subsite_0_as_global') && $recordSubsiteID==0) return false;
+		if ($recordSubsiteID!=$currentSubsiteID) return true;
+		return false;
+	}
+
+	/**
 	 * Do some pre-flight checks if a subsite switch is needed.
 	 * We redirect the user to something accessible if the current section/subsite is forbidden.
 	 */
@@ -159,9 +167,24 @@ class LeftAndMainSubsites extends Extension {
 		// We are accessing the CMS, so we need to let Subsites know we will be using the session.
 		Subsite::$use_session_subsiteid = true;
 
-		// Do not try to be smart for AJAX requests.
+		// Do not attempt to redirect for AJAX calls. The proper security checks are done on specific objects
+		// (by Subsite augmentations of Member and Group). Also the only good time to change the subsite in the CMS
+		// is upon initial load - otherwise we risk the internal state becoming mismatched with the interface.
 		if ($this->owner->request->isAjax()) {
 			return;
+		}
+
+		// FIRST, check if we need to change subsites due to the URL.
+
+		// Automatically redirect the session to appropriate subsite when requesting a record.
+		// This is needed to properly initialise the session in situations where someone opens the CMS via a link.
+		$record = $this->owner->currentPage();
+		if($record && isset($record->SubsiteID) && is_numeric($record->SubsiteID)) {
+
+			if ($this->shouldChangeSubsite($this->owner->class, $record->SubsiteID, Subsite::currentSubsiteID())) {
+				Subsite::changeSubsite($record->SubsiteID);
+			}
+
 		}
 
 		// Catch forced subsite changes that need to cause CMS reloads.
@@ -178,14 +201,7 @@ class LeftAndMainSubsites extends Extension {
 			return $this->owner->redirect('admin/');
 		}
 
-		$className = $this->owner->class;
-
-		// Transparently switch to the subsite of the current page.
-		if ($this->owner->class == 'CMSMain' && $currentPage = $this->owner->currentPage()) {
-			if (Subsite::currentSubsiteID() != $currentPage->SubsiteID) {
-				Subsite::changeSubsite($currentPage->SubsiteID);
-			}
-		}
+		// SECOND, check if we need to change subsites due to lack of permissions.
 
 		// If we can view current URL there is nothing to do.
 		if ($this->owner->canView()) {
