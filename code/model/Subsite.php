@@ -20,18 +20,30 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * @var boolean $disable_subsite_filter If enabled, bypasses the query decoration
 	 * to limit DataObject::get*() calls to a specific subsite. Useful for debugging.
 	 */
-	static $disable_subsite_filter = false;
+	public static $disable_subsite_filter = false;
 	
 	/**
 	 * Allows you to force a specific subsite ID, or comma separated list of IDs.
 	 * Only works for reading. An object cannot be written to more than 1 subsite.
 	 */
-	static $force_subsite = null;
+	public static $force_subsite = null;
 
-	static $write_hostmap = true;
+	/**
+	 *
+	 * @var boolean
+	 */
+	public static $write_hostmap = true;
 	
+	/**
+	 *
+	 * @var string
+	 */
 	private static $default_sort = "\"Title\" ASC";
 
+	/**
+	 *
+	 * @var array
+	 */
 	private static $db = array(
 		'Title' => 'Varchar(255)',
 		'RedirectURL' => 'Varchar(255)',
@@ -46,22 +58,35 @@ class Subsite extends DataObject implements PermissionProvider {
 		// Comma-separated list of disallowed page types
 		'PageTypeBlacklist' => 'Text',
 	);
-	
-	private static $has_one = array(
-	);
-	
+
+	/**
+	 *
+	 * @var array
+	 */
 	private static $has_many = array(
 		'Domains' => 'SubsiteDomain',
 	);
 	
+	/**
+	 *
+	 * @var array
+	 */
 	private static $belongs_many_many = array(
 		"Groups" => "Group",
 	);
 
+	/**
+	 *
+	 * @var array
+	 */
 	private static $defaults = array(
 		'IsPublic' => 1
 	);
 
+	/**
+	 *
+	 * @var array
+	 */
 	private static $searchable_fields = array(
 		'Title',
 		'Domains.Domain',
@@ -70,9 +95,16 @@ class Subsite extends DataObject implements PermissionProvider {
 
 	/**
 	 * Memory cache of accessible sites
+	 * 
+	 * @array
 	 */
 	private static $_cache_accessible_sites = array();
 
+	/**
+	 * Memory cache of subsite id for domains
+	 *
+	 * @var array
+	 */
 	private static $_cache_subsite_for_domain = array();
 
 	/**
@@ -87,21 +119,28 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Doesn't affect wildcard matching, so '*.example.com' will match 'www.example.com' (but not 'example.com')
 	 * in both TRUE or FALSE setting.
 	 */
-	static $strict_subdomain_matching = false;
+	public static $strict_subdomain_matching = false;
 
 	/**
 	 * @var boolean Respects the IsPublic flag when retrieving subsites
 	 */
-	static $check_is_public = true;
+	public static $check_is_public = true;
 
-	static function set_allowed_themes($themes) {
+	/**
+	 * Set allowed themes
+	 * 
+	 * @param array $themes - Numeric array of all themes which are allowed to be selected for all subsites.
+	 */
+	public static function set_allowed_themes($themes) {
 		self::$allowed_themes = $themes;
 	}
 
 	/**
 	 * Return the themes that can be used with this subsite, as an array of themecode => description
+	 * 
+	 * @return array
 	 */
-	function allowedThemes() {
+	public function allowedThemes() {
 		if($themes = $this->stat('allowed_themes')) {
 			return ArrayLib::valuekey($themes);
 		} else {
@@ -118,6 +157,9 @@ class Subsite extends DataObject implements PermissionProvider {
 		}
 	}
 
+	/**
+	 * @return string Current locale of the subsite
+	 */
 	public function getLanguage() {
 		if($this->getField('Language')) {
 			return $this->getField('Language');
@@ -126,12 +168,15 @@ class Subsite extends DataObject implements PermissionProvider {
 		}
 	}
 
+	/**
+	 * 
+	 * @return ValidationResult
+	 */
 	public function validate() {
 		$result = parent::validate();
 		if(!$this->Title) {
 			$result->error(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
 		}
-		
 		return $result;
 	}
 
@@ -151,7 +196,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * 
 	 * @return string The full domain name of this subsite (without protocol prefix)
 	 */
-	function domain() {
+	public function domain() {
 		if($this->ID) {
 			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
 			if($domains && $domains->Count()>0) {
@@ -174,18 +219,20 @@ class Subsite extends DataObject implements PermissionProvider {
 		}
 	}
 	
-	function getPrimaryDomain() {
+	public function getPrimaryDomain() {
 		return $this->domain();
 	}
 
-	function absoluteBaseURL() {
+	public function absoluteBaseURL() {
 		return "http://" . $this->domain() . Director::baseURL();
 	}
 
 	/**
 	 * Show the configuration fields for each subsite
+	 * 
+	 * @return FieldList
 	 */
-	function getCMSFields() {
+	public function getCMSFields() {
 		if($this->ID!=0) {
 			$domainTable = new GridField(
 				"Domains", 
@@ -257,6 +304,11 @@ class Subsite extends DataObject implements PermissionProvider {
 		return $fields;
 	}
 
+	/**
+	 * 
+	 * @param boolean $includerelations
+	 * @return array
+	 */
 	public function fieldLabels($includerelations = true) {
 		$labels = parent::fieldLabels($includerelations);
 		$labels['Title'] = _t('Subsites.TitleFieldLabel', 'Subsite Name');
@@ -272,6 +324,10 @@ class Subsite extends DataObject implements PermissionProvider {
 		return $labels;
 	}
 
+	/**
+	 * 
+	 * @return array
+	 */
 	public function summaryFields() {
 		return array(
 			'Title' => $this->fieldLabel('Title'),
@@ -283,11 +339,15 @@ class Subsite extends DataObject implements PermissionProvider {
 	/**
 	 * @todo getClassName is redundant, already stored as a database field?
 	 */
-	function getClassName() {
+	public function getClassName() {
 		return $this->class;
 	}
 
-	function getCMSActions() {
+	/**
+	 * 
+	 * @return FieldList
+	 */
+	public function getCMSActions() {
 		return new FieldList(
             new FormAction(
             	'callPageMethod', 
@@ -298,7 +358,12 @@ class Subsite extends DataObject implements PermissionProvider {
 		);
 	}
 
-	function adminDuplicate() {
+	/**
+	 * Javascript admin action to duplicate this subsite
+	 * 
+	 * @return string - javascript 
+	 */
+	public function adminDuplicate() {
 		$newItem = $this->duplicate();
 		$message = _t(
 			'Subsite.CopyMessage',
@@ -316,10 +381,9 @@ JS;
 	 * Gets the subsite currently set in the session.
 	 *
 	 * @uses ControllerSubsites->controllerAugmentInit()
-	 * 
 	 * @return Subsite
 	 */
-	static function currentSubsite() {
+	public static function currentSubsite() {
 		// get_by_id handles caching so we don't have to
 		return DataObject::get_by_id('Subsite', self::currentSubsiteID());
 	}
@@ -337,7 +401,7 @@ JS;
 	 * @param boolean $cache
 	 * @return int ID of the current subsite instance
 	 */
-	static function currentSubsiteID() {
+	public static function currentSubsiteID() {
 		$id = NULL;
 
 		if(isset($_GET['SubsiteID'])) {
@@ -359,7 +423,7 @@ JS;
 	 *
 	 * @param int|Subsite $subsite Either the ID of the subsite, or the subsite object itself
 	 */
-	static function changeSubsite($subsite) {
+	public static function changeSubsite($subsite) {
 		if(is_object($subsite)) $subsiteID = $subsite->ID;
 		else $subsiteID = $subsite;
 		
@@ -385,6 +449,7 @@ JS;
 
 	/**
 	 * @todo Possible security issue, don't grant edit permissions to everybody.
+	 * @return boolean
 	 */
 	function canEdit($member = false) {
 		return true;
@@ -399,7 +464,7 @@ JS;
 	 * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
 	 * @return int Subsite ID
 	 */
-	static function getSubsiteIDForDomain($host = null, $checkPermissions = true) {
+	public static function getSubsiteIDForDomain($host = null, $checkPermissions = true) {
 		if($host == null) $host = $_SERVER['HTTP_HOST'];
 
 		if(!self::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
@@ -439,7 +504,12 @@ JS;
 		return $subsiteID;
 	}
 
-	function getMembersByPermission($permissionCodes = array('ADMIN')){
+	/**
+	 * 
+	 * @param array $permissionCodes
+	 * @return DataList
+	 */
+	public function getMembersByPermission($permissionCodes = array('ADMIN')){
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::getMembersByPermission as an array', E_USER_ERROR);
 		$SQL_permissionCodes = Convert::raw2sql($permissionCodes);
@@ -470,7 +540,7 @@ JS;
 	 * @param Array Permission code strings. Defaults to "ADMIN".
 	 * @return boolean
 	 */
-	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
+	public static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
 		if(!is_array($permissionCodes))
 			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
@@ -514,7 +584,7 @@ JS;
 	/**
 	 * Duplicate this subsite
 	 */
-	function duplicate($doWrite = true) {
+	public function duplicate($doWrite = true) {
 		$duplicate = parent::duplicate($doWrite);
 
 		$oldSubsiteID = Session::get('SubsiteID');
@@ -683,9 +753,10 @@ JS;
 	 *
 	 * This is used primarily when using subsites in conjunction with StaticPublisher
 	 *
+	 * @param string $file - filepath of the host map to be written
 	 * @return void
 	 */
-	static function writeHostMap($file = null) {
+	public static function writeHostMap($file = null) {
 		if (!self::$write_hostmap) return;
 		
 		if (!$file) $file = Director::baseFolder().'/subsites/host-map.php';
@@ -716,7 +787,11 @@ JS;
 	// CMS ADMINISTRATION HELPERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	function providePermissions() {
+	/**
+	 * 
+	 * @return array
+	 */
+	public function providePermissions() {
 		return array(
 			'SUBSITE_ASSETS_CREATE_SUBSITE' => array(
 				'name' => _t('Subsite.MANAGE_ASSETS', 'Manage assets for subsites'),
@@ -727,7 +802,16 @@ JS;
 		);
 	}
 
-	static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "") {
+	/**
+	 * 
+	 * @param string $className
+	 * @param string $filter
+	 * @param string $sort
+	 * @param string $join
+	 * @param string $limit
+	 * @return DataList
+	 */
+	public static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "") {
 		$result = DataObject::get($className, $filter, $sort, $join, $limit);
 		$result = $result->setDataQueryParam('Subsite.filter', false);
 		return $result;
@@ -736,14 +820,14 @@ JS;
 	/**
 	 * Disable the sub-site filtering; queries will select from all subsites
 	 */
-	static function disable_subsite_filter($disabled = true) {
+	public static function disable_subsite_filter($disabled = true) {
 		self::$disable_subsite_filter = $disabled;
 	}
 	
 	/**
 	 * Flush caches on database reset
 	 */
-	static function on_db_reset() {
+	public static function on_db_reset() {
 		self::$_cache_accessible_sites = array();
 		self::$_cache_subsite_for_domain = array();
 	}
