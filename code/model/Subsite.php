@@ -413,12 +413,11 @@ JS;
 		if(isset(self::$_cache_subsite_for_domain[$cacheKey])) return self::$_cache_subsite_for_domain[$cacheKey];
 
 		$SQL_host = Convert::raw2sql($host);
-		$joinFilter = self::$check_is_public ? "AND \"Subsite\".\"IsPublic\"=1" : '';
 		$matchingDomains = DataObject::get(
 			"SubsiteDomain", 
 			"'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
 			"\"IsPrimary\" DESC"
-		)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");;
+		)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
 		
 		if($matchingDomains && $matchingDomains->Count()) {
 			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
