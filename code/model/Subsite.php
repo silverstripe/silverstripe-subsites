@@ -94,11 +94,6 @@ class Subsite extends DataObject implements PermissionProvider {
 	 */
 	static $check_is_public = true;
 
-	static function set_allowed_domains($domain){
-		user_error('Subsite::set_allowed_domains() is deprecated; it is no longer necessary '
-			. 'because users can now enter any domain name', E_USER_NOTICE);
-	}
-
 	static function set_allowed_themes($themes) {
 		self::$allowed_themes = $themes;
 	}

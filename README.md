@@ -22,52 +22,6 @@ The subsites module allows multiple websites to run from a single installation o
 
 ## Usage
 
-### Limit allowed domains
-
-You can list available domains for your subsites (Example: subdomain.''domain''.tld). The subsites are generally identified only by their subdomain part (Example: ''subdomain''.domain.tld).
-
-This example would let you create subsites such as ''wellington.mycompany.com'' or ''london.mycompany.org''
-
-*mysite/_config.php*
-
-	:::php
-	Subsite::set_allowed_domains(array(
-	   'mycompany.com',
-	   'mycompany.org'
-	));
-
-
-If you would like to be able to choose any domain for your subsite, rather than subdomains off a common base, then list top-level domains in your `set_allowed_domains()` list.
-
-In this example, your subsite name (e.g. ''silverstripe''), will be appended to a much shorter base domain (e.g.  ''co.nz'', or ''org'').  This would let you create subsites with domains such as ''silverstripe.org'' or ''example.co.nz''
-
-*mysite/_config.php*
-
-	:::php
-	Subsite::set_allowed_domains(array(
-	   'com',
-	   'org',
-	   'co.nz',
-	   'org.nz',
-	));
-
-
-You can mix the two together, if you want to have some subsites hosted off subdomains of your mail site, and some subsites hosted off their own domains.  In this example, you could set up subsites at ''wellington.example.com'', ''othersite.co.nz'', or ''thirdsite.org''.
-
-*mysite/_config.php*
-
-	:::php
-	Subsite::set_allowed_domains(array(
-	   'example.com',
-	   'com',
-	   'org',
-	   'co.nz',
-	   'org.nz',
-	));
-
-
-Note that every site also has a ''www.''-prefixed version of the domain available.  For example, if your subsite is accessible from ''wellington.example.org'' then it will also be accessible from '''www.wellington.example.org''.
-
 ### Strict Subdomain Matching ###
 
 The module tries to provide sensible defaults, in which it regards `example.com` and `www.example.com` as the same domains. In case you want to distinguish between these variations, set `Subsite::$strict_subdomain_matching` to TRUE. This won't affect wildcard/asterisk checks, but removes the ambiguity about default subdomains.
