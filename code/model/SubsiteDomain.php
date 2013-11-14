@@ -26,10 +26,12 @@ class SubsiteDomain extends DataObject {
 	}
 	
 	public function getCMSFields() {
-		return new FieldList(
+		$fields = new FieldList(
 			new TextField('Domain', $this->fieldLabel('Domain'), null, 255),
 			new CheckboxField('IsPrimary', $this->fieldLabel('IsPrimary'))
 		);
+		$this->extend('updateCMSFields', $fields);
+		return $fields;
 	}
 
 	public function fieldLabels($includerelations = true) {
