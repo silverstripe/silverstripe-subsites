@@ -20,7 +20,7 @@ en:
     SECURITYTABTITLE: Subsites
   LeftAndMainSubsites:
     Saved: 'Saved, please update related pages.'
-  LeftAndMain_Menu.ss:
+  LeftAndMain_Menu:
     Hello: Hi
     LOGOUT: 'Log out'
   Permissions:

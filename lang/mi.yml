@@ -3,39 +3,38 @@ mi:
     MENUTITLE: Ngā pae iti
   SubsiteXHRController:
     MENUTITLE: ManaXHRPaeiti
+  ASSETADMIN:
+    SUBSITENOTICE: 'Ka taea ngā kōpaki me ngā kōnae kua hangaia i te pae matua te uru mā ngā pae iti katoa.'
   LeftAndMain_Menu:
-    ASSETADMIN:
-      SUBSITENOTICE: 'Ka taea ngā kōpaki me ngā kōnae kua hangaia i te pae matua te uru mā ngā pae iti katoa.'
-    ss:
-      Hello: Tēnā koe
-      LOGOUT: 'Takiputa'
-    Permissions:
-      PERMISSIONS_CATEGORY: 'Ngā tūnga me ngā whakaaetanga uru'
-    Subsite:
-      ButtonLabelCopy: 'Hanga tārua'
-      COPYSTRUCTURE: 'Tāurutia te hanganga mai i:'
-      CopyMessage: 'I hangaia he tārua o {title}'
-      CustomExtraMeta: 'Ngā Tūtohu Meta Ritenga'
-      CustomMetaDescription: Whakaahuatanga
-      CustomMetaKeywords: Ngā kupumatua
-      CustomMetaTitle: Taitara
-      DOMAINSAVEFIRST: 'Ka taea noa iho te tāpiri rohe i muri i te tiakinga tuatahitanga'
-      DomainsHeadline: 'Ngā rohe mō tēnei pae iti'
-      DomainsListTitle: Ngā Rohe
-      IsPublicHeaderField: 'Pae iti hohe'
-      MANAGE_ASSETS: 'Whakahaere rawa mō ngā pae iti'
-      MANAGE_ASSETS_HELP: 'Te āheinga ki te tīpako i te pae iti nōna tētahi kōpaki rawa. Ka hiahiatia te "Urunga ki ngā Kōnae me ngā Atahanga"'
-      NOTEMPLATE: 'Kāore he tātauira'
-      PLURALNAME: Ngā pae iti
-      PageTypeBlacklistField: 'Me whakakāhore ngā momo whārangi?'
-      SINGULARNAME: Pae iti
-      SiteConfigSubtitle: 'Tō rārangi tautuhinga ki konei'
-      SiteConfigTitle: 'Tō Ingoa Pae'
-      TabTitleConfig: Whirihoranga
-      ValidateTitle: 'Tāurua he "Taitara"'
-    VirtualPage:
-      CHOOSE: 'Kōwhiria he whārangi hei hononga atu'
-      EDITCONTENT: 'Pāwhiri ki konei hei whakatika i ngā ihirangi'
+    Hello: Tēnā koe
+    LOGOUT: 'Takiputa'
+  Permissions:
+    PERMISSIONS_CATEGORY: 'Ngā tūnga me ngā whakaaetanga uru'
+  Subsite:
+    ButtonLabelCopy: 'Hanga tārua'
+    COPYSTRUCTURE: 'Tāurutia te hanganga mai i:'
+    CopyMessage: 'I hangaia he tārua o {title}'
+    CustomExtraMeta: 'Ngā Tūtohu Meta Ritenga'
+    CustomMetaDescription: Whakaahuatanga
+    CustomMetaKeywords: Ngā kupumatua
+    CustomMetaTitle: Taitara
+    DOMAINSAVEFIRST: 'Ka taea noa iho te tāpiri rohe i muri i te tiakinga tuatahitanga'
+    DomainsHeadline: 'Ngā rohe mō tēnei pae iti'
+    DomainsListTitle: Ngā Rohe
+    IsPublicHeaderField: 'Pae iti hohe'
+    MANAGE_ASSETS: 'Whakahaere rawa mō ngā pae iti'
+    MANAGE_ASSETS_HELP: 'Te āheinga ki te tīpako i te pae iti nōna tētahi kōpaki rawa. Ka hiahiatia te "Urunga ki ngā Kōnae me ngā Atahanga"'
+    NOTEMPLATE: 'Kāore he tātauira'
+    PLURALNAME: Ngā pae iti
+    PageTypeBlacklistField: 'Me whakakāhore ngā momo whārangi?'
+    SINGULARNAME: Pae iti
+    SiteConfigSubtitle: 'Tō rārangi tautuhinga ki konei'
+    SiteConfigTitle: 'Tō Ingoa Pae'
+    TabTitleConfig: Whirihoranga
+    ValidateTitle: 'Tāurua he "Taitara"'
+  VirtualPage:
+    CHOOSE: 'Kōwhiria he whārangi hei hononga atu'
+    EDITCONTENT: 'Pāwhiri ki konei hei whakatika i ngā ihirangi'
   FileSubsites:
     AllSitesDropdownOpt: 'Ngā pae katoa'
     SubsiteFieldLabel: Pae iti

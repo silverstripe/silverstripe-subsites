@@ -3,39 +3,38 @@ ar:
     MENUTITLE: مواقع فرعية
   SubsiteXHRController:
     MENUTITLE: المراقب XHR للموقع الفرعي
+  ASSETADMIN:
+    SUBSITENOTICE: 'يمكن الوصول إلى المجلدات والملفات التي تم إنشاؤها في الموقع الرئيسي من طرف كل المواقع الفرعية.'
   LeftAndMain_Menu:
-    ASSETADMIN:
-      SUBSITENOTICE: 'يمكن الوصول إلى المجلدات والملفات التي تم إنشاؤها في الموقع الرئيسي من طرف كل المواقع الفرعية.'
-    ss:
-      Hello: مرحبا
-      LOGOUT: 'تسجيل الخروج'
-    Permissions:
-      PERMISSIONS_CATEGORY: 'أدوار وأذونات الدخول'
-    Subsite:
-      ButtonLabelCopy: 'إنشاء نسخة'
-      COPYSTRUCTURE: 'نسخ الهيكل من:'
-      CopyMessage: 'إنشاء نسخة من {title}'
-      CustomExtraMeta: 'العلامات الوصفية المخصصة'
-      CustomMetaDescription: الوصف
-      CustomMetaKeywords: كلمات البحث
-      CustomMetaTitle: عنوان
-      DOMAINSAVEFIRST: 'لا يمكنك إضافة النطاقات إلا بعد القيام بالحفظ لأول مرة'
-      DomainsHeadline: 'نطاقات هذا الموقع الفرعي'
-      DomainsListTitle: النطاقات
-      IsPublicHeaderField: 'موقع فرعي نشط'
-      MANAGE_ASSETS: 'إدارة الأصول للمواقع الفرعية'
-      MANAGE_ASSETS_HELP: 'القدرة على اختيار الموقع الفرعي الذي ينتمي إليه مجلد أصلي. يتطلب "إذن الدخول إلى الملفات والصور."'
-      NOTEMPLATE: 'بدون قالب'
-      PLURALNAME: المواقع الفرعية
-      PageTypeBlacklistField: 'عدم السماح بأصناف الصفحات؟'
-      SINGULARNAME: الموقع الفرعي
-      SiteConfigSubtitle: 'هنا سطر الوصف الخاص بك'
-      SiteConfigTitle: 'اسم موقعك'
-      TabTitleConfig: المواصفات
-      ValidateTitle: 'الرجاء إضافة "عنوان"'
-    VirtualPage:
-      CHOOSE: 'اختيار صفحة للربط معها'
-      EDITCONTENT: 'انقر هنا لتحرير المحتوى'
+    Hello: مرحبا
+    LOGOUT: 'تسجيل الخروج'
+  Permissions:
+    PERMISSIONS_CATEGORY: 'أدوار وأذونات الدخول'
+  Subsite:
+    ButtonLabelCopy: 'إنشاء نسخة'
+    COPYSTRUCTURE: 'نسخ الهيكل من:'
+    CopyMessage: 'إنشاء نسخة من {title}'
+    CustomExtraMeta: 'العلامات الوصفية المخصصة'
+    CustomMetaDescription: الوصف
+    CustomMetaKeywords: كلمات البحث
+    CustomMetaTitle: عنوان
+    DOMAINSAVEFIRST: 'لا يمكنك إضافة النطاقات إلا بعد القيام بالحفظ لأول مرة'
+    DomainsHeadline: 'نطاقات هذا الموقع الفرعي'
+    DomainsListTitle: النطاقات
+    IsPublicHeaderField: 'موقع فرعي نشط'
+    MANAGE_ASSETS: 'إدارة الأصول للمواقع الفرعية'
+    MANAGE_ASSETS_HELP: 'القدرة على اختيار الموقع الفرعي الذي ينتمي إليه مجلد أصلي. يتطلب "إذن الدخول إلى الملفات والصور."'
+    NOTEMPLATE: 'بدون قالب'
+    PLURALNAME: المواقع الفرعية
+    PageTypeBlacklistField: 'عدم السماح بأصناف الصفحات؟'
+    SINGULARNAME: الموقع الفرعي
+    SiteConfigSubtitle: 'هنا سطر الوصف الخاص بك'
+    SiteConfigTitle: 'اسم موقعك'
+    TabTitleConfig: المواصفات
+    ValidateTitle: 'الرجاء إضافة "عنوان"'
+  VirtualPage:
+    CHOOSE: 'اختيار صفحة للربط معها'
+    EDITCONTENT: 'انقر هنا لتحرير المحتوى'
   FileSubsites:
     AllSitesDropdownOpt: 'كافة المواقع'
     SubsiteFieldLabel: الموقع الفرعي

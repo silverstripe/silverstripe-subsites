@@ -3,39 +3,38 @@ zh:
     MENUTITLE: 多个子网站
   SubsiteXHRController:
     MENUTITLE: 子网站 XHR 控制器
+  ASSETADMIN:
+    SUBSITENOTICE: '主网站上创建的文件夹和文件可以被所有子网站访问。'
   LeftAndMain_Menu:
-    ASSETADMIN:
-      SUBSITENOTICE: '主网站上创建的文件夹和文件可以被所有子网站访问。'
-    ss:
-      Hello: 您好
-      LOGOUT: '退出'
-    Permissions:
-      PERMISSIONS_CATEGORY: '角色和访问权限'
-    Subsite:
-      ButtonLabelCopy: '创建副本'
-      COPYSTRUCTURE: '复制结构来自：'
-      CopyMessage: '已创建一个 {title} 的副本'
-      CustomExtraMeta: '自定义 Meta 标签'
-      CustomMetaDescription: 说明
-      CustomMetaKeywords: 关键词
-      CustomMetaTitle: 标题
-      DOMAINSAVEFIRST: '只有当您第一次保存后，才能添加域名'
-      DomainsHeadline: '这个子网站的域名'
-      DomainsListTitle: 域名
-      IsPublicHeaderField: '活跃的子网站'
-      MANAGE_ASSETS: '为子网站管理资源'
-      MANAGE_ASSETS_HELP: '能够选择资源文件夹所属的子网站。要求“文件和图片的访问权。”'
-      NOTEMPLATE: '没有模板'
-      PLURALNAME: 子网站
-      PageTypeBlacklistField: '禁止页面类型？'
-      SINGULARNAME: 子网站
-      SiteConfigSubtitle: '您的标语在这里'
-      SiteConfigTitle: '您的网站名称'
-      TabTitleConfig: 配置
-      ValidateTitle: '请添加一个“标题”'
-    VirtualPage:
-      CHOOSE: '选择一个页面以链接到'
-      EDITCONTENT: '点击这里来编辑内容'
+    Hello: 您好
+    LOGOUT: '退出'
+  Permissions:
+    PERMISSIONS_CATEGORY: '角色和访问权限'
+  Subsite:
+    ButtonLabelCopy: '创建副本'
+    COPYSTRUCTURE: '复制结构来自：'
+    CopyMessage: '已创建一个 {title} 的副本'
+    CustomExtraMeta: '自定义 Meta 标签'
+    CustomMetaDescription: 说明
+    CustomMetaKeywords: 关键词
+    CustomMetaTitle: 标题
+    DOMAINSAVEFIRST: '只有当您第一次保存后，才能添加域名'
+    DomainsHeadline: '这个子网站的域名'
+    DomainsListTitle: 域名
+    IsPublicHeaderField: '活跃的子网站'
+    MANAGE_ASSETS: '为子网站管理资源'
+    MANAGE_ASSETS_HELP: '能够选择资源文件夹所属的子网站。要求“文件和图片的访问权。”'
+    NOTEMPLATE: '没有模板'
+    PLURALNAME: 子网站
+    PageTypeBlacklistField: '禁止页面类型？'
+    SINGULARNAME: 子网站
+    SiteConfigSubtitle: '您的标语在这里'
+    SiteConfigTitle: '您的网站名称'
+    TabTitleConfig: 配置
+    ValidateTitle: '请添加一个“标题”'
+  VirtualPage:
+    CHOOSE: '选择一个页面以链接到'
+    EDITCONTENT: '点击这里来编辑内容'
   FileSubsites:
     AllSitesDropdownOpt: '所有网站'
     SubsiteFieldLabel: 子网站
