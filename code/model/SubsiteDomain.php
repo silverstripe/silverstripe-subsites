@@ -2,15 +2,27 @@
 
 class SubsiteDomain extends DataObject {
 
+	/**
+	 *
+	 * @var array
+	 */
 	private static $db = array(
 		"Domain" => "Varchar(255)",
 		"IsPrimary" => "Boolean",
 	);
 
+	/**
+	 *
+	 * @var array
+	 */
 	private static $has_one = array(
  		"Subsite" => "Subsite",
 	);
 
+	/**
+	 *
+	 * @var array
+	 */
 	private static $summary_fields=array(
 		'Domain',
 		'IsPrimary',
@@ -25,6 +37,10 @@ class SubsiteDomain extends DataObject {
 		Subsite::writeHostMap();
 	}
 	
+	/**
+	 * 
+	 * @return \FieldList
+	 */
 	public function getCMSFields() {
 		$fields = new FieldList(
 			new TextField('Domain', $this->fieldLabel('Domain'), null, 255),
@@ -34,6 +50,11 @@ class SubsiteDomain extends DataObject {
 		return $fields;
 	}
 
+	/**
+	 * 
+	 * @param bool $includerelations
+	 * @return array
+	 */
 	public function fieldLabels($includerelations = true) {
 		$labels = parent::fieldLabels($includerelations);
 		$labels['Domain'] = _t('SubsiteDomain.DOMAIN', 'Domain');
