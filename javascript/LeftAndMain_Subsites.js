@@ -106,8 +106,8 @@
 		});
 		
 		$('.cms-edit-form').entwine({
-			getChangeTrackerOptions: function() {
-				this.ChangeTrackerOptions.ignoreFieldSelector+=', input[name=IsSubsite]';
+			ChangeTrackerOptions: {
+				ignoreFieldSelector: '.no-change-track, .ss-upload :input, .cms-navigator :input, input[name=IsSubsite]'
 			}
 		});
 		
