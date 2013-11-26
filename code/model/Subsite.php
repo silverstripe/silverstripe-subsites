@@ -20,59 +20,32 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * @var boolean $disable_subsite_filter If enabled, bypasses the query decoration
 	 * to limit DataObject::get*() calls to a specific subsite. Useful for debugging.
 	 */
-	static $disable_subsite_filter = false;
+	public static $disable_subsite_filter = false;
 	
 	/**
 	 * Allows you to force a specific subsite ID, or comma separated list of IDs.
 	 * Only works for reading. An object cannot be written to more than 1 subsite.
 	 */
-	static $force_subsite = null;
-
-	static $write_hostmap = true;
-	
-	private static $default_sort = "\"Title\" ASC";
-
-	private static $db = array(
-		'Title' => 'Varchar(255)',
-		'RedirectURL' => 'Varchar(255)',
-		'DefaultSite' => 'Boolean',
-		'Theme' => 'Varchar',
-		'Language' => 'Varchar(6)',
-
-		// Used to hide unfinished/private subsites from public view.
-		// If unset, will default to true
-		'IsPublic' => 'Boolean',
-		
-		// Comma-separated list of disallowed page types
-		'PageTypeBlacklist' => 'Text',
-	);
-	
-	private static $has_one = array(
-	);
-	
-	private static $has_many = array(
-		'Domains' => 'SubsiteDomain',
-	);
-	
-	private static $belongs_many_many = array(
-		"Groups" => "Group",
-	);
-
-	private static $defaults = array(
-		'IsPublic' => 1
-	);
-
-	private static $searchable_fields = array(
-		'Title',
-		'Domains.Domain',
-		'IsPublic',	
-	);
+	public static $force_subsite = null;
 
 	/**
+	 *
+	 * @var boolean
+	 */
+	public static $write_hostmap = true;
+	
+	/**
 	 * Memory cache of accessible sites
+	 * 
+	 * @array
 	 */
 	private static $_cache_accessible_sites = array();
 
+	/**
+	 * Memory cache of subsite id for domains
+	 *
+	 * @var array
+	 */
 	private static $_cache_subsite_for_domain = array();
 
 	/**
@@ -87,244 +60,29 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * Doesn't affect wildcard matching, so '*.example.com' will match 'www.example.com' (but not 'example.com')
 	 * in both TRUE or FALSE setting.
 	 */
-	static $strict_subdomain_matching = false;
+	public static $strict_subdomain_matching = false;
 
 	/**
 	 * @var boolean Respects the IsPublic flag when retrieving subsites
 	 */
-	static $check_is_public = true;
+	public static $check_is_public = true;
 
-	static function set_allowed_domains($domain){
-		user_error('Subsite::set_allowed_domains() is deprecated; it is no longer necessary '
-			. 'because users can now enter any domain name', E_USER_NOTICE);
-	}
-
-	static function set_allowed_themes($themes) {
+	/**
+	 * Set allowed themes
+	 * 
+	 * @param array $themes - Numeric array of all themes which are allowed to be selected for all subsites.
+	 */
+	public static function set_allowed_themes($themes) {
 		self::$allowed_themes = $themes;
 	}
-
-	/**
-	 * Return the themes that can be used with this subsite, as an array of themecode => description
-	 */
-	function allowedThemes() {
-		if($themes = $this->stat('allowed_themes')) {
-			return ArrayLib::valuekey($themes);
-		} else {
-			$themes = array();
-			if(is_dir('../themes/')) {
-				foreach(scandir('../themes/') as $theme) {
-					if($theme[0] == '.') continue;
-					$theme = strtok($theme,'_');
-					$themes[$theme] = $theme;
-				}
-				ksort($themes);
-			}
-			return $themes;
-		}
-	}
-
-	public function getLanguage() {
-		if($this->getField('Language')) {
-			return $this->getField('Language');
-		} else {
-			return i18n::get_locale();
-		}
-	}
-
-	public function validate() {
-		$result = parent::validate();
-		if(!$this->Title) {
-			$result->error(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
-		}
-		
-		return $result;
-	}
-
-	/**
-	 * Whenever a Subsite is written, rewrite the hostmap
-	 *
-	 * @return void
-	 */
-	public function onAfterWrite() {
-		Subsite::writeHostMap();
-		parent::onAfterWrite();
-	}
 	
-	/**
-	 * Return the primary domain of this site. Tries to "normalize" the domain name,
-	 * by replacing potential wildcards.
-	 * 
-	 * @return string The full domain name of this subsite (without protocol prefix)
-	 */
-	function domain() {
-		if($this->ID) {
-			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
-			if($domains && $domains->Count()>0) {
-				$domain = $domains->First()->Domain;
-				// If there are wildcards in the primary domain (not recommended), make some
-				// educated guesses about what to replace them with:
-				$domain = preg_replace('/\.\*$/',".$_SERVER[HTTP_HOST]", $domain);
-				// Default to "subsite." prefix for first wildcard
-				// TODO Whats the significance of "subsite" in this context?!
-				$domain = preg_replace('/^\*\./',"subsite.", $domain);
-				// *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'
-				$domain = str_replace('.www.','.', $domain);
-				
-				return $domain;
-			}
-			
-		// SubsiteID = 0 is often used to refer to the main site, just return $_SERVER['HTTP_HOST']
-		} else {
-			return $_SERVER['HTTP_HOST'];
-		}
-	}
-	
-	function getPrimaryDomain() {
-		return $this->domain();
-	}
-
-	function absoluteBaseURL() {
-		return "http://" . $this->domain() . Director::baseURL();
-	}
-
-	/**
-	 * Show the configuration fields for each subsite
-	 */
-	function getCMSFields() {
-		if($this->ID!=0) {
-			$domainTable = new GridField(
-				"Domains", 
-				_t('Subsite.DomainsListTitle',"Domains"), 
-				$this->Domains(), 
-				GridFieldConfig_RecordEditor::create(10)
-			);
-		}else {
-			$domainTable = new LiteralField(
-				'Domains', 
-				'<p>'._t('Subsite.DOMAINSAVEFIRST', 'You can only add domains after saving for the first time').'</p>'
-			);
-		}
-			
-		$languageSelector = new DropdownField(
-			'Language', 
-			$this->fieldLabel('Language'),
-			i18n::get_common_locales()
-		);
-		
-		$pageTypeMap = array();
-		$pageTypes = SiteTree::page_type_classes();
-		foreach($pageTypes as $pageType) {
-			$pageTypeMap[$pageType] = singleton($pageType)->i18n_singular_name();
-		}
-		asort($pageTypeMap);
-
-		$fields = new FieldList(
-			$subsiteTabs = new TabSet('Root',
-				new Tab(
-					'Configuration',
-					_t('Subsite.TabTitleConfig', 'Configuration'),
-					new HeaderField($this->getClassName() . ' configuration', 2),
-					new TextField('Title', $this->fieldLabel('Title'), $this->Title),
-					
-					new HeaderField(
-						_t('Subsite.DomainsHeadline',"Domains for this subsite")
-					),
-					$domainTable,
-					$languageSelector,
-					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
-					new CheckboxField('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
-					new CheckboxField('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
-
-					new DropdownField('Theme',$this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme),
-					
-					
-					new LiteralField(
-						'PageTypeBlacklistToggle',
-						sprintf(
-							'<div class="field"><a href="#" id="PageTypeBlacklistToggle">%s</a></div>',
-							_t('Subsite.PageTypeBlacklistField', 'Disallow page types?')
-						)
-					),
-					new CheckboxSetField(
-						'PageTypeBlacklist', 
-						false,
-						$pageTypeMap
-					)
-				)
-			),
-			new HiddenField('ID', '', $this->ID),
-			new HiddenField('IsSubsite', '', 1)
-		);
-
-		$subsiteTabs->addExtraClass('subsite-model');
-
-		$this->extend('updateCMSFields', $fields);
-		return $fields;
-	}
-
-	public function fieldLabels($includerelations = true) {
-		$labels = parent::fieldLabels($includerelations);
-		$labels['Title'] = _t('Subsites.TitleFieldLabel', 'Subsite Name');
-		$labels['RedirectURL'] = _t('Subsites.RedirectURLFieldLabel', 'Redirect URL');
-		$labels['DefaultSite'] = _t('Subsites.DefaultSiteFieldLabel', 'Default site');
-		$labels['Theme'] = _t('Subsites.ThemeFieldLabel', 'Theme');
-		$labels['Language'] = _t('Subsites.LanguageFieldLabel', 'Language');
-		$labels['IsPublic'] = _t('Subsites.IsPublicFieldLabel', 'Enable public access');
-		$labels['PageTypeBlacklist'] = _t('Subsites.PageTypeBlacklistFieldLabel', 'Page Type Blacklist');
-		$labels['Domains.Domain'] = _t('Subsites.DomainFieldLabel', 'Domain');
-		$labels['PrimaryDomain'] = _t('Subsites.PrimaryDomainFieldLabel', 'Primary Domain');
-
-		return $labels;
-	}
-
-	public function summaryFields() {
-		return array(
-			'Title' => $this->fieldLabel('Title'),
-			'PrimaryDomain' => $this->fieldLabel('PrimaryDomain'),
-			'IsPublic' => _t('Subsite.IsPublicHeaderField','Active subsite'),
-		);
-	}
-
-	/**
-	 * @todo getClassName is redundant, already stored as a database field?
-	 */
-	function getClassName() {
-		return $this->class;
-	}
-
-	function getCMSActions() {
-		return new FieldList(
-            new FormAction(
-            	'callPageMethod', 
-            	_t('Subsite.ButtonLabelCopy',"Create copy"), 
-            	null, 
-            	'adminDuplicate'
-            )
-		);
-	}
-
-	function adminDuplicate() {
-		$newItem = $this->duplicate();
-		$message = _t(
-			'Subsite.CopyMessage',
-			'Created a copy of {title}',
-			array('title' => Convert::raw2js($this->Title))
-		);
-		
-		return <<<JS
-			statusMessage($message, 'good');
-			$('Form_EditForm').loadURLFromServer('admin/subsites/show/$newItem->ID');
-JS;
-	}
-
 	/**
 	 * Gets the subsite currently set in the session.
 	 *
 	 * @uses ControllerSubsites->controllerAugmentInit()
-	 * 
 	 * @return Subsite
 	 */
-	static function currentSubsite() {
+	public static function currentSubsite() {
 		// get_by_id handles caching so we don't have to
 		return DataObject::get_by_id('Subsite', self::currentSubsiteID());
 	}
@@ -342,7 +100,7 @@ JS;
 	 * @param boolean $cache
 	 * @return int ID of the current subsite instance
 	 */
-	static function currentSubsiteID() {
+	public static function currentSubsiteID() {
 		$id = NULL;
 
 		if(isset($_GET['SubsiteID'])) {
@@ -364,7 +122,7 @@ JS;
 	 *
 	 * @param int|Subsite $subsite Either the ID of the subsite, or the subsite object itself
 	 */
-	static function changeSubsite($subsite) {
+	public static function changeSubsite($subsite) {
 		if(is_object($subsite)) $subsiteID = $subsite->ID;
 		else $subsiteID = $subsite;
 		
@@ -380,21 +138,7 @@ JS;
 		
 		Permission::flush_permission_cache(); 
 	}
-
-	/**
-	 * Make this subsite the current one
-	 */
-	public function activate() {
-		Subsite::changeSubsite($this);
-	}
-
-	/**
-	 * @todo Possible security issue, don't grant edit permissions to everybody.
-	 */
-	function canEdit($member = false) {
-		return true;
-	}
-
+	
 	/**
 	 * Get a matching subsite for the given host, or for the current HTTP_HOST.
 	 * Supports "fuzzy" matching of domains by placing an asterisk at the start of end of the string,
@@ -404,7 +148,7 @@ JS;
 	 * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
 	 * @return int Subsite ID
 	 */
-	static function getSubsiteIDForDomain($host = null, $checkPermissions = true) {
+	public static function getSubsiteIDForDomain($host = null, $checkPermissions = true) {
 		if($host == null) $host = $_SERVER['HTTP_HOST'];
 
 		if(!self::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
@@ -413,12 +157,11 @@ JS;
 		if(isset(self::$_cache_subsite_for_domain[$cacheKey])) return self::$_cache_subsite_for_domain[$cacheKey];
 
 		$SQL_host = Convert::raw2sql($host);
-		$joinFilter = self::$check_is_public ? "AND \"Subsite\".\"IsPublic\"=1" : '';
 		$matchingDomains = DataObject::get(
 			"SubsiteDomain", 
 			"'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
 			"\"IsPrimary\" DESC"
-		)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");;
+		)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
 		
 		if($matchingDomains && $matchingDomains->Count()) {
 			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
@@ -445,119 +188,36 @@ JS;
 		return $subsiteID;
 	}
 
-	function getMembersByPermission($permissionCodes = array('ADMIN')){
-		if(!is_array($permissionCodes))
-			user_error('Permissions must be passed to Subsite::getMembersByPermission as an array', E_USER_ERROR);
-		$SQL_permissionCodes = Convert::raw2sql($permissionCodes);
+	/**
+	 * 
+	 * @param string $className
+	 * @param string $filter
+	 * @param string $sort
+	 * @param string $join
+	 * @param string $limit
+	 * @return DataList
+	 */
+	public static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "") {
+		$result = DataObject::get($className, $filter, $sort, $join, $limit);
+		$result = $result->setDataQueryParam('Subsite.filter', false);
+		return $result;
+	}
 
-		$SQL_permissionCodes = join("','", $SQL_permissionCodes);
-
-		return DataObject::get(
-			'Member',
-			"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
-			'',
-			"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
-			LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
-			LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
-		);
+	/**
+	 * Disable the sub-site filtering; queries will select from all subsites
+	 */
+	public static function disable_subsite_filter($disabled = true) {
+		self::$disable_subsite_filter = $disabled;
+	}
 	
-	}
-
 	/**
-	 * Checks if a member can be granted certain permissions, regardless of the subsite context.
-	 * Similar logic to {@link Permission::checkMember()}, but only returns TRUE
-	 * if the member is part of a group with the "AccessAllSubsites" flag set.
-	 * If more than one permission is passed to the method, at least one of them must
-	 * be granted for if to return TRUE.
-	 * 
-	 * @todo Allow permission inheritance through group hierarchy.
-	 * 
-	 * @param Member Member to check against. Defaults to currently logged in member
-	 * @param Array Permission code strings. Defaults to "ADMIN".
-	 * @return boolean
+	 * Flush caches on database reset
 	 */
-	static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
-		if(!is_array($permissionCodes))
-			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
-
-		if(!$member && $member !== FALSE) $member = Member::currentUser();
-
-		if(!$member) return false;
-		
-		if(!in_array("ADMIN", $permissionCodes)) $permissionCodes[] = "ADMIN";
-
-		$SQLa_perm = Convert::raw2sql($permissionCodes);
-		$SQL_perms = join("','", $SQLa_perm);
-		$memberID = (int)$member->ID;
-		
-		// Count this user's groups which can access the main site
-		$groupCount = DB::query("
-			SELECT COUNT(\"Permission\".\"ID\")
-			FROM \"Permission\"
-			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
-			INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
-			WHERE \"Permission\".\"Code\" IN ('$SQL_perms')
-			AND \"MemberID\" = {$memberID}
-		")->value();
-
-		// Count this user's groups which have a role that can access the main site
-		$roleCount = DB::query("
-			SELECT COUNT(\"PermissionRoleCode\".\"ID\")
-			FROM \"Group\"
-			INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Group\".\"ID\"
-			INNER JOIN \"Group_Roles\" ON \"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"
-			INNER JOIN \"PermissionRole\" ON \"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"
-			INNER JOIN \"PermissionRoleCode\" ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
-			WHERE \"PermissionRoleCode\".\"Code\" IN ('$SQL_perms')
-			AND \"Group\".\"AccessAllSubsites\" = 1
-			AND \"MemberID\" = {$memberID}
-		")->value();
-
-		// There has to be at least one that allows access.
-		return ($groupCount + $roleCount > 0);
+	public static function on_db_reset() {
+		self::$_cache_accessible_sites = array();
+		self::$_cache_subsite_for_domain = array();
 	}
-
-	/**
-	 * Duplicate this subsite
-	 */
-	function duplicate($doWrite = true) {
-		$duplicate = parent::duplicate($doWrite);
-
-		$oldSubsiteID = Session::get('SubsiteID');
-		self::changeSubsite($this->ID);
-
-		/*
-		 * Copy data from this object to the given subsite. Does this using an iterative depth-first search.
-		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
-		 * issues with having to check whether or not the new parents have been added to the site tree
-		 * when a page, etc, is duplicated
-		 */
-		$stack = array(array(0,0));
-		while(count($stack) > 0) {
-			list($sourceParentID, $destParentID) = array_pop($stack);
-			$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
-
-			if($children) {
-				foreach($children as $child) {
-					self::changeSubsite($duplicate->ID); //Change to destination subsite
-					
-					$childClone = $child->duplicateToSubsite($duplicate, false);
-					$childClone->ParentID = $destParentID;
-					$childClone->writeToStage('Stage');
-					$childClone->publish('Stage', 'Live');
-
-					self::changeSubsite($this->ID); //Change Back to this subsite
-
-					array_push($stack, array($child->ID, $childClone->ID));
-				}
-			}
-		}
-
-		self::changeSubsite($oldSubsiteID);
-
-		return $duplicate;
-	}
-
+	
 	/**
 	 * Return all subsites, regardless of permissions (augmented with main site).
 	 *
@@ -689,9 +349,10 @@ JS;
 	 *
 	 * This is used primarily when using subsites in conjunction with StaticPublisher
 	 *
+	 * @param string $file - filepath of the host map to be written
 	 * @return void
 	 */
-	static function writeHostMap($file = null) {
+	public static function writeHostMap($file = null) {
 		if (!self::$write_hostmap) return;
 		
 		if (!$file) $file = Director::baseFolder().'/subsites/host-map.php';
@@ -717,12 +378,133 @@ JS;
 			file_put_contents($file, $data);
 		}
 	}
+	
+	/**
+	 * Checks if a member can be granted certain permissions, regardless of the subsite context.
+	 * Similar logic to {@link Permission::checkMember()}, but only returns TRUE
+	 * if the member is part of a group with the "AccessAllSubsites" flag set.
+	 * If more than one permission is passed to the method, at least one of them must
+	 * be granted for if to return TRUE.
+	 * 
+	 * @todo Allow permission inheritance through group hierarchy.
+	 * 
+	 * @param Member Member to check against. Defaults to currently logged in member
+	 * @param Array Permission code strings. Defaults to "ADMIN".
+	 * @return boolean
+	 */
+	public static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN')) {
+		if(!is_array($permissionCodes))
+			user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// CMS ADMINISTRATION HELPERS
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		if(!$member && $member !== FALSE) $member = Member::currentUser();
 
-	function providePermissions() {
+		if(!$member) return false;
+		
+		if(!in_array("ADMIN", $permissionCodes)) $permissionCodes[] = "ADMIN";
+
+		$SQLa_perm = Convert::raw2sql($permissionCodes);
+		$SQL_perms = join("','", $SQLa_perm);
+		$memberID = (int)$member->ID;
+		
+		// Count this user's groups which can access the main site
+		$groupCount = DB::query("
+			SELECT COUNT(\"Permission\".\"ID\")
+			FROM \"Permission\"
+			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
+			INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
+			WHERE \"Permission\".\"Code\" IN ('$SQL_perms')
+			AND \"MemberID\" = {$memberID}
+		")->value();
+
+		// Count this user's groups which have a role that can access the main site
+		$roleCount = DB::query("
+			SELECT COUNT(\"PermissionRoleCode\".\"ID\")
+			FROM \"Group\"
+			INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Group\".\"ID\"
+			INNER JOIN \"Group_Roles\" ON \"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"
+			INNER JOIN \"PermissionRole\" ON \"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"
+			INNER JOIN \"PermissionRoleCode\" ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
+			WHERE \"PermissionRoleCode\".\"Code\" IN ('$SQL_perms')
+			AND \"Group\".\"AccessAllSubsites\" = 1
+			AND \"MemberID\" = {$memberID}
+		")->value();
+
+		// There has to be at least one that allows access.
+		return ($groupCount + $roleCount > 0);
+	}
+	
+	/**
+	 *
+	 * @var array
+	 */
+	private static $db = array(
+		'Title' => 'Varchar(255)',
+		'RedirectURL' => 'Varchar(255)',
+		'DefaultSite' => 'Boolean',
+		'Theme' => 'Varchar',
+		'Language' => 'Varchar(6)',
+
+		// Used to hide unfinished/private subsites from public view.
+		// If unset, will default to true
+		'IsPublic' => 'Boolean',
+		
+		// Comma-separated list of disallowed page types
+		'PageTypeBlacklist' => 'Text',
+	);
+
+	/**
+	 *
+	 * @var array
+	 */
+	private static $has_many = array(
+		'Domains' => 'SubsiteDomain',
+	);
+	
+	/**
+	 *
+	 * @var array
+	 */
+	private static $belongs_many_many = array(
+		"Groups" => "Group",
+	);
+
+	/**
+	 *
+	 * @var array
+	 */
+	private static $defaults = array(
+		'IsPublic' => 1
+	);
+
+	/**
+	 *
+	 * @var array
+	 */
+	private static $searchable_fields = array(
+		'Title',
+		'Domains.Domain',
+		'IsPublic',	
+	);
+	
+	/**
+	 *
+	 * @var string
+	 */
+	private static $default_sort = "\"Title\" ASC";
+	
+	/**
+	 * @todo Possible security issue, don't grant edit permissions to everybody.
+	 * @return boolean
+	 */
+	public function canEdit($member = false) {
+		return true;
+	}
+	
+	/**
+	 * 
+	 * @return array
+	 */
+	public function providePermissions() {
 		return array(
 			'SUBSITE_ASSETS_CREATE_SUBSITE' => array(
 				'name' => _t('Subsite.MANAGE_ASSETS', 'Manage assets for subsites'),
@@ -732,25 +514,310 @@ JS;
 			)
 		);
 	}
+	
+	/**
+	 * Show the configuration fields for each subsite
+	 * 
+	 * @return FieldList
+	 */
+	public function getCMSFields() {
+		if($this->ID!=0) {
+			$domainTable = new GridField(
+				"Domains", 
+				_t('Subsite.DomainsListTitle',"Domains"), 
+				$this->Domains(), 
+				GridFieldConfig_RecordEditor::create(10)
+			);
+		}else {
+			$domainTable = new LiteralField(
+				'Domains', 
+				'<p>'._t('Subsite.DOMAINSAVEFIRST', 'You can only add domains after saving for the first time').'</p>'
+			);
+		}
+			
+		$languageSelector = new DropdownField(
+			'Language', 
+			$this->fieldLabel('Language'),
+			i18n::get_common_locales()
+		);
+		
+		$pageTypeMap = array();
+		$pageTypes = SiteTree::page_type_classes();
+		foreach($pageTypes as $pageType) {
+			$pageTypeMap[$pageType] = singleton($pageType)->i18n_singular_name();
+		}
+		asort($pageTypeMap);
 
-	static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "") {
-		$result = DataObject::get($className, $filter, $sort, $join, $limit);
-		$result = $result->setDataQueryParam('Subsite.filter', false);
+		$fields = new FieldList(
+			$subsiteTabs = new TabSet('Root',
+				new Tab(
+					'Configuration',
+					_t('Subsite.TabTitleConfig', 'Configuration'),
+					new HeaderField($this->getClassName() . ' configuration', 2),
+					new TextField('Title', $this->fieldLabel('Title'), $this->Title),
+					
+					new HeaderField(
+						_t('Subsite.DomainsHeadline',"Domains for this subsite")
+					),
+					$domainTable,
+					$languageSelector,
+					// new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
+					new CheckboxField('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
+					new CheckboxField('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
+
+					new DropdownField('Theme',$this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme),
+					
+					
+					new LiteralField(
+						'PageTypeBlacklistToggle',
+						sprintf(
+							'<div class="field"><a href="#" id="PageTypeBlacklistToggle">%s</a></div>',
+							_t('Subsite.PageTypeBlacklistField', 'Disallow page types?')
+						)
+					),
+					new CheckboxSetField(
+						'PageTypeBlacklist', 
+						false,
+						$pageTypeMap
+					)
+				)
+			),
+			new HiddenField('ID', '', $this->ID),
+			new HiddenField('IsSubsite', '', 1)
+		);
+
+		$subsiteTabs->addExtraClass('subsite-model');
+
+		$this->extend('updateCMSFields', $fields);
+		return $fields;
+	}
+	
+	/**
+	 * 
+	 * @param boolean $includerelations
+	 * @return array
+	 */
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		$labels['Title'] = _t('Subsites.TitleFieldLabel', 'Subsite Name');
+		$labels['RedirectURL'] = _t('Subsites.RedirectURLFieldLabel', 'Redirect URL');
+		$labels['DefaultSite'] = _t('Subsites.DefaultSiteFieldLabel', 'Default site');
+		$labels['Theme'] = _t('Subsites.ThemeFieldLabel', 'Theme');
+		$labels['Language'] = _t('Subsites.LanguageFieldLabel', 'Language');
+		$labels['IsPublic'] = _t('Subsites.IsPublicFieldLabel', 'Enable public access');
+		$labels['PageTypeBlacklist'] = _t('Subsites.PageTypeBlacklistFieldLabel', 'Page Type Blacklist');
+		$labels['Domains.Domain'] = _t('Subsites.DomainFieldLabel', 'Domain');
+		$labels['PrimaryDomain'] = _t('Subsites.PrimaryDomainFieldLabel', 'Primary Domain');
+
+		return $labels;
+	}
+
+	/**
+	 * 
+	 * @return array
+	 */
+	public function summaryFields() {
+		return array(
+			'Title' => $this->fieldLabel('Title'),
+			'PrimaryDomain' => $this->fieldLabel('PrimaryDomain'),
+			'IsPublic' => _t('Subsite.IsPublicHeaderField','Active subsite'),
+		);
+	}
+	
+	/**
+	 * Return the themes that can be used with this subsite, as an array of themecode => description
+	 * 
+	 * @return array
+	 */
+	public function allowedThemes() {
+		if($themes = $this->stat('allowed_themes')) {
+			return ArrayLib::valuekey($themes);
+		} else {
+			$themes = array();
+			if(is_dir('../themes/')) {
+				foreach(scandir('../themes/') as $theme) {
+					if($theme[0] == '.') continue;
+					$theme = strtok($theme,'_');
+					$themes[$theme] = $theme;
+				}
+				ksort($themes);
+			}
+			return $themes;
+		}
+	}
+
+	/**
+	 * @return string Current locale of the subsite
+	 */
+	public function getLanguage() {
+		if($this->getField('Language')) {
+			return $this->getField('Language');
+		} else {
+			return i18n::get_locale();
+		}
+	}
+
+	/**
+	 * 
+	 * @return ValidationResult
+	 */
+	public function validate() {
+		$result = parent::validate();
+		if(!$this->Title) {
+			$result->error(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
+		}
 		return $result;
 	}
 
 	/**
-	 * Disable the sub-site filtering; queries will select from all subsites
+	 * Whenever a Subsite is written, rewrite the hostmap
+	 *
+	 * @return void
 	 */
-	static function disable_subsite_filter($disabled = true) {
-		self::$disable_subsite_filter = $disabled;
+	public function onAfterWrite() {
+		Subsite::writeHostMap();
+		parent::onAfterWrite();
 	}
 	
 	/**
-	 * Flush caches on database reset
+	 * Return the primary domain of this site. Tries to "normalize" the domain name,
+	 * by replacing potential wildcards.
+	 * 
+	 * @return string The full domain name of this subsite (without protocol prefix)
 	 */
-	static function on_db_reset() {
-		self::$_cache_accessible_sites = array();
-		self::$_cache_subsite_for_domain = array();
+	public function domain() {
+		if($this->ID) {
+			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
+			if($domains && $domains->Count()>0) {
+				$domain = $domains->First()->Domain;
+				// If there are wildcards in the primary domain (not recommended), make some
+				// educated guesses about what to replace them with:
+				$domain = preg_replace('/\.\*$/',".$_SERVER[HTTP_HOST]", $domain);
+				// Default to "subsite." prefix for first wildcard
+				// TODO Whats the significance of "subsite" in this context?!
+				$domain = preg_replace('/^\*\./',"subsite.", $domain);
+				// *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'
+				$domain = str_replace('.www.','.', $domain);
+				
+				return $domain;
+			}
+			
+		// SubsiteID = 0 is often used to refer to the main site, just return $_SERVER['HTTP_HOST']
+		} else {
+			return $_SERVER['HTTP_HOST'];
+		}
+	}
+	
+	/**
+	 * 
+	 * @return string - The full domain name of this subsite (without protocol prefix)
+	 */
+	public function getPrimaryDomain() {
+		return $this->domain();
+	}
+
+	/**
+	 * 
+	 * @return string 
+	 */
+	public function absoluteBaseURL() {
+		return "http://" . $this->domain() . Director::baseURL();
+	}
+
+	/**
+	 * @todo getClassName is redundant, already stored as a database field?
+	 */
+	public function getClassName() {
+		return $this->class;
+	}
+
+	/**
+	 * Javascript admin action to duplicate this subsite
+	 * 
+	 * @return string - javascript 
+	 */
+	public function adminDuplicate() {
+		$newItem = $this->duplicate();
+		$message = _t(
+			'Subsite.CopyMessage',
+			'Created a copy of {title}',
+			array('title' => Convert::raw2js($this->Title))
+		);
+		
+		return <<<JS
+			statusMessage($message, 'good');
+			$('Form_EditForm').loadURLFromServer('admin/subsites/show/$newItem->ID');
+JS;
+	}
+
+	/**
+	 * Make this subsite the current one
+	 */
+	public function activate() {
+		Subsite::changeSubsite($this);
+	}
+
+	/**
+	 * 
+	 * @param array $permissionCodes
+	 * @return DataList
+	 */
+	public function getMembersByPermission($permissionCodes = array('ADMIN')){
+		if(!is_array($permissionCodes))
+			user_error('Permissions must be passed to Subsite::getMembersByPermission as an array', E_USER_ERROR);
+		$SQL_permissionCodes = Convert::raw2sql($permissionCodes);
+
+		$SQL_permissionCodes = join("','", $SQL_permissionCodes);
+
+		return DataObject::get(
+			'Member',
+			"\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
+			'',
+			"LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
+			LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
+			LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
+		);
+	
+	}
+
+	/**
+	 * Duplicate this subsite
+	 */
+	public function duplicate($doWrite = true) {
+		$duplicate = parent::duplicate($doWrite);
+
+		$oldSubsiteID = Session::get('SubsiteID');
+		self::changeSubsite($this->ID);
+
+		/*
+		 * Copy data from this object to the given subsite. Does this using an iterative depth-first search.
+		 * This will make sure that the new parents on the new subsite are correct, and there are no funny
+		 * issues with having to check whether or not the new parents have been added to the site tree
+		 * when a page, etc, is duplicated
+		 */
+		$stack = array(array(0,0));
+		while(count($stack) > 0) {
+			list($sourceParentID, $destParentID) = array_pop($stack);
+			$children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
+
+			if($children) {
+				foreach($children as $child) {
+					self::changeSubsite($duplicate->ID); //Change to destination subsite
+					
+					$childClone = $child->duplicateToSubsite($duplicate, false);
+					$childClone->ParentID = $destParentID;
+					$childClone->writeToStage('Stage');
+					$childClone->publish('Stage', 'Live');
+
+					self::changeSubsite($this->ID); //Change Back to this subsite
+
+					array_push($stack, array($child->ID, $childClone->ID));
+				}
+			}
+		}
+
+		self::changeSubsite($oldSubsiteID);
+
+		return $duplicate;
 	}
 }
