@@ -123,11 +123,15 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * @param int|Subsite $subsite Either the ID of the subsite, or the subsite object itself
 	 */
 	public static function changeSubsite($subsite) {
+		// Session subsite change only meaningful if the session is active.
+		// Otherwise we risk setting it to wrong value, e.g. if we rely on currentSubsiteID.
+		if (!Subsite::$use_session_subsiteid) return;
+
 		if(is_object($subsite)) $subsiteID = $subsite->ID;
 		else $subsiteID = $subsite;
-		
+
 		Session::set('SubsiteID', (int)$subsiteID);
-		
+
 		// Set locale
 		if (is_object($subsite) && $subsite->Language != '') {
 			$locale = i18n::get_locale_from_lang($subsite->Language);
@@ -135,8 +139,8 @@ class Subsite extends DataObject implements PermissionProvider {
 				i18n::set_locale($locale);
 			}
 		}
-		
-		Permission::flush_permission_cache(); 
+
+		Permission::flush_permission_cache();
 	}
 	
 	/**
