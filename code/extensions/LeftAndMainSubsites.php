@@ -160,19 +160,44 @@ class LeftAndMainSubsites extends Extension {
 	}
 
 	/**
-	 * Do some pre-flight checks if a subsite switch is needed.
-	 * We redirect the user to something accessible if the current section/subsite is forbidden.
+	 * Check if the current controller is accessible for this user on this subsite.
+	 */
+	function canAccess() {
+		// Admin can access everything, no point in checking.
+		$member = Member::currentUser();
+		if($member && Permission::checkMember($member, 'ADMIN')) return true;
+
+		// Check if we have access to current section on the current subsite.
+		$accessibleSites = $this->owner->sectionSites($member);
+		if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
+			// Current section can be accessed on the current site, all good.
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Prevent accessing disallowed resources. This happens after onBeforeInit has executed,
+	 * so all redirections should've already taken place.
+	 */
+	public function alternateAccessCheck() {
+		return $this->owner->canAccess();
+	}
+
+	/**
+	 * Redirect the user to something accessible if the current section/subsite is forbidden.
+	 *
+	 * This is done via onBeforeInit as it needs to be done before the LeftAndMain::init has a
+	 * chance to forbids access via alternateAccessCheck.
+	 *
+	 * If we need to change the subsite we force the redirection to /admin/ so the frontend is
+	 * fully re-synchronised with the internal session. This is better than risking some panels
+	 * showing data from another subsite.
 	 */
 	public function onBeforeInit() {
 		// We are accessing the CMS, so we need to let Subsites know we will be using the session.
 		Subsite::$use_session_subsiteid = true;
-
-		// Do not attempt to redirect for AJAX calls. The proper security checks are done on specific objects
-		// (by Subsite augmentations of Member and Group). Also the only good time to change the subsite in the CMS
-		// is upon initial load - otherwise we risk the internal state becoming mismatched with the interface.
-		if ($this->owner->request->isAjax()) {
-			return;
-		}
 
 		// FIRST, check if we need to change subsites due to the URL.
 
@@ -182,7 +207,11 @@ class LeftAndMainSubsites extends Extension {
 		if($record && isset($record->SubsiteID) && is_numeric($record->SubsiteID)) {
 
 			if ($this->shouldChangeSubsite($this->owner->class, $record->SubsiteID, Subsite::currentSubsiteID())) {
+				// Update current subsite in session
 				Subsite::changeSubsite($record->SubsiteID);
+
+				//Redirect to clear the current page
+				return $this->owner->redirect('admin/');
 			}
 
 		}
@@ -203,47 +232,41 @@ class LeftAndMainSubsites extends Extension {
 
 		// SECOND, check if we need to change subsites due to lack of permissions.
 
-		// If we can view current URL there is nothing to do.
-		if ($this->owner->canView()) {
-			return;
-		}
+		if (!$this->owner->canAccess()) {
 
-		// Admin can access everything, no point in checking.
-		$member = Member::currentUser();
-		if($member && Permission::checkMember($member, 'ADMIN')) return;
+			$member = Member::currentUser();
 
-		// Check if we have access to current section on the current subsite.
-		$accessibleSites = $this->owner->sectionSites($member);
-		if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
-			// Current section can be accessed on the current site, all good.
-			return;
-		}
+			// Current section is not accessible, try at least to stick to the same subsite.
+			$menu = CMSMenu::get_menu_items();
+			foreach($menu as $candidate) {
+				if($candidate->controller && $candidate->controller!=$this->owner->class) {
 
-		// If the current section is not accessible, try at least to stick to the same subsite.
-		$menu = CMSMenu::get_menu_items();
-		foreach($menu as $candidate) {
-			if($candidate->controller && $candidate->controller!=$this->owner->class) {
-
-				$accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
-				if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
-					// Section is accessible, redirect there.
-					$this->owner->redirect(singleton($candidate->controller)->Link());
-					return;
+					$accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
+					if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
+						// Section is accessible, redirect there.
+						return $this->owner->redirect(singleton($candidate->controller)->Link());
+					}
 				}
 			}
-		}
 
-		// Finally, if no section is available, move to any other permitted subsite.
-		foreach($menu as $candidate) {
-			if($candidate->controller) {
-				$accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
-				if ($accessibleSites->count()) {
-					Subsite::changeSubsite($accessibleSites->First()->ID);
-					$this->owner->redirect(singleton($candidate->controller)->Link());
-					return;
+			// If no section is available, look for other accessible subsites.
+			foreach($menu as $candidate) {
+				if($candidate->controller) {
+					$accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
+					if ($accessibleSites->count()) {
+						Subsite::changeSubsite($accessibleSites->First()->ID);
+						return $this->owner->redirect(singleton($candidate->controller)->Link());
+					}
 				}
 			}
+
+			// We have not found any accessible section or subsite. User should be denied access.
+			return Security::permissionFailure($this->owner);
+
 		}
+
+		// Current site is accessible. Allow through.
+		return;
 	}
 
 	function augmentNewSiteTreeItem(&$item) {

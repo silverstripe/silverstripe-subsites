@@ -16,6 +16,13 @@ class SubsiteXHRController extends LeftAndMain {
 		return false;
 	}
 
+	/**
+	 * Similar as above, but for the LeftAndMainSubsites - allow access if user allowed into the CMS at all.
+	 */
+	public function canAccess() {
+		if (Subsite::all_accessible_sites()->count()>0) return true;
+	}
+
 	public function getResponseNegotiator() {
 		$negotiator = parent::getResponseNegotiator();
 		$self = $this;
