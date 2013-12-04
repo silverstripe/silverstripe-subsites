@@ -69,17 +69,17 @@ class SubsiteAdminFunctionalTest extends FunctionalTest {
 		Subsite::changeSubsite(0);
 		$this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
 		$this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading an object switches the subsite');
-		$this->assertRegExp("#^admin/pages/edit/show/$subsite1Home->ID.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
+		$this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
 
 		Config::inst()->update('CMSPageEditController', 'treats_subsite_0_as_global', true);
 		Subsite::changeSubsite(0);
 		$this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
 		$this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global');
-		$this->assertRegExp("#^admin/pages/edit/show/$subsite1Home->ID.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
+		$this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
 
 		$this->getAndFollowAll("admin/pages/edit/show/$mainSubsitePage->ID");
 		$this->assertNotEquals(Subsite::currentSubsiteID(), $mainSubsitePage->SubsiteID, 'Loading a main-site object does not change the subsite if configured with treats_subsite_0_as_global');
-		$this->assertRegExp("#^admin/pages/edit/show/$mainSubsitePage->ID.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
+		$this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
 
 		Config::inst()->unnest();
 	}
