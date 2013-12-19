@@ -106,8 +106,27 @@
 		});
 		
 		$('.cms-edit-form').entwine({
+			/**
+			 * TODO: Fix with Entwine API extension. See https://github.com/silverstripe/silverstripe-subsites/pull/125
+			 */
 			getChangeTrackerOptions: function() {
-				this.ChangeTrackerOptions.ignoreFieldSelector+=', input[name=IsSubsite]';
+				// Figure out if we're still returning the default value
+				var isDefault = (this.entwineData('ChangeTrackerOptions') === undefined);
+				// Get the current options
+				var opts = this._super();
+
+				if (isDefault) {
+					// If it is the default then...
+					// clone the object (so we don't modify the original),
+					var opts = $.extend({}, opts);
+					// modify it,
+					opts.ignoreFieldSelector +=', input[name=IsSubsite]';
+					// then set the clone as the value on this element
+					// (so next call to this method gets this same clone)
+					this.setChangeTrackerOptions(opts);
+				}
+
+				return opts;
 			}
 		});
 		
