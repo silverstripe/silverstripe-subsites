@@ -113,7 +113,7 @@ class FileSubsites extends DataExtension {
 			return true;
 		} else {
 			Session::set('SubsiteID', $this->owner->SubsiteID);
-			$access = Permission::check('CMS_ACCESS_AssetAdmin');
+			$access = Permission::check(array('CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain'));
 			Session::set('SubsiteID', $subsiteID);
 
 			return $access;
