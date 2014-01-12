@@ -165,10 +165,16 @@ class LeftAndMainSubsites extends Extension {
 	function canAccess() {
 		// Admin can access everything, no point in checking.
 		$member = Member::currentUser();
-		if($member && Permission::checkMember($member, 'ADMIN')) return true;
+		if($member &&
+		(
+			Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
+			Permission::checkMember($member, 'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections' in SecurityAdmin
+		)) {
+			return true;
+		}
 
 		// Check if we have access to current section on the current subsite.
-		$accessibleSites = $this->owner->sectionSites($member);
+		$accessibleSites = $this->owner->sectionSites(true, "Main site", $member);
 		if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
 			// Current section can be accessed on the current site, all good.
 			return true;
