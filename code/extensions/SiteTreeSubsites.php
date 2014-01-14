@@ -127,13 +127,25 @@ class SiteTreeSubsites extends DataExtension {
 	 * @return boolean
 	 */
 	function canEdit($member = null) {
+
 		if(!$member) $member = Member::currentUser();
 		
 		// Find the sites that this user has access to
 		$goodSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain',true,'all',$member)->column('ID');
-		
+
+		if (!is_null($this->owner->SubsiteID)) {
+			$subsiteID = $this->owner->SubsiteID;
+		} else {
+			// The relationships might not be available during the record creation when using a GridField.
+			// In this case the related objects will have empty fields, and SubsiteID will not be available.
+			//
+			// We do the second best: fetch the likely SubsiteID from the session. The drawback is this might
+			// make it possible to force relations to point to other (forbidden) subsites.
+			$subsiteID = Subsite::currentSubsiteID();
+		}
+
 		// Return true if they have access to this object's site
-		if(!(in_array(0, $goodSites) || in_array($this->owner->SubsiteID, $goodSites))) return false;
+		if(!(in_array(0, $goodSites) || in_array($subsiteID, $goodSites))) return false;
 	}
 	
 	/**
