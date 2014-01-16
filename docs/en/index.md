@@ -13,13 +13,16 @@ A useful way to think of its use is where you have a business with a global head
  * Create translations of subsite pages
  * Schedule the publishing of subsite pages
  * The database is shared between subsites (meaning duplicating content is easy)
+ * When recovering from a disaster it's much easier to bring up a new copy of a single environment with 100 subsites than it is to bring up 100 environments.
 
 ## Limitations:
  * Each subsite domain name has to be set up on the server first, and DNS records need to be updated as appropriate.
  * A subsite cannot use a different codebase as the main site, they are intrinsically tied
    * However, you can remove page types from a subsite when creating the subsite - [see the setup documentation for further details](set_up.md)
  * The only code a developer can edit between subsites is the theme
- * All subsites run in the same process space and data set. Therefore if an outage affects one subsite it will affect all subsites, and if bad code or hardware corrupts one subsite's data, it's very likely that it has corrupted all subsite data. It is not currently possible to backup or restore the data from a single subsite. On the other hand, when recovering from a disaster it's much easier to bring up a new copy of a single environment with 100 subsites than it is to bring up 100 environments. This principle applies to application error, security vulnerabilities, or high levels of traffic - this will be experienced across all subsites.
+ * All subsites run in the same process space and data set. Therefore if an outage affects one subsite it will affect all subsites, and if bad code or hardware corrupts one subsite's data, it's very likely that it has corrupted all subsite data. 
+ 	* This principle applies to application error, security vulnerabilities and high levels of traffic
+ * It is not currently possible to backup or restore the data from a single subsite. 
  * It is awkward (but not impossible) to have separate teams of developers working on different subsites - primarily because of the level of collaboration needed. It is more suited to the same group of developers being responsible for all of the subsites.
 
 If more isolation of code, security, or performance is needed, then consider running multiple separate installations (e.g. on separate servers).
