@@ -4,7 +4,52 @@
 
 ## Introduction
 
-The subsites module allows multiple websites to run from a single installation of SilverStripe, and share users, content, and assets between them. A useful way to think of its use is where you have a business with a global headquarters and four branches in various countries. The subsites module allows the five offices to use a single SilverStripe installation, and have information from the headquarters flow down into the branches. The branches can have separate users/admins, and information that is individual. The website templates can also be different.
+The subsites module provides a convenient way of running multiple websites from a single installation of SilverStripe,
+sharing users, content, and assets between them - the sites will be managed from a single CMS.
+
+A useful way to think of its use is where you have a business with a global headquarters and four branches in various
+countries. The subsites module allows the five offices to use a single SilverStripe installation, and have information
+from the headquarters flow down into the branches. The branches can hold information that is individual and the website
+templates can also be different.
+
+<div class="warning" markdown='1'>
+All separation of content achieved with this module should be viewed as cosmetic and not appropriate for
+security-critical applications. The module gives some control over access rights especially in the "Pages" and "Files"
+area of the CMS, but other sections' separation is much weaker: for example giving someone any of the "Roles and access
+permissions" will imply that the person will likely be able to escalate his/her privileges to the global admin role.
+</div>
+
+For user documentation please see:
+
+ 1. [Setting up subsites](docs/en/set_up.md)
+ 1. [Working with subsites](docs/en/working_with.md)
+
+## Features & limitations
+
+### Features:
+
+ * Each subsite appears as a standalone website from a users prospective
+ * No need to duplicate existing code as all subsites use the same codebase as the main site
+ * You can set individual permissions on each subsite domain name
+ * Ability to copy a page and its content from the main site into a subsite
+ * Create translations of subsite pages
+ * Schedule the publishing of subsite pages
+ * The database is shared between subsites (meaning duplicating content is easy)
+ * When recovering from a disaster it's much easier to bring up a new copy of a single environment with 100 subsites than it is to bring up 100 environments.
+
+### Limitations:
+
+ * Each subsite domain name has to be set up on the server first, and DNS records need to be updated as appropriate.
+ * A subsite cannot use a different codebase as the main site, they are intrinsically tied
+ 	* However, you can remove page types from a subsite when creating the subsite - [see the setup documentation for further details](set_up.md)
+ * The only code a developer can edit between subsites is the theme
+ * The separation between subsites in the CMS needs to be seen as cosmetic, and mostly applicable to the "Pages" and "Files" sections of the CMS.
+ * All subsites run in the same process space and data set. Therefore if an outage affects one subsite it will affect all subsites, and if bad code or hardware corrupts one subsite's data, it's very likely that it has corrupted all subsite data. 
+ 	* This principle applies to application error, security vulnerabilities and high levels of traffic
+ * It is not currently possible to backup or restore the data from a single subsite. 
+ * It is awkward (but not impossible) to have separate teams of developers working on different subsites - primarily because of the level of collaboration needed. It is more suited to the same group of developers being responsible for all of the subsites.
+
+If more isolation of code, security, or performance is needed, then consider running multiple separate installations (e.g. on separate servers).
 
 ## Requirements
 
@@ -28,8 +73,17 @@ The module tries to provide sensible defaults, in which it regards `example.com`
 
 ### Permissions ###
 
-Groups can be associated with one or more subsites, in which case the granted permissions
-only apply to this subsite. Even the `ADMIN` permission only grants super-user rights on certain subsites by default. If you want to create a super-user regardless of subsites association, please use the `Group.AccessAllSubsites` property ("Give this group access to all subsites"), together with the `ADMIN` permission.
+Groups can be associated with one or more subsites, in which case the granted page- and asset-related permissions
+only apply to this subsite.
+
+Note that creating a Subsite-specific group, and giving it permissions unrelated to content editing and asset management
+will result in members of this group being able to escalate their privileges. An example here is giving that group
+"Full administrative rights" or some of the "Roles and access permissions", in which case it is possible for the member
+of that group to simply add himself to the global "Administrators" group or change his own group to having access to all
+sites.
+
+The subsites module should be viewed as providing a convenience of visual separation for the sites on the interface
+level, rather than a fully tight security model for managing many sites on the same CMS (it is still the same CMS).
 
 ### Access created domains
 
@@ -135,3 +189,4 @@ for all subdomains:
 ## Screenshots
 
 ![](docs/en/_images/subsites-module-adminscreenshot.png)
+
