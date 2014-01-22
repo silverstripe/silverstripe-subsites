@@ -5,13 +5,33 @@ zh:
     MENUTITLE: 子网站 XHR 控制器
   ASSETADMIN:
     SUBSITENOTICE: '主网站上创建的文件夹和文件可以被所有子网站访问。'
+  FileSubsites:
+    AllSitesDropdownOpt: '所有网站'
+    SubsiteFieldLabel: 子网站
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: '从模板中取出新加入'
+  GroupSubsites:
+    ACCESSALL: '所有子网站'
+    ACCESSONLY: '仅这些子网站'
+    ACCESSRADIOTITLE: '准许该群进入'
+    GlobalGroup: '全局小组'
+    MANAGE_SUBSITES: '管理小组的子网站'
+    MANAGE_SUBSITES_HELP: '能够将权限限制在一个小组、一个或多个子网站。'
+    SECURITYTABTITLE: 多个子网站
+  LeftAndMainSubsites:
+    Saved: '已保存，请更新相关的页面。'
   LeftAndMain_Menu:
     Hello: 您好
     LOGOUT: '退出'
   Permissions:
     PERMISSIONS_CATEGORY: '角色和访问权限'
+  SiteTree:
+    PLURALNAME: 页面
+    SINGULARNAME: 页面
+  SiteTreeSubsites:
+    CopyAction: 复制
+    CopyToSubsite: '将页面复制到子网站'
   Subsite:
-    ButtonLabelCopy: '创建副本'
     COPYSTRUCTURE: '复制结构来自：'
     CopyMessage: '已创建一个 {title} 的副本'
     CustomExtraMeta: '自定义 Meta 标签'
@@ -32,30 +52,6 @@ zh:
     SiteConfigTitle: '您的网站名称'
     TabTitleConfig: 配置
     ValidateTitle: '请添加一个“标题”'
-  VirtualPage:
-    CHOOSE: '选择一个页面以链接到'
-    EDITCONTENT: '点击这里来编辑内容'
-  FileSubsites:
-    AllSitesDropdownOpt: '所有网站'
-    SubsiteFieldLabel: 子网站
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: '从模板中取出新加入'
-  GroupSubsites:
-    ACCESSALL: '所有子网站'
-    ACCESSONLY: '仅这些子网站'
-    ACCESSRADIOTITLE: '准许该群进入'
-    GlobalGroup: '全局小组'
-    MANAGE_SUBSITES: '管理小组的子网站'
-    MANAGE_SUBSITES_HELP: '能够将权限限制在一个小组、一个或多个子网站。'
-    SECURITYTABTITLE: 多个子网站
-  LeftAndMainSubsites:
-    Saved: '已保存，请更新相关的页面。'
-  SiteTree:
-    PLURALNAME: 页面
-    SINGULARNAME: 页面
-  SiteTreeSubsites:
-    CopyAction: 复制
-    CopyToSubsite: '将页面复制到子网站'
   SubsiteDomain:
     DOMAIN: 域名
     IS_PRIMARY: '是主域名'
@@ -79,3 +75,6 @@ zh:
     PLURALNAME: '基本页面'
     SINGULARNAME: '子网站虚拟页面'
     SubsiteField: 子网站
+  VirtualPage:
+    CHOOSE: '选择一个页面以链接到'
+    EDITCONTENT: '点击这里来编辑内容'

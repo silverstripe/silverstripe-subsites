@@ -1,17 +1,45 @@
 de:
   SubsiteAdmin:
     MENUTITLE: Subsites
+  FileSubsites:
+    AllSitesDropdownOpt: 'Alle Subseiten'
+    SubsiteFieldLabel: Subseite
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Neu hinzufügen von Template'
   GroupSubsites:
     ACCESSALL: 'Alle Subsites'
     ACCESSONLY: 'Nur diese Subsites'
     ACCESSRADIOTITLE: 'Dieser Gruppe Zugriff geben auf'
+    GlobalGroup: 'globale Gruppe'
+    MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
     SECURITYTABTITLE: Subsites
+  LeftAndMain_Menu:
+    Hello: Hallo
+    LOGOUT: 'Abmelden'
+  SiteTree:
+    PLURALNAME: Seiten
+    SINGULARNAME: Seite
+  SiteTreeSubsites:
+    CopyAction: Kopieren
+    CopyToSubsite: 'Seite auf Subseite Kopieren'
+  Subsite:
+    CustomMetaDescription: Beschreibung
+    CustomMetaKeywords: Schlüsselwörter
+    CustomMetaTitle: Titel
+    TabTitleConfig: Einstellungen
+    ValidateTitle: 'Bitte geben Sie einen Titel an'
   SubsiteDomain:
     DOMAIN: Domain
     IS_PRIMARY: 'Ist primäre Domain'
     PLURALNAME: 'Subsite Domains'
     SINGULARNAME: 'Subsite Domain'
+  Subsites:
+    DomainFieldLabel: Domäne
+    LanguageFieldLabel: Sprache
+    MainSiteTitle: 'Hauptsite'
+    RedirectURLFieldLabel: 'Weierleitungs-URL'
+    ThemeFieldLabel: Theme
   SubsitesVirtualPage:
     SINGULARNAME: 'Subsites Virtuelle Seite'
+  VirtualPage:
+    CHOOSE: 'Verknüpfte Seite auswählen'

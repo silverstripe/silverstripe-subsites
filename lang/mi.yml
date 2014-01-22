@@ -5,13 +5,33 @@ mi:
     MENUTITLE: ManaXHRPaeiti
   ASSETADMIN:
     SUBSITENOTICE: 'Ka taea ngā kōpaki me ngā kōnae kua hangaia i te pae matua te uru mā ngā pae iti katoa.'
+  FileSubsites:
+    AllSitesDropdownOpt: 'Ngā pae katoa'
+    SubsiteFieldLabel: Pae iti
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Tāpiri Hōu mai i te Tātauira'
+  GroupSubsites:
+    ACCESSALL: 'Ngā pae iti katoa'
+    ACCESSONLY: 'Ko ēnei pae iti anake'
+    ACCESSRADIOTITLE: 'Tukuna tēnei rōpū kia uru ki'
+    GlobalGroup: 'Rōpū Hurinoa'
+    MANAGE_SUBSITES: 'Whakahaere pae iti mō ngā rōpū'
+    MANAGE_SUBSITES_HELP: 'Te āheinga ki te whakawhāiti whakaaetanga mō tētahi rōpū ki tētahi neke atu rānei o ngā pae iti.'
+    SECURITYTABTITLE: Ngā pae iti
+  LeftAndMainSubsites:
+    Saved: 'Kua tiakina, whakahoutia ngā whārangi pāhono.'
   LeftAndMain_Menu:
     Hello: Tēnā koe
     LOGOUT: 'Takiputa'
   Permissions:
     PERMISSIONS_CATEGORY: 'Ngā tūnga me ngā whakaaetanga uru'
+  SiteTree:
+    PLURALNAME: Ngā Whārangi
+    SINGULARNAME: Whārangi
+  SiteTreeSubsites:
+    CopyAction: Tārua
+    CopyToSubsite: 'Tāruatia te whārangi ki te pae iti'
   Subsite:
-    ButtonLabelCopy: 'Hanga tārua'
     COPYSTRUCTURE: 'Tāurutia te hanganga mai i:'
     CopyMessage: 'I hangaia he tārua o {title}'
     CustomExtraMeta: 'Ngā Tūtohu Meta Ritenga'
@@ -32,30 +52,6 @@ mi:
     SiteConfigTitle: 'Tō Ingoa Pae'
     TabTitleConfig: Whirihoranga
     ValidateTitle: 'Tāurua he "Taitara"'
-  VirtualPage:
-    CHOOSE: 'Kōwhiria he whārangi hei hononga atu'
-    EDITCONTENT: 'Pāwhiri ki konei hei whakatika i ngā ihirangi'
-  FileSubsites:
-    AllSitesDropdownOpt: 'Ngā pae katoa'
-    SubsiteFieldLabel: Pae iti
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Tāpiri Hōu mai i te Tātauira'
-  GroupSubsites:
-    ACCESSALL: 'Ngā pae iti katoa'
-    ACCESSONLY: 'Ko ēnei pae iti anake'
-    ACCESSRADIOTITLE: 'Tukuna tēnei rōpū kia uru ki'
-    GlobalGroup: 'Rōpū Hurinoa'
-    MANAGE_SUBSITES: 'Whakahaere pae iti mō ngā rōpū'
-    MANAGE_SUBSITES_HELP: 'Te āheinga ki te whakawhāiti whakaaetanga mō tētahi rōpū ki tētahi neke atu rānei o ngā pae iti.'
-    SECURITYTABTITLE: Ngā pae iti
-  LeftAndMainSubsites:
-    Saved: 'Kua tiakina, whakahoutia ngā whārangi pāhono.'
-  SiteTree:
-    PLURALNAME: Ngā Whārangi
-    SINGULARNAME: Whārangi
-  SiteTreeSubsites:
-    CopyAction: Tārua
-    CopyToSubsite: 'Tāruatia te whārangi ki te pae iti'
   SubsiteDomain:
     DOMAIN: Rohe
     IS_PRIMARY: 'Ko Te Rohe Matua'
@@ -79,3 +75,6 @@ mi:
     PLURALNAME: 'Ngā Whārangi Taketake'
     SINGULARNAME: 'Whārangi Mariko Pae Iti'
     SubsiteField: Pae iti
+  VirtualPage:
+    CHOOSE: 'Kōwhiria he whārangi hei hononga atu'
+    EDITCONTENT: 'Pāwhiri ki konei hei whakatika i ngā ihirangi'
