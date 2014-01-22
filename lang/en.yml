@@ -32,7 +32,6 @@ en:
     CopyAction: Copy
     CopyToSubsite: 'Copy page to subsite'
   Subsite:
-    ButtonLabelCopy: 'Create copy'
     COPYSTRUCTURE: 'Copy structure from:'
     CopyMessage: 'Created a copy of {title}'
     CustomExtraMeta: 'Custom Meta Tags'
