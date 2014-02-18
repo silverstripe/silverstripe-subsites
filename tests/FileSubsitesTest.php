@@ -67,7 +67,7 @@ class FileSubsitesTest extends BaseSubsiteTest {
 			'Test 1',
 			'Test 2',
 			'Test 3'
-		), $file->getCMSFields()->dataFieldByName('SubsiteID')->getSource());
+		), array_values($file->getCMSFields()->dataFieldByName('SubsiteID')->getSource()));
 	}
 	
 }

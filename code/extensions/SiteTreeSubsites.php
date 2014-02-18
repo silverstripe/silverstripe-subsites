@@ -184,9 +184,9 @@ class SiteTreeSubsites extends DataExtension {
 	 */
 	function ReverseRelated() {
 		return DataObject::get('RelatedPageLink', "\"RelatedPageLink\".\"RelatedPageID\" = {$this->owner->ID}
-			AND R2.\"ID\" IS NULL", '')
+			AND \"R2\".\"ID\" IS NULL", '')
 			->innerJoin('SiteTree', "\"SiteTree\".\"ID\" = \"RelatedPageLink\".\"MasterPageID\"")
-			->leftJoin('RelatedPageLink', "R2.\"MasterPageID\" = {$this->owner->ID} AND R2.\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"", 'R2');
+			->leftJoin('RelatedPageLink', "\"R2\".\"MasterPageID\" = {$this->owner->ID} AND \"R2\".\"RelatedPageID\" = \"RelatedPageLink\".\"MasterPageID\"", 'R2');
 	}
 	
 	function NormalRelated() {
