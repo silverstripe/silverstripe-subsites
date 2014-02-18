@@ -10,4 +10,11 @@ class BaseSubsiteTest extends SapphireTest {
 
 		return $obj;
 	}
+
+        /**
+         * Tests the initial state of disable_subsite_filter
+         */
+        function testDisableSubsiteFilter() {
+                $this->assertFalse(Subsite::$disable_subsite_filter);
+        }
 }
