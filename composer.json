@@ -11,7 +11,7 @@
 	],
 	"require":
 	{
-		"silverstripe/framework": "3.*",
-		"silverstripe/cms": "3.*"
+		"silverstripe/framework": "3.0.*",
+		"silverstripe/cms": "3.0.*"
 	}
 }
