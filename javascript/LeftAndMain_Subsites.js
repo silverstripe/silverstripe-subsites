@@ -181,7 +181,7 @@
 				$(doc).find('a').each(function() {
 					var href = $(this).attr('href');
 
-					if (!href.match(/^http:\/\//)) {
+					if (typeof href!=='undefined' && !href.match(/^http:\/\//)) {
 
 						$(this).attr('href', $.path.addSearchParams(href, {
 							'SubsiteID': subsiteId
@@ -192,9 +192,10 @@
 
 				// Inject the SubsiteID as a hidden input into all forms submitting to the local site.
 				$(doc).find('form').each(function() {
+					var action = $(this).attr('action');
 
-					if (!$(this).attr('action').match(/^http:\/\//)) {
-						$(doc).find('form').append('<input type=hidden name="SubsiteID" value="' + subsiteId + '" >');
+					if (typeof action!=='undefined' && !action.match(/^http:\/\//)) {
+						$(this).append('<input type=hidden name="SubsiteID" value="' + subsiteId + '" >');
 					}
 
 				});
