@@ -153,20 +153,26 @@ class Subsite extends DataObject implements PermissionProvider {
 	 * @return int Subsite ID
 	 */
 	public static function getSubsiteIDForDomain($host = null, $checkPermissions = true) {
-		if($host == null) $host = $_SERVER['HTTP_HOST'];
+		if($host == null && isset($_SERVER['HTTP_HOST'])) {
+			$host = $_SERVER['HTTP_HOST'];
+		}
 
-		if(!self::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
+		$matchingDomains = null;
+		$cacheKey = null;
+		if ($host) {
+			if(!self::$strict_subdomain_matching) $host = preg_replace('/^www\./', '', $host);
 
-		$cacheKey = implode('_', array($host, Member::currentUserID(), self::$check_is_public));
-		if(isset(self::$_cache_subsite_for_domain[$cacheKey])) return self::$_cache_subsite_for_domain[$cacheKey];
+			$cacheKey = implode('_', array($host, Member::currentUserID(), self::$check_is_public));
+			if(isset(self::$_cache_subsite_for_domain[$cacheKey])) return self::$_cache_subsite_for_domain[$cacheKey];
 
-		$SQL_host = Convert::raw2sql($host);
-		$matchingDomains = DataObject::get(
-			"SubsiteDomain", 
-			"'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
-			"\"IsPrimary\" DESC"
-		)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
-		
+			$SQL_host = Convert::raw2sql($host);
+			$matchingDomains = DataObject::get(
+				"SubsiteDomain", 
+				"'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
+				"\"IsPrimary\" DESC"
+			)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
+		}
+
 		if($matchingDomains && $matchingDomains->Count()) {
 			$subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
 			$subsiteDomains = array_unique($matchingDomains->column('Domain'));
@@ -177,7 +183,7 @@ class Subsite extends DataObject implements PermissionProvider {
 					implode(',', $subsiteDomains)
 				));
 			}
-			
+
 			$subsiteID = $subsiteIDs[0];
 		} else if($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
 			// Check for a 'default' subsite
@@ -186,9 +192,11 @@ class Subsite extends DataObject implements PermissionProvider {
 			// Default subsite id = 0, the main site
 			$subsiteID = 0;
 		}
-		
-		self::$_cache_subsite_for_domain[$cacheKey] = $subsiteID;
-		
+
+		if ($cacheKey) {
+			self::$_cache_subsite_for_domain[$cacheKey] = $subsiteID;
+		}
+
 		return $subsiteID;
 	}
 
