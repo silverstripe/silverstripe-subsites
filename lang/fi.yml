@@ -1,12 +1,80 @@
 fi:
   SubsiteAdmin:
     MENUTITLE: Alasivustot
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
+  ASSETADMIN:
+    SUBSITENOTICE: 'Kansiot ja tiedostot, jotka on luotu pääsivustolla, ovat käytettävissä kaikissa alisivustoissa.'
+  FileSubsites:
+    AllSitesDropdownOpt: 'Kaikki sivustot'
+    SubsiteFieldLabel: Alisivusto
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Lisää uusi sivupohjasta'
   GroupSubsites:
     ACCESSALL: 'Kaikki alasivustot'
     ACCESSONLY: 'Vain nämä alasivustot'
     ACCESSRADIOTITLE: 'Anna tälle ryhmälle pääsy kohteeseen'
+    GlobalGroup: 'Globaaliryhmä'
+    MANAGE_SUBSITES: 'Hallinnoi ryhmien alisivustoja'
+    MANAGE_SUBSITES_HELP: 'Mahdollisuus rajoittaa ryhmän oikeuksia yhdelle tai useammalle alisivustolle.'
+    SECURITYTABTITLE: Alisivustot
+  LeftAndMainSubsites:
+    Saved: 'Tallennettu, ole hyvä ja päivitä liittyvät sivut.'
+  LeftAndMain_Menu:
+    Hello: Hei
+    LOGOUT: 'Kirjaudu ulos'
+  Permissions:
+    PERMISSIONS_CATEGORY: 'Roolit ja oikeudet'
+  SiteTree:
+    PLURALNAME: Sivut
+    SINGULARNAME: Sivu
+  SiteTreeSubsites:
+    CopyAction: Kopioi
+    CopyToSubsite: 'Kopioi sivu alisivustolle'
+  Subsite:
+    COPYSTRUCTURE: 'Kopioi rakenne kohteesta:'
+    CopyMessage: 'Luotiin kopio lähteestä {title}'
+    CustomExtraMeta: 'Omat Meta-tagit'
+    CustomMetaDescription: Kuvaus
+    CustomMetaKeywords: Avainsanat
+    CustomMetaTitle: Otsikko
+    DOMAINSAVEFIRST: 'Voit lisätä domain-osoitteita vasta tallentamisen jälkeen'
+    DomainsHeadline: 'Tämän alisivuston domainit'
+    DomainsListTitle: Domainit
+    IsPublicHeaderField: 'Aktiivinen alisivusto'
+    MANAGE_ASSETS: 'Hallinnoi alisivustojen tiedostoja'
+    MANAGE_ASSETS_HELP: 'Mahdollisuus valita alisivusto, johon tiedostokansio kuuluu. Vaatii "Pääsy kohteeseen tiedostot & kuvat."'
+    NOTEMPLATE: 'Ei sivupohjaa'
+    PLURALNAME: Alisivustot
+    PageTypeBlacklistField: 'Kiellä sivutyyppien käyttö?'
+    SINGULARNAME: Alisivusto
+    SiteConfigSubtitle: 'Iskulauseesi'
+    SiteConfigTitle: 'Sivuston nimi'
+    TabTitleConfig: Asetukset
+    ValidateTitle: 'Lisää "Otsikko"'
   SubsiteDomain:
     DOMAIN: Domain
     IS_PRIMARY: 'On päädomain'
+    PLURALNAME: 'Alisivuston domain-osoitteet'
+    SINGULARNAME: 'Alisivuston domain-osoite'
+  SubsiteReportWrapper:
+    ReportDropdown: Sivustot
+  Subsites:
+    DefaultSiteFieldLabel: 'Oletussivusto'
+    DomainFieldLabel: Domain
+    IsPublicFieldLabel: 'Aktivoi julkinen pääsy'
+    LanguageFieldLabel: Kieli
+    MainSiteTitle: 'Pääsivusto'
+    PageTypeBlacklistFieldLabel: 'Sivutyyppien mustalista'
+    PrimaryDomainFieldLabel: 'Oletusdomain'
+    RedirectURLFieldLabel: 'Edelleenohjaus URL'
+    ThemeFieldLabel: Teema
+    TitleFieldLabel: 'Alisivuston nimi'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
+    PLURALNAME: 'Alisivustojen virtuaaliset sivut'
+    SINGULARNAME: 'Alisivuston Virtuaalisivu'
+    SubsiteField: Alisivu
+  VirtualPage:
+    CHOOSE: 'Valitse linkitettävä sivu'
+    EDITCONTENT: 'Napsauta tästä muokataksesi sisältöä'

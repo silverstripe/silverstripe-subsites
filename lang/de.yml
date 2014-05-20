@@ -1,6 +1,10 @@
 de:
   SubsiteAdmin:
     MENUTITLE: Subsites
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
+  ASSETADMIN:
+    SUBSITENOTICE: 'Auf Ordner und Dateien der Hauptseite kann von allen Subsites zugegriffen werden.'
   FileSubsites:
     AllSitesDropdownOpt: 'Alle Subseiten'
     SubsiteFieldLabel: Subseite
@@ -12,10 +16,15 @@ de:
     ACCESSRADIOTITLE: 'Dieser Gruppe Zugriff geben auf'
     GlobalGroup: 'globale Gruppe'
     MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
+    MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
     SECURITYTABTITLE: Subsites
+  LeftAndMainSubsites:
+    Saved: 'Gespeichert.'
   LeftAndMain_Menu:
     Hello: Hallo
     LOGOUT: 'Abmelden'
+  Permissions:
+    PERMISSIONS_CATEGORY: 'Rollen und Zugriffsberechtigungen'
   SiteTree:
     PLURALNAME: Seiten
     SINGULARNAME: Seite
@@ -23,9 +32,24 @@ de:
     CopyAction: Kopieren
     CopyToSubsite: 'Seite auf Subseite Kopieren'
   Subsite:
+    COPYSTRUCTURE: 'Struktur kopieren von:'
+    CopyMessage: 'Kopie von {title} erstellt'
+    CustomExtraMeta: 'Benutzerdefinierte Meta-Tags'
     CustomMetaDescription: Beschreibung
     CustomMetaKeywords: Schlüsselwörter
     CustomMetaTitle: Titel
+    DOMAINSAVEFIRST: 'Domains können erst nach dem ersten Speichern hinzugefügt werden'
+    DomainsHeadline: 'Domains für diese Subsite'
+    DomainsListTitle: Domains
+    IsPublicHeaderField: 'Aktive Subsite'
+    MANAGE_ASSETS: 'Dateien für Subsites verwalten'
+    MANAGE_ASSETS_HELP: 'Möglichkeit die Subsite für Dateiordner auszuwählen. Benötigt "Zugang zum Bereich Dateien"'
+    NOTEMPLATE: 'Kein Template'
+    PLURALNAME: Subsites
+    PageTypeBlacklistField: 'Seitentyp verbieten?'
+    SINGULARNAME: Subsite
+    SiteConfigSubtitle: 'Ihr Websiteslogan'
+    SiteConfigTitle: 'Name Ihrer Website'
     TabTitleConfig: Einstellungen
     ValidateTitle: 'Bitte geben Sie einen Titel an'
   SubsiteDomain:
@@ -33,13 +57,24 @@ de:
     IS_PRIMARY: 'Ist primäre Domain'
     PLURALNAME: 'Subsite Domains'
     SINGULARNAME: 'Subsite Domain'
+  SubsiteReportWrapper:
+    ReportDropdown: Seiten
   Subsites:
+    DefaultSiteFieldLabel: 'Standard Seite'
     DomainFieldLabel: Domäne
+    IsPublicFieldLabel: 'Öffentlich zugänglich'
     LanguageFieldLabel: Sprache
     MainSiteTitle: 'Hauptsite'
+    PageTypeBlacklistFieldLabel: 'Ausgeschlossene Seitentypen'
+    PrimaryDomainFieldLabel: 'Primäre Domain'
     RedirectURLFieldLabel: 'Weierleitungs-URL'
     ThemeFieldLabel: Theme
+    TitleFieldLabel: 'Name der Subsite'
   SubsitesVirtualPage:
+    DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subsite an'
+    PLURALNAME: 'Subsites Virtuelle Seiten'
     SINGULARNAME: 'Subsites Virtuelle Seite'
+    SubsiteField: Subsite
   VirtualPage:
     CHOOSE: 'Verknüpfte Seite auswählen'
+    EDITCONTENT: 'Inhalt der verknüpften Seite bearbeiten'
