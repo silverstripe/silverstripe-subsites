@@ -72,7 +72,7 @@ en:
     TitleFieldLabel: 'Subsite Name'
   SubsitesVirtualPage:
     DESCRIPTION: 'Displays the content of a page on another subsite'
-    PLURALNAME: 'Subsites Virtual Pages'
+    PLURALNAME: 'Subsites Virtual Pags'
     SINGULARNAME: 'Subsites Virtual Page'
     SubsiteField: Subsite
   VirtualPage:
