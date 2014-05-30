@@ -295,7 +295,16 @@ class SiteTreeSubsites extends DataExtension {
 		// Need to set the SubsiteID to null incase we've been in the CMS
 		Session::set('SubsiteID', null);
 		$subsite = Subsite::currentSubsite();
-		if($subsite && $subsite->Theme) SSViewer::set_theme(Subsite::currentSubsite()->Theme);
+		if ($subsite) {
+			if ($subsite->Theme) {
+				SSViewer::set_theme($subsite->Theme);
+			}
+			if ($subsite->Language != '') {
+				// There has previously been some code related to $likely_subtags, however
+				// SubSite::Language is a locale string, e.g. "en_NZ", so it's fine to use here
+				i18n::set_locale($subsite->Language);
+			}
+		}
 	}
 	
 	/**
