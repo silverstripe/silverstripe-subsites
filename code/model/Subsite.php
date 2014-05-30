@@ -263,8 +263,6 @@ JS;
 	/**
 	 * Gets the subsite currently set in the session.
 	 *
-	 * @uses ControllerSubsites->controllerAugmentInit()
-	 * 
 	 * @return Subsite
 	 */
 	static function currentSubsite() {

@@ -368,4 +368,13 @@ class SiteTreeSubsites extends DataExtension {
 			if(in_array($this->owner->class, $blacklisted)) return false;
 		}
 	}
+
+	/**
+	 * Return the current subsite
+	 *
+	 * @return Subsite|null
+	 */
+	public function getCurrentSubsite() {
+		return Subsite::currentSubsite();
+	}
 }
