@@ -108,18 +108,19 @@ class FileSubsites extends DataExtension {
 
 	function canEdit($member = null) {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
-		// $subsiteID = Session::get('SubsiteID');
-		// if($subsiteID&&$subsiteID == $this->owner->SubsiteID) {
-		// 	return true;
-		// } else {
-		// 	Session::set('SubsiteID', $this->owner->SubsiteID);
-		// 	$access = Permission::check(array('CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain'));
-		// 	Session::set('SubsiteID', $subsiteID);
+		//Returns true if the current user has the CMS_ACCESS_AssetAdmin or CMS_ACCESS_LeftAndMain or is the owner of this file 
+		//through the file OwnerID
+		if($memberID = Member::currentUserID()){
+        		if($this->owner->OwnerID == $memberID){
+        			
+            			return true;
+        		}else{
+        			return Permission::check(array('CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain')));
+        		}
 
-		// 	return $access;
-		// }
+            		return false;
+		}
 		
-		return $this->IsOwner();
 	}
 	
 	/**
@@ -127,21 +128,6 @@ class FileSubsites extends DataExtension {
 	 */
 	function cacheKeyComponent() {
 		return 'subsite-'.Subsite::currentSubsiteID();
-	}
-	
-	/**
-	 * Returns true if the current user is an admin, or is the owner of this file 
-	 *
-	 * @return Boolean
-	 */
-	public function IsOwner() {
-		if($memberID = Member::currentUserID()){
-        	if($this->getOwner()->OwnerID == $memberID || Permission::check('CMS_ACCESS_AssetAdmin'))
-            	return true;
-
-            return false;
-        }
-        return false;
 	}
 	
 }
