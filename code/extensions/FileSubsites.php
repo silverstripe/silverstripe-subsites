@@ -110,6 +110,7 @@ class FileSubsites extends DataExtension {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
 		// Returns true if the current user has the CMS_ACCESS_AssetAdmin or CMS_ACCESS_LeftAndMain or is the owner of this file 
 		// through the file OwnerID
+		
 		if($memberID = Member::currentUserID()){
     		if($this->owner->OwnerID == $memberID){
     			return true;
