@@ -99,10 +99,8 @@ class SiteTreeSubsites extends DataExtension {
 				($nested_urls_enabled && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
 			);
 			
-			$url = (strlen($baseLink) > 36 ? "..." .substr($baseLink, -32) : $baseLink);
-
 			$urlsegment = $fields->dataFieldByName('URLSegment');
-			$urlsegment->setURLPrefix($url);
+			$urlsegment->setURLPrefix($baseLink);
 		}
 	}
 	
