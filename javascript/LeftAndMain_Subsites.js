@@ -13,52 +13,12 @@
 			}
 		});
 
-		$('.cms-container').entwine({
-
-			SubsiteCurrentXHR: null,
-
-			/**
-			 * LeftAndMain does not give us possibility to parallel-fetch a PJAX fragment.
-			 * We provide our own fetcher that bypasses the history - that's because we
-			 * don't want to load a panel, but rather just a subsite dropdown.
-			 */
-			subsiteFetchPjaxFragment: function(url, pjaxFragment) {
-
-				// Make sure only one subsite XHR request is ongoing.
-				if(this.getSubsiteCurrentXHR()){
-					this.getSubsiteCurrentXHR().abort();
-				}
-
-				var self = this,
-					xhr,
-					headers = {},
-					baseUrl = $('base').attr('href');
-					
-				url = $.path.isAbsoluteUrl(url) ? url : $.path.makeUrlAbsolute(url, baseUrl);
-				headers['X-Pjax'] = pjaxFragment;
-
-				xhr = $.ajax({
-					headers: headers,
-					url: url,
-					complete: function() {
-						self.setSubsiteCurrentXHR(null);
-					},
-					success: function(data, status, xhr) {
-						self.handleAjaxResponse(data, status, xhr, null);
-					}
-				});
-
-				this.setSubsiteCurrentXHR(xhr);
-			}
-
-		});
-
 		/* 
 		 * Reload subsites dropdown when links are processed 
 		 */
 		$('.cms-container .cms-menu-list li a').entwine({
 			onclick: function(e) {
-				$('.cms-container').subsiteFetchPjaxFragment('SubsiteXHRController', 'SubsiteList');
+				$('.cms-container').loadFragment('SubsiteXHRController', 'SubsiteList');
 				this._super(e);
 			}
 		});
@@ -68,7 +28,7 @@
 		 */
 		$('.cms-container .SubsiteAdmin .cms-edit-form fieldset.ss-gridfield').entwine({
 			onreload: function(e) {
-				$('.cms-container').subsiteFetchPjaxFragment('SubsiteXHRController', 'SubsiteList');
+				$('.cms-container').loadFragment('SubsiteXHRController', 'SubsiteList');
 				this._super(e);
 			}
 		});
@@ -81,7 +41,7 @@
 		 */
 		$('.cms-container .cms-content-fields .subsite-model').entwine({
 			onadd: function(e) {
-				$('.cms-container').subsiteFetchPjaxFragment('SubsiteXHRController', 'SubsiteList');
+				$('.cms-container').loadFragment('SubsiteXHRController', 'SubsiteList');
 				this._super(e);
 			}
 		});
