@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @property text Domain domain name of this subsite. Do not include the URL scheme here
+ * @property bool IsPrimary Is this the primary subdomain?
+ */
 class SubsiteDomain extends DataObject {
 
 	/**
@@ -46,6 +50,7 @@ class SubsiteDomain extends DataObject {
 			new TextField('Domain', $this->fieldLabel('Domain'), null, 255),
 			new CheckboxField('IsPrimary', $this->fieldLabel('IsPrimary'))
 		);
+
 		$this->extend('updateCMSFields', $fields);
 		return $fields;
 	}
@@ -61,5 +66,16 @@ class SubsiteDomain extends DataObject {
 		$labels['IsPrimary'] = _t('SubsiteDomain.IS_PRIMARY', 'Is Primary Domain');
 
 		return $labels;
+	}
+
+	/**
+	 * Before writing the Subsite Domain, strip out any HTML the user has entered.
+	 * @return void
+	 */
+	public function onBeforeWrite() {
+		parent::onBeforeWrite();
+
+		//strip out any HTML to avoid XSS attacks
+		$this->Domain = Convert::html2raw($this->Domain);
 	}
 }
