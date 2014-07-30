@@ -55,6 +55,9 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 
 			$subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true);
 			$subsiteMap = $subsites->map();
+
+			// Prevent XSS injection
+			$subsiteMap = Convert::raw2xml($subsiteMap);
 			
 			// Interface is different if you have the rights to modify subsite group values on
 			// all subsites
