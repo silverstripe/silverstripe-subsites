@@ -24,21 +24,16 @@ With Subsites you can set up users to have access to all subsites or just a sele
 ## Common subsite uses
 Subsites can be used for various different reasons here are some of the common ones
 
-- Setting up a subsite for a small campaign so for example a clothing company may set up a summer or winter subsite to
+* Setting up a subsite for a small campaign so for example a clothing company may set up a summer or winter subsite to
 market just that season of clothing.
-
-- Locking down a particular subsite you may create a particular department like recruitment who would have access to
+* Locking down a particular subsite you may create a particular department like recruitment who would have access to
 create and edit pages for their particular subsite but they would not be able to modify the main website.
-
-- Running sub-domains on a single SilverStripe instance, with subsites if a sub-domain is pointing to the same instance
+* Running sub-domains on a single SilverStripe instance, with subsites if a sub-domain is pointing to the same instance
 and has been setup correctly you can manage this via a single CMS instance.
-
-- Subsites can not be used to run multiple websites on a single instance.
+* Subsites can not be used to run multiple websites on a single instance.
 Subsites does not allow you to run multiple domains/vhosts on a single instance.
 
-
 ## Access
-
 
 Access to certain subsites can be limited to administrators based on the groups they are in.
 So for example if you had a couple of subsites you could create a group for each subsite and then specify that the 
