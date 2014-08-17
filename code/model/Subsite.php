@@ -5,7 +5,7 @@
  *
  * @package subsites
  */
-class Subsite extends DataObject implements PermissionProvider {
+class Subsite extends DataObject {
 
 	/**
 	 * @var $use_session_subsiteid Boolean Set to TRUE when using the CMS and FALSE
@@ -511,22 +511,7 @@ class Subsite extends DataObject implements PermissionProvider {
 	public function canEdit($member = false) {
 		return true;
 	}
-	
-	/**
-	 * 
-	 * @return array
-	 */
-	public function providePermissions() {
-		return array(
-			'SUBSITE_ASSETS_CREATE_SUBSITE' => array(
-				'name' => _t('Subsite.MANAGE_ASSETS', 'Manage assets for subsites'),
-				'category' => _t('Permissions.PERMISSIONS_CATEGORY', 'Roles and access permissions'),
-				'help' => _t('Subsite.MANAGE_ASSETS_HELP', 'Ability to select the subsite to which an asset folder belongs. Requires "Access to Files & Images."'),
-				'sort' => 300
-			)
-		);
-	}
-	
+
 	/**
 	 * Show the configuration fields for each subsite
 	 * 
