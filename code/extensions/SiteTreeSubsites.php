@@ -93,7 +93,7 @@ class SiteTreeSubsites extends DataExtension {
 		$subsite = $this->owner->Subsite();
 		$nested_urls_enabled = Config::inst()->get('SiteTree', 'nested_urls');
 		if($subsite && $subsite->ID) {
-			$baseUrl = 'http://' . $subsite->domain() . '/';
+			$baseUrl = Director::protocol() . $subsite->domain() . '/';
 			$baseLink = Controller::join_links (
 				$baseUrl,
 				($nested_urls_enabled && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
