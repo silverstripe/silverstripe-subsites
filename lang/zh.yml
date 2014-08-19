@@ -42,8 +42,6 @@ zh:
     DomainsHeadline: '这个子网站的域名'
     DomainsListTitle: 域名
     IsPublicHeaderField: '活跃的子网站'
-    MANAGE_ASSETS: '为子网站管理资源'
-    MANAGE_ASSETS_HELP: '能够选择资源文件夹所属的子网站。要求“文件和图片的访问权。”'
     NOTEMPLATE: '没有模板'
     PLURALNAME: 子网站
     PageTypeBlacklistField: '禁止页面类型？'
@@ -72,7 +70,6 @@ zh:
     TitleFieldLabel: '子网站名称'
   SubsitesVirtualPage:
     DESCRIPTION: '显示另一个子网站上一个页面的内容'
-    PLURALNAME: '基本页面'
     SINGULARNAME: '子网站虚拟页面'
     SubsiteField: 子网站
   VirtualPage:

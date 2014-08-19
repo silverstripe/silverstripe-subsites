@@ -42,8 +42,6 @@ en:
     DomainsHeadline: 'Domains for this subsite'
     DomainsListTitle: Domains
     IsPublicHeaderField: 'Active subsite'
-    MANAGE_ASSETS: 'Manage assets for subsites'
-    MANAGE_ASSETS_HELP: 'Ability to select the subsite to which an asset folder belongs. Requires "Access to Files & Images."'
     NOTEMPLATE: 'No template'
     PLURALNAME: Subsits
     PageTypeBlacklistField: 'Disallow page types?'

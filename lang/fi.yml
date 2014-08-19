@@ -42,8 +42,6 @@ fi:
     DomainsHeadline: 'Tämän alisivuston domainit'
     DomainsListTitle: Domainit
     IsPublicHeaderField: 'Aktiivinen alisivusto'
-    MANAGE_ASSETS: 'Hallinnoi alisivustojen tiedostoja'
-    MANAGE_ASSETS_HELP: 'Mahdollisuus valita alisivusto, johon tiedostokansio kuuluu. Vaatii "Pääsy kohteeseen tiedostot & kuvat."'
     NOTEMPLATE: 'Ei sivupohjaa'
     PLURALNAME: Alisivustot
     PageTypeBlacklistField: 'Kiellä sivutyyppien käyttö?'

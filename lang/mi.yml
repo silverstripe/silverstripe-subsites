@@ -42,8 +42,6 @@ mi:
     DomainsHeadline: 'Ngā rohe mō tēnei pae iti'
     DomainsListTitle: Ngā Rohe
     IsPublicHeaderField: 'Pae iti hohe'
-    MANAGE_ASSETS: 'Whakahaere rawa mō ngā pae iti'
-    MANAGE_ASSETS_HELP: 'Te āheinga ki te tīpako i te pae iti nōna tētahi kōpaki rawa. Ka hiahiatia te "Urunga ki ngā Kōnae me ngā Atahanga"'
     NOTEMPLATE: 'Kāore he tātauira'
     PLURALNAME: Ngā pae iti
     PageTypeBlacklistField: 'Me whakakāhore ngā momo whārangi?'
@@ -72,7 +70,6 @@ mi:
     TitleFieldLabel: 'Ingoa Pae Iti'
   SubsitesVirtualPage:
     DESCRIPTION: 'Ka whakaatu i ngā ihirangi o tētahi whārangi ki tētahi atu pae iti'
-    PLURALNAME: 'Ngā Whārangi Taketake'
     SINGULARNAME: 'Whārangi Mariko Pae Iti'
     SubsiteField: Pae iti
   VirtualPage:

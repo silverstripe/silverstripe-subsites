@@ -42,8 +42,6 @@ de:
     DomainsHeadline: 'Domains für diese Subsite'
     DomainsListTitle: Domains
     IsPublicHeaderField: 'Aktive Subsite'
-    MANAGE_ASSETS: 'Dateien für Subsites verwalten'
-    MANAGE_ASSETS_HELP: 'Möglichkeit die Subsite für Dateiordner auszuwählen. Benötigt "Zugang zum Bereich Dateien"'
     NOTEMPLATE: 'Kein Template'
     PLURALNAME: Subsites
     PageTypeBlacklistField: 'Seitentyp verbieten?'
@@ -72,7 +70,6 @@ de:
     TitleFieldLabel: 'Name der Subsite'
   SubsitesVirtualPage:
     DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subsite an'
-    PLURALNAME: 'Subsites Virtuelle Seiten'
     SINGULARNAME: 'Subsites Virtuelle Seite'
     SubsiteField: Subsite
   VirtualPage:
