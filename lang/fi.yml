@@ -20,14 +20,6 @@ fi:
     SECURITYTABTITLE: Alisivustot
   LeftAndMainSubsites:
     Saved: 'Tallennettu, ole hyvä ja päivitä liittyvät sivut.'
-  LeftAndMain_Menu:
-    Hello: Hei
-    LOGOUT: 'Kirjaudu ulos'
-  Permissions:
-    PERMISSIONS_CATEGORY: 'Roolit ja oikeudet'
-  SiteTree:
-    PLURALNAME: Sivut
-    SINGULARNAME: Sivu
   SiteTreeSubsites:
     CopyAction: Kopioi
     CopyToSubsite: 'Kopioi sivu alisivustolle'
@@ -43,7 +35,7 @@ fi:
     DomainsListTitle: Domainit
     IsPublicHeaderField: 'Aktiivinen alisivusto'
     NOTEMPLATE: 'Ei sivupohjaa'
-    PLURALNAME: Alisivustot
+    PLURALNAME: Alasivustot
     PageTypeBlacklistField: 'Kiellä sivutyyppien käyttö?'
     SINGULARNAME: Alisivusto
     SiteConfigSubtitle: 'Iskulauseesi'
@@ -73,6 +65,3 @@ fi:
     PLURALNAME: 'Alisivustojen virtuaaliset sivut'
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
     SubsiteField: Alisivu
-  VirtualPage:
-    CHOOSE: 'Valitse linkitettävä sivu'
-    EDITCONTENT: 'Napsauta tästä muokataksesi sisältöä'

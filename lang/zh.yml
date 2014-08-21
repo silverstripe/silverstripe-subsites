@@ -20,14 +20,6 @@ zh:
     SECURITYTABTITLE: 多个子网站
   LeftAndMainSubsites:
     Saved: '已保存，请更新相关的页面。'
-  LeftAndMain_Menu:
-    Hello: 您好
-    LOGOUT: '退出'
-  Permissions:
-    PERMISSIONS_CATEGORY: '角色和访问权限'
-  SiteTree:
-    PLURALNAME: 页面
-    SINGULARNAME: 页面
   SiteTreeSubsites:
     CopyAction: 复制
     CopyToSubsite: '将页面复制到子网站'
@@ -43,7 +35,7 @@ zh:
     DomainsListTitle: 域名
     IsPublicHeaderField: '活跃的子网站'
     NOTEMPLATE: '没有模板'
-    PLURALNAME: 子网站
+    PLURALNAME: 多个子网站
     PageTypeBlacklistField: '禁止页面类型？'
     SINGULARNAME: 子网站
     SiteConfigSubtitle: '您的标语在这里'
@@ -70,8 +62,6 @@ zh:
     TitleFieldLabel: '子网站名称'
   SubsitesVirtualPage:
     DESCRIPTION: '显示另一个子网站上一个页面的内容'
+    PLURALNAME: '基本页面'
     SINGULARNAME: '子网站虚拟页面'
     SubsiteField: 子网站
-  VirtualPage:
-    CHOOSE: '选择一个页面以链接到'
-    EDITCONTENT: '点击这里来编辑内容'

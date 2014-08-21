@@ -20,14 +20,6 @@ en:
     SECURITYTABTITLE: Subsites
   LeftAndMainSubsites:
     Saved: 'Saved, please update related pages.'
-  LeftAndMain_Menu:
-    Hello: Hi
-    LOGOUT: 'Log out'
-  Permissions:
-    PERMISSIONS_CATEGORY: 'Roles and access permissions'
-  SiteTree:
-    PLURALNAME: Pages
-    SINGULARNAME: Page
   SiteTreeSubsites:
     CopyAction: Copy
     CopyToSubsite: 'Copy page to subsite'
@@ -43,7 +35,7 @@ en:
     DomainsListTitle: Domains
     IsPublicHeaderField: 'Active subsite'
     NOTEMPLATE: 'No template'
-    PLURALNAME: Subsits
+    PLURALNAME: Subsites
     PageTypeBlacklistField: 'Disallow page types?'
     SINGULARNAME: Subsite
     SiteConfigSubtitle: 'Your tagline here'
@@ -73,6 +65,3 @@ en:
     PLURALNAME: 'Subsites Virtual Pages'
     SINGULARNAME: 'Subsites Virtual Page'
     SubsiteField: Subsite
-  VirtualPage:
-    CHOOSE: 'Choose a page to link to'
-    EDITCONTENT: 'Click here to edit the content'

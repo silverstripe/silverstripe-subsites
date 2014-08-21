@@ -20,14 +20,6 @@ de:
     SECURITYTABTITLE: Subsites
   LeftAndMainSubsites:
     Saved: 'Gespeichert.'
-  LeftAndMain_Menu:
-    Hello: Hallo
-    LOGOUT: 'Abmelden'
-  Permissions:
-    PERMISSIONS_CATEGORY: 'Rollen und Zugriffsberechtigungen'
-  SiteTree:
-    PLURALNAME: Seiten
-    SINGULARNAME: Seite
   SiteTreeSubsites:
     CopyAction: Kopieren
     CopyToSubsite: 'Seite auf Subseite Kopieren'
@@ -70,8 +62,6 @@ de:
     TitleFieldLabel: 'Name der Subsite'
   SubsitesVirtualPage:
     DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subsite an'
+    PLURALNAME: 'Subsites Virtuelle Seiten'
     SINGULARNAME: 'Subsites Virtuelle Seite'
     SubsiteField: Subsite
-  VirtualPage:
-    CHOOSE: 'Verknüpfte Seite auswählen'
-    EDITCONTENT: 'Inhalt der verknüpften Seite bearbeiten'

@@ -20,14 +20,6 @@ mi:
     SECURITYTABTITLE: Ngā pae iti
   LeftAndMainSubsites:
     Saved: 'Kua tiakina, whakahoutia ngā whārangi pāhono.'
-  LeftAndMain_Menu:
-    Hello: Tēnā koe
-    LOGOUT: 'Takiputa'
-  Permissions:
-    PERMISSIONS_CATEGORY: 'Ngā tūnga me ngā whakaaetanga uru'
-  SiteTree:
-    PLURALNAME: Ngā Whārangi
-    SINGULARNAME: Whārangi
   SiteTreeSubsites:
     CopyAction: Tārua
     CopyToSubsite: 'Tāruatia te whārangi ki te pae iti'
@@ -70,8 +62,6 @@ mi:
     TitleFieldLabel: 'Ingoa Pae Iti'
   SubsitesVirtualPage:
     DESCRIPTION: 'Ka whakaatu i ngā ihirangi o tētahi whārangi ki tētahi atu pae iti'
+    PLURALNAME: 'Ngā Whārangi Taketake'
     SINGULARNAME: 'Whārangi Mariko Pae Iti'
     SubsiteField: Pae iti
-  VirtualPage:
-    CHOOSE: 'Kōwhiria he whārangi hei hononga atu'
-    EDITCONTENT: 'Pāwhiri ki konei hei whakatika i ngā ihirangi'

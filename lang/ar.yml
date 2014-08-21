@@ -20,14 +20,6 @@ ar:
     SECURITYTABTITLE: مواقع فرعية
   LeftAndMainSubsites:
     Saved: 'تمّ الحفظ، يرجى تحديث الصفحات ذات الصلة.'
-  LeftAndMain_Menu:
-    Hello: مرحبا
-    LOGOUT: 'تسجيل الخروج'
-  Permissions:
-    PERMISSIONS_CATEGORY: 'أدوار وأذونات الدخول'
-  SiteTree:
-    PLURALNAME: صفحات
-    SINGULARNAME: صفحة
   SiteTreeSubsites:
     CopyAction: نسخ
     CopyToSubsite: 'نسخ الصفحة في موقع فرعي'
@@ -70,8 +62,6 @@ ar:
     TitleFieldLabel: 'اسم الموقع الفرعي'
   SubsitesVirtualPage:
     DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
+    PLURALNAME: 'قاعدة الصفحات'
     SINGULARNAME: 'الصفحة الإفتراضية للمواقع الفرعية'
     SubsiteField: الموقع الفرعي
-  VirtualPage:
-    CHOOSE: 'اختيار صفحة للربط معها'
-    EDITCONTENT: 'انقر هنا لتحرير المحتوى'
