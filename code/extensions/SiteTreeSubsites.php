@@ -263,7 +263,7 @@ class SiteTreeSubsites extends DataExtension {
 
 					$origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
 					Subsite::disable_subsite_filter(true);
-					$candidatePage = DataObject::get_one("SiteTree", "\"URLSegment\" = '" . urldecode( $rest). "' AND \"SubsiteID\" = " . $subsiteID, false);
+					$candidatePage = DataObject::get_one("SiteTree", "\"URLSegment\" = '" . Convert::raw2sql(urldecode( $rest)) . "' AND \"SubsiteID\" = " . $subsiteID, false);
 					Subsite::disable_subsite_filter($origDisableSubsiteFilter);
 					
 					if($candidatePage) {
