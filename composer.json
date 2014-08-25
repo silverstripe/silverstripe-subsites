@@ -4,14 +4,19 @@
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "subsites", "multisite"],
 	"authors": [
-	{
-		"name": "Sam Minnee",
-		"email": "sam@silverstripe.com"
-	}
+		{
+			"name": "Sam Minnee",
+			"email": "sam@silverstripe.com"
+		}
 	],
 	"require":
 	{
-		"silverstripe/framework": "~3.1",
-		"silverstripe/cms": "~3.1"
+		"silverstripe/framework": "~3.2",
+		"silverstripe/cms": "~3.2"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "0.6.x-dev"
+		}
 	}
 }
