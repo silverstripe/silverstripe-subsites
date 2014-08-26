@@ -12,20 +12,24 @@ class SiteConfigSubsites extends DataExtension {
 	/**
 	 * Update any requests to limit the results to the current site
 	 */
-	function augmentSQL(SQLQuery &$query) {
+	public function augmentSQL(SQLSelect $query) {
 		if(Subsite::$disable_subsite_filter) return;
-		
+
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
-		if (!$query->where || (!preg_match('/\.(\'|"|`|)ID(\'|"|`|)( ?)=/', $query->where[0]) && !preg_match('/\.?(\'|"|`|)SubsiteID(\'|"|`|)( ?)=/', $query->where[0]))) {
-			/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-			else */$subsiteID = (int)Subsite::currentSubsiteID();
-			
-			$froms=$query->getFrom();
-			$froms=array_keys($froms);
-			$tableName = array_shift($froms);
-			if($tableName != 'SiteConfig') return;
-			$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
+		if($query->filtersOnID()) return;
+		$regexp = '/^(.*\.)?("|`)?SubsiteID("|`)?\s?=/';
+		foreach($query->getWhereParameterised($parameters) as $predicate) {
+			if(preg_match($regexp, $predicate)) return;
 		}
+
+		/*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+		else */$subsiteID = (int)Subsite::currentSubsiteID();
+
+		$froms=$query->getFrom();
+		$froms=array_keys($froms);
+		$tableName = array_shift($froms);
+		if($tableName != 'SiteConfig') return;
+		$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
 	}
 
 	function onBeforeWrite() {

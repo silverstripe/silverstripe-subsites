@@ -23,7 +23,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 	 */
 	function requireDefaultRecords() {
 		// Migration for Group.SubsiteID data from when Groups only had a single subsite
-		$groupFields = DB::getConn()->fieldList('Group');
+		$groupFields = DB::field_list('Group');
 		
 		// Detection of SubsiteID field is the trigger for old-style-subsiteID migration
 		if(isset($groupFields['SubsiteID'])) {
@@ -35,7 +35,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 			DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1 WHERE "SubsiteID" = 0');
 			
 			// Move the field out of the way so that this migration doesn't get executed again
-			DB::getConn()->renameField('Group', 'SubsiteID', '_obsolete_SubsiteID');
+			DB::get_schema()->renameField('Group', 'SubsiteID', '_obsolete_SubsiteID');
 			
 		// No subsite access on anything means that we've just installed the subsites module.
 		// Make all previous groups global-access groups
@@ -107,7 +107,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider {
 	/**
 	 * Update any requests to limit the results to the current site
 	 */
-	function augmentSQL(SQLQuery &$query) {
+	public function augmentSQL(SQLSelect $query) {
 		if(Subsite::$disable_subsite_filter) return;
 		if(Cookie::get('noSubsiteFilter') == 'true') return;
 

@@ -161,6 +161,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		// create svp in subsite
 		$svp = new SubsitesVirtualPage();
 		$svp->CopyContentFromID = $p->ID;
+		$svp->write();
 		$svp->writeToStage('Stage');
 		$svp->publish('Stage', 'Live');
 		$this->assertEquals($svp->SubsiteID, $subsite->ID);

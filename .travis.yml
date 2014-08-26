@@ -2,19 +2,22 @@
 
 language: php 
 
-php: 
- - 5.3
+php:
+ - 5.4
 
 env:
- - DB=MYSQL CORE_RELEASE=3.1
- - DB=PGSQL CORE_RELEASE=master
+  global:
+    - CORE_RELEASE=master
+  matrix:
+    - DB=MYSQL 
+    - DB=PGSQL
 
 matrix:
   include:
+    - php: 5.3
+      env: DB=MYSQL
     - php: 5.4
-      env: DB=MYSQL CORE_RELEASE=master
-    - php: 5.4
-      env: DB=MYSQL CORE_RELEASE=3.1 BEHAT_TEST=1
+      env: DB=MYSQL BEHAT_TEST=1
 
 before_script:
  - composer self-update
