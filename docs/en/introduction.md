@@ -30,8 +30,7 @@ market just that season of clothing.
 create and edit pages for their particular subsite but they would not be able to modify the main website.
 * Running sub-domains on a single SilverStripe instance, with subsites if a sub-domain is pointing to the same instance
 and has been setup correctly you can manage this via a single CMS instance.
-* Subsites can not be used to run multiple websites on a single instance.
-Subsites does not allow you to run multiple domains/vhosts on a single instance.
+* Subsites cannot be used to run multiple unrelated websites on a single instance. Although each subsite can have its own domain name, they must all share a database, codebase, and any installed modules. Ideally, subsites are driven by a common body of content and/or uploaded files. Disparate websites are not good candidates for the Subsites module.
 
 ## Access
 
