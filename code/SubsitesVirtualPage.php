@@ -207,4 +207,13 @@ class SubsitesVirtualPage_Controller extends VirtualPage_Controller {
 		
 		Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
 	}
+	
+	public function allowedActions ($limitToClass = NULL) {
+		$parent = SiteTree::get()->byID($this->CopyContentFromID);
+		$model = $parent ? ModelAsController::controller_for($parent) : null;
+		if ($model && get_class($model) != get_class($this)) {
+			return array_merge($model->allowedActions(), parent::allowedActions ());
+		}
+		return parent::allowedActions ();
+	}
 }
