@@ -1,0 +1,67 @@
+eo:
+  SubsiteAdmin:
+    MENUTITLE: Subretejoj
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
+  ASSETADMIN:
+    SUBSITENOTICE: 'Dosierujoj kaj dosieroj kreitaj en la ĉefa retejo estas alireblaj de ĉiuj retejoj'
+  FileSubsites:
+    AllSitesDropdownOpt: 'Ĉiuj retejoj'
+    SubsiteFieldLabel: Subretejo
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Aldoni novan el ŝablono'
+  GroupSubsites:
+    ACCESSALL: 'Ĉiuj subretejoj'
+    ACCESSONLY: 'Nur ĉi tiuj subretejoj'
+    ACCESSRADIOTITLE: 'Doni ĉi tiun grupon aliron al'
+    GlobalGroup: 'ĉiea grupo'
+    MANAGE_SUBSITES: 'Administri subretejojn por grupoj'
+    MANAGE_SUBSITES_HELP: 'Eblo limigi la permesojn por grupo al unu aŭ pluaj subretejoj.'
+    SECURITYTABTITLE: Subsites
+  LeftAndMainSubsites:
+    Saved: 'Konservita, bonvole ĝisdatigi rilatajn paĝojn.'
+  SiteTreeSubsites:
+    CopyAction: Kopio
+    CopyToSubsite: 'Kopii paĝon al subretejo'
+  Subsite:
+    COPYSTRUCTURE: 'Kopii strukturon de:'
+    CopyMessage: 'Kreis kopion de {title}'
+    CustomExtraMeta: 'Propraj meta-etikedoj'
+    CustomMetaDescription: Priskribo
+    CustomMetaKeywords: Ŝlosilvortoj
+    CustomMetaTitle: Titolo
+    DOMAINSAVEFIRST: 'Vi povas aldoni domajnojn post konservante unuafoje'
+    DomainsHeadline: 'Domajnoj por ĉi tiu subretejo'
+    DomainsListTitle: Domajnoj
+    IsPublicHeaderField: 'Aktiva subretejo'
+    NOTEMPLATE: 'Mankas ŝablono'
+    PLURALNAME: Subretejoj
+    PageTypeBlacklistField: 'Ĉu malpermesu paĝajn tipojn?'
+    SINGULARNAME: Subretejo
+    SiteConfigSubtitle: 'Jen via slogano'
+    SiteConfigTitle: 'Nomo de via retejo'
+    TabTitleConfig: Agordaro
+    ValidateTitle: 'Bonvole aldonu "Titolon"'
+  SubsiteDomain:
+    DOMAIN: Domajno
+    IS_PRIMARY: 'Estas unuaranga domajno'
+    PLURALNAME: 'Subretejaj domajnoj'
+    SINGULARNAME: 'Subreteja domajno'
+  SubsiteReportWrapper:
+    ReportDropdown: Retejoj
+  Subsites:
+    DefaultSiteFieldLabel: 'Apriora retejo'
+    DomainFieldLabel: Domajno
+    IsPublicFieldLabel: 'Enŝalti publikan aliron'
+    LanguageFieldLabel: Lingvo
+    MainSiteTitle: 'Ĉefa retejo'
+    PageTypeBlacklistFieldLabel: 'Paĝtipa nigra listo'
+    PrimaryDomainFieldLabel: 'Unuaranga domajno'
+    RedirectURLFieldLabel: 'Redirekti je URL'
+    ThemeFieldLabel: Etoso
+    TitleFieldLabel: 'Nomo de subretejo'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
+    PLURALNAME: 'Virtualaj paĝoj de subretejoj'
+    SINGULARNAME: 'Virtuala paĝo de subretejoj'
+    SubsiteField: Subretejo
