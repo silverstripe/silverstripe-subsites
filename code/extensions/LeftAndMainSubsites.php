@@ -207,21 +207,6 @@ class LeftAndMainSubsites extends Extension {
 
 		// FIRST, check if we need to change subsites due to the URL.
 
-		// Automatically redirect the session to appropriate subsite when requesting a record.
-		// This is needed to properly initialise the session in situations where someone opens the CMS via a link.
-		$record = $this->owner->currentPage();
-		if($record && isset($record->SubsiteID) && is_numeric($record->SubsiteID)) {
-
-			if ($this->shouldChangeSubsite($this->owner->class, $record->SubsiteID, Subsite::currentSubsiteID())) {
-				// Update current subsite in session
-				Subsite::changeSubsite($record->SubsiteID);
-
-				//Redirect to clear the current page
-				return $this->owner->redirect('admin/');
-			}
-
-		}
-
 		// Catch forced subsite changes that need to cause CMS reloads.
 		if(isset($_GET['SubsiteID'])) {
 			// Clear current page when subsite changes (or is set for the first time)
@@ -234,6 +219,21 @@ class LeftAndMainSubsites extends Extension {
 
 			//Redirect to clear the current page
 			return $this->owner->redirect('admin/');
+		}
+
+		// Automatically redirect the session to appropriate subsite when requesting a record.
+		// This is needed to properly initialise the session in situations where someone opens the CMS via a link.
+		$record = $this->owner->currentPage();
+		if($record && isset($record->SubsiteID) && is_numeric($record->SubsiteID) && isset($this->owner->urlParams['ID'])) {
+
+			if ($this->shouldChangeSubsite($this->owner->class, $record->SubsiteID, Subsite::currentSubsiteID())) {
+				// Update current subsite in session
+				Subsite::changeSubsite($record->SubsiteID);
+
+				//Redirect to clear the current page
+				return $this->owner->redirect('admin/');
+			}
+
 		}
 
 		// SECOND, check if we need to change subsites due to lack of permissions.
