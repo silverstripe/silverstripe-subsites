@@ -8,6 +8,12 @@ class SubsiteDomain extends DataObject {
 
 	/**
 	 *
+	 * @var string
+	 */
+	private static $default_sort = "\"IsPrimary\" DESC";
+
+	/**
+	 *
 	 * @var array
 	 */
 	private static $db = array(
