@@ -66,7 +66,7 @@ class FileSubsites extends DataExtension {
 		$from = $query->getFrom();
 		$where = $query->getWhere();
 
-		if(!isset($from['SiteTree_ImageTracking']) && !($where && preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', $where[0]))) {
+		if(!isset($from['SiteTree_ImageTracking']) && !($where && preg_match('/\.(\'|"|`|)ID(\'|"|`|)/', implode(' ', $where)))) {
 			$subsiteID = (int) Subsite::currentSubsiteID();
 
 			// The foreach is an ugly way of getting the first key :-)
