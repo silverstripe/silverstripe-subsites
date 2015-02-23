@@ -30,5 +30,5 @@ before_script:
  - php ~/travis-support/travis_setup_php54_webserver.php --if-env BEHAT_TEST
 
 script: 
- - "if [ \"$BEHAT_TEST\" = \"\" ]; then phpunit subsites/tests; fi"
+ - "if [ \"$BEHAT_TEST\" = \"\" ]; then vendor/bin/phpunit subsites/tests; fi"
  - "if [ \"$BEHAT_TEST\" = \"1\" ]; then vendor/bin/behat @subsites; fi"
