@@ -218,6 +218,11 @@ class LeftAndMainSubsites extends Extension {
 			Subsite::changeSubsite($_GET['SubsiteID']);
 
 			//Redirect to clear the current page
+			if ($this->owner->canView(Member::currentUser())) {
+				//Redirect to clear the current page
+				return $this->owner->redirect($this->owner->Link());
+			}
+			//Redirect to the default CMS section
 			return $this->owner->redirect('admin/');
 		}
 
@@ -230,7 +235,11 @@ class LeftAndMainSubsites extends Extension {
 				// Update current subsite in session
 				Subsite::changeSubsite($record->SubsiteID);
 
-				//Redirect to clear the current page
+				if ($this->owner->canView(Member::currentUser())) {
+					//Redirect to clear the current page
+					return $this->owner->redirect($this->owner->Link());
+				}
+				//Redirect to the default CMS section
 				return $this->owner->redirect('admin/');
 			}
 
