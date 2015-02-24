@@ -57,7 +57,7 @@ class FileSubsites extends DataExtension {
 	/**
 	 * Update any requests to limit the results to the current site
 	 */
-	public function augmentSQL(SQLSelect $query) {
+	public function augmentSQL(SQLQuery &$query) {
 		if(Subsite::$disable_subsite_filter) return;
 
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)

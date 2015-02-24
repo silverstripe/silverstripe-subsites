@@ -2,6 +2,8 @@
 
 namespace Subsites\Test\Behaviour;
 
+if(!class_exists('SilverStripe\BehatExtension\Context\SilverStripeContext')) return;
+
 use SilverStripe\BehatExtension\Context\SilverStripeContext,
     SilverStripe\BehatExtension\Context\BasicContext,
     SilverStripe\BehatExtension\Context\LoginContext,

@@ -14,6 +14,9 @@
 		"silverstripe/framework": "~3.2",
 		"silverstripe/cms": "~3.2"
 	},
+	"require-dev": {
+		"phpunit/PHPUnit": "~3.7@stable"
+	},
 	"extra": {
 		"branch-alias": {
 			"dev-master": "1.1.x-dev"
