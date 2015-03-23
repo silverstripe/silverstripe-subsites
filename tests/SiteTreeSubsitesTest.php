@@ -8,6 +8,10 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		'SiteTreeSubsitesTest_ClassA',
 		'SiteTreeSubsitesTest_ClassB'
 	);
+
+	protected $illegalExtensions = array(
+		'SiteTree' => array('Translatable')
+	);
 	
 	function testPagesInDifferentSubsitesCanShareURLSegment() {
 		$subsiteMain = $this->objFromFixture('Subsite', 'main');
@@ -178,16 +182,18 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		$s1->write();
 
 		Subsite::changeSubsite($s1);
-		$classes = $cmsmain->PageTypes()->column('ClassName');
-		$this->assertNotContains('ErrorPage', $classes);
-		$this->assertNotContains('SiteTreeSubsitesTest_ClassA', $classes);
-		$this->assertContains('SiteTreeSubsitesTest_ClassB', $classes);
-
-		Subsite::changeSubsite($s2);
-		$classes = $cmsmain->PageTypes()->column("ClassName");
+		$hints = Convert::json2array($cmsmain->SiteTreeHints());
+		$classes = $hints['Root']['disallowedChildren'];
 		$this->assertContains('ErrorPage', $classes);
 		$this->assertContains('SiteTreeSubsitesTest_ClassA', $classes);
-		$this->assertContains('SiteTreeSubsitesTest_ClassB', $classes);
+		$this->assertNotContains('SiteTreeSubsitesTest_ClassB', $classes);
+
+		Subsite::changeSubsite($s2);
+		$hints = Convert::json2array($cmsmain->SiteTreeHints());
+		$classes = $hints['Root']['disallowedChildren'];
+		$this->assertNotContains('ErrorPage', $classes);
+		$this->assertNotContains('SiteTreeSubsitesTest_ClassA', $classes);
+		$this->assertNotContains('SiteTreeSubsitesTest_ClassB', $classes);
 	}
 	
 }
