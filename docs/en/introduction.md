@@ -2,15 +2,7 @@
 
 Subsites is a module to allow you manage multiple related sites from a single CMS interface.
 
-When Subsites is installed your existing site is defined as the main site, you will be then be able to create related 
-subsites under the main site. 
-
-
-So for example you may have an international presence and you want to create a subsite for a country where you do 
-business which is geared just for that market.
-You could create a subsite for this and have all information related to that country kept under this subsite, you can 
-also set up a subdomain for this site.
-
+When Subsites is installed your existing site is defined as the main site, you will be then be able to create related subsites under the main site. 
 
 One of the benefits of subsites is that it is easy to copy pages between the subsites and you have access to all of 
 the assets across all of the subsites.
@@ -20,17 +12,23 @@ you will not be able to run them with Subsites on a single SilverStripe instance
 
 With Subsites you can set up users to have access to all subsites or just a selection of subsites.
 
+## When to use the Subsites module
 
-## Common subsite uses
-Subsites can be used for various different reasons here are some of the common ones
+* You have a clear parent/main website and a set of subsites associated with it. 
+* You have a group of simple, commonly themed websites
+* Your websites contain some overlapping content, and you want to avoid the redundancy of making the same update to content that exists on multiple CMS installations. 
+* You have simple content websites that use the same templates and modules, and are managed by the same team, but have different themes.  
+* Content editing of the subsites is through the same team, so there is no problem around editors having access to all the files for each subsite, nor around having CMS admin(s) who control access to all the sites.
 
-* Setting up a subsite for a small campaign so for example a clothing company may set up a summer or winter subsite to
-market just that season of clothing.
-* Locking down a particular subsite you may create a particular department like recruitment who would have access to
-create and edit pages for their particular subsite but they would not be able to modify the main website.
-* Running sub-domains on a single SilverStripe instance, with subsites if a sub-domain is pointing to the same instance
-and has been setup correctly you can manage this via a single CMS instance.
-* Subsites cannot be used to run multiple unrelated websites on a single instance. Although each subsite can have its own domain name, they must all share a database, codebase, and any installed modules. Ideally, subsites are driven by a common body of content and/or uploaded files. Disparate websites are not good candidates for the Subsites module.
+## When to avoid the Subsites module
+
+* You have constraints on what content CMS editors can and cannot view between subsites.
+* You have a business critical website, and adding complexity around changes and releases for subsites creates unwanted risk. 
+* There is a significant security risk around putting the websites into the same CMS installation. This could be the risk of content bleeding between sites, or the risk of an editor on one site gaining access to content on the other site. 
+* Websites that are distinct and use customised modules and/or bespoke code 
+* Websites that are owned by different business units and/or managed by different development and web teams. (not technical, it just organisational complexity). 
+
+It is important to remember that the only unique trait each site can have is its theme (look and feel), whilst all the other building blocks of the site — the code, database, and modules — are shared. Therefore, one of the biggest drawbacks to using subsites is exposure to a single point of failure. If there is a bug in code that is only used on one subsite, it nevertheless affects all other subsites, because they share a codebase. Similarly, if the database becomes corrupt, all subsites are affected. Further, it is not possible to create or restore backups of any given subsite. Backups must represent and replace the entire collection of sites.
 
 ## Access
 
