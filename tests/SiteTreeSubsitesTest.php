@@ -129,7 +129,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 	}
 	
 	function testPageTypesBlacklistInClassDropdown() {
-		Session::set("loggedInAs", null);
+		$editor = $this->objFromFixture('Member', 'editor');
+		Session::set("loggedInAs", $editor->ID);
 		
 		$s1 = $this->objFromFixture('Subsite','domaintest1');
 		$s2 = $this->objFromFixture('Subsite','domaintest2');
@@ -140,6 +141,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		
 		Subsite::changeSubsite($s1);
 		$settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
+		
 		$this->assertArrayNotHasKey('ErrorPage', 
 			$settingsFields
 		);
@@ -164,7 +166,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 	}
 	
 	function testPageTypesBlacklistInCMSMain() {
-		Session::set("loggedInAs", null);
+		$editor = $this->objFromFixture('Member', 'editor');
+		Session::set("loggedInAs", $editor->ID);
 		
 		$cmsmain = new CMSMain();
 		

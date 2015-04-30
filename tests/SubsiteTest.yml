@@ -178,3 +178,7 @@ Member:
    subsite1member2:
       Email: subsite1member2@test.com
       Groups: =>Group.subsite1_group_via_role
+
+SiteConfig:
+   config:
+      CanCreateTopLevelType: LoggedInUsers
