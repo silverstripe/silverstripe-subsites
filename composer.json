@@ -11,15 +11,15 @@
 	],
 	"require":
 	{
-		"silverstripe/framework": "~3.2",
-		"silverstripe/cms": "~3.2"
+		"silverstripe/framework": "~4.0",
+		"silverstripe/cms": "~4.0"
 	},
 	"require-dev": {
 		"phpunit/PHPUnit": "~3.7@stable"
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "1.1.x-dev"
+			"dev-master": "1.2.x-dev"
 		}
 	}
 }

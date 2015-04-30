@@ -7,7 +7,7 @@ php:
 
 env:
   global:
-    - CORE_RELEASE=3
+    - CORE_RELEASE=master
   matrix:
     - DB=MYSQL
     - DB=PGSQL

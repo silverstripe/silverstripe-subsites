@@ -53,7 +53,7 @@ If more isolation of code, security, or performance is needed, then consider run
 
 ## Requirements
 
-*  SilverStripe 3.1
+*  SilverStripe 4.x
 
 ## Installation
 
