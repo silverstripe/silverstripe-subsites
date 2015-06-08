@@ -205,7 +205,10 @@ class SiteTreeSubsites extends DataExtension {
 	 */
 	static function contentcontrollerInit($controller) {
 		$subsite = Subsite::currentSubsite();
-		if($subsite && $subsite->Theme) SSViewer::set_theme(Subsite::currentSubsite()->Theme);
+
+		if($subsite && $subsite->Theme){
+			Config::inst()->update('SSViewer', 'theme', Subsite::currentSubsite()->Theme);
+		}
 	}
 
 	function alternateAbsoluteLink() {
