@@ -51,7 +51,7 @@ class SubsitesVirtualPage extends VirtualPage {
 		
 		// Create links back to the original object in the CMS
 		if($this->CopyContentFromID) {
-			$editLink = "admin/page/edit/show/$this->CopyContentFromID/?SubsiteID=" . $this->CopyContentFrom()->SubsiteID;
+			$editLink = "admin/pages/edit/show/$this->CopyContentFromID/?SubsiteID=" . $this->CopyContentFrom()->SubsiteID;
 			$linkToContent = "
 				<a class=\"cmsEditlink\" href=\"$editLink\">" . 
 				_t('VirtualPage.EDITCONTENT', 'Click here to edit the content') . 
