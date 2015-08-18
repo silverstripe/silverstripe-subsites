@@ -614,11 +614,13 @@ class Subsite extends DataObject {
 	 * @return array
 	 */
 	public function summaryFields() {
-		return array(
+		$fields = array(
 			'Title' => $this->fieldLabel('Title'),
 			'PrimaryDomain' => $this->fieldLabel('PrimaryDomain'),
 			'IsPublic' => _t('Subsite.IsPublicHeaderField','Active subsite'),
 		);
+		$this->extend("updateSummaryFields", $fields);
+		return $fields;
 	}
 	
 	/**
