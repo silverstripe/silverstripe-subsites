@@ -1,0 +1,19 @@
+id:
+  SubsiteAdmin:
+    MENUTITLE: Subsitus
+  FileSubsites:
+    SubsiteFieldLabel: Subsitus
+  GroupSubsites:
+    SECURITYTABTITLE: Subsitus
+  Subsite:
+    CustomMetaDescription: Deskripsi
+    CustomMetaKeywords: Kata kunci
+    CustomMetaTitle: Judul
+    PLURALNAME: Subsitus
+    SINGULARNAME: Subsitus
+  SubsiteReportWrapper:
+    ReportDropdown: Situs
+  Subsites:
+    LanguageFieldLabel: Bahasa
+  SubsitesVirtualPage:
+    SubsiteField: Subsitus
