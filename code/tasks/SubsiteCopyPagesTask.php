@@ -1,10 +1,13 @@
 <?php
 /**
  * Handy alternative to copying pages when creating a subsite through the UI.
- * Can be used to batch-add new pages after subsite creation,
- * or simply to process a large site outside of the UI.
+ *
+ * Can be used to batch-add new pages after subsite creation, or simply to 
+ * process a large site outside of the UI.
  *
  * Example: sake dev/tasks/SubsiteCopyPagesTask from=<subsite-source> to=<subsite-target>
+ *
+ * @package subsites
  */
 class SubsiteCopyPagesTask extends BuildTask {
 
