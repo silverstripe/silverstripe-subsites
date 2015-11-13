@@ -1,8 +1,4 @@
 en:
-  SubsiteAdmin:
-    MENUTITLE: Subsites
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   ASSETADMIN:
     SUBSITENOTICE: 'Folders and files created in the main site are accessible by all subsites.'
   FileSubsites:
@@ -20,6 +16,9 @@ en:
     SECURITYTABTITLE: Subsites
   LeftAndMainSubsites:
     Saved: 'Saved, please update related pages.'
+  LeftAndMain_Menu:
+    Hello: Hi
+    LOGOUT: 'Log out'
   SiteTreeSubsites:
     CopyAction: Copy
     CopyToSubsite: 'Copy page to subsite'
@@ -42,6 +41,8 @@ en:
     SiteConfigTitle: 'Your Site Name'
     TabTitleConfig: Configuration
     ValidateTitle: 'Please add a "Title"'
+  SubsiteAdmin:
+    MENUTITLE: Subsites
   SubsiteDomain:
     DOMAIN: Domain
     IS_PRIMARY: 'Is Primary Domain'
@@ -49,6 +50,8 @@ en:
     SINGULARNAME: 'Subsite Domain'
   SubsiteReportWrapper:
     ReportDropdown: Sites
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Default site'
     DomainFieldLabel: Domain
@@ -62,6 +65,8 @@ en:
     TitleFieldLabel: 'Subsite Name'
   SubsitesVirtualPage:
     DESCRIPTION: 'Displays the content of a page on another subsite'
-    PLURALNAME: 'Subsites Virtual Pages'
+    PLURALNAME: 'Base Pages'
     SINGULARNAME: 'Subsites Virtual Page'
     SubsiteField: Subsite
+  VirtualPage:
+    EDITCONTENT: 'Click here to edit the content'

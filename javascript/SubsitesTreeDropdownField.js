@@ -1,24 +1,30 @@
 (function($) {
 	$.entwine('ss', function($) {
-		$('.TreeDropdownField').entwine({
-			subsiteID: function() {
-				var subsiteSel = $('#CopyContentFromID_SubsiteID select')[0];
-				if(!subsiteSel) return;
-				
-				subsiteSel.onchange = (function() {
-					this.createTreeNode(true);
-					this.ajaxGetTree((function(response) {
-						this.newTreeReady(response, true);
-						this.updateTreeLabel();
-					}).bind(this));
-				}).bind(this);
-				return subsiteSel.options[subsiteSel.selectedIndex].value;
-			},
-	
+		/**
+		 * Choose a subsite from which to select pages.
+		 * Needs to clear tree dropdowns in case selection is changed.
+		 */
+		$('.subsitestreedropdownfield-chooser').entwine({
+			onchange: function() {
+				// TODO Data binding between two fields
+				// TODO create resetField method on API instead
+				var fields = $('.SubsitesTreeDropdownField');
+				fields.setValue(null);
+				fields.setTitle(null);
+				fields.find('.tree-holder').empty();
+			}
+		});
+
+		/**
+		 * Add selected subsite from separate dropdown to the request parameters
+		 * before asking for the tree.
+		 */
+		$('.TreeDropdownField.SubsitesTreeDropdownField').entwine({
 			getRequestParams: function() {
-				var name = this.find(':input:hidden').attr('name'), obj = {};
-				obj[name + '_SubsiteID'] = parseInt(this.subsiteID());
-				return obj;
+				var name = this.find(':input[type=hidden]:first').attr('name') + '_SubsiteID',
+					source = $('[name=' + name + ']'), params = {};
+				params[name] = source.length ? source.val() : null;
+				return params;
 			}
 		});
 	});

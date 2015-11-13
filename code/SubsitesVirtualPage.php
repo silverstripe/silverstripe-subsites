@@ -22,15 +22,13 @@ class SubsitesVirtualPage extends VirtualPage {
 		
 		$subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 
-		$subsiteSelectionField = new DropdownField(
-			"CopyContentFromID_SubsiteID", 
-			_t('SubsitesVirtualPage.SubsiteField',"Subsite"), 
-			$subsites->map('ID', 'Title'),
-			($this->CopyContentFromID) ? $this->CopyContentFrom()->SubsiteID : Session::get('SubsiteID')
-		);
 		$fields->addFieldToTab(
 			'Root.Main',
-			$subsiteSelectionField,
+			DropdownField::create(
+				"CopyContentFromID_SubsiteID", 
+				_t('SubsitesVirtualPage.SubsiteField',"Subsite"),  
+				$subsites->map('ID', 'Title')
+			)->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
 			'CopyContentFromID'
 		);
 		
@@ -44,7 +42,7 @@ class SubsitesVirtualPage extends VirtualPage {
 		);
 		
 		if(Controller::has_curr() && Controller::curr()->getRequest()) {
-			$subsiteID = Controller::curr()->getRequest()->postVar('CopyContentFromID_SubsiteID');
+			$subsiteID = Controller::curr()->getRequest()->requestVar('CopyContentFromID_SubsiteID');
 			$pageSelectionField->setSubsiteID($subsiteID);
 		}
 		$fields->replaceField('CopyContentFromID', $pageSelectionField);
@@ -110,6 +108,10 @@ class SubsitesVirtualPage extends VirtualPage {
 		$labels['CustomExtraMeta'] = _t('Subsite.CustomExtraMeta','Custom Meta Tags');
 
 		return $labels;
+	}
+
+	public function getCopyContentFromID_SubsiteID() {
+		return ($this->CopyContentFromID) ? (int)$this->CopyContentFrom()->SubsiteID : (int)Session::get('SubsiteID');
 	}
 	
 	public function getVirtualFields() {
