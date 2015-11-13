@@ -5,7 +5,7 @@ language: php
 sudo: false
 
 php:
- - 5.4
+ - 5.5
 
 env:
   global:
@@ -16,9 +16,7 @@ env:
 
 matrix:
   include:
-    - php: 5.3
-      env: DB=MYSQL
-    - php: 5.4
+    - php: 5.5
       env: DB=MYSQL BEHAT_TEST=1
 
 before_script:
