@@ -1,8 +1,4 @@
 mi:
-  SubsiteAdmin:
-    MENUTITLE: Ngā pae iti
-  SubsiteXHRController:
-    MENUTITLE: ManaXHRPaeiti
   ASSETADMIN:
     SUBSITENOTICE: 'Ka taea ngā kōpaki me ngā kōnae kua hangaia i te pae matua te uru mā ngā pae iti katoa.'
   FileSubsites:
@@ -42,6 +38,8 @@ mi:
     SiteConfigTitle: 'Tō Ingoa Pae'
     TabTitleConfig: Whirihoranga
     ValidateTitle: 'Tāurua he "Taitara"'
+  SubsiteAdmin:
+    MENUTITLE: Ngā pae iti
   SubsiteDomain:
     DOMAIN: Rohe
     IS_PRIMARY: 'Ko Te Rohe Matua'
@@ -49,6 +47,8 @@ mi:
     SINGULARNAME: 'Rohe Pae Iti'
   SubsiteReportWrapper:
     ReportDropdown: Ngā Pae
+  SubsiteXHRController:
+    MENUTITLE: ManaXHRPaeiti
   Subsites:
     DefaultSiteFieldLabel: 'Pae taunoa'
     DomainFieldLabel: Rohe
@@ -62,6 +62,5 @@ mi:
     TitleFieldLabel: 'Ingoa Pae Iti'
   SubsitesVirtualPage:
     DESCRIPTION: 'Ka whakaatu i ngā ihirangi o tētahi whārangi ki tētahi atu pae iti'
-    PLURALNAME: 'Ngā Whārangi Taketake'
     SINGULARNAME: 'Whārangi Mariko Pae Iti'
     SubsiteField: Pae iti

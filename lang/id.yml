@@ -1,6 +1,4 @@
 id:
-  SubsiteAdmin:
-    MENUTITLE: Subsitus
   FileSubsites:
     SubsiteFieldLabel: Subsitus
   GroupSubsites:
@@ -11,6 +9,8 @@ id:
     CustomMetaTitle: Judul
     PLURALNAME: Subsitus
     SINGULARNAME: Subsitus
+  SubsiteAdmin:
+    MENUTITLE: Subsitus
   SubsiteReportWrapper:
     ReportDropdown: Situs
   Subsites:

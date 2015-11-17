@@ -1,6 +1,4 @@
 ja:
-  SubsiteAdmin:
-    MENUTITLE: サブサイト
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'テンプレートから新しく追加'
   GroupSubsites:
@@ -8,6 +6,8 @@ ja:
     ACCESSONLY: 'これらのサブサイトのみ'
     ACCESSRADIOTITLE: 'このグループに選択先へのアクセス権を与える'
     SECURITYTABTITLE: サブサイト
+  SubsiteAdmin:
+    MENUTITLE: サブサイト
   SubsiteDomain:
     DOMAIN: ドメイン
     IS_PRIMARY: 'プライマリドメイン'

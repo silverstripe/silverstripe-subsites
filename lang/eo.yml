@@ -1,8 +1,4 @@
 eo:
-  SubsiteAdmin:
-    MENUTITLE: Subretejoj
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   ASSETADMIN:
     SUBSITENOTICE: 'Dosierujoj kaj dosieroj kreitaj en la ĉefa retejo estas alireblaj de ĉiuj retejoj'
   FileSubsites:
@@ -20,6 +16,9 @@ eo:
     SECURITYTABTITLE: Subsites
   LeftAndMainSubsites:
     Saved: 'Konservita, bonvole ĝisdatigi rilatajn paĝojn.'
+  LeftAndMain_Menu:
+    Hello: Saluton
+    LOGOUT: 'Elsaluti'
   SiteTreeSubsites:
     CopyAction: Kopio
     CopyToSubsite: 'Kopii paĝon al subretejo'
@@ -42,6 +41,8 @@ eo:
     SiteConfigTitle: 'Nomo de via retejo'
     TabTitleConfig: Agordaro
     ValidateTitle: 'Bonvole aldonu "Titolon"'
+  SubsiteAdmin:
+    MENUTITLE: Subretejoj
   SubsiteDomain:
     DOMAIN: Domajno
     IS_PRIMARY: 'Estas unuaranga domajno'
@@ -49,6 +50,8 @@ eo:
     SINGULARNAME: 'Subreteja domajno'
   SubsiteReportWrapper:
     ReportDropdown: Retejoj
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Apriora retejo'
     DomainFieldLabel: Domajno
@@ -62,6 +65,8 @@ eo:
     TitleFieldLabel: 'Nomo de subretejo'
   SubsitesVirtualPage:
     DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
-    PLURALNAME: 'Virtualaj paĝoj de subretejoj'
+    PLURALNAME: 'Bazaj paĝoj'
     SINGULARNAME: 'Virtuala paĝo de subretejoj'
     SubsiteField: Subretejo
+  VirtualPage:
+    EDITCONTENT: 'Alklaku ĉi tie por redakti la enhavon'

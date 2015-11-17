@@ -1,6 +1,4 @@
 tr_TR:
-  SubsiteAdmin:
-    MENUTITLE: Alt Siteler
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Add New from Template'
   GroupSubsites:
@@ -8,6 +6,8 @@ tr_TR:
     ACCESSONLY: 'Only these subsites'
     ACCESSRADIOTITLE: 'Give this group access to'
     SECURITYTABTITLE: Alt Siteler
+  SubsiteAdmin:
+    MENUTITLE: Alt Siteler
   SubsiteDomain:
     DOMAIN: Domain
     IS_PRIMARY: 'Is Primary Domain'

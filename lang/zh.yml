@@ -1,8 +1,4 @@
 zh:
-  SubsiteAdmin:
-    MENUTITLE: 多个子网站
-  SubsiteXHRController:
-    MENUTITLE: 子网站 XHR 控制器
   ASSETADMIN:
     SUBSITENOTICE: '主网站上创建的文件夹和文件可以被所有子网站访问。'
   FileSubsites:
@@ -42,6 +38,8 @@ zh:
     SiteConfigTitle: '您的网站名称'
     TabTitleConfig: 配置
     ValidateTitle: '请添加一个“标题”'
+  SubsiteAdmin:
+    MENUTITLE: 多个子网站
   SubsiteDomain:
     DOMAIN: 域名
     IS_PRIMARY: '是主域名'
@@ -49,6 +47,8 @@ zh:
     SINGULARNAME: '子网站域名'
   SubsiteReportWrapper:
     ReportDropdown: 网站
+  SubsiteXHRController:
+    MENUTITLE: 子网站 XHR 控制器
   Subsites:
     DefaultSiteFieldLabel: '默认网站'
     DomainFieldLabel: 域名
@@ -62,6 +62,5 @@ zh:
     TitleFieldLabel: '子网站名称'
   SubsitesVirtualPage:
     DESCRIPTION: '显示另一个子网站上一个页面的内容'
-    PLURALNAME: '基本页面'
     SINGULARNAME: '子网站虚拟页面'
     SubsiteField: 子网站

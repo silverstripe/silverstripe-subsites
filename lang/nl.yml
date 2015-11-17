@@ -1,6 +1,4 @@
 nl:
-  SubsiteAdmin:
-    MENUTITLE: Subsites
   FileSubsites:
     SubsiteFieldLabel: Subsite
   GridFieldAddFromTemplateButton:
@@ -17,6 +15,8 @@ nl:
     SINGULARNAME: Subsite
     SiteConfigTitle: 'Jouw Site Naam'
     TabTitleConfig: Configuratie
+  SubsiteAdmin:
+    MENUTITLE: Subsites
   SubsiteDomain:
     DOMAIN: Domein
     IS_PRIMARY: 'Is Primaire domein'
@@ -29,6 +29,5 @@ nl:
     ThemeFieldLabel: Thema
     TitleFieldLabel: 'Subsite naam'
   SubsitesVirtualPage:
-    PLURALNAME: 'Subsites Virtuele pagina'
     SINGULARNAME: 'Subsites Virtuele pagina'
     SubsiteField: Subsite

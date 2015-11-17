@@ -1,8 +1,4 @@
 fi:
-  SubsiteAdmin:
-    MENUTITLE: Alasivustot
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   ASSETADMIN:
     SUBSITENOTICE: 'Kansiot ja tiedostot, jotka on luotu pääsivustolla, ovat käytettävissä kaikissa alisivustoissa.'
   FileSubsites:
@@ -42,6 +38,8 @@ fi:
     SiteConfigTitle: 'Sivuston nimi'
     TabTitleConfig: Asetukset
     ValidateTitle: 'Lisää "Otsikko"'
+  SubsiteAdmin:
+    MENUTITLE: Alasivustot
   SubsiteDomain:
     DOMAIN: Domain
     IS_PRIMARY: 'On päädomain'
@@ -49,6 +47,8 @@ fi:
     SINGULARNAME: 'Alisivuston domain-osoite'
   SubsiteReportWrapper:
     ReportDropdown: Sivustot
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Oletussivusto'
     DomainFieldLabel: Domain
@@ -62,6 +62,5 @@ fi:
     TitleFieldLabel: 'Alisivuston nimi'
   SubsitesVirtualPage:
     DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
-    PLURALNAME: 'Alisivustojen virtuaaliset sivut'
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
     SubsiteField: Alisivu

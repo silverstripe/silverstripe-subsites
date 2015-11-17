@@ -1,6 +1,4 @@
 pl_PL:
-  SubsiteAdmin:
-    MENUTITLE: Podwitryny
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Dodaj nową na podstawie szablonu'
   GroupSubsites:
@@ -8,6 +6,8 @@ pl_PL:
     ACCESSONLY: 'Tylko te podwitryny'
     ACCESSRADIOTITLE: 'Daj tej grupie dostęp do'
     SECURITYTABTITLE: Podwitryny
+  SubsiteAdmin:
+    MENUTITLE: Podwitryny
   SubsiteDomain:
     DOMAIN: Domena
     IS_PRIMARY: 'Ma priorytet?'
