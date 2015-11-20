@@ -5,26 +5,29 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		'subsites/tests/SubsiteTest.yml',
 		'subsites/tests/SubsitesVirtualPageTest.yml',
 	);
-	
-	function setUp() {
+
+	public function setUp() {
 		parent::setUp();
-		$this->logInWithPermission('ADMIN');
-		
-		$fh = fopen(Director::baseFolder() . '/assets/testscript-test-file.pdf', "w");
-		fwrite($fh, str_repeat('x',1000000));
-		fclose($fh);
+
+		// Set backend root to /DataDifferencerTest
+		AssetStoreTest_SpyStore::activate('SubsitesVirtualPageTest');
+
+		// Create a test files for each of the fixture references
+		$file = $this->objFromFixture('File', 'file1');
+		$page = $this->objFromFixture('SiteTree', 'page1');
+		$fromPath = __DIR__ . '/testscript-test-file.pdf';
+		$destPath = AssetStoreTest_SpyStore::getLocalPath($file);
+		Filesystem::makeFolder(dirname($destPath));
+		copy($fromPath, $destPath);
+
+		// Hack in site link tracking after the fact
+		$page->Content = '<p><img src="'. $file->getURL(). '" data-fileid="' . $file->ID . '" /></p>';
+		$page->write();
 	}
 
-	function tearDown() {
+	public function tearDown() {
+		AssetStoreTest_SpyStore::reset();
 		parent::tearDown();
-		$testFiles = array(
-			'/assets/testscript-test-file.pdf',
-			'/assets/renamed-test-file.pdf',
-			'/assets/renamed-test-file-second-time.pdf',
-		);
-		foreach($testFiles as $file) {
-			if(file_exists(Director::baseFolder().$file)) unlink(Director::baseFolder().$file);
-		}
 	}
 	
 	// Attempt to bring main:linky to subsite2:linky
@@ -52,7 +55,6 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	function testFileLinkRewritingOnVirtualPages() {
 		// File setup
 		$this->logInWithPermission('ADMIN');
-		touch(Director::baseFolder() . '/assets/testscript-test-file.pdf');
 
 		// Publish the source page
 		$page = $this->objFromFixture('SiteTree', 'page1');
@@ -70,19 +72,10 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		$file->write();
 		
 		// Verify that the draft and publish virtual pages both have the corrected link
-		$this->assertContains('<img src="assets/renamed-test-file.pdf"',
+		$this->assertContains('<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
 			DB::query("SELECT \"Content\" FROM \"SiteTree\" WHERE \"ID\" = $svp->ID")->value());
-		$this->assertContains('<img src="assets/renamed-test-file.pdf"',
+		$this->assertContains('<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
 			DB::query("SELECT \"Content\" FROM \"SiteTree_Live\" WHERE \"ID\" = $svp->ID")->value());
-
-		// File teardown
-		$testFiles = array(
-			'/assets/testscript-test-file.pdf',
-			'/assets/renamed-test-file.pdf',
-		);
-		foreach($testFiles as $file) {
-			if(file_exists(Director::baseFolder().$file)) unlink(Director::baseFolder().$file);
-		}
 	}
 
 	function testSubsiteVirtualPagesArentInappropriatelyPublished() {

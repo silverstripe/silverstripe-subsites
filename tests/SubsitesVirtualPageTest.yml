@@ -1,10 +1,12 @@
 # These need to come first so that SiteTree has the link meta-data written.
 File:
-   file1:
-      Filename: assets/testscript-test-file.pdf
+  file1:
+    FileFilename: testscript-test-file.pdf
+    FileHash: 464dedb70af0dc7f8f3360e7f3ae43cbbf1cdf4e
+    Name: testscript-test-file.pdf
 
 SiteTree:   
-   page1:
-      Title: page1
-      URLSegment: page1
-      Content: <p><img src="assets/testscript-test-file.pdf" /></p>
+  page1:
+    Title: page1
+    URLSegment: page1
+    Content: '<p><img src="/assets/SubsitesVirtualPageTest/464dedb70a/testscript-test-file.pdf" /></p>'
