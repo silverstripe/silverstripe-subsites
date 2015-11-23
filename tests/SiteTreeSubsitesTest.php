@@ -6,7 +6,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 	
 	protected $extraDataObjects = array(
 		'SiteTreeSubsitesTest_ClassA',
-		'SiteTreeSubsitesTest_ClassB'
+		'SiteTreeSubsitesTest_ClassB',
+		'SiteTreeSubsitesTest_ErrorPage'
 	);
 
 	protected $illegalExtensions = array(
@@ -55,10 +56,9 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		$subsite1 = $this->objFromFixture('Subsite', 'domaintest1');
 		
 		Subsite::changeSubsite($subsite1->ID);
-		$path = ErrorPage::get_filepath_for_errorcode(500);
+		$path = SiteTreeSubsitesTest_ErrorPage::get_error_filename_spy(500);
 		
-		$static_path = Config::inst()->get('ErrorPage', 'static_filepath');
-		$expected_path = $static_path . '/error-500-'.$subsite1->domain().'.html';
+		$expected_path = 'error-500-'.$subsite1->domain().'.html';
 		$this->assertEquals($expected_path, $path);
 	}
 	
@@ -201,3 +201,16 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 class SiteTreeSubsitesTest_ClassA extends SiteTree implements TestOnly {}
 
 class SiteTreeSubsitesTest_ClassB extends SiteTree implements TestOnly {}
+
+class SiteTreeSubsitesTest_ErrorPage extends ErrorPage implements TestOnly {
+
+	/**
+	 * Helper method to call protected members
+	 *
+	 * @param int $statusCode
+	 * @return string
+	 */
+	public static function get_error_filename_spy($statusCode) {
+		return self::get_error_filename($statusCode);
+	}
+}
