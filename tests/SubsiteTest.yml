@@ -1,184 +1,208 @@
 Subsite:
-   main:
-      Title: Template
-   subsite1:
-      Title: Subsite1 Template
-   subsite2:
-      Title: Subsite2 Template
-   domaintest1:
-      Title: Test 1
-   domaintest2:
-      Title: Test 2
-   domaintest3:
-      Title: Test 3
+  main:
+    Title: Template
+  subsite1:
+    Title: Subsite1 Template
+  subsite2:
+    Title: Subsite2 Template
+  domaintest1:
+    Title: Test 1
+  domaintest2:
+    Title: Test 2
+  domaintest3:
+    Title: Test 3
+  domaintest4:
+    Title: 'Test SSL'
+  domaintest5:
+    Title: 'Test Non-SSL'
 SubsiteDomain:
-   subsite1:
-      SubsiteID: =>Subsite.subsite1
-      Domain: subsite1.*
-   subsite2:
-      SubsiteID: =>Subsite.subsite2
-      Domain: subsite2.*
-   dt1a:
-      SubsiteID: =>Subsite.domaintest1
-      Domain: one.example.org
-      IsPrimary: 1
-   dt1b:
-      SubsiteID: =>Subsite.domaintest1
-      Domain: one.*
-   dt2a:
-      SubsiteID: =>Subsite.domaintest2
-      Domain: two.mysite.com
-      IsPrimary: 1
-   dt2b:
-      SubsiteID: =>Subsite.domaintest2
-      Domain: *.mysite.com
-   dt3:
-      SubsiteID: =>Subsite.domaintest3
-      Domain: three.*
-      IsPrimary: 1
+  subsite1:
+    SubsiteID: =>Subsite.subsite1
+    Domain: subsite1.*
+    Protocol: automatic
+  subsite2:
+    SubsiteID: =>Subsite.subsite2
+    Domain: subsite2.*
+    Protocol: automatic
+  dt1a:
+    SubsiteID: =>Subsite.domaintest1
+    Domain: one.example.org
+    Protocol: automatic
+    IsPrimary: 1
+  dt1b:
+    SubsiteID: =>Subsite.domaintest1
+    Domain: one.*
+    Protocol: automatic
+  dt2a:
+    SubsiteID: =>Subsite.domaintest2
+    Domain: two.mysite.com
+    Protocol: automatic
+    IsPrimary: 1
+  dt2b:
+    SubsiteID: =>Subsite.domaintest2
+    Domain: *.mysite.com
+    Protocol: automatic
+  dt3:
+    SubsiteID: =>Subsite.domaintest3
+    Domain: three.*
+    Protocol: automatic
+    IsPrimary: 1
+  dt4a:
+    SubsiteID: =>Subsite.domaintest4
+    Domain: www.primary.com
+    Protocol: https
+  dt4b:
+    SubsiteID: =>Subsite.domaintest4
+    Domain: www.secondary.com
+    Protocol: http
+  dt5:
+    SubsiteID: =>Subsite.domaintest5
+    Domain: www.tertiary.com
+    Protocol: http
+    IsPrimary: 1
 Page:
-   mainSubsitePage:
-      Title: MainSubsitePage
-      SubsiteID: 0
-   home:
-      Title: Home
-      SubsiteID: =>Subsite.main
-   about:
-      Title: About
-      SubsiteID: =>Subsite.main
-   linky:
-       Title: Linky
-       SubsiteID: =>Subsite.main
-   staff:
-      Title: Staff
-      ParentID: =>Page.about
-      SubsiteID: =>Subsite.main
-   contact:
-      Title: Contact Us
-      SubsiteID: =>Subsite.main
-   importantpage:
-      Title: Important Page
-      SubsiteID: =>Subsite.main
-   subsite1_home:
-      Title: Home (Subsite 1)
-      SubsiteID: =>Subsite.subsite1
-   subsite1_contactus:
-      Title: Contact Us (Subsite 1)
-      SubsiteID: =>Subsite.subsite1
-   subsite1_staff:
-      Title: Staff
-      SubsiteID: =>Subsite.subsite1
-   subsite2_home:
-      Title: Home (Subsite 2)
-      SubsiteID: =>Subsite.subsite2
-   subsite2_contactus:
-      Title: Contact Us (Subsite 2)
-      SubsiteID: =>Subsite.subsite2
+  mainSubsitePage:
+    Title: MainSubsitePage
+    SubsiteID: 0
+  home:
+    Title: Home
+    SubsiteID: =>Subsite.main
+  about:
+    Title: About
+    SubsiteID: =>Subsite.main
+  linky:
+     Title: Linky
+     SubsiteID: =>Subsite.main
+  staff:
+    Title: Staff
+    ParentID: =>Page.about
+    SubsiteID: =>Subsite.main
+  contact:
+    Title: Contact Us
+    SubsiteID: =>Subsite.main
+  importantpage:
+    Title: Important Page
+    SubsiteID: =>Subsite.main
+  subsite1_home:
+    Title: Home (Subsite 1)
+    SubsiteID: =>Subsite.subsite1
+  subsite1_contactus:
+    Title: Contact Us (Subsite 1)
+    SubsiteID: =>Subsite.subsite1
+  subsite1_staff:
+    Title: Staff
+    SubsiteID: =>Subsite.subsite1
+  subsite2_home:
+    Title: Home (Subsite 2)
+    SubsiteID: =>Subsite.subsite2
+  subsite2_contactus:
+    Title: Contact Us (Subsite 2)
+    SubsiteID: =>Subsite.subsite2
 
 PermissionRoleCode:
-   roleCode1:
-      Code: CMS_ACCESS_CMSMain
+  roleCode1:
+    Code: CMS_ACCESS_CMSMain
 PermissionRole:
-   role1:
-      Title: role1
-      Codes: =>PermissionRoleCode.roleCode1
+  role1:
+    Title: role1
+    Codes: =>PermissionRoleCode.roleCode1
 Group:
-   admin:
-      Title: Admin
-      Code: admin
-      AccessAllSubsites: 1
-   editor:
-      Title: Editor
-      Code: editor
-      AccessAllSubsites: 1
-   subsite1_group:
-      Title: subsite1_group
-      Code: subsite1_group
-      AccessAllSubsites: 0
-      Subsites: =>Subsite.subsite1
-   subsite2_group:
-      Title: subsite2_group
-      Code: subsite2_group
-      AccessAllSubsites: 0
-      Subsites: =>Subsite.subsite2
-   subsite1admins:
-      Title: subsite1admins
-      Code: subsite1admins
-      AccessAllSubsites: 0
-      Subsites: =>Subsite.subsite1
-   allsubsitesauthors:
-      Title: allsubsitesauthors
-      Code: allsubsitesauthors
-      AccessAllSubsites: 1
-   subsite1_group_via_role:
-      Title: subsite1_group_via_role
-      Code: subsite1_group_via_role
-      AccessAllSubsites: 1
-      Roles: =>PermissionRole.role1
+  admin:
+    Title: Admin
+    Code: admin
+    AccessAllSubsites: 1
+  editor:
+    Title: Editor
+    Code: editor
+    AccessAllSubsites: 1
+  subsite1_group:
+    Title: subsite1_group
+    Code: subsite1_group
+    AccessAllSubsites: 0
+    Subsites: =>Subsite.subsite1
+  subsite2_group:
+    Title: subsite2_group
+    Code: subsite2_group
+    AccessAllSubsites: 0
+    Subsites: =>Subsite.subsite2
+  subsite1admins:
+    Title: subsite1admins
+    Code: subsite1admins
+    AccessAllSubsites: 0
+    Subsites: =>Subsite.subsite1
+  allsubsitesauthors:
+    Title: allsubsitesauthors
+    Code: allsubsitesauthors
+    AccessAllSubsites: 1
+  subsite1_group_via_role:
+    Title: subsite1_group_via_role
+    Code: subsite1_group_via_role
+    AccessAllSubsites: 1
+    Roles: =>PermissionRole.role1
 Permission:
-   admin:
-      Code: ADMIN
-      GroupID: =>Group.admin
-   editor1:
-      Code: CMS_ACCESS_CMSMain
-      GroupID: =>Group.editor
-   editor2:
-      Code: SITETREE_VIEW_ALL
-      GroupID: =>Group.editor
-   editor3:
-      Code: VIEW_DRAFT_CONTENT
-      GroupID: =>Group.editor
-   accesscmsmain1:
-      Code: CMS_ACCESS_CMSMain
-      GroupID: =>Group.subsite1_group
-   accesscmsmain2:
-      Code: CMS_ACCESS_CMSMain
-      GroupID: =>Group.subsite2_group
-   accesscmsmain3:
-      Code: CMS_ACCESS_CMSMain
-      GroupID: =>Group.subsite1admins
-   accesscmsmain4:
-      Code: CMS_ACCESS_CMSMain
-      GroupID: =>Group.allsubsitesauthors
-   securityaccess1:
-      Code: CMS_ACCESS_SecurityAdmin
-      GroupID: =>Group.subsite1_group
-   securityaccess2:
-      Code: CMS_ACCESS_SecurityAdmin
-      GroupID: =>Group.subsite2_group
-   adminsubsite1:
-      Code: ADMIN
-      GroupID: =>Group.subsite1admins
+  admin:
+    Code: ADMIN
+    GroupID: =>Group.admin
+  editor1:
+    Code: CMS_ACCESS_CMSMain
+    GroupID: =>Group.editor
+  editor2:
+    Code: SITETREE_VIEW_ALL
+    GroupID: =>Group.editor
+  editor3:
+    Code: VIEW_DRAFT_CONTENT
+    GroupID: =>Group.editor
+  accesscmsmain1:
+    Code: CMS_ACCESS_CMSMain
+    GroupID: =>Group.subsite1_group
+  accesscmsmain2:
+    Code: CMS_ACCESS_CMSMain
+    GroupID: =>Group.subsite2_group
+  accesscmsmain3:
+    Code: CMS_ACCESS_CMSMain
+    GroupID: =>Group.subsite1admins
+  accesscmsmain4:
+    Code: CMS_ACCESS_CMSMain
+    GroupID: =>Group.allsubsitesauthors
+  securityaccess1:
+    Code: CMS_ACCESS_SecurityAdmin
+    GroupID: =>Group.subsite1_group
+  securityaccess2:
+    Code: CMS_ACCESS_SecurityAdmin
+    GroupID: =>Group.subsite2_group
+  adminsubsite1:
+    Code: ADMIN
+    GroupID: =>Group.subsite1admins
 
 Member:
-   admin:
-      FirstName: Admin
-      Surname: User
-      Email: admin@test.com
-      Password: rangi
-      Groups: =>Group.admin
-   editor:
-      FirstName: Editor
-      Surname: User
-      Email: editor@test.com
-      Password: rangi
-      Groups: =>Group.editor
-   subsite1member:
-      Email: subsite1member@test.com
-      Groups: =>Group.subsite1_group
-   subsite2member:
-      Email: subsite2member@test.com
-      Groups: =>Group.subsite2_group
-   subsite1admin:
-      Email: subsite1admin@test.com
-      Groups: =>Group.subsite1admins
-   allsubsitesauthor:
-      Email: allsubsitesauthor@test.com
-      Groups: =>Group.allsubsitesauthors
-   subsite1member2:
-      Email: subsite1member2@test.com
-      Groups: =>Group.subsite1_group_via_role
+  admin:
+    FirstName: Admin
+    Surname: User
+    Email: admin@test.com
+    Password: rangi
+    Groups: =>Group.admin
+  editor:
+    FirstName: Editor
+    Surname: User
+    Email: editor@test.com
+    Password: rangi
+    Groups: =>Group.editor
+  subsite1member:
+    Email: subsite1member@test.com
+    Groups: =>Group.subsite1_group
+  subsite2member:
+    Email: subsite2member@test.com
+    Groups: =>Group.subsite2_group
+  subsite1admin:
+    Email: subsite1admin@test.com
+    Groups: =>Group.subsite1admins
+  allsubsitesauthor:
+    Email: allsubsitesauthor@test.com
+    Groups: =>Group.allsubsitesauthors
+  subsite1member2:
+    Email: subsite1member2@test.com
+    Groups: =>Group.subsite1_group_via_role
 
 SiteConfig:
-   config:
-      CanCreateTopLevelType: LoggedInUsers
+  config:
+    CanCreateTopLevelType: LoggedInUsers

@@ -3,6 +3,18 @@
 class FileSubsitesTest extends BaseSubsiteTest
 {
     public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+
+    /**
+     * Disable other file extensions
+     *
+     * @var array
+     */
+	protected $illegalExtensions = array(
+        'File' => array(
+            'SecureFileExtension',
+            'VersionedFileExtension'
+        )
+	);
     
     public function testTrivialFeatures()
     {
@@ -68,12 +80,14 @@ class FileSubsitesTest extends BaseSubsiteTest
 
         $this->assertEquals(array(
             'Main site',
-            'Template',
             'Subsite1 Template',
             'Subsite2 Template',
+            'Template',
             'Test 1',
             'Test 2',
-            'Test 3'
-        ), $source);
+            'Test 3',
+            'Test Non-SSL',
+            'Test SSL',
+        ), array_values($source));
     }
 }

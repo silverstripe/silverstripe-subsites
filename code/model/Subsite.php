@@ -758,26 +758,27 @@ class Subsite extends DataObject
      */
     public function domain()
     {
-        if ($this->ID) {
-            $domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC", "", 1);
-            if ($domains && $domains->Count()>0) {
-                $domain = $domains->First()->Domain;
-                // If there are wildcards in the primary domain (not recommended), make some
-                // educated guesses about what to replace them with:
-                $domain = preg_replace('/\.\*$/', ".$_SERVER[HTTP_HOST]", $domain);
-                // Default to "subsite." prefix for first wildcard
-                // TODO Whats the significance of "subsite" in this context?!
-                $domain = preg_replace('/^\*\./', "subsite.", $domain);
-                // *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'
-                $domain = str_replace('.www.', '.', $domain);
-                
-                return $domain;
-            }
-            
-        // SubsiteID = 0 is often used to refer to the main site, just return $_SERVER['HTTP_HOST']
-        } else {
-            return $_SERVER['HTTP_HOST'];
+        // Get best SubsiteDomain object
+        $domainObject = $this->getPrimarySubsiteDomain();
+        if ($domainObject) {
+            return $domainObject->SubstitutedDomain;
         }
+
+        // If there are no objects, default to the current hostname
+        return $_SERVER['HTTP_HOST'];
+    }
+
+    /**
+     * Finds the primary {@see SubsiteDomain} object for this subsite
+     *
+     * @return SubsiteDomain
+     */
+    public function getPrimarySubsiteDomain()
+    {
+        return $this
+            ->Domains()
+            ->sort('"IsPrimary" DESC')
+            ->first();
     }
     
     /**
@@ -790,12 +791,19 @@ class Subsite extends DataObject
     }
 
     /**
-     * 
+     * Get the absolute URL for this subsite
      * @return string 
      */
     public function absoluteBaseURL()
     {
-        return "http://" . $this->domain() . Director::baseURL();
+        // Get best SubsiteDomain object
+        $domainObject = $this->getPrimarySubsiteDomain();
+        if ($domainObject) {
+            return $domainObject->absoluteBaseURL();
+        }
+
+        // Fall back to the current base url
+        return Director::absoluteBaseURL();
     }
 
     /**
