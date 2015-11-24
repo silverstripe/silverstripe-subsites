@@ -104,12 +104,17 @@ class SiteTreeSubsites extends DataExtension
         // replace readonly link prefix
         $subsite = $this->owner->Subsite();
         $nested_urls_enabled = Config::inst()->get('SiteTree', 'nested_urls');
-        if ($subsite && $subsite->ID) {
-            $baseUrl = Director::protocol() . $subsite->domain() . '/';
-            $baseLink = Controller::join_links(
-                $baseUrl,
-                ($nested_urls_enabled && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
-            );
+        if ($subsite && $subsite->exists()) {
+            // Use baseurl from domain
+            $baseLink = $subsite->absoluteBaseURL();
+            
+            // Add parent page if enabled
+            if($nested_urls_enabled && $this->owner->ParentID) {
+                $baseLink = Controller::join_links(
+                    $baseLink,
+                    $this->owner->Parent()->RelativeLink(true)
+                );
+            }
             
             $urlsegment = $fields->dataFieldByName('URLSegment');
             $urlsegment->setURLPrefix($baseLink);

@@ -3,20 +3,37 @@
 class SubsiteTest extends BaseSubsiteTest
 {
     public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+
+    /**
+     * Original value of {@see SubSite::$strict_subdomain_matching}
+     *
+     * @var bool
+     */
+    protected $origStrictSubdomainMatching = null;
+
+    /**
+     * Original value of $_REQUEST
+     *
+     * @var array
+     */
+    protected $origServer = array();
     
     public function setUp()
     {
         parent::setUp();
         
+        Config::inst()->update('Director', 'alternate_base_url', '/');
         $this->origStrictSubdomainMatching = Subsite::$strict_subdomain_matching;
+        $this->origServer = $_SERVER;
         Subsite::$strict_subdomain_matching = false;
     }
     
     public function tearDown()
     {
-        parent::tearDown();
-        
+        $_SERVER = $this->origServer;
         Subsite::$strict_subdomain_matching = $this->origStrictSubdomainMatching;
+
+        parent::tearDown();
     }
 
     /**
@@ -238,9 +255,7 @@ class SubsiteTest extends BaseSubsiteTest
 
         $this->assertEquals('two.mysite.com',
             $this->objFromFixture('Subsite', 'domaintest2')->domain());
-            
-        $originalHTTPHost = $_SERVER['HTTP_HOST'];
-        
+
         $_SERVER['HTTP_HOST'] = "www.example.org";
         $this->assertEquals('three.example.org',
             $this->objFromFixture('Subsite', 'domaintest3')->domain());
@@ -251,8 +266,51 @@ class SubsiteTest extends BaseSubsiteTest
 
         $this->assertEquals($_SERVER['HTTP_HOST'], singleton('Subsite')->PrimaryDomain);
         $this->assertEquals('http://'.$_SERVER['HTTP_HOST'].Director::baseURL(), singleton('Subsite')->absoluteBaseURL());
-
-        $_SERVER['HTTP_HOST'] = $originalHTTPHost;
+    }
+    
+    /**
+     * Tests that Subsite and SubsiteDomain both respect http protocol correctly
+     */
+    public function testDomainProtocol() {
+        // domaintest2 has 'protocol'
+        $subsite2 = $this->objFromFixture('Subsite', 'domaintest2');
+        $domain2a = $this->objFromFixture('SubsiteDomain', 'dt2a');
+        $domain2b = $this->objFromFixture('SubsiteDomain', 'dt2b');
+        
+        // domaintest4 is 'https' (primary only)
+        $subsite4 = $this->objFromFixture('Subsite', 'domaintest4');
+        $domain4a = $this->objFromFixture('SubsiteDomain', 'dt4a');
+        $domain4b = $this->objFromFixture('SubsiteDomain', 'dt4b'); // secondary domain is http only though
+        
+        // domaintest5 is 'http'
+        $subsite5 = $this->objFromFixture('Subsite', 'domaintest5');
+        $domain5a = $this->objFromFixture('SubsiteDomain', 'dt5');
+        
+        // Check protocol when current protocol is http://
+        $_SERVER['HTTP_HOST'] = 'www.mysite.com';
+        $_SERVER['HTTPS'] = '';
+        
+        $this->assertEquals('http://two.mysite.com/', $subsite2->absoluteBaseURL());
+        $this->assertEquals('http://two.mysite.com/', $domain2a->absoluteBaseURL());
+        $this->assertEquals('http://subsite.mysite.com/', $domain2b->absoluteBaseURL());
+        $this->assertEquals('https://www.primary.com/', $subsite4->absoluteBaseURL());
+        $this->assertEquals('https://www.primary.com/', $domain4a->absoluteBaseURL());
+        $this->assertEquals('http://www.secondary.com/', $domain4b->absoluteBaseURL());
+        $this->assertEquals('http://www.tertiary.com/', $subsite5->absoluteBaseURL());
+        $this->assertEquals('http://www.tertiary.com/', $domain5a->absoluteBaseURL());
+        
+        // Check protocol when current protocol is https://
+        $_SERVER['HTTP_HOST'] = 'www.mysite.com';
+        $_SERVER['HTTPS'] = 'ON';
+        
+        $this->assertEquals('https://two.mysite.com/', $subsite2->absoluteBaseURL());
+        $this->assertEquals('https://two.mysite.com/', $domain2a->absoluteBaseURL());
+        $this->assertEquals('https://subsite.mysite.com/', $domain2b->absoluteBaseURL());
+        $this->assertEquals('https://www.primary.com/', $subsite4->absoluteBaseURL());
+        $this->assertEquals('https://www.primary.com/', $domain4a->absoluteBaseURL());
+        $this->assertEquals('http://www.secondary.com/', $domain4b->absoluteBaseURL());
+        $this->assertEquals('http://www.tertiary.com/', $subsite5->absoluteBaseURL());
+        $this->assertEquals('http://www.tertiary.com/', $domain5a->absoluteBaseURL());
     }
 
     public function testAllSites()
@@ -265,7 +323,9 @@ class SubsiteTest extends BaseSubsiteTest
             array('Title' =>'Subsite2 Template'),
             array('Title' =>'Test 1'),
             array('Title' =>'Test 2'),
-            array('Title' =>'Test 3')
+            array('Title' =>'Test 3'),
+            array('Title' => 'Test Non-SSL'),
+            array('Title' => 'Test SSL')
         ), $subsites, 'Lists all subsites');
     }
 
@@ -301,10 +361,14 @@ class SubsiteTest extends BaseSubsiteTest
             'Test 1',
             'Test 2',
             'Test 3',
-        ), $adminSiteTitles);
+            'Test Non-SSL',
+            'Test SSL'
+        ), array_values($adminSiteTitles));
 
-        $member2Sites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", false, null,
-            $this->objFromFixture('Member', 'subsite1member2'));
+        $member2Sites = Subsite::accessible_sites(
+            "CMS_ACCESS_CMSMain", false, null,
+            $this->objFromFixture('Member', 'subsite1member2')
+        );
         $member2SiteTitles = $member2Sites->column("Title");
         sort($member2SiteTitles);
         $this->assertEquals('Subsite1 Template', $member2SiteTitles[0], 'Member can get to subsite via a group role');
