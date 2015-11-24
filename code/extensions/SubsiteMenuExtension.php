@@ -10,10 +10,10 @@
  * Or you can include the subsiteCMSShowInMenu function in your admin class and have it return true
  */
 
-class SubsiteMenuExtension extends Extension{
-	
-	public function subsiteCMSShowInMenu(){
-		return true;
-	}
-
+class SubsiteMenuExtension extends Extension
+{
+    public function subsiteCMSShowInMenu()
+    {
+        return true;
+    }
 }

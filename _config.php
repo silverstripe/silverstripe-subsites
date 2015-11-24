@@ -25,4 +25,3 @@ CMSMain::add_extension('SubsiteMenuExtension');
 CMSPagesController::add_extension('SubsiteMenuExtension');
 SubsiteAdmin::add_extension('SubsiteMenuExtension');
 CMSSettingsController::add_extension('SubsiteMenuExtension');
-
