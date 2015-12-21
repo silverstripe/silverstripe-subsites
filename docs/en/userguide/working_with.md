@@ -2,11 +2,11 @@
 
 ## Managing content across subsites
 
-Select a subsite from the dropdown in the upper left to display the content for that site in the site tree.
+To edit a particular subsite, choose the subsite from the dropdown menu in the left-hand menu.
 
 ![Subsites dropdown](_images/subsites-dropdown.png)
 
-## Subsites virtual pages
+### Subsites virtual pages
 
 You can pull in the content from a page that resides on another subsite by creating a page of the type **Subsites
 Virtual Page**. Pick the subsite from which you want to pull the content, then select the page. As with regular virtual
@@ -15,7 +15,7 @@ the original content changes.
 
 ![Subsites virtual page](_images/subsites-virtual-page.jpg)
 
-## Duplicating pages from the main site
+### Duplicating pages from the main site
 
 If you have an existing page on the main site that you would like to copy to a subsite, all you need to do is:
 
