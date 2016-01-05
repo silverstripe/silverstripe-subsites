@@ -21,8 +21,8 @@ permissions" will imply that the person will likely be able to escalate his/her 
 
 For user documentation please see:
 
- 1. [Setting up subsites](docs/en/set_up.md)
- 1. [Working with subsites](docs/en/working_with.md)
+ 1. [Setting up subsites](docs/en/userhelp/set_up.md)
+ 1. [Working with subsites](docs/en/userhelp/working_with.md)
 
 ## Features & limitations
 
@@ -41,7 +41,7 @@ For user documentation please see:
 
  * Each subsite domain name has to be set up on the server first, and DNS records need to be updated as appropriate.
  * A subsite cannot use a different codebase as the main site, they are intrinsically tied
- 	* However, you can remove page types from a subsite when creating the subsite - [see the setup documentation for further details](set_up.md)
+ 	* However, you can remove page types from a subsite when creating the subsite - [see the setup documentation for further details](docs/en/userhelp/set_up.md)
  * The only code a developer can edit between subsites is the theme
  * The separation between subsites in the CMS needs to be seen as cosmetic, and mostly applicable to the "Pages" and "Files" sections of the CMS.
  * All subsites run in the same process space and data set. Therefore if an outage affects one subsite it will affect all subsites, and if bad code or hardware corrupts one subsite's data, it's very likely that it has corrupted all subsite data. 
