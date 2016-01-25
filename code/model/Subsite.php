@@ -700,8 +700,8 @@ class Subsite extends DataObject
             return ArrayLib::valuekey($themes);
         } else {
             $themes = array();
-            if (is_dir('../themes/')) {
-                foreach (scandir('../themes/') as $theme) {
+            if (is_dir(THEMES_PATH)) {
+                foreach (scandir(THEMES_PATH) as $theme) {
                     if ($theme[0] == '.') {
                         continue;
                     }
