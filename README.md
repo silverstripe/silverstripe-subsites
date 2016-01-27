@@ -21,8 +21,8 @@ permissions" will imply that the person will likely be able to escalate his/her 
 
 For user documentation please see:
 
- 1. [Setting up subsites](docs/en/userhelp/set_up.md)
- 1. [Working with subsites](docs/en/userhelp/working_with.md)
+ 1. [Setting up subsites](docs/en/userguide/set_up.md)
+ 1. [Working with subsites](docs/en/userguide/working_with.md)
 
 ## Features & limitations
 
