@@ -1,0 +1,14 @@
+fa_IR:
+  LeftAndMain_Menu:
+    Hello: سلام
+    LOGOUT: 'خروج'
+  Subsite:
+    CustomMetaTitle: عنوان
+  SubsiteDomain:
+    DOMAIN: دامنه
+  Subsites:
+    DefaultSiteFieldLabel: 'سایت پیش فرض'
+    DomainFieldLabel: دامنه
+    LanguageFieldLabel: زبان
+  SubsitesVirtualPage:
+    PLURALNAME: 'صفحه اصلی'
