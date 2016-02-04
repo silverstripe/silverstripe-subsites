@@ -9,6 +9,13 @@ class FileSubsites extends DataExtension {
 	// If this is set to true, all folders created will be default be
 	// considered 'global', unless set otherwise
 	static $default_root_folders_global = false;
+
+	/**
+	 * Show global folders in AssetAdmin
+	 * @config
+	 * @var bool
+	 */
+	private static $show_global_folders = true;
 	
 	private static $has_one=array(
 		'Subsite' => 'Subsite',
@@ -71,7 +78,15 @@ class FileSubsites extends DataExtension {
 
 			// The foreach is an ugly way of getting the first key :-)
 			foreach($query->getFrom() as $tableName => $info) {
-				$where = "\"$tableName\".\"SubsiteID\" IN (0, $subsiteID)";
+				
+				$in = "(0, $subsiteID)";
+				
+				//If "show global folders" is disabled we only show assets belonging to the subsite
+				if (Config::inst()->get('FileSubsites', 'show_global_folders') == false) {
+					$in = "($subsiteID)";
+				}
+				
+				$where = "\"$tableName\".\"SubsiteID\" IN $in";
 				$query->addWhere($where);
 				break;
 			}
