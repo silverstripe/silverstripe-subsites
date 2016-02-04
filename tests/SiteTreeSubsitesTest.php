@@ -145,7 +145,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		
 		Subsite::changeSubsite($s1);
 		$settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
-		
+
 		$this->assertArrayNotHasKey('ErrorPage', 
 			$settingsFields
 		);
@@ -194,6 +194,25 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		$this->assertNotContains('ErrorPage', $classes);
 		$this->assertNotContains('SiteTreeSubsitesTest_ClassA', $classes);
 		$this->assertNotContains('SiteTreeSubsitesTest_ClassB', $classes);
+	}
+
+	
+	function testCopySubsiteWithChildren() {
+		$page = $this->objFromFixture('Page', 'about');
+		$newSubsite = $this->objFromFixture('Subsite', 'subsite1');
+
+		$moved = $page->duplicateToSubsite($newSubsite->ID, true);
+		$this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
+		$this->assertEquals($moved->AllChildren()->count(), $page->AllChildren()->count(), 'All pages are copied across');
+	}
+
+	function testCopySubsiteWithoutChildren() {
+		$page = $this->objFromFixture('Page', 'about');
+		$newSubsite = $this->objFromFixture('Subsite', 'subsite2');
+
+		$moved = $page->duplicateToSubsite($newSubsite->ID, false);
+		$this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
+		$this->assertEquals($moved->AllChildren()->count(), 0, 'All pages are copied across');
 	}
 	
 }
