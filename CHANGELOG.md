@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.1]
+
+* BUG: The move to subsite folder dropdown in files is gone
+* Update templates for 3.3 compatibility
+* Update userhelp documentation
+* Fix Subsite module does not picks up themes
+* Update translations
+
 ## [1.2.0]
 
 * API Add option to specify http / https on subsite domains
