@@ -33,7 +33,8 @@ class SiteTreeSubsites extends DataExtension
         if (Subsite::$disable_subsite_filter) {
             return;
         }
-        if ($dataQuery->getQueryParam('Subsite.filter') === false) {
+        
+        if ($dataQuery && $dataQuery->getQueryParam('Subsite.filter') === false) {
             return;
         }
         
