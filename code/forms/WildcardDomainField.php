@@ -33,7 +33,7 @@ class WildcardDomainField extends TextField
      */
     public function checkHostname($hostname)
     {
-        return (bool)preg_match('/^([a-z0-9\*]+[\-\.])*([a-z0-9\*]+)$/', $hostname);
+        return (bool)preg_match('/^([a-z0-9\*]+[\-\.\:])*([a-z0-9\*]+)$/', $hostname);
     }
 
     public function Type()
