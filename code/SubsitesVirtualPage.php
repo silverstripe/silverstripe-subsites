@@ -230,4 +230,12 @@ class SubsitesVirtualPage_Controller extends VirtualPage_Controller
         
         Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
     }
+    
+    
+    public function getViewer($action)
+    {
+        $controller = ModelAsController::controller_for($this->CopyContentFrom());
+        $controller->init();
+        return $controller->getViewer($action);
+    }
 }
