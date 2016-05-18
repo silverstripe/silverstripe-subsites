@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.2]
+
+* Update translations.
+* Added attributes to menu link
+
 ## [1.2.1]
 
 * BUG: The move to subsite folder dropdown in files is gone
