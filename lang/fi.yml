@@ -42,7 +42,6 @@ fi:
     MENUTITLE: Alasivustot
   SubsiteDomain:
     DOMAIN: Domain
-    IS_PRIMARY: 'On päädomain'
     PLURALNAME: 'Alisivuston domain-osoitteet'
     SINGULARNAME: 'Alisivuston domain-osoite'
   SubsiteReportWrapper:
@@ -62,5 +61,6 @@ fi:
     TitleFieldLabel: 'Alisivuston nimi'
   SubsitesVirtualPage:
     DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
+    PLURALNAME: 'Pohjasivut'
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
     SubsiteField: Alisivu

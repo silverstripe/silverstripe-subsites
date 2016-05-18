@@ -42,7 +42,6 @@ mi:
     MENUTITLE: Ngā pae iti
   SubsiteDomain:
     DOMAIN: Rohe
-    IS_PRIMARY: 'Ko Te Rohe Matua'
     PLURALNAME: 'Ngā Rohe Pae Iti'
     SINGULARNAME: 'Rohe Pae Iti'
   SubsiteReportWrapper:

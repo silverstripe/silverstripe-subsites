@@ -10,7 +10,6 @@ ja:
     MENUTITLE: サブサイト
   SubsiteDomain:
     DOMAIN: ドメイン
-    IS_PRIMARY: 'プライマリドメイン'
     PLURALNAME: 'サブサイトのドメイン'
     SINGULARNAME: 'サブサイトのドメイン'
   SubsitesVirtualPage:

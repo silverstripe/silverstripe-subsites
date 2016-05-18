@@ -42,7 +42,6 @@ zh:
     MENUTITLE: 多个子网站
   SubsiteDomain:
     DOMAIN: 域名
-    IS_PRIMARY: '是主域名'
     PLURALNAME: '多个子网站域名'
     SINGULARNAME: '子网站域名'
   SubsiteReportWrapper:

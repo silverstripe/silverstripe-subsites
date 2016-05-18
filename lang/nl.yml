@@ -19,7 +19,6 @@ nl:
     MENUTITLE: Subsites
   SubsiteDomain:
     DOMAIN: Domein
-    IS_PRIMARY: 'Is Primaire domein'
     PLURALNAME: 'Subsite Domeinen'
     SINGULARNAME: 'Subsite Domein'
   Subsites:

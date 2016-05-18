@@ -10,7 +10,6 @@ pl_PL:
     MENUTITLE: Podwitryny
   SubsiteDomain:
     DOMAIN: Domena
-    IS_PRIMARY: 'Ma priorytet?'
     PLURALNAME: 'Domeny podwitryny'
     SINGULARNAME: 'Domena podwitryny'
   SubsitesVirtualPage:

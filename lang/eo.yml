@@ -1,6 +1,8 @@
 eo:
   ASSETADMIN:
     SUBSITENOTICE: 'Dosierujoj kaj dosieroj kreitaj en la ĉefa retejo estas alireblaj de ĉiuj retejoj'
+  DomainNameField:
+    INVALID_DOMAIN: 'Nevalida domajna nomo'
   FileSubsites:
     AllSitesDropdownOpt: 'Ĉiuj retejoj'
     SubsiteFieldLabel: Subretejo
@@ -45,8 +47,14 @@ eo:
     MENUTITLE: Subretejoj
   SubsiteDomain:
     DOMAIN: Domajno
-    IS_PRIMARY: 'Estas unuaranga domajno'
+    DOMAIN_DESCRIPTION: 'Gastiga nomo de ĉi tiu subretejo (ellasu protokolon). Permesas ĵokerojn (*).'
+    IS_PRIMARY: 'Ĉu unuaranga domajno?'
     PLURALNAME: 'Subretejaj domajnoj'
+    PROTOCOL_AUTOMATIC: Aŭtomata
+    PROTOCOL_DESCRIPTION: 'Marki ĉi tion kiel la aprioran domajnon por ĉi tiu subretejo'
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protokolo
     SINGULARNAME: 'Subreteja domajno'
   SubsiteReportWrapper:
     ReportDropdown: Retejoj

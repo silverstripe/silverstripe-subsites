@@ -45,8 +45,12 @@ de:
     MENUTITLE: Subsites
   SubsiteDomain:
     DOMAIN: Domain
-    IS_PRIMARY: 'Ist primäre Domain'
+    IS_PRIMARY: 'Ist Hauptdomain?'
     PLURALNAME: 'Subsite Domains'
+    PROTOCOL_AUTOMATIC: Automatisch
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protokoll
     SINGULARNAME: 'Subsite Domain'
   SubsiteReportWrapper:
     ReportDropdown: Seiten
@@ -65,6 +69,7 @@ de:
     TitleFieldLabel: 'Name der Subsite'
   SubsitesVirtualPage:
     DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subsite an'
+    PLURALNAME: 'Basis Seiten'
     SINGULARNAME: 'Subsites Virtuelle Seite'
     SubsiteField: Subsite
   VirtualPage:

@@ -28,7 +28,6 @@ lt:
     ValidateTitle: 'Prašome įvesti "Pavadinimą"'
   SubsiteDomain:
     DOMAIN: Domenas
-    IS_PRIMARY: 'Pagrindinis domenas'
   SubsiteReportWrapper:
     ReportDropdown: Svetainės
   SubsiteXHRController:
@@ -42,3 +41,5 @@ lt:
     PrimaryDomainFieldLabel: 'Pagrindinis domenas'
     RedirectURLFieldLabel: 'Nukreipimo nuoroda'
     ThemeFieldLabel: Tema
+  SubsitesVirtualPage:
+    PLURALNAME: 'Baziniai puslapiai'

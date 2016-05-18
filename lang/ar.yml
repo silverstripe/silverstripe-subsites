@@ -42,7 +42,6 @@ ar:
     MENUTITLE: مواقع فرعية
   SubsiteDomain:
     DOMAIN: نطاق
-    IS_PRIMARY: 'هو نطاق أساسي'
     PLURALNAME: 'نطاقات موقع فرعي'
     SINGULARNAME: 'نطاق موقع فرعي'
   SubsiteReportWrapper:
