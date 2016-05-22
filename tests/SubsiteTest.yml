@@ -64,40 +64,52 @@ Page:
   mainSubsitePage:
     Title: MainSubsitePage
     SubsiteID: 0
+    URLSegment: mainsubsitepage
   home:
     Title: Home
     SubsiteID: =>Subsite.main
+    URLSegment: home
   about:
     Title: About
     SubsiteID: =>Subsite.main
+    URLSegment: about
   linky:
      Title: Linky
      SubsiteID: =>Subsite.main
+     URLSegment: linky
   staff:
     Title: Staff
     ParentID: =>Page.about
     SubsiteID: =>Subsite.main
+    URLSegment: staff
   contact:
     Title: Contact Us
     SubsiteID: =>Subsite.main
+    URLSegment: contact-us
   importantpage:
     Title: Important Page
     SubsiteID: =>Subsite.main
+    URLSegment: important-page
   subsite1_home:
     Title: Home (Subsite 1)
     SubsiteID: =>Subsite.subsite1
+    URLSegment: home
   subsite1_contactus:
     Title: Contact Us (Subsite 1)
     SubsiteID: =>Subsite.subsite1
+    URLSegment: contact-us
   subsite1_staff:
     Title: Staff
     SubsiteID: =>Subsite.subsite1
+    URLSegment: staff
   subsite2_home:
     Title: Home (Subsite 2)
     SubsiteID: =>Subsite.subsite2
+    URLSegment: home
   subsite2_contactus:
     Title: Contact Us (Subsite 2)
     SubsiteID: =>Subsite.subsite2
+    URLSegment: contact-us
 
 PermissionRoleCode:
   roleCode1:

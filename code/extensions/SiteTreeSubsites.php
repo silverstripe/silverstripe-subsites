@@ -24,7 +24,7 @@ class SiteTreeSubsites extends DataExtension
         }
         return false;
     }
-    
+
     /**
      * Update any requests to limit the results to the current site
      */
@@ -36,7 +36,7 @@ class SiteTreeSubsites extends DataExtension
         if ($dataQuery->getQueryParam('Subsite.filter') === false) {
             return;
         }
-        
+
         // If you're querying by ID, ignore the sub-site - this is a bit ugly...
         // if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
         if ($query->filtersOnID()) {
@@ -60,13 +60,13 @@ class SiteTreeSubsites extends DataExtension
             break;
         }
     }
-    
+
     public function onBeforeWrite()
     {
         if (!$this->owner->ID && !$this->owner->SubsiteID) {
             $this->owner->SubsiteID = Subsite::currentSubsiteID();
         }
-        
+
         parent::onBeforeWrite();
     }
 
@@ -107,7 +107,7 @@ class SiteTreeSubsites extends DataExtension
         if ($subsite && $subsite->exists()) {
             // Use baseurl from domain
             $baseLink = $subsite->absoluteBaseURL();
-            
+
             // Add parent page if enabled
             if($nested_urls_enabled && $this->owner->ParentID) {
                 $baseLink = Controller::join_links(
@@ -115,12 +115,12 @@ class SiteTreeSubsites extends DataExtension
                     $this->owner->Parent()->RelativeLink(true)
                 );
             }
-            
+
             $urlsegment = $fields->dataFieldByName('URLSegment');
             $urlsegment->setURLPrefix($baseLink);
         }
     }
-    
+
     public function alternateSiteConfig()
     {
         if (!$this->owner->SubsiteID) {
@@ -136,12 +136,12 @@ class SiteTreeSubsites extends DataExtension
         }
         return $sc;
     }
-    
+
     /**
      * Only allow editing of a page if the member satisfies one of the following conditions:
      * - Is in a group which has access to the subsite this page belongs to
      * - Is in a group with edit permissions on the "main site"
-     * 
+     *
      * @return boolean
      */
     public function canEdit($member = null)
@@ -149,7 +149,7 @@ class SiteTreeSubsites extends DataExtension
         if (!$member) {
             $member = Member::currentUser();
         }
-        
+
         // Find the sites that this user has access to
         $goodSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true, 'all', $member)->column('ID');
 
@@ -169,7 +169,7 @@ class SiteTreeSubsites extends DataExtension
             return false;
         }
     }
-    
+
     /**
      * @return boolean
      */
@@ -178,10 +178,10 @@ class SiteTreeSubsites extends DataExtension
         if (!$member && $member !== false) {
             $member = Member::currentUser();
         }
-        
+
         return $this->canEdit($member);
     }
-    
+
     /**
      * @return boolean
      */
@@ -190,10 +190,10 @@ class SiteTreeSubsites extends DataExtension
         if (!$member && $member !== false) {
             $member = Member::currentUser();
         }
-        
+
         return $this->canEdit($member);
     }
-    
+
     /**
      * @return boolean
      */
@@ -218,7 +218,7 @@ class SiteTreeSubsites extends DataExtension
         } else {
             $subsite = DataObject::get_by_id('Subsite', $subsiteID);
         }
-        
+
         $oldSubsite=Subsite::currentSubsiteID();
         if ($subsiteID) {
             Subsite::changeSubsite($subsiteID);
@@ -294,7 +294,7 @@ class SiteTreeSubsites extends DataExtension
         // Set LinkTracking appropriately
         $links = HTTP::getLinksIn($this->owner->Content);
         $linkedPages = array();
-        
+
         if ($links) {
             foreach ($links as $link) {
                 if (substr($link, 0, strlen('http://')) == 'http://') {
@@ -302,7 +302,7 @@ class SiteTreeSubsites extends DataExtension
                     if (strpos($withoutHttp, '/') && strpos($withoutHttp, '/') < strlen($withoutHttp)) {
                         $domain = substr($withoutHttp, 0, strpos($withoutHttp, '/'));
                         $rest = substr($withoutHttp, strpos($withoutHttp, '/') + 1);
-                    
+
                         $subsiteID = Subsite::getSubsiteIDForDomain($domain);
                         if ($subsiteID == 0) {
                             continue;
@@ -312,7 +312,7 @@ class SiteTreeSubsites extends DataExtension
                         Subsite::disable_subsite_filter(true);
                         $candidatePage = DataObject::get_one("SiteTree", "\"URLSegment\" = '" . Convert::raw2sql(urldecode($rest)) . "' AND \"SubsiteID\" = " . $subsiteID, false);
                         Subsite::disable_subsite_filter($origDisableSubsiteFilter);
-                    
+
                         if ($candidatePage) {
                             $linkedPages[] = $candidatePage->ID;
                         } else {
@@ -322,10 +322,37 @@ class SiteTreeSubsites extends DataExtension
                 }
             }
         }
-        
+
         $this->owner->CrossSubsiteLinkTracking()->setByIDList($linkedPages);
     }
-    
+
+	/**
+	 * Ensure that valid url segments are checked within the correct subsite of the owner object,
+	 * even if the current subsiteID is set to some other subsite.
+	 *
+	 * @return null|bool Either true or false, or null to not influence result
+	 */
+	public function augmentValidURLSegment()
+	{
+		// If this page is being filtered in the current subsite, then no custom validation query is required.
+		$subsite = Subsite::$force_subsite ?: Subsite::currentSubsiteID();
+		if (empty($this->owner->SubsiteID) || $subsite == $this->owner->SubsiteID) {
+			return null;
+		}
+
+		// Backup forced subsite
+		$prevForceSubsite = Subsite::$force_subsite;
+		Subsite::$force_subsite = $this->owner->SubsiteID;
+
+		// Repeat validation in the correct subsite
+		$isValid = $this->owner->validURLSegment();
+
+		// Restore
+		Subsite::$force_subsite = $prevForceSubsite;
+
+		return (bool)$isValid;
+	}
+
     /**
      * Return a piece of text to keep DataObject cache keys appropriately specific
      */
@@ -333,7 +360,7 @@ class SiteTreeSubsites extends DataExtension
     {
         return 'subsite-'.Subsite::currentSubsiteID();
     }
-    
+
     /**
      * @param Member
      * @return boolean|null

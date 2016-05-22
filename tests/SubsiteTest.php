@@ -17,17 +17,17 @@ class SubsiteTest extends BaseSubsiteTest
      * @var array
      */
     protected $origServer = array();
-    
+
     public function setUp()
     {
         parent::setUp();
-        
+
         Config::inst()->update('Director', 'alternate_base_url', '/');
         $this->origStrictSubdomainMatching = Subsite::$strict_subdomain_matching;
         $this->origServer = $_SERVER;
         Subsite::$strict_subdomain_matching = false;
     }
-    
+
     public function tearDown()
     {
         $_SERVER = $this->origServer;
@@ -42,15 +42,16 @@ class SubsiteTest extends BaseSubsiteTest
     public function testSubsiteCreation()
     {
         Subsite::$write_hostmap = false;
-        
+
         // Create the instance
         $template = $this->objFromFixture('Subsite', 'main');
-    
+
         // Test that changeSubsite is working
         Subsite::changeSubsite($template->ID);
+		$this->assertEquals($template->ID, Subsite::currentSubsiteID());
         $tmplStaff = $this->objFromFixture('Page', 'staff');
         $tmplHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
-    
+
         // Publish all the pages in the template, testing that DataObject::get only returns pages from the chosen subsite
         $pages = DataObject::get("SiteTree");
         $totalPages = $pages->Count();
@@ -61,22 +62,22 @@ class SubsiteTest extends BaseSubsiteTest
 
         // Create a new site
         $subsite = $template->duplicate();
-    
+
         // Check title
         $this->assertEquals($subsite->Title, $template->Title);
-        
+
         // Another test that changeSubsite is working
         $subsite->activate();
-    
+
         $siteHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
         $this->assertNotEquals($siteHome, false, 'Home Page for subsite not found');
         $this->assertEquals($subsite->ID, $siteHome->SubsiteID,
             'createInstance() copies existing pages retaining the same URLSegment'
         );
-        
+
         Subsite::changeSubsite(0);
     }
-    
+
     /**
      * Confirm that domain lookup is working
      */
@@ -89,7 +90,7 @@ class SubsiteTest extends BaseSubsiteTest
         foreach (DataObject::get('SubsiteDomain') as $domain) {
             $domain->delete();
         }
-        
+
         // Much more expressive than YML in this case
         $subsite1 = $this->createSubsiteWithDomains(array(
             'one.example.org' => true,
@@ -105,19 +106,19 @@ class SubsiteTest extends BaseSubsiteTest
             'subdomain.unique.com' => false,
             '*.onmultiplesubsites.com' => false,
         ));
-        
+
         $this->assertEquals(
             $subsite3->ID,
             Subsite::getSubsiteIDForDomain('subdomain.unique.com'),
             'Full unique match'
         );
-        
+
         $this->assertEquals(
             $subsite1->ID,
             Subsite::getSubsiteIDForDomain('one.example.org'),
             'Full match, doesn\'t complain about multiple matches within a single subsite'
         );
-        
+
         $failed = false;
         try {
             Subsite::getSubsiteIDForDomain('subdomain.onmultiplesubsites.com');
@@ -128,19 +129,19 @@ class SubsiteTest extends BaseSubsiteTest
             $failed,
             'Fails on multiple matches with wildcard vs. www across multiple subsites'
         );
-        
+
         $this->assertEquals(
             $subsite1->ID,
             Subsite::getSubsiteIDForDomain('one.unique.com'),
             'Fuzzy match suffixed with wildcard (rule "one.*")'
         );
-        
+
         $this->assertEquals(
             $subsite2->ID,
             Subsite::getSubsiteIDForDomain('two.mysite.com'),
             'Matches correct subsite for rule'
         );
-        
+
         $this->assertEquals(
             $subsite2->ID,
             Subsite::getSubsiteIDForDomain('other.mysite.com'),
@@ -153,7 +154,7 @@ class SubsiteTest extends BaseSubsiteTest
             "Doesn't match unknown subsite"
         );
     }
-    
+
     public function testStrictSubdomainMatching()
     {
         // Clear existing fixtures
@@ -163,7 +164,7 @@ class SubsiteTest extends BaseSubsiteTest
         foreach (DataObject::get('SubsiteDomain') as $domain) {
             $domain->delete();
         }
-        
+
         // Much more expressive than YML in this case
         $subsite1 = $this->createSubsiteWithDomains(array(
             'example.org' => true,
@@ -176,7 +177,7 @@ class SubsiteTest extends BaseSubsiteTest
         ));
 
         Subsite::$strict_subdomain_matching = false;
-        
+
         $this->assertEquals(
             $subsite1->ID,
             Subsite::getSubsiteIDForDomain('example.org'),
@@ -197,9 +198,9 @@ class SubsiteTest extends BaseSubsiteTest
             Subsite::getSubsiteIDForDomain('www.wildcard.com'),
             'Doesn\'t match www prefix without strict check, even if a wildcard subdomain is in place'
         );
-        
+
         Subsite::$strict_subdomain_matching = true;
-        
+
         $this->assertEquals(
             $subsite1->ID,
             Subsite::getSubsiteIDForDomain('example.org'),
@@ -226,7 +227,7 @@ class SubsiteTest extends BaseSubsiteTest
             'Fails on multiple matches with strict checking and wildcard vs. www'
         );
     }
-    
+
     protected function createSubsiteWithDomains($domains)
     {
         $subsite = new Subsite(array(
@@ -241,7 +242,7 @@ class SubsiteTest extends BaseSubsiteTest
             ));
             $domain->write();
         }
-        
+
         return $subsite;
     }
 
@@ -267,7 +268,7 @@ class SubsiteTest extends BaseSubsiteTest
         $this->assertEquals($_SERVER['HTTP_HOST'], singleton('Subsite')->PrimaryDomain);
         $this->assertEquals('http://'.$_SERVER['HTTP_HOST'].Director::baseURL(), singleton('Subsite')->absoluteBaseURL());
     }
-    
+
     /**
      * Tests that Subsite and SubsiteDomain both respect http protocol correctly
      */
@@ -276,20 +277,20 @@ class SubsiteTest extends BaseSubsiteTest
         $subsite2 = $this->objFromFixture('Subsite', 'domaintest2');
         $domain2a = $this->objFromFixture('SubsiteDomain', 'dt2a');
         $domain2b = $this->objFromFixture('SubsiteDomain', 'dt2b');
-        
+
         // domaintest4 is 'https' (primary only)
         $subsite4 = $this->objFromFixture('Subsite', 'domaintest4');
         $domain4a = $this->objFromFixture('SubsiteDomain', 'dt4a');
         $domain4b = $this->objFromFixture('SubsiteDomain', 'dt4b'); // secondary domain is http only though
-        
+
         // domaintest5 is 'http'
         $subsite5 = $this->objFromFixture('Subsite', 'domaintest5');
         $domain5a = $this->objFromFixture('SubsiteDomain', 'dt5');
-        
+
         // Check protocol when current protocol is http://
         $_SERVER['HTTP_HOST'] = 'www.mysite.com';
         $_SERVER['HTTPS'] = '';
-        
+
         $this->assertEquals('http://two.mysite.com/', $subsite2->absoluteBaseURL());
         $this->assertEquals('http://two.mysite.com/', $domain2a->absoluteBaseURL());
         $this->assertEquals('http://subsite.mysite.com/', $domain2b->absoluteBaseURL());
@@ -298,11 +299,11 @@ class SubsiteTest extends BaseSubsiteTest
         $this->assertEquals('http://www.secondary.com/', $domain4b->absoluteBaseURL());
         $this->assertEquals('http://www.tertiary.com/', $subsite5->absoluteBaseURL());
         $this->assertEquals('http://www.tertiary.com/', $domain5a->absoluteBaseURL());
-        
+
         // Check protocol when current protocol is https://
         $_SERVER['HTTP_HOST'] = 'www.mysite.com';
         $_SERVER['HTTPS'] = 'ON';
-        
+
         $this->assertEquals('https://two.mysite.com/', $subsite2->absoluteBaseURL());
         $this->assertEquals('https://two.mysite.com/', $domain2a->absoluteBaseURL());
         $this->assertEquals('https://subsite.mysite.com/', $domain2b->absoluteBaseURL());
@@ -373,14 +374,14 @@ class SubsiteTest extends BaseSubsiteTest
         sort($member2SiteTitles);
         $this->assertEquals('Subsite1 Template', $member2SiteTitles[0], 'Member can get to subsite via a group role');
     }
-    
+
     public function testhasMainSitePermission()
     {
         $admin = $this->objFromFixture('Member', 'admin');
         $subsite1member = $this->objFromFixture('Member', 'subsite1member');
         $subsite1admin = $this->objFromFixture('Member', 'subsite1admin');
         $allsubsitesauthor = $this->objFromFixture('Member', 'allsubsitesauthor');
-        
+
         $this->assertTrue(
             Subsite::hasMainSitePermission($admin),
             'Default permissions granted for super-admin'
@@ -425,7 +426,7 @@ class SubsiteTest extends BaseSubsiteTest
         $page1->write();
         $page1->doPublish();
         $this->assertEquals($page1->SubsiteID, $subsite1->ID);
-        
+
         // duplicate
         $subsite2 = $subsite1->duplicate();
         $subsite2->activate();
@@ -434,7 +435,7 @@ class SubsiteTest extends BaseSubsiteTest
         $page2->Title = 'MyNewAwesomePage';
         $page2->write();
         $page2->doPublish();
-        
+
         // check change & check change has not affected subiste1
         $subsite1->activate();
         $this->assertEquals('MyAwesomePage', DataObject::get_by_id('Page', $page1->ID)->Title);

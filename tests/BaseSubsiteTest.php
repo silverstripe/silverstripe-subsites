@@ -6,6 +6,7 @@ class BaseSubsiteTest extends SapphireTest
         parent::setUp();
 
         Subsite::$use_session_subsiteid = true;
+		Subsite::$force_subsite = null;
     }
 
     /**
