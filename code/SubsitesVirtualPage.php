@@ -9,18 +9,18 @@ class SubsitesVirtualPage extends VirtualPage
         'CustomMetaDescription' => 'Text',
         'CustomExtraMeta' => 'HTMLText'
     );
-    
+
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        
+
         $subsites = DataObject::get('Subsite');
         if (!$subsites) {
             $subsites = new ArrayList();
         } else {
             $subsites=ArrayList::create($subsites->toArray());
         }
-        
+
         $subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
 
         $fields->addFieldToTab(
@@ -32,7 +32,7 @@ class SubsitesVirtualPage extends VirtualPage
             )->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
             'CopyContentFromID'
         );
-        
+
         // Setup the linking to the original page.
         $pageSelectionField = new SubsitesTreeDropdownField(
             "CopyContentFromID",
@@ -41,13 +41,13 @@ class SubsitesVirtualPage extends VirtualPage
             "ID",
             "MenuTitle"
         );
-        
+
         if (Controller::has_curr() && Controller::curr()->getRequest()) {
             $subsiteID = Controller::curr()->getRequest()->requestVar('CopyContentFromID_SubsiteID');
             $pageSelectionField->setSubsiteID($subsiteID);
         }
         $fields->replaceField('CopyContentFromID', $pageSelectionField);
-        
+
         // Create links back to the original object in the CMS
         if ($this->CopyContentFromID) {
             $editLink = "admin/pages/edit/show/$this->CopyContentFromID/?SubsiteID=" . $this->CopyContentFrom()->SubsiteID;
@@ -63,8 +63,8 @@ class SubsitesVirtualPage extends VirtualPage
             );
             $linkToContentLabelField->setAllowHTML(true);
         }
-        
-        
+
+
         $fields->addFieldToTab(
             'Root.Main',
             TextField::create(
@@ -97,7 +97,7 @@ class SubsitesVirtualPage extends VirtualPage
             )->setDescription(_t('SubsitesVirtualPage.OverrideNote')),
             'ExtraMeta'
         );
-        
+
         return $fields;
     }
 
@@ -116,7 +116,7 @@ class SubsitesVirtualPage extends VirtualPage
     {
         return ($this->CopyContentFromID) ? (int)$this->CopyContentFrom()->SubsiteID : (int)Session::get('SubsiteID');
     }
-    
+
     public function getVirtualFields()
     {
         $fields = parent::getVirtualFields();
@@ -125,7 +125,7 @@ class SubsitesVirtualPage extends VirtualPage
                 unset($fields[$k]);
             }
         }
-        
+
         foreach (self::$db as $field => $type) {
             if (in_array($field, $fields)) {
                 unset($fields[array_search($field, $fields)]);
@@ -134,7 +134,7 @@ class SubsitesVirtualPage extends VirtualPage
 
         return $fields;
     }
-    
+
     public function syncLinkTracking()
     {
         $oldState = Subsite::$disable_subsite_filter;
@@ -148,7 +148,7 @@ class SubsitesVirtualPage extends VirtualPage
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-    
+
         if ($this->CustomMetaTitle) {
             $this->MetaTitle = $this->CustomMetaTitle;
         } else {
@@ -170,46 +170,6 @@ class SubsitesVirtualPage extends VirtualPage
             $this->ExtraMeta = $this->ContentSource()->ExtraMeta ? $this->ContentSource()->ExtraMeta : $this->ExtraMeta;
         }
     }
-    
-    public function validURLSegment()
-    {
-        $isValid = parent::validURLSegment();
-        
-        // Veto the validation rules if its false. In this case, some logic
-        // needs to be duplicated from parent to find out the exact reason the validation failed.
-        if (!$isValid) {
-            $IDFilter = ($this->ID) ? "AND \"SiteTree\".\"ID\" <> $this->ID" :  null;
-            $parentFilter = null;
-
-            if (Config::inst()->get('SiteTree', 'nested_urls')) {
-                if ($this->ParentID) {
-                    $parentFilter = " AND \"SiteTree\".\"ParentID\" = $this->ParentID";
-                } else {
-                    $parentFilter = ' AND "SiteTree"."ParentID" = 0';
-                }
-            }
-            
-            $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
-            Subsite::$disable_subsite_filter = true;
-            $existingPage = DataObject::get_one(
-                'SiteTree',
-                "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
-                false // disable cache, it doesn't include subsite status in the key
-            );
-            Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
-            $existingPageInSubsite = DataObject::get_one(
-                'SiteTree',
-                "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
-                false // disable cache, it doesn't include subsite status in the key
-            );
-
-            // If URL has been vetoed because of an existing page,
-            // be more specific and allow same URLSegments in different subsites
-            $isValid = !($existingPage && $existingPageInSubsite);
-        }
-        
-        return $isValid;
-    }
 }
 
 class SubsitesVirtualPage_Controller extends VirtualPage_Controller
@@ -220,14 +180,14 @@ class SubsitesVirtualPage_Controller extends VirtualPage_Controller
         $this->failover->write();
         return;
     }
-    
+
     public function init()
     {
         $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
         Subsite::$disable_subsite_filter = true;
-        
+
         parent::init();
-        
+
         Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
     }
 }
