@@ -84,13 +84,17 @@ class SiteTreeSubsites extends DataExtension
         if ($isDefaultSubsite && $subsitesMap) {
             $fields->addFieldToTab(
                 'Root.Main',
-                new DropdownField(
+                $copyField = new DropdownField(
                     "CopyToSubsiteID",
                     _t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"),
                     $subsitesMap,
                     ''
                 )
             );
+            $copyField->setDescription(_t(
+                'SiteTreeSubsites.CopyToSubsiteDescription',
+                "Note that this page will be copied to the top level and should be re-organised if necessary."
+            ));
             $fields->addFieldToTab(
                 'Root.Main',
                 $copyAction = new InlineFormAction(
@@ -208,22 +212,21 @@ class SiteTreeSubsites extends DataExtension
 
     /**
      * Create a duplicate of this page and save it to another subsite
-     * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
+     *
+     * @param int|Subsite $subsiteID The Subsite to copy to, or its ID
+     * @return SiteTree duplicated page
      */
     public function duplicateToSubsite($subsiteID = null)
     {
-        if (is_object($subsiteID)) {
-            $subsite = $subsiteID;
-            $subsiteID = $subsite->ID;
-        } else {
-            $subsite = DataObject::get_by_id('Subsite', $subsiteID);
+        if ($subsiteID instanceof Subsite) {
+            $subsiteID = $subsiteID->ID;
         }
 
-        $oldSubsite=Subsite::currentSubsiteID();
+        $oldSubsite = Subsite::currentSubsiteID();
         if ($subsiteID) {
             Subsite::changeSubsite($subsiteID);
         } else {
-            $subsiteID=$oldSubsite;
+            $subsiteID = $oldSubsite;
         }
 
         $page = $this->owner->duplicate(false);
@@ -231,6 +234,9 @@ class SiteTreeSubsites extends DataExtension
         $page->CheckedPublicationDifferences = $page->AddedToStage = true;
         $subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
         $page->SubsiteID = $subsiteID;
+
+        // Remove parent ID, since this parent belongs to another subsite
+        $page->ParentID = 0;
 
         // MasterPageID is here for legacy purposes, to satisfy the subsites_relatedpages module
         $page->MasterPageID = $this->owner->ID;
@@ -326,32 +332,32 @@ class SiteTreeSubsites extends DataExtension
         $this->owner->CrossSubsiteLinkTracking()->setByIDList($linkedPages);
     }
 
-	/**
-	 * Ensure that valid url segments are checked within the correct subsite of the owner object,
-	 * even if the current subsiteID is set to some other subsite.
-	 *
-	 * @return null|bool Either true or false, or null to not influence result
-	 */
-	public function augmentValidURLSegment()
-	{
-		// If this page is being filtered in the current subsite, then no custom validation query is required.
-		$subsite = Subsite::$force_subsite ?: Subsite::currentSubsiteID();
-		if (empty($this->owner->SubsiteID) || $subsite == $this->owner->SubsiteID) {
-			return null;
-		}
+    /**
+     * Ensure that valid url segments are checked within the correct subsite of the owner object,
+     * even if the current subsiteID is set to some other subsite.
+     *
+     * @return null|bool Either true or false, or null to not influence result
+     */
+    public function augmentValidURLSegment()
+    {
+        // If this page is being filtered in the current subsite, then no custom validation query is required.
+        $subsite = Subsite::$force_subsite ?: Subsite::currentSubsiteID();
+        if (empty($this->owner->SubsiteID) || $subsite == $this->owner->SubsiteID) {
+            return null;
+        }
 
-		// Backup forced subsite
-		$prevForceSubsite = Subsite::$force_subsite;
-		Subsite::$force_subsite = $this->owner->SubsiteID;
+        // Backup forced subsite
+        $prevForceSubsite = Subsite::$force_subsite;
+        Subsite::$force_subsite = $this->owner->SubsiteID;
 
-		// Repeat validation in the correct subsite
-		$isValid = $this->owner->validURLSegment();
+        // Repeat validation in the correct subsite
+        $isValid = $this->owner->validURLSegment();
 
-		// Restore
-		Subsite::$force_subsite = $prevForceSubsite;
+        // Restore
+        Subsite::$force_subsite = $prevForceSubsite;
 
-		return (bool)$isValid;
-	}
+        return (bool)$isValid;
+    }
 
     /**
      * Return a piece of text to keep DataObject cache keys appropriately specific
