@@ -175,6 +175,30 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         );
     }
 
+	public function testCopyToSubsite() {
+		/** @var Subsite $otherSubsite */
+		$otherSubsite = $this->objFromFixture('Subsite', 'subsite1');
+		$staffPage = $this->objFromFixture('Page', 'staff'); // nested page
+		$contactPage = $this->objFromFixture('Page', 'contact'); // top level page
+
+		$staffPage2 = $staffPage->duplicateToSubsite($otherSubsite->ID);
+		$contactPage2 = $contactPage->duplicateToSubsite($otherSubsite->ID);
+
+		$this->assertNotEquals($staffPage->ID, $staffPage2->ID);
+		$this->assertNotEquals($staffPage->SubsiteID, $staffPage2->SubsiteID);
+		$this->assertNotEquals($contactPage->ID, $contactPage2->ID);
+		$this->assertNotEquals($contactPage->SubsiteID, $contactPage2->SubsiteID);
+		$this->assertEmpty($staffPage2->ParentID);
+		$this->assertEmpty($contactPage2->ParentID);
+		$this->assertNotEmpty($staffPage->ParentID);
+		$this->assertEmpty($contactPage->ParentID);
+
+		// Staff is shifted to top level and given a unique url segment
+		$domain = $otherSubsite->domain();
+		$this->assertEquals('http://'.$domain.'/staff-2/', $staffPage2->AbsoluteLink());
+		$this->assertEquals('http://'.$domain.'/contact-us-2/', $contactPage2->AbsoluteLink());
+	}
+
     public function testPageTypesBlacklistInCMSMain()
     {
         $editor = $this->objFromFixture('Member', 'editor');
