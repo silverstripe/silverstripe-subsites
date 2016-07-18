@@ -285,6 +285,24 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 		$mainSubsiteImportantPage->write();
 		$this->assertEquals('important-page', $mainSubsiteImportantPage->URLSegment);
 	}
+
+	function testCopySubsiteWithChildren() {
+		$page = $this->objFromFixture('Page', 'about');
+		$newSubsite = $this->objFromFixture('Subsite', 'subsite1');
+
+		$moved = $page->duplicateToSubsite($newSubsite->ID, true);
+		$this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
+		$this->assertEquals($moved->AllChildren()->count(), $page->AllChildren()->count(), 'All pages are copied across');
+	}
+
+	function testCopySubsiteWithoutChildren() {
+		$page = $this->objFromFixture('Page', 'about');
+		$newSubsite = $this->objFromFixture('Subsite', 'subsite2');
+
+		$moved = $page->duplicateToSubsite($newSubsite->ID, false);
+		$this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
+		$this->assertEquals($moved->AllChildren()->count(), 0, 'All pages are copied across');
+	}
 }
 
 class SiteTreeSubsitesTest_ClassA extends SiteTree implements TestOnly
