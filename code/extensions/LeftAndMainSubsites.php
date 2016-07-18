@@ -30,7 +30,7 @@ class LeftAndMainSubsites extends Extension
         $subsite = Subsite::currentSubSite();
         return $subsite ? Convert::raw2xml($subsite->Title) : _t('LeftAndMain.SITECONTENTLEFT');
     }
-    
+
     public function updatePageOptions(&$fields)
     {
         $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
@@ -108,7 +108,7 @@ class LeftAndMainSubsites extends Extension
     }
 
     /*
-     * Generates a list of subsites with the data needed to 
+     * Generates a list of subsites with the data needed to
      * produce a dropdown site switcher
      * @return ArrayList
      */
@@ -128,7 +128,7 @@ class LeftAndMainSubsites extends Extension
 
         foreach ($list as $subsite) {
             $CurrentState = $subsite->ID == $currentSubsiteID ? 'selected' : '';
-    
+
             $output->push(new ArrayData(array(
                 'CurrentState' => $CurrentState,
                 'ID' => $subsite->ID,
@@ -316,13 +316,23 @@ class LeftAndMainSubsites extends Extension
         }
     }
 
+	/**
+	 * @param array $data
+	 * @param Form $form
+	 */
     public function copytosubsite($data, $form)
     {
         $page = DataObject::get_by_id('SiteTree', $data['ID']);
         $subsite = DataObject::get_by_id('Subsite', $data['CopyToSubsiteID']);
-        $newPage = $page->duplicateToSubsite($subsite->ID, true);
+        $includeChildren = (isset($data['CopyToSubsiteWithChildren'])) ? $data['CopyToSubsiteWithChildren'] : false;
+
+        $newPage = $page->duplicateToSubsite($subsite->ID, $includeChildren);
         $response = $this->owner->getResponse();
         $response->addHeader('X-Reload', true);
-        return $this->owner->redirect(Controller::join_links($this->owner->Link('show'), $newPage->ID));
+
+        return $this->owner->redirect(Controller::join_links(
+            $this->owner->Link('show'),
+            $newPage->ID
+        ));
     }
 }
