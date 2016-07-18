@@ -81,27 +81,28 @@ class SiteTreeSubsites extends DataExtension
 
         // Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
         $isDefaultSubsite = $this->owner->SubsiteID == 0 || $this->owner->Subsite()->DefaultSite;
+
         if ($isDefaultSubsite && $subsitesMap) {
-            $fields->addFieldToTab(
+            $fields->addFieldsToTab(
                 'Root.Main',
-                $copyField = new DropdownField(
-                    "CopyToSubsiteID",
-                    _t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"),
-                    $subsitesMap,
-                    ''
-                )
+                ToggleCompositeField::create('SubsiteOperations',
+                	_t('SiteTreeSubsites.SubsiteOperations', 'Subsite Operations'),
+                	array(
+						new DropdownField("CopyToSubsiteID", _t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"), $subsitesMap),
+						new CheckboxField("CopyToSubsiteWithChildren", _t('SiteTreeSubsites.CopyToSubsiteWithChildren', 'Include children pages?')),
+						$copyAction = new InlineFormAction(
+							"copytosubsite",
+							_t('SiteTreeSubsites.CopyAction', "Copy")
+						)
+					)
+				)->setHeadingLevel(4)
             );
+
             $copyField->setDescription(_t(
                 'SiteTreeSubsites.CopyToSubsiteDescription',
                 "Note that this page will be copied to the top level and should be re-organised if necessary."
             ));
-            $fields->addFieldToTab(
-                'Root.Main',
-                $copyAction = new InlineFormAction(
-                    "copytosubsite",
-                    _t('SiteTreeSubsites.CopyAction', "Copy")
-                )
-            );
+
             $copyAction->includeDefaultJS(false);
         }
 
@@ -125,6 +126,9 @@ class SiteTreeSubsites extends DataExtension
         }
     }
 
+    /**
+     * @return SiteConfig
+     */
     public function alternateSiteConfig()
     {
         if (!$this->owner->SubsiteID) {
@@ -214,15 +218,17 @@ class SiteTreeSubsites extends DataExtension
      * Create a duplicate of this page and save it to another subsite
      *
      * @param int|Subsite $subsiteID The Subsite to copy to, or its ID
+     *
      * @return SiteTree duplicated page
      */
-    public function duplicateToSubsite($subsiteID = null)
+    public function duplicateToSubsite($subsiteID = null, $includeChildren = false)
     {
         if ($subsiteID instanceof Subsite) {
             $subsiteID = $subsiteID->ID;
         }
 
         $oldSubsite = Subsite::currentSubsiteID();
+
         if ($subsiteID) {
             Subsite::changeSubsite($subsiteID);
         } else {
@@ -241,6 +247,12 @@ class SiteTreeSubsites extends DataExtension
         // MasterPageID is here for legacy purposes, to satisfy the subsites_relatedpages module
         $page->MasterPageID = $this->owner->ID;
         $page->write();
+
+        if($includeChildren) {
+			foreach($this->owner->AllChildren() as $child) {
+				$child->duplicateToSubsite($subsiteID, $includeChildren);
+			}
+		}
 
         Subsite::changeSubsite($oldSubsite);
 
