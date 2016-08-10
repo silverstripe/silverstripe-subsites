@@ -169,35 +169,80 @@ class SiteTreeSubsites extends DataExtension {
 	}
 
 	/**
+	 * Does the basic duplication, but doesn't write anything
+	 * this means we can subclass this easier and do more complex
+	 * relation duplication.
+	 */
+	public function duplicateToSubsitePrep($subsiteID) {
+		if (is_object($subsiteID)) {
+			$subsiteID = $subsiteID->ID;
+		}
+
+		$oldSubsite = Subsite::currentSubsiteID();
+		if ($subsiteID) {
+			Subsite::changeSubsite($subsiteID);
+		} else {
+			$subsiteID = $oldSubsite;
+		}
+		// doesn't write as we need to reset the SubsiteID, ParentID etc
+		$clone = $this->owner->duplicate(false);
+		$clone->CheckedPublicationDifferences = $clone->AddedToStage = true;
+		$subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
+		$clone->SubsiteID = $subsiteID;
+		// We have no idea what the parentID should be, so as a workaround use the url-segment and subsite ID
+		if ($this->owner->Parent()) {
+			$parentSeg = $this->owner->Parent()->URLSegment;
+			$newParentPage = Page::get()->filter('URLSegment', $parentSeg)->first();
+			if ($newParentPage) {
+				$clone->ParentID = $newParentPage->ID;
+			} else {
+				// reset it to the top level, so the user can decide where to put it
+				$clone->ParentID = 0;
+			}
+		}
+		// MasterPageID is here for legacy purposes, to satisfy the subsites_relatedpages module
+		$clone->MasterPageID = $this->owner->ID;
+		return $clone;
+	}
+
+	/**
 	 * Create a duplicate of this page and save it to another subsite
 	 * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
 	 */
 	public function duplicateToSubsite($subsiteID = null) {
-		if(is_object($subsiteID)) {
-			$subsite = $subsiteID;
-			$subsiteID = $subsite->ID;
-		} else $subsite = DataObject::get_by_id('Subsite', $subsiteID);
-		
-		$oldSubsite=Subsite::currentSubsiteID();
-		if($subsiteID) {
-			Subsite::changeSubsite($subsiteID);
-		}else {
-			$subsiteID=$oldSubsite;
+		$clone = $this->owner->duplicateToSubsitePrep($subsiteID);
+		$clone->invokeWithExtensions('onBeforeDuplicateToSubsite', $this->owner);
+		$clone->write();
+		$clone->duplicateSubsiteRelations($this->owner);
+		// new extension hooks which happens after write,
+		// onAfterDuplicate isn't reliable due to
+		// https://github.com/silverstripe/silverstripe-cms/issues/1253
+		$clone->invokeWithExtensions('onAfterDuplicateToSubsite', $this->owner);
+		return $clone;
+	}
+
+	/**
+	 * Duplicate relations using a static property to define
+	 * which ones we want to duplicate
+	 *
+	 * It may be that some relations are not diostinct to sub site so can stay
+	 * whereas others may need to be duplicated
+	 *
+	 */
+	public function duplicateSubsiteRelations($originalPage) {
+		$thisClass = $originalPage->ClassName;
+		$relations = Config::inst()->get($thisClass, 'duplicate_to_subsite_relations');
+
+		if($relations && !empty($relations)) {
+			foreach($relations as $relation) {
+				$items = $originalPage->$relation();
+				foreach($items as $item) {
+					$duplicateItem = $item->duplicate(false);
+					$duplicateItem->{$thisClass.'ID'} = $this->owner->ID;
+					$duplicateItem->write();
+				}
+			}
 		}
-
-		$page = $this->owner->duplicate(false);
-
-		$page->CheckedPublicationDifferences = $page->AddedToStage = true;
-		$subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
-		$page->SubsiteID = $subsiteID;
-
-		// MasterPageID is here for legacy purposes, to satisfy the subsites_relatedpages module
-		$page->MasterPageID = $this->owner->ID;
-		$page->write();
-
-		Subsite::changeSubsite($oldSubsite);
-
-		return $page;
 	}
 
 	/**
