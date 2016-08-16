@@ -24,6 +24,8 @@ en:
   SiteTreeSubsites:
     CopyAction: Copy
     CopyToSubsite: 'Copy page to subsite'
+    CopyToSubsiteWithChildren: 'Include children pages?'
+    SubsiteOperations: 'Subsite Operations'
   Subsite:
     COPYSTRUCTURE: 'Copy structure from:'
     CopyMessage: 'Created a copy of {title}'

@@ -1,6 +1,8 @@
 de:
   ASSETADMIN:
     SUBSITENOTICE: 'Auf Ordner und Dateien der Hauptseite kann von allen Subsites zugegriffen werden.'
+  DomainNameField:
+    INVALID_DOMAIN: 'Ungültige Domain'
   FileSubsites:
     AllSitesDropdownOpt: 'Alle Subseiten'
     SubsiteFieldLabel: Subseite
