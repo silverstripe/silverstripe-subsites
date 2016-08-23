@@ -176,6 +176,9 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     }
 
 	public function testCopyToSubsite() {
+		// Remove baseurl if testing in subdir
+		Config::inst()->update('Director', 'alternate_base_url', '/');
+
 		/** @var Subsite $otherSubsite */
 		$otherSubsite = $this->objFromFixture('Subsite', 'subsite1');
 		$staffPage = $this->objFromFixture('Page', 'staff'); // nested page
