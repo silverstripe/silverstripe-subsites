@@ -1,6 +1,7 @@
 {
 	"name": "silverstripe/subsites",
 	"description": "Run multiple sites from a single SilverStripe install.",
+	"license": "BSD-3-Clause",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "subsites", "multisite"],
 	"authors": [
