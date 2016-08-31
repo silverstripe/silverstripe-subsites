@@ -7,6 +7,10 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         'subsites/tests/SubsitesVirtualPageTest.yml',
     );
 
+    protected $illegalExtensions = array(
+        'SiteTree' => array('Translatable')
+    );
+
     public function setUp()
     {
         parent::setUp();

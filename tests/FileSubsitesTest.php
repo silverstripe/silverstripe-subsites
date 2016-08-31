@@ -13,9 +13,12 @@ class FileSubsitesTest extends BaseSubsiteTest
         'File' => array(
             'SecureFileExtension',
             'VersionedFileExtension'
-        )
+        ),
+		'SiteTree' => array(
+			'Translatable',
+		)
 	);
-    
+
     public function testTrivialFeatures()
     {
         $this->assertTrue(is_array(singleton('FileSubsites')->extraStatics()));
@@ -29,35 +32,35 @@ class FileSubsitesTest extends BaseSubsiteTest
         Subsite::changeSubsite(1);
         $this->assertEquals($file->cacheKeyComponent(), 'subsite-1');
     }
-    
+
     public function testWritingSubsiteID()
     {
         $this->objFromFixture('Member', 'admin')->logIn();
-        
+
         $subsite = $this->objFromFixture('Subsite', 'domaintest1');
         FileSubsites::$default_root_folders_global = true;
-        
+
         Subsite::changeSubsite(0);
         $file = new File();
         $file->write();
         $file->onAfterUpload();
         $this->assertEquals((int)$file->SubsiteID, 0);
-        
+
         Subsite::changeSubsite($subsite->ID);
         $this->assertTrue($file->canEdit());
-        
+
         $file = new File();
         $file->write();
         $this->assertEquals((int)$file->SubsiteID, 0);
         $this->assertTrue($file->canEdit());
-        
+
         FileSubsites::$default_root_folders_global = false;
-        
+
         Subsite::changeSubsite($subsite->ID);
         $file = new File();
         $file->write();
         $this->assertEquals($file->SubsiteID, $subsite->ID);
-        
+
         // Test inheriting from parent folder
         $folder = new Folder();
         $folder->write();
