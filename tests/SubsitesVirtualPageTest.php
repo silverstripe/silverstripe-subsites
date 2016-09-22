@@ -1,5 +1,10 @@
 <?php
 
+use SilverStripe\Assets\Filesystem;
+use SilverStripe\ORM\DB;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\Versioning\Versioned;
+
 class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	static $fixture_file = array(
 		'subsites/tests/SubsiteTest.yml',
@@ -13,8 +18,8 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		AssetStoreTest_SpyStore::activate('SubsitesVirtualPageTest');
 
 		// Create a test files for each of the fixture references
-		$file = $this->objFromFixture('File', 'file1');
-		$page = $this->objFromFixture('SiteTree', 'page1');
+		$file = $this->objFromFixture('SilverStripe\\Assets\\File', 'file1');
+		$page = $this->objFromFixture('SilverStripe\\CMS\\Model\\SiteTree', 'page1');
 		$fromPath = __DIR__ . '/testscript-test-file.pdf';
 		$destPath = AssetStoreTest_SpyStore::getLocalPath($file);
 		Filesystem::makeFolder(dirname($destPath));
@@ -57,7 +62,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		$this->logInWithPermission('ADMIN');
 
 		// Publish the source page
-		$page = $this->objFromFixture('SiteTree', 'page1');
+		$page = $this->objFromFixture('SilverStripe\\CMS\\Model\\SiteTree', 'page1');
 		$this->assertTrue($page->doPublish());
 
 		// Create a virtual page from it, and publish that
@@ -67,7 +72,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		$svp->doPublish();
 		
 		// Rename the file
-		$file = $this->objFromFixture('File', 'file1');
+		$file = $this->objFromFixture('SilverStripe\\Assets\\File', 'file1');
 		$file->Name = 'renamed-test-file.pdf';
 		$file->write();
 		
@@ -261,8 +266,8 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	function fixVersionNumberCache($page) {
 		$pages = func_get_args();
 		foreach($pages as $p) {
-			Versioned::prepopulate_versionnumber_cache('SiteTree', 'Stage', array($p->ID));
-			Versioned::prepopulate_versionnumber_cache('SiteTree', 'Live', array($p->ID));
+			Versioned::prepopulate_versionnumber_cache('SilverStripe\\CMS\\Model\\SiteTree', 'Stage', array($p->ID));
+			Versioned::prepopulate_versionnumber_cache('SilverStripe\\CMS\\Model\\SiteTree', 'Live', array($p->ID));
 		}
 	}
 

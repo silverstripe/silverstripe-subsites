@@ -25,12 +25,17 @@
 		}
 
 .cms-menu .cms-subsites{
-	padding:3px 0px 15px;
+	padding: 0 8px 12px;
 }
 .cms-menu .cms-subsites .field.dropdown{
 	padding-bottom:0;
 	margin-bottom:0;
 }
+
+.cms-menu .cms-subsites .field.dropdown span {
+    color: #4f5861;
+}
+
 .cms-menu.collapsed .cms-subsites {
 	display: none;
 }

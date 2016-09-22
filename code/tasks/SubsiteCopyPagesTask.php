@@ -1,4 +1,8 @@
 <?php
+
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\Versioning\Versioned;
+use SilverStripe\Dev\BuildTask;
 /**
  * Handy alternative to copying pages when creating a subsite through the UI.
  * Can be used to batch-add new pages after subsite creation,
@@ -35,7 +39,7 @@ class SubsiteCopyPagesTask extends BuildTask {
 		while(count($stack) > 0) {
 			list($sourceParentID, $destParentID) = array_pop($stack);
 
-			$children = Versioned::get_by_stage('SiteTree', 'Live', "\"ParentID\" = $sourceParentID", '');
+			$children = Versioned::get_by_stage('SilverStripe\\CMS\\Model\\SiteTree', 'Live', "\"ParentID\" = $sourceParentID", '');
 
 			if($children) {
 				foreach($children as $child) {

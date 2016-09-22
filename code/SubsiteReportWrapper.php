@@ -1,10 +1,14 @@
 <?php
 
+use SilverStripe\Forms\TreeMultiselectField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Reports\ReportWrapper;
+
 /**
  * Creates a subsite-aware version of another report.
  * Pass another report (or its classname) into the constructor.
  */
-class SubsiteReportWrapper extends SS_ReportWrapper {
+class SubsiteReportWrapper extends ReportWrapper {
 	///////////////////////////////////////////////////////////////////////////////////////////
 	// Filtering
 	
