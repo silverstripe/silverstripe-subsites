@@ -1,4 +1,14 @@
 <?php
+
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Assets\Folder;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\Control\Session;
+use SilverStripe\Security\Permission;
+use SilverStripe\ORM\DataExtension;
 /**
  * Extension for the File object to add subsites support
  *

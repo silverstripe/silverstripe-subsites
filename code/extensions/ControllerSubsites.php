@@ -1,4 +1,7 @@
 <?php
+
+use SilverStripe\View\SSViewer;
+use SilverStripe\Core\Extension;
 /**
  * @package subsites
  */

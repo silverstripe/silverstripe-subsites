@@ -1,5 +1,7 @@
 <?php
 
+use SilverStripe\Admin\LeftAndMain;
+
 /**
  * Section-agnostic PJAX controller.
  */
@@ -39,7 +41,7 @@ class SubsiteXHRController extends LeftAndMain {
 	 * Provide the list of available subsites as a cms-section-agnostic PJAX handler.
 	 */
 	public function SubsiteList() {
-		return $this->renderWith('SubsiteList');
+		return $this->renderWith('Includes/SubsiteList');
 	}
 
 }

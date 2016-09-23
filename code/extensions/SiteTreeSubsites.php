@@ -1,5 +1,20 @@
 <?php
 
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\InlineFormAction;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\Director;
+use SilverStripe\Control\Controller;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Security\Member;
+use SilverStripe\Control\HTTP;
+use SilverStripe\Core\Convert;
+use SilverStripe\ORM\DataExtension;
+
 /**
  * Extension for the SiteTree object to add subsites support
  */
@@ -10,7 +25,7 @@ class SiteTreeSubsites extends DataExtension {
 	);
 
 	private static $many_many = array(
-		'CrossSubsiteLinkTracking' => 'SiteTree' // Stored separately, as the logic for URL rewriting is different
+		'CrossSubsiteLinkTracking' => 'SilverStripe\\CMS\\Model\\SiteTree' // Stored separately, as the logic for URL rewriting is different
 	);
 
 	private static $many_many_extraFields = array(
@@ -21,14 +36,14 @@ class SiteTreeSubsites extends DataExtension {
 		if($this->owner->SubsiteID == 0) return true;
 		return false;
 	}
-	
+
 	/**
 	 * Update any requests to limit the results to the current site
 	 */
 	public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null) {
 		if(Subsite::$disable_subsite_filter) return;
 		if($dataQuery->getQueryParam('Subsite.filter') === false) return;
-		
+
 		// If you're querying by ID, ignore the sub-site - this is a bit ugly...
 		// if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
 		if($query->filtersOnID()) return;
@@ -47,10 +62,10 @@ class SiteTreeSubsites extends DataExtension {
 			break;
 		}
 	}
-	
+
 	function onBeforeWrite() {
 		if(!$this->owner->ID && !$this->owner->SubsiteID) $this->owner->SubsiteID = Subsite::currentSubsiteID();
-		
+
 		parent::onBeforeWrite();
 	}
 
@@ -58,7 +73,7 @@ class SiteTreeSubsites extends DataExtension {
 		$subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
 		$subsitesMap = array();
 		if($subsites && $subsites->Count()) {
-			$subsitesMap = $subsites->map('ID', 'Title');
+			$subsitesMap = $subsites->map('ID', 'Title')->toArray();
 			unset($subsitesMap[$this->owner->SubsiteID]);
 		}
 
@@ -68,8 +83,8 @@ class SiteTreeSubsites extends DataExtension {
 			$fields->addFieldToTab(
 				'Root.Main',
 				new DropdownField(
-					"CopyToSubsiteID", 
-					_t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"), 
+					"CopyToSubsiteID",
+					_t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"),
 					$subsitesMap,
 					''
 				)
@@ -77,31 +92,30 @@ class SiteTreeSubsites extends DataExtension {
 			$fields->addFieldToTab(
 				'Root.Main',
 				$copyAction = new InlineFormAction(
-					"copytosubsite", 
+					"copytosubsite",
 					_t('SiteTreeSubsites.CopyAction', "Copy")
 				)
 			);
-			$copyAction->includeDefaultJS(false);
 		}
 
 		// replace readonly link prefix
 		$subsite = $this->owner->Subsite();
-		$nested_urls_enabled = Config::inst()->get('SiteTree', 'nested_urls');
+		$nested_urls_enabled = Config::inst()->get('SilverStripe\\CMS\\Model\\SiteTree', 'nested_urls');
 		if($subsite && $subsite->ID) {
 			$baseUrl = Director::protocol() . $subsite->domain() . '/';
 			$baseLink = Controller::join_links (
 				$baseUrl,
 				($nested_urls_enabled && $this->owner->ParentID ? $this->owner->Parent()->RelativeLink(true) : null)
 			);
-			
+
 			$urlsegment = $fields->dataFieldByName('URLSegment');
 			$urlsegment->setURLPrefix($baseLink);
 		}
 	}
-	
+
 	function alternateSiteConfig() {
 		if(!$this->owner->SubsiteID) return false;
-		$sc = DataObject::get_one('SiteConfig', '"SubsiteID" = ' . $this->owner->SubsiteID);
+		$sc = DataObject::get_one('SilverStripe\\SiteConfig\\SiteConfig', '"SubsiteID" = ' . $this->owner->SubsiteID);
 		if(!$sc) {
 			$sc = new SiteConfig();
 			$sc->SubsiteID = $this->owner->SubsiteID;
@@ -111,18 +125,18 @@ class SiteTreeSubsites extends DataExtension {
 		}
 		return $sc;
 	}
-	
+
 	/**
 	 * Only allow editing of a page if the member satisfies one of the following conditions:
 	 * - Is in a group which has access to the subsite this page belongs to
 	 * - Is in a group with edit permissions on the "main site"
-	 * 
+	 *
 	 * @return boolean
 	 */
 	function canEdit($member = null) {
 
 		if(!$member) $member = Member::currentUser();
-		
+
 		// Find the sites that this user has access to
 		$goodSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain',true,'all',$member)->column('ID');
 
@@ -140,25 +154,25 @@ class SiteTreeSubsites extends DataExtension {
 		// Return true if they have access to this object's site
 		if(!(in_array(0, $goodSites) || in_array($subsiteID, $goodSites))) return false;
 	}
-	
+
 	/**
 	 * @return boolean
 	 */
 	function canDelete($member = null) {
 		if(!$member && $member !== FALSE) $member = Member::currentUser();
-		
+
 		return $this->canEdit($member);
 	}
-	
+
 	/**
 	 * @return boolean
 	 */
 	function canAddChildren($member = null) {
 		if(!$member && $member !== FALSE) $member = Member::currentUser();
-		
+
 		return $this->canEdit($member);
 	}
-	
+
 	/**
 	 * @return boolean
 	 */
@@ -252,7 +266,7 @@ class SiteTreeSubsites extends DataExtension {
 		$subsite = Subsite::currentSubsite();
 
 		if($subsite && $subsite->Theme){
-			Config::inst()->update('SSViewer', 'theme', Subsite::currentSubsite()->Theme);
+			Config::inst()->update('SilverStripe\\View\\SSViewer', 'theme', Subsite::currentSubsite()->Theme);
 		}
 	}
 
@@ -293,22 +307,22 @@ class SiteTreeSubsites extends DataExtension {
 		// Set LinkTracking appropriately
 		$links = HTTP::getLinksIn($this->owner->Content);
 		$linkedPages = array();
-		
+
 		if($links) foreach($links as $link) {
 			if(substr($link, 0, strlen('http://')) == 'http://') {
 				$withoutHttp = substr($link, strlen('http://'));
 				if(strpos($withoutHttp, '/') && strpos($withoutHttp, '/') < strlen($withoutHttp)) {
 					$domain = substr($withoutHttp, 0, strpos($withoutHttp, '/'));
 					$rest = substr($withoutHttp, strpos($withoutHttp, '/') + 1);
-					
+
 					$subsiteID = Subsite::getSubsiteIDForDomain($domain);
 					if($subsiteID == 0) continue; // We have no idea what the domain for the main site is, so cant track links to it
 
 					$origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
 					Subsite::disable_subsite_filter(true);
-					$candidatePage = DataObject::get_one("SiteTree", "\"URLSegment\" = '" . Convert::raw2sql(urldecode( $rest)) . "' AND \"SubsiteID\" = " . $subsiteID, false);
+					$candidatePage = DataObject::get_one("SilverStripe\\CMS\\Model\\SiteTree", "\"URLSegment\" = '" . Convert::raw2sql(urldecode( $rest)) . "' AND \"SubsiteID\" = " . $subsiteID, false);
 					Subsite::disable_subsite_filter($origDisableSubsiteFilter);
-					
+
 					if($candidatePage) {
 						$linkedPages[] = $candidatePage->ID;
 					} else {
@@ -317,17 +331,17 @@ class SiteTreeSubsites extends DataExtension {
 				}
 			}
 		}
-		
+
 		$this->owner->CrossSubsiteLinkTracking()->setByIDList($linkedPages);
 	}
-	
+
 	/**
 	 * Return a piece of text to keep DataObject cache keys appropriately specific
 	 */
 	function cacheKeyComponent() {
 		return 'subsite-'.Subsite::currentSubsiteID();
 	}
-	
+
 	/**
 	 * @param Member
 	 * @return boolean|null

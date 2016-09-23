@@ -1,4 +1,6 @@
 <?php
+
+use SilverStripe\Admin\ModelAdmin;
 /**
  * Admin interface to manage and create {@link Subsite} instances.
  * 
@@ -23,7 +25,7 @@ class SubsiteAdmin extends ModelAdmin {
 
 		$grid=$form->Fields()->dataFieldByName('Subsite');
 		if($grid) {
-			$grid->getConfig()->removeComponentsByType('GridFieldDetailForm');
+			$grid->getConfig()->removeComponentsByType('SilverStripe\\Forms\\GridField\\GridFieldDetailForm');
 			$grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());
 		}
 

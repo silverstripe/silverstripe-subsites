@@ -1,5 +1,11 @@
 <?php
 
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\ORM\DataExtension;
+
 /**
  * Extension for the SiteConfig object to add subsites support
  */
@@ -8,7 +14,7 @@ class SiteConfigSubsites extends DataExtension {
 	private static $has_one = array(
 		'Subsite' => 'Subsite', // The subsite that this page belongs to
 	);
-	
+
 	/**
 	 * Update any requests to limit the results to the current site
 	 */

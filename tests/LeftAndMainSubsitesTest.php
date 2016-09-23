@@ -1,5 +1,9 @@
 <?php
 
+use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\FunctionalTest;
+
 class LeftAndMainSubsitesTest extends FunctionalTest {
 	
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
@@ -16,9 +20,9 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 	}
 
 	function testSectionSites() {
-		$member = $this->objFromFixture('Member', 'subsite1member');
+		$member = $this->objFromFixture('SilverStripe\\Security\\Member', 'subsite1member');
 
-		$cmsmain = singleton('CMSMain');
+		$cmsmain = singleton('SilverStripe\\CMS\\Controllers\\CMSMain');
 		$subsites = $cmsmain->sectionSites(true, "Main site", $member);
 		$this->assertDOSEquals(array(
 			array('Title' =>'Subsite1 Template')
@@ -28,9 +32,9 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 		$subsites = $assetadmin->sectionSites(true, "Main site", $member);
 		$this->assertDOSEquals(array(), $subsites, 'Does not list any sites for forbidden controller.');
 
-		$member = $this->objFromFixture('Member', 'editor');
+		$member = $this->objFromFixture('SilverStripe\\Security\\Member', 'editor');
 
-		$cmsmain = singleton('CMSMain');
+		$cmsmain = singleton('SilverStripe\\CMS\\Controllers\\CMSMain');
 		$subsites = $cmsmain->sectionSites(true, "Main site", $member);
 		$this->assertDOSContains(array(
 			array('Title' =>'Main site')
@@ -38,7 +42,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 	}
 
 	function testAccessChecksDontChangeCurrentSubsite() {
-		$admin = $this->objFromFixture("Member","admin");
+		$admin = $this->objFromFixture("SilverStripe\\Security\\Member","admin");
 		$this->loginAs($admin);
 		$ids = array();
 		
@@ -70,17 +74,17 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 		$l = new LeftAndMain();
 		Config::inst()->nest();
 
-		Config::inst()->update('CMSPageEditController', 'treats_subsite_0_as_global', false);
-		$this->assertTrue($l->shouldChangeSubsite('CMSPageEditController', 0, 5));
-		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 0, 0));
-		$this->assertTrue($l->shouldChangeSubsite('CMSPageEditController', 1, 5));
-		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 1, 1));
+		Config::inst()->update('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', false);
+		$this->assertTrue($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 5));
+		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 0));
+		$this->assertTrue($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 1, 5));
+		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 1, 1));
 
-		Config::inst()->update('CMSPageEditController', 'treats_subsite_0_as_global', true);
-		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 0, 5));
-		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 0, 0));
-		$this->assertTrue($l->shouldChangeSubsite('CMSPageEditController', 1, 5));
-		$this->assertFalse($l->shouldChangeSubsite('CMSPageEditController', 1, 1));
+		Config::inst()->update('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', true);
+		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 5));
+		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 0));
+		$this->assertTrue($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 1, 5));
+		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 1, 1));
 
 		Config::inst()->unnest();
 	}

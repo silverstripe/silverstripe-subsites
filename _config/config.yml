@@ -7,6 +7,6 @@ After:
 AssetAdmin:
   treats_subsite_0_as_global: true
 
-Director:
+SilverStripe\Control\Director:
   rules:
     'SubsiteXHRController': 'SubsiteXHRController'
