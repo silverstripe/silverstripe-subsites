@@ -627,7 +627,7 @@ class Subsite extends DataObject
                     new CheckboxField('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
                     new CheckboxField('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
 
-                    new DropdownField('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme),
+                    DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)->setEmptyString('Please Select'),
 
 
                     new LiteralField(
