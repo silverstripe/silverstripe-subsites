@@ -213,10 +213,12 @@ class SiteTreeSubsites extends DataExtension
      * Create a duplicate of this page and save it to another subsite
      *
      * @param int|Subsite $subsiteID The Subsite to copy to, or its ID
+     * @param bool $includeChildren Recursively copy child Pages.
+     * @param int $parentID Where to place the Page in the SiteTree's structure.
      *
      * @return SiteTree duplicated page
      */
-    public function duplicateToSubsite($subsiteID = null, $includeChildren = false)
+    public function duplicateToSubsite($subsiteID = null, $includeChildren = false, $parentID = 0)
     {
         if ($subsiteID instanceof Subsite) {
             $subsiteID = $subsiteID->ID;
@@ -236,20 +238,19 @@ class SiteTreeSubsites extends DataExtension
         $subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
         $page->SubsiteID = $subsiteID;
 
-        // Remove parent ID, since this parent belongs to another subsite
-        $page->ParentID = 0;
+        $page->ParentID = $parentID;
 
         // MasterPageID is here for legacy purposes, to satisfy the subsites_relatedpages module
         $page->MasterPageID = $this->owner->ID;
         $page->write();
 
+        Subsite::changeSubsite($oldSubsite);
+
         if($includeChildren) {
 			foreach($this->owner->AllChildren() as $child) {
-				$child->duplicateToSubsite($subsiteID, $includeChildren);
+				$child->duplicateToSubsite($subsiteID, $includeChildren, $page->ID);
 			}
 		}
-
-        Subsite::changeSubsite($oldSubsite);
 
         return $page;
     }
