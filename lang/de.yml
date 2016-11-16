@@ -17,10 +17,10 @@ de:
     MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
     SECURITYTABTITLE: Subsites
   LeftAndMainSubsites:
-    Saved: 'Gespeichert.'
+    Saved: Gespeichert.
   LeftAndMain_Menu:
     Hello: Hallo
-    LOGOUT: 'Abmelden'
+    LOGOUT: Abmelden
   SiteTreeSubsites:
     CopyAction: Kopieren
     CopyToSubsite: 'Seite auf Subseite Kopieren'
@@ -47,6 +47,7 @@ de:
     MENUTITLE: Subsites
   SubsiteDomain:
     DOMAIN: Domain
+    DOMAIN_DESCRIPTION: 'Hostname dieser Subsite (ohne Protokol). Joker (*) ist erlaubt.'
     IS_PRIMARY: 'Ist Hauptdomain?'
     PLURALNAME: 'Subsite Domains'
     PROTOCOL_AUTOMATIC: Automatisch
@@ -63,10 +64,10 @@ de:
     DomainFieldLabel: Domäne
     IsPublicFieldLabel: 'Öffentlich zugänglich'
     LanguageFieldLabel: Sprache
-    MainSiteTitle: 'Hauptsite'
+    MainSiteTitle: Hauptsite
     PageTypeBlacklistFieldLabel: 'Ausgeschlossene Seitentypen'
     PrimaryDomainFieldLabel: 'Primäre Domain'
-    RedirectURLFieldLabel: 'Weierleitungs-URL'
+    RedirectURLFieldLabel: Weierleitungs-URL
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Name der Subsite'
   SubsitesVirtualPage:

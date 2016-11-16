@@ -20,7 +20,7 @@ hr:
     Saved: 'Spremljeno, molimo osvježite povezane stranice.'
   LeftAndMain_Menu:
     Hello: Pozdrav
-    LOGOUT: 'Odjava'
+    LOGOUT: Odjava
   SiteTreeSubsites:
     CopyAction: Kopiraj
     CopyToSubsite: 'Kopiraj stranicu u podsajt'
@@ -29,7 +29,7 @@ hr:
     CopyMessage: 'Kreirana kopija od {title}'
     CustomExtraMeta: 'Prilagođeni Meta tagovi'
     CustomMetaDescription: Opis
-    CustomMetaKeywords: Ključne riječi
+    CustomMetaKeywords: 'Ključne riječi'
     CustomMetaTitle: Naslov
     DOMAINSAVEFIRST: 'Možete dodati domene nakon prvog spremanja'
     DomainsHeadline: 'Domene za ove podsajtove'

@@ -7,7 +7,7 @@ lt:
     Saved: 'Išsaugota, prašome atnaujinti susijusius puslapius'
   LeftAndMain_Menu:
     Hello: Sveiki
-    LOGOUT: 'Atsijungti'
+    LOGOUT: Atsijungti
   SiteTreeSubsites:
     CopyAction: Kopijuoti
     CopyToSubsite: 'Kopijuoti puslapį į kitą svetainę'

@@ -5,7 +5,7 @@ id:
     SECURITYTABTITLE: Subsitus
   Subsite:
     CustomMetaDescription: Deskripsi
-    CustomMetaKeywords: Kata kunci
+    CustomMetaKeywords: 'Kata kunci'
     CustomMetaTitle: Judul
     PLURALNAME: Subsitus
     SINGULARNAME: Subsitus

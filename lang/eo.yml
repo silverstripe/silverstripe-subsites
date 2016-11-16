@@ -20,10 +20,12 @@ eo:
     Saved: 'Konservita, bonvole ĝisdatigi rilatajn paĝojn.'
   LeftAndMain_Menu:
     Hello: Saluton
-    LOGOUT: 'Elsaluti'
+    LOGOUT: Elsaluti
   SiteTreeSubsites:
     CopyAction: Kopio
     CopyToSubsite: 'Kopii paĝon al subretejo'
+    CopyToSubsiteWithChildren: 'Ĉu inkluzivi  paĝidojn?'
+    SubsiteOperations: 'Subretejaj operacioj'
   Subsite:
     COPYSTRUCTURE: 'Kopii strukturon de:'
     CopyMessage: 'Kreis kopion de {title}'

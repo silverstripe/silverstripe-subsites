@@ -10,7 +10,7 @@ fi:
     ACCESSALL: 'Kaikki alasivustot'
     ACCESSONLY: 'Vain nämä alasivustot'
     ACCESSRADIOTITLE: 'Anna tälle ryhmälle pääsy kohteeseen'
-    GlobalGroup: 'Globaaliryhmä'
+    GlobalGroup: Globaaliryhmä
     MANAGE_SUBSITES: 'Hallinnoi ryhmien alisivustoja'
     MANAGE_SUBSITES_HELP: 'Mahdollisuus rajoittaa ryhmän oikeuksia yhdelle tai useammalle alisivustolle.'
     SECURITYTABTITLE: Alisivustot
@@ -34,7 +34,7 @@ fi:
     PLURALNAME: Alasivustot
     PageTypeBlacklistField: 'Kiellä sivutyyppien käyttö?'
     SINGULARNAME: Alisivusto
-    SiteConfigSubtitle: 'Iskulauseesi'
+    SiteConfigSubtitle: Iskulauseesi
     SiteConfigTitle: 'Sivuston nimi'
     TabTitleConfig: Asetukset
     ValidateTitle: 'Lisää "Otsikko"'
@@ -49,18 +49,18 @@ fi:
   SubsiteXHRController:
     MENUTITLE: SubsiteXHRController
   Subsites:
-    DefaultSiteFieldLabel: 'Oletussivusto'
+    DefaultSiteFieldLabel: Oletussivusto
     DomainFieldLabel: Domain
     IsPublicFieldLabel: 'Aktivoi julkinen pääsy'
     LanguageFieldLabel: Kieli
-    MainSiteTitle: 'Pääsivusto'
+    MainSiteTitle: Pääsivusto
     PageTypeBlacklistFieldLabel: 'Sivutyyppien mustalista'
-    PrimaryDomainFieldLabel: 'Oletusdomain'
+    PrimaryDomainFieldLabel: Oletusdomain
     RedirectURLFieldLabel: 'Edelleenohjaus URL'
     ThemeFieldLabel: Teema
     TitleFieldLabel: 'Alisivuston nimi'
   SubsitesVirtualPage:
     DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
-    PLURALNAME: 'Pohjasivut'
+    PLURALNAME: Pohjasivut
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
     SubsiteField: Alisivu

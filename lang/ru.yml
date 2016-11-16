@@ -24,12 +24,14 @@ ru:
   SiteTreeSubsites:
     CopyAction: Копировать
     CopyToSubsite: 'Копировать страницу на подсайт'
+    CopyToSubsiteWithChildren: 'Включая под-страницы?'
+    SubsiteOperations: 'Операции над подсайтами'
   Subsite:
     COPYSTRUCTURE: 'Скопировать структуры из:'
     CopyMessage: 'Создана копия {title}'
     CustomExtraMeta: 'Пользовательские мета-тэги'
     CustomMetaDescription: Описание
-    CustomMetaKeywords: Ключевые слова
+    CustomMetaKeywords: 'Ключевые слова'
     CustomMetaTitle: Заголовок
     DOMAINSAVEFIRST: 'Вы можете добавлять домены только после первого сохранения'
     DomainsHeadline: 'Домены для этого подсайта'

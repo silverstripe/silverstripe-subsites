@@ -5,9 +5,9 @@ tr_TR:
     ACCESSALL: 'All subsites'
     ACCESSONLY: 'Only these subsites'
     ACCESSRADIOTITLE: 'Give this group access to'
-    SECURITYTABTITLE: Alt Siteler
+    SECURITYTABTITLE: 'Alt Siteler'
   SubsiteAdmin:
-    MENUTITLE: Alt Siteler
+    MENUTITLE: 'Alt Siteler'
   SubsiteDomain:
     DOMAIN: Domain
     PLURALNAME: 'Subsite Domains'

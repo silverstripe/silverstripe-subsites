@@ -7,7 +7,7 @@ cs:
   Subsite:
     CustomExtraMeta: 'Vlastní meta tagy'
     CustomMetaDescription: Popis
-    CustomMetaKeywords: Klíčová slova
+    CustomMetaKeywords: 'Klíčová slova'
     CustomMetaTitle: Název
     DOMAINSAVEFIRST: 'Domény můžete přidávat až po uložení'
     DomainsHeadline: 'Domény pro tento web'
