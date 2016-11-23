@@ -206,7 +206,15 @@ class SubsitesVirtualPage_Controller extends VirtualPage_Controller {
 		Subsite::$disable_subsite_filter = true;
 		
 		parent::init();
-		
+		// we also need to load the originally referenced page controller and fire it's init() method
+		$original_class = $this->CopyContentFrom()->ClassName;
+		// dont' run init() when page is newly created and does not have an original page assigned to it yet
+		if($original_class != 'SiteTree') {
+			$controller_class = $this->CopyContentFrom()->ClassName . '_Controller';
+			$cc = New $controller_class; // manually instantiate the class to stop 'method on non-object' errors
+			$cc->init();
+		}
+
 		Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
 	}
 }
