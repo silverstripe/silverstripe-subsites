@@ -190,4 +190,12 @@ class SubsitesVirtualPage_Controller extends VirtualPage_Controller
 
         Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
     }
+    
+    public function getViewer($action) {
+        $originalClass = get_class($this->CopyContentFrom());
+        if ($originalClass == 'SiteTree') $name = 'Page_Controller';
+        else $name = $originalClass."_Controller";
+        $controller = new $name($this->CopyContentFrom());
+        return $controller->getViewer($action);
+    }
 }
