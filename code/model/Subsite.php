@@ -571,7 +571,7 @@ class Subsite extends DataObject {
 		$languageSelector = new DropdownField(
 			'Language',
 			$this->fieldLabel('Language'),
-			i18n::get_common_locales()
+			i18n::getData()->getLocales()
 		);
 
 		$pageTypeMap = array();

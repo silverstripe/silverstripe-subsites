@@ -265,7 +265,8 @@ class SiteTreeSubsites extends DataExtension {
 	static function contentcontrollerInit($controller) {
 		$subsite = Subsite::currentSubsite();
 
-		if($subsite && $subsite->Theme){
+		if($subsite && $theme=$subsite->Theme){
+			SilverStripe\View\SSViewer::set_theme($theme);
 			Config::inst()->update('SilverStripe\\View\\SSViewer', 'theme', Subsite::currentSubsite()->Theme);
 		}
 	}
