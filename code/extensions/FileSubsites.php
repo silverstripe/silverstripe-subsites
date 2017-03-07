@@ -116,16 +116,17 @@ class FileSubsites extends DataExtension {
 
 	function canEdit($member = null) {
 		// Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
-		$subsiteID = Session::get('SubsiteID');
-		if($subsiteID&&$subsiteID == $this->owner->SubsiteID) {
-			return true;
-		} else {
-			Session::set('SubsiteID', $this->owner->SubsiteID);
-			$access = Permission::check(array('CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain'));
-			Session::set('SubsiteID', $subsiteID);
-
-			return $access;
+		// Returns true if the current user has the CMS_ACCESS_AssetAdmin or CMS_ACCESS_LeftAndMain or is the owner of this file 
+		// through the file OwnerID
+		
+		if($memberID = Member::currentUserID()){
+    		if($this->owner->OwnerID == $memberID){
+    			return true;
+    		}else{
+    			return Permission::check(array('CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain'));
+    		}
 		}
+		
 	}
 	
 	/**
