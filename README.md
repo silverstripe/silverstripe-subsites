@@ -185,6 +185,26 @@ for all subdomains:
 
 	// Example matching subsite1.example.org and www.example.org
 	Session::set_cookie_domain('.example.org');
+	
+	
+### Disallow Page Types
+
+In the subsites you can define disallowed PageTypes. If you should still be able to add these page types please add this function to your *Page.php* or implement a similar feature in your existing canCreate function:
+
+    public function canCreate($member = null) {
+        // only check if subsites module is loaded
+        if(class_exists('Subsite')) {
+            // split the blacklisted PageTypes for the current subsite
+            $blacklistedPageTypes = explode(',', Subsite::currentSubsite()->PageTypeBlacklist);
+
+            // return false if it is listed in the blacklist
+            if (in_array(get_class($this), $blacklistedPageTypes)) return false;
+        }
+ 
+        // if the subsites module isn't loaded or the page isn't blacklisted leave the
+        // decision to the parent function.
+        return parent::canCreate($member);
+    }
 
 ## Screenshots
 
