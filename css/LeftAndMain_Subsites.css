@@ -95,6 +95,6 @@ body.SubsiteAdmin .right form #URL .fieldgroup * {
 	display:none;
 }
 
-#Root_DetailsView .subsites-move-dropdown{
+#Form_ItemEditForm .subsites-move-dropdown{
 	display:block;
 }
