@@ -1,5 +1,7 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Forms\FieldList;

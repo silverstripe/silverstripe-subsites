@@ -1,5 +1,7 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\Security\Group;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Subsites\Extensions\GroupSubsites;
@@ -10,7 +12,6 @@ class GroupSubsitesTest extends BaseSubsiteTest
     public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
     protected $requireDefaultRecordsFrom = [GroupSubsites::class];
-
     public function testTrivialFeatures()
     {
         $this->assertTrue(is_array(singleton('GroupSubsites')->extraStatics()));

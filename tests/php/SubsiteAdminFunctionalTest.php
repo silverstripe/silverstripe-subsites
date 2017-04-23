@@ -1,5 +1,7 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\Security\Member;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;

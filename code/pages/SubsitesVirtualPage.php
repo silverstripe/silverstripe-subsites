@@ -18,7 +18,6 @@ use SilverStripe\Subsites\Forms\SubsitesTreeDropdownField;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\View\ArrayData;
 
-
 class SubsitesVirtualPage extends VirtualPage
 {
 

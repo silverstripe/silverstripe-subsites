@@ -1,20 +1,24 @@
 <?php
 
-use SilverStripe\View\Requirements;
-use SilverStripe\Core\Convert;
-use SilverStripe\Forms\HiddenField;
-use SilverStripe\Security\Member;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataObject;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\View\ArrayData;
-use SilverStripe\Security\Permission;
-use SilverStripe\Control\Session;
+namespace SilverStripe\Subsites\Extensions;
+
 use SilverStripe\Admin\CMSMenu;
-use SilverStripe\Security\Security;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
+use SilverStripe\Control\Session;
+use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extension;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
+
 /**
  * Decorator designed to add subsites support to LeftAndMain
  *
@@ -22,6 +26,7 @@ use SilverStripe\Core\Extension;
  */
 class LeftAndMainSubsites extends Extension
 {
+
     private static $allowed_actions = array('CopyToSubsite');
 
     /**
@@ -351,4 +356,5 @@ class LeftAndMainSubsites extends Extension
             $newPage->ID
         ));
     }
+
 }

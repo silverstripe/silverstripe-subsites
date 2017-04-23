@@ -1,5 +1,7 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Subsites\Model\Subsite;
 
@@ -10,8 +12,9 @@ class BaseSubsiteTest extends SapphireTest
     {
         parent::setUp();
 
-		Subsite::$use_session_subsiteid = true;
-	Subsite::$force_subsite = null;}
+        Subsite::$use_session_subsiteid = true;
+		Subsite::$force_subsite = null;
+    }
 
 	/**
 	 * Avoid subsites filtering on fixture fetching.

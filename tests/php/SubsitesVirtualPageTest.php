@@ -1,5 +1,7 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\Assets\Tests\Storage\AssetStoreTest\TestAssetStore;
 use SilverStripe\Control\Director;

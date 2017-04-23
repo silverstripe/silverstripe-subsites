@@ -1,5 +1,7 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Extensions\SiteConfigSubsites;
 use SilverStripe\Subsites\Model\Subsite;
@@ -7,9 +9,9 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SiteConfigSubsitesTest extends BaseSubsiteTest
 {
-    static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
-    function testEachSubsiteHasAUniqueSiteConfig()
+    public function testEachSubsiteHasAUniqueSiteConfig()
     {
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');

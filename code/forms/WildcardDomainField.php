@@ -1,5 +1,7 @@
 <?php
 
+namespace SilverStripe\Subsites\Forms;
+
 use SilverStripe\Forms\TextField;
 
 /**
@@ -7,6 +9,7 @@ use SilverStripe\Forms\TextField;
  */
 class WildcardDomainField extends TextField
 {
+
     /**
      * Validate this field as a valid hostname
      *
@@ -24,6 +27,7 @@ class WildcardDomainField extends TextField
             _t("DomainNameField.INVALID_DOMAIN", "Invalid domain name"),
             "validation"
         );
+
         return false;
     }
 
@@ -42,4 +46,5 @@ class WildcardDomainField extends TextField
     {
         return 'text wildcarddomain';
     }
+
 }

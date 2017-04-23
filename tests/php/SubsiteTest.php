@@ -1,9 +1,11 @@
 <?php
 
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Control\Director;
-use SilverStripe\ORM\DataObject;
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Model\SubsiteDomain;

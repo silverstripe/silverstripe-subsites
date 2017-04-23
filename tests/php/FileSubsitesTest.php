@@ -1,13 +1,17 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
+use SilverStripe\Subsites\Tests\BaseSubsiteTest;
 use SilverStripe\Subsites\Model\Subsite;
 
 class FileSubsitesTest extends BaseSubsiteTest
 {
+
     public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
     /**
@@ -15,15 +19,15 @@ class FileSubsitesTest extends BaseSubsiteTest
      *
      * @var array
      */
-	protected $illegalExtensions = array(
+    protected $illegalExtensions = array(
         'File' => array(
             'SecureFileExtension',
             'VersionedFileExtension'
         ),
-		'SiteTree' => array(
-			'Translatable',
-		)
-	);
+        'SiteTree' => array(
+            'Translatable',
+        )
+    );
 
     public function testTrivialFeatures()
     {

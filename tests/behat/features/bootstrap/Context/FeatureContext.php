@@ -1,6 +1,6 @@
 <?php
 
-namespace Subsites\Test\Behaviour;
+namespace SilverStripe\Subsites\Tests\Behaviour;
 
 if (!class_exists('SilverStripe\BehatExtension\Context\SilverStripeContext')) {
     return;

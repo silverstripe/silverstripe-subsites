@@ -1,5 +1,8 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
+use SilverStripe\AssetAdmin\Controller\AssetAdmin;
 use SilverStripe\Security\Member;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Admin\LeftAndMain;
@@ -56,7 +59,6 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
         $subsite3 = $this->objFromFixture(Subsite::class, 'domaintest3');
-
         $ids[] = $subsite1->ID;
         $ids[] = $subsite2->ID;
         $ids[] = $subsite3->ID;

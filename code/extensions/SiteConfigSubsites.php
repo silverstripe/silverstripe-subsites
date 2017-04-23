@@ -17,9 +17,9 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SiteConfigSubsites extends DataExtension
 {
-	private static $has_one = [
-		'Subsite' => Subsite::class, // The subsite that this page belongs to
-	];
+    private static $has_one = [
+        'Subsite' => Subsite::class, // The subsite that this page belongs to
+    ];
 
 	/**
 	 * Update any requests to limit the results to the current site
@@ -66,4 +66,5 @@ class SiteConfigSubsites extends DataExtension
     {
         $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
     }
+
 }

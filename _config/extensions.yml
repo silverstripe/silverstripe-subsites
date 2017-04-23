@@ -1,0 +1,65 @@
+---
+Name: subsiteextensions
+After:
+  - 'framework/*'
+---
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SiteTreeSubsites
+
+SilverStripe\CMS\Controllers\ContentController:
+  extensions:
+    - SilverStripe\Subsites\Extensions\ControllerSubsites
+
+SilverStripe\CMS\Controllers\CMSPageAddController:
+  extensions:
+    - SilverStripe\Subsites\Extensions\CMSPageAddControllerExtension
+
+SilverStripe\Admin\LeftAndMain:
+  extensions:
+    - SilverStripe\Subsites\Extensions\LeftAndMainSubsites
+    - SilverStripe\Subsites\Extensions\ControllerSubsites
+
+SilverStripe\Security\Group:
+  extensions:
+    - SilverStripe\Subsites\Extensions\GroupSubsites
+
+SilverStripe\Assets\File:
+  extensions:
+    - SilverStripe\Subsites\Extensions\FileSubsites
+
+SilverStripe\CMS\Model\ErrorPage:
+  extensions:
+    - SilverStripe\Subsites\Extensions\ErrorPageSubsite
+
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SiteConfigSubsites
+
+SilverStripe\Reports\Report:
+  extensions:
+    - SilverStripe\Subsites\SubsiteReportWrapper
+
+SilverStripe\AssetAdmin\Controller\AssetAdmin:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
+
+SilverStripe\Admin\SecurityAdmin:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
+
+SilverStripe\CMS\Controllers\CMSMain:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
+
+SilverStripe\CMS\Controllers\CMSPagesController:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
+
+SilverStripe\Subsites\SubsiteAdmin:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
+
+SilverStripe\CMS\Controllers\CMSPageSettingsController:
+  extensions:
+    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension

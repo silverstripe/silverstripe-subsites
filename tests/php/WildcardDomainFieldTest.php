@@ -1,6 +1,9 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Subsites\Forms\WildcardDomainField;
 
 /**
  * Tests {@see WildcardDomainField}
@@ -61,7 +64,7 @@ class WildcardDomainFieldTest extends SapphireTest {
             array('*.mysite.')
         );
     }
-    
+
     public function validWildcards() {
         return array(
             array('*.mysite.com'),

@@ -15,9 +15,10 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SubsiteReportWrapper extends ReportWrapper
 {
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // Filtering
 
+    /**
+     * @return FieldList
+     */
     public function parameterFields()
     {
         $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true);
@@ -44,9 +45,9 @@ class SubsiteReportWrapper extends ReportWrapper
         return $fields;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // Columns
-
+    /**
+     * @return array
+     */
     public function columns()
     {
         $columns = parent::columns();
@@ -57,6 +58,10 @@ class SubsiteReportWrapper extends ReportWrapper
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Querying
 
+    /**
+     * @param arary $params
+     * @return void
+     */
     public function beforeQuery($params)
     {
         // The user has select a few specific sites
@@ -70,6 +75,10 @@ class SubsiteReportWrapper extends ReportWrapper
             Subsite::$force_subsite = join(',', array_keys($options));
         }
     }
+
+    /**
+     * @return void
+     */
     public function afterQuery()
     {
         // Manually manage the subsite filtering

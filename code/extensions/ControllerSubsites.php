@@ -1,8 +1,6 @@
 <?php
 
 namespace SilverStripe\Subsites\Extensions;
-
-
 use SilverStripe\Core\Extension;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\View\SSViewer;
@@ -12,6 +10,7 @@ use SilverStripe\View\SSViewer;
  */
 class ControllerSubsites extends Extension
 {
+
     public function controllerAugmentInit()
     {
         if ($subsite = Subsite::currentSubsite()) {
@@ -27,4 +26,5 @@ class ControllerSubsites extends Extension
             return $subsite;
         }
     }
+
 }

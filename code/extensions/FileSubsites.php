@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
-
 use SilverStripe\Assets\Folder;
 use SilverStripe\Control\Session;
 use SilverStripe\Forms\DropdownField;
@@ -13,8 +12,6 @@ use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Permission;
 use SilverStripe\Subsites\Model\Subsite;
-
-
 /**
  * Extension for the File object to add subsites support
  *
