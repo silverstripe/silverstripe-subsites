@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Model;
 
 
+use SilverStripe\i18n\Data\Intl\IntlLocales;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Control\Session;
 use SilverStripe\i18n\i18n;
@@ -582,7 +583,7 @@ class Subsite extends DataObject {
 		$languageSelector = new DropdownField(
 			'Language',
 			$this->fieldLabel('Language'),
-			i18n::get_common_locales()
+            (new IntlLocales)->getLocales()
 		);
 
 		$pageTypeMap = array();
