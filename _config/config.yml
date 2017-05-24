@@ -1,8 +1,5 @@
 ---
 Name: subsiteconfig
-After:
- - 'framework/*'
- - 'cms/*'
 ---
 AssetAdmin:
   treats_subsite_0_as_global: true
