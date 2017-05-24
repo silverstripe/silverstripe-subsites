@@ -1,8 +1,13 @@
 <?php
 
+namespace SilverStripe\Subsites\Forms;
+
+
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
+use Subsite;
+
 class GridFieldSubsiteDetailForm extends GridFieldDetailForm {
 	protected $itemRequestClass='GridFieldSubsiteDetailForm_ItemRequest';
 }

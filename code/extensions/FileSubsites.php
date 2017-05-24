@@ -1,5 +1,8 @@
 <?php
 
+namespace SilverStripe\Subsites\Extensions;
+
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Assets\Folder;
 use SilverStripe\Forms\DropdownField;
@@ -9,17 +12,19 @@ use SilverStripe\ORM\DataQuery;
 use SilverStripe\Control\Session;
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\Subsites\Model\Subsite;
+
 /**
  * Extension for the File object to add subsites support
  *
  * @package subsites
  */
 class FileSubsites extends DataExtension {
-	
+
 	// If this is set to true, all folders created will be default be
 	// considered 'global', unless set otherwise
 	static $default_root_folders_global = false;
-	
+
 	private static $has_one=array(
 		'Subsite' => 'Subsite',
 	);
@@ -48,14 +53,14 @@ class FileSubsites extends DataExtension {
 			if($sites){
 				//Dropdown needed to move folders between subsites
 				$dropdown = new DropdownField(
-					'SubsiteID', 
-					_t('FileSubsites.SubsiteFieldLabel','Subsite'), 
+					'SubsiteID',
+					_t('FileSubsites.SubsiteFieldLabel','Subsite'),
 					$values
 				);
 				$dropdown->addExtraClass('subsites-move-dropdown');
 				$fields->push($dropdown);
 				$fields->push(new LiteralField(
-					'Message', 
+					'Message',
 					'<p class="message notice">'.
 					_t('ASSETADMIN.SUBSITENOTICE', 'Folders and files created in the main site are accessible by all subsites.')
 					.'</p>'
@@ -127,13 +132,13 @@ class FileSubsites extends DataExtension {
 			return $access;
 		}
 	}
-	
+
 	/**
 	 * Return a piece of text to keep DataObject cache keys appropriately specific
 	 */
 	function cacheKeyComponent() {
 		return 'subsite-'.Subsite::currentSubsiteID();
 	}
-	
+
 }
 

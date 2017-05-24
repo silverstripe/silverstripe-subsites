@@ -1,5 +1,8 @@
 <?php
 
+namespace SilverStripe\Subsites\Extensions;
+
+
 use SilverStripe\ORM\DB;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Core\Convert;
@@ -11,6 +14,8 @@ use SilverStripe\ORM\DataQuery;
 use SilverStripe\Control\Cookie;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Subsites\Model\Subsite;
+
 /**
  * Extension for the Group object to add subsites support
  *

@@ -1,7 +1,12 @@
 <?php
 
+namespace SilverStripe\Subsites\Extensions;
+
+
 use SilverStripe\View\SSViewer;
 use SilverStripe\Core\Extension;
+use SilverStripe\Subsites\Model\Subsite;
+
 /**
  * @package subsites
  */
@@ -12,7 +17,7 @@ class ControllerSubsites extends Extension {
 			SSViewer::set_theme($theme);
 		}
 	}
-	
+
 	function CurrentSubsite(){
 		if($subsite = Subsite::currentSubsite()){
 			return $subsite;

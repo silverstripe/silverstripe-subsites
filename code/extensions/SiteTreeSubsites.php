@@ -1,5 +1,8 @@
 <?php
 
+namespace SilverStripe\Subsites\Extensions;
+
+
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\Forms\FieldList;
@@ -14,6 +17,9 @@ use SilverStripe\Security\Member;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\Subsites\Model\Subsite;
+use Page;
+
 
 /**
  * Extension for the SiteTree object to add subsites support

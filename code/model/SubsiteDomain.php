@@ -1,10 +1,15 @@
 <?php
 
+namespace SilverStripe\Subsites\Model;
+
+
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataObject;
+
+
 
 /**
  * @property text Domain domain name of this subsite. Do not include the URL scheme here

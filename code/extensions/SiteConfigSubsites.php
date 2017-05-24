@@ -1,10 +1,15 @@
 <?php
 
+namespace SilverStripe\Subsites\Extensions;
+
+
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\Subsites\Model\Subsite;
+
 
 /**
  * Extension for the SiteConfig object to add subsites support

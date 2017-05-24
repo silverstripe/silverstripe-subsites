@@ -1,5 +1,8 @@
 <?php
 
+namespace SilverStripe\Subsites\Model;
+
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Control\Session;
 use SilverStripe\i18n\i18n;
@@ -25,7 +28,9 @@ use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\ArrayLib;
-use SilverStripe\ORM\Versioning\Versioned;
+use SilverStripe\Versioned\Versioned;
+use UnexpectedValueException;
+
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
  * You can simulate subsite access without setting up virtual hosts by appending ?SubsiteID=<ID> to the request.

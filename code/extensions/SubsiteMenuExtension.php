@@ -1,6 +1,11 @@
 <?php
 
+namespace SilverStripe\Subsites\Extensions;
+
+
 use SilverStripe\Core\Extension;
+
+
 
 /*
  * Simple extension to show admins in the menu of subsites.

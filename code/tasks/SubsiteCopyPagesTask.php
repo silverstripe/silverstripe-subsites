@@ -1,8 +1,15 @@
 <?php
 
+namespace SilverStripe\Subsites\Tasks;
+
+
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\Versioning\Versioned;
 use SilverStripe\Dev\BuildTask;
+use InvalidArgumentException;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Versioned\Versioned;
+use SubsitesVirtualPage;
+
 /**
  * Handy alternative to copying pages when creating a subsite through the UI.
  * Can be used to batch-add new pages after subsite creation,
@@ -13,7 +20,7 @@ use SilverStripe\Dev\BuildTask;
 class SubsiteCopyPagesTask extends BuildTask {
 
 	protected $title = 'Copy pages to different subsite';
-	
+
 	protected $description = '';
 
 	function run($request) {
@@ -51,7 +58,7 @@ class SubsiteCopyPagesTask extends BuildTask {
 					} else {
 						$childClone = $child->duplicateToSubsite($subsiteTo->ID, true);
 					}
-					
+
 					$childClone->ParentID = $destParentID;
 					$childClone->writeToStage('Stage');
 					$childClone->publish('Stage', 'Live');

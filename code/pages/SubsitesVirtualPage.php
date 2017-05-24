@@ -1,5 +1,8 @@
 <?php
 
+namespace SilverStripe\Subsites\Pages;
+
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
@@ -12,6 +15,9 @@ use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\CMS\Model\VirtualPage_Controller;
+use SubsitesTreeDropdownField;
+use Subsite;
+
 class SubsitesVirtualPage extends VirtualPage {
 
 	private static $description = 'Displays the content of a page on another subsite';
