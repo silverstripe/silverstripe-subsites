@@ -20,7 +20,9 @@ use SilverStripe\Subsites\Forms\SubsitesTreeDropdownField;
 
 class SubsitesVirtualPage extends VirtualPage {
 
-	private static $description = 'Displays the content of a page on another subsite';
+    private static $table_name = 'SubsitesVirtualPage';
+
+    private static $description = 'Displays the content of a page on another subsite';
 
 	private static $db = array(
 		'CustomMetaTitle' => 'Varchar(255)',

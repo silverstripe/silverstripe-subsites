@@ -43,6 +43,8 @@ use SilverStripe\Security\PermissionRoleCode;
  */
 class Subsite extends DataObject {
 
+    private static $table_name = 'Subsite';
+
 	/**
 	 * @var $use_session_subsiteid Boolean Set to TRUE when using the CMS and FALSE
 	 * when browsing the frontend of a website.

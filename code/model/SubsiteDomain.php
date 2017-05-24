@@ -17,7 +17,9 @@ use SilverStripe\ORM\DataObject;
  */
 class SubsiteDomain extends DataObject {
 
-	/**
+    private static $table_name = 'SubsiteDomain';
+
+    /**
 	 *
 	 * @var string
 	 */
