@@ -1,15 +1,18 @@
 <?php
 
 use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Extensions\SiteConfigSubsites;
+
 
 class SiteConfigSubsitesTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 	
 	function testEachSubsiteHasAUniqueSiteConfig() {
-		$subsite1 = $this->objFromFixture('Subsite', 'domaintest1');
-		$subsite2 = $this->objFromFixture('Subsite', 'domaintest2');
+		$subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
+		$subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
-		$this->assertTrue(is_array(singleton('SiteConfigSubsites')->extraStatics()));
+		$this->assertTrue(is_array(singleton(SiteConfigSubsites::class)->extraStatics()));
 		
 		Subsite::changeSubsite(0);
 		$sc = SiteConfig::current_site_config();

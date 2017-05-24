@@ -3,6 +3,9 @@
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\AssetAdmin\Controller\AssetAdmin;
+
 
 class LeftAndMainSubsitesTest extends FunctionalTest {
 
@@ -28,7 +31,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 			array('Title' =>'Subsite1 Template')
 		), $subsites, 'Lists member-accessible sites for the accessible controller.');
 
-		$assetadmin = singleton('AssetAdmin');
+		$assetadmin = singleton(AssetAdmin::class);
 		$subsites = $assetadmin->sectionSites(true, "Main site", $member);
 		$this->assertDOSEquals(array(), $subsites, 'Does not list any sites for forbidden controller.');
 
@@ -46,9 +49,9 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 		$this->loginAs($admin);
 		$ids = array();
 
-		$subsite1 = $this->objFromFixture('Subsite', 'domaintest1');
-		$subsite2 = $this->objFromFixture('Subsite', 'domaintest2');
-		$subsite3 = $this->objFromFixture('Subsite', 'domaintest3');
+		$subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
+		$subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
+		$subsite3 = $this->objFromFixture(Subsite::class, 'domaintest3');
 
 		$ids[] = $subsite1->ID;
 		$ids[] = $subsite2->ID;

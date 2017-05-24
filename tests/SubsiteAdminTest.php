@@ -3,6 +3,8 @@
 use SilverStripe\Control\Session;
 use SilverStripe\Control\Director;
 use SilverStripe\CMS\Controllers\CMSMain;
+use SilverStripe\Subsites\Model\Subsite;
+
 
 class SubsiteAdminTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
@@ -18,7 +20,7 @@ class SubsiteAdminTest extends BaseSubsiteTest {
      */
     function testBasicView() {
 		Subsite::$write_hostmap = false;
-		$subsite1ID = $this->objFromFixture('Subsite','domaintest1')->ID;
+		$subsite1ID = $this->objFromFixture(Subsite::class,'domaintest1')->ID;
 
         // Open the admin area logged in as admin
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
@@ -44,9 +46,9 @@ class SubsiteAdminTest extends BaseSubsiteTest {
 		}	
 
 		$this->assertArrayHasKey(0, $ids, "Main site accessible");
-		$this->assertArrayHasKey($this->idFromFixture('Subsite','main'), $ids, "Site with no groups inaccesible");
-		$this->assertArrayHasKey($this->idFromFixture('Subsite','subsite1'), $ids, "Subsite1 Template inaccessible");
-		$this->assertArrayHasKey($this->idFromFixture('Subsite','subsite2'), $ids, "Subsite2 Template inaccessible");
+		$this->assertArrayHasKey($this->idFromFixture(Subsite::class,'main'), $ids, "Site with no groups inaccesible");
+		$this->assertArrayHasKey($this->idFromFixture(Subsite::class,'subsite1'), $ids, "Subsite1 Template inaccessible");
+		$this->assertArrayHasKey($this->idFromFixture(Subsite::class,'subsite2'), $ids, "Subsite2 Template inaccessible");
 	}
 
 	

@@ -1,4 +1,4 @@
-Subsite:
+SilverStripe\Subsites\Model\Subsite:
   main:
     Title: 'Template'
   subsite1:
@@ -11,7 +11,7 @@ Subsite:
     Title: 'Test 2'
   domaintest3:
     Title: 'Test 3'
-SubsiteDomain:
+SilverStripe\Subsites\Model\SubsiteDomain:
   subsite1:
     SubsiteID: =>Subsite.subsite1
     Domain: 'subsite1.*'

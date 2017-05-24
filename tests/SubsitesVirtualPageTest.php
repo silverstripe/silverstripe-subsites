@@ -3,7 +3,12 @@
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\ORM\DB;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\ORM\Versioning\Versioned;
+
+use SilverStripe\Assets\Tests\Storage\AssetStoreTest\TestAssetStore;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
+use SilverStripe\Versioned\Versioned;
+
 
 class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	static $fixture_file = array(
@@ -15,13 +20,13 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		parent::setUp();
 
 		// Set backend root to /DataDifferencerTest
-		AssetStoreTest_SpyStore::activate('SubsitesVirtualPageTest');
+		TestAssetStore::activate('SubsitesVirtualPageTest');
 
 		// Create a test files for each of the fixture references
 		$file = $this->objFromFixture('SilverStripe\\Assets\\File', 'file1');
 		$page = $this->objFromFixture('SilverStripe\\CMS\\Model\\SiteTree', 'page1');
 		$fromPath = __DIR__ . '/testscript-test-file.pdf';
-		$destPath = AssetStoreTest_SpyStore::getLocalPath($file);
+		$destPath = TestAssetStore::getLocalPath($file);
 		Filesystem::makeFolder(dirname($destPath));
 		copy($fromPath, $destPath);
 
@@ -31,7 +36,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	}
 
 	public function tearDown() {
-		AssetStoreTest_SpyStore::reset();
+		TestAssetStore::reset();
 		parent::tearDown();
 	}
 
@@ -39,7 +44,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	function testVirtualPageFromAnotherSubsite() {
 		Subsite::$write_hostmap = false;
 
-		$subsite = $this->objFromFixture('Subsite', 'subsite2');
+		$subsite = $this->objFromFixture(Subsite::class, 'subsite2');
 
 		Subsite::changeSubsite($subsite->ID);
 		Subsite::$disable_subsite_filter = false;
@@ -152,7 +157,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		$this->assertTrue($p->ExistsOnLive);
 
 		// change to subsite
-		$subsite = $this->objFromFixture('Subsite', 'subsite2');
+		$subsite = $this->objFromFixture(Subsite::class, 'subsite2');
 		Subsite::changeSubsite($subsite->ID);
 		Subsite::$disable_subsite_filter = false;
 
@@ -187,19 +192,19 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		Config::modify()->set('StaticPublisher', 'disable_realtime', true);
 
 		// Go to main site, get parent page
-		$subsite = $this->objFromFixture('Subsite', 'main');
+		$subsite = $this->objFromFixture(Subsite::class, 'main');
 		Subsite::changeSubsite($subsite->ID);
 		$page = $this->objFromFixture('Page', 'importantpage');
 
 		// Create two SVPs on other subsites
-		$subsite = $this->objFromFixture('Subsite', 'subsite1');
+		$subsite = $this->objFromFixture(Subsite::class, 'subsite1');
 		Subsite::changeSubsite($subsite->ID);
 		$vp1 = new SubsitesVirtualPage();
 		$vp1->CopyContentFromID = $page->ID;
 		$vp1->write();
 		$vp1->doPublish();
 
-		$subsite = $this->objFromFixture('Subsite', 'subsite2');
+		$subsite = $this->objFromFixture(Subsite::class, 'subsite2');
 		Subsite::changeSubsite($subsite->ID);
 		$vp2 = new SubsitesVirtualPage();
 		$vp2->CopyContentFromID = $page->ID;
@@ -207,18 +212,18 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 		$vp2->doPublish();
 
 		// Switch back to main site, unpublish source
-		$subsite = $this->objFromFixture('Subsite', 'main');
+		$subsite = $this->objFromFixture(Subsite::class, 'main');
 		Subsite::changeSubsite($subsite->ID);
 		$page = $this->objFromFixture('Page', 'importantpage');
 		$page->doUnpublish();
 
 		Subsite::changeSubsite($vp1->SubsiteID);
-		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
+		$onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
 		$this->assertNull($onLive, 'SVP has been removed from live');
 
-		$subsite = $this->objFromFixture('Subsite', 'subsite2');
+		$subsite = $this->objFromFixture(Subsite::class, 'subsite2');
 		Subsite::changeSubsite($vp2->SubsiteID);
-		$onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
+		$onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
 		$this->assertNull($onLive, 'SVP has been removed from live');
 	}
 
@@ -228,8 +233,8 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest {
 	 */
 	function testSubsiteVirtualPageCanHaveSameUrlsegmentAsOtherSubsite() {
 		Subsite::$write_hostmap = false;
-		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
-		$subsite2 = $this->objFromFixture('Subsite', 'subsite2');
+		$subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
+		$subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
 		Subsite::changeSubsite($subsite1->ID);
 
 		$subsite1Page = $this->objFromFixture('Page', 'subsite1_staff');

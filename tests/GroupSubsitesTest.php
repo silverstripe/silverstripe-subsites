@@ -2,15 +2,18 @@
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Group;
+use SilverStripe\Subsites\Extensions\GroupSubsites;
+use SilverStripe\Subsites\Model\Subsite;
+
 
 class GroupSubsitesTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 	
-	protected $requireDefaultRecordsFrom = array('GroupSubsites');
+	protected $requireDefaultRecordsFrom = array(GroupSubsites::class);
 	
 	function testTrivialFeatures() {
-		$this->assertTrue(is_array(singleton('GroupSubsites')->extraStatics()));
-		$this->assertTrue(is_array(singleton('GroupSubsites')->providePermissions()));
+		$this->assertTrue(is_array(singleton(GroupSubsites::class)->extraStatics()));
+		$this->assertTrue(is_array(singleton(GroupSubsites::class)->providePermissions()));
 		$this->assertTrue(singleton('SilverStripe\\Security\\Group')->getCMSFields() instanceof FieldList);
 	}
 	
@@ -21,8 +24,8 @@ class GroupSubsitesTest extends BaseSubsiteTest {
 		$this->assertEquals($group->getTreeTitle(), 'The A Team <i>(global group)</i>');
 		$group->AccessAllSubsites = false;
 		$group->write();
-		$group->Subsites()->add($this->objFromFixture('Subsite', 'domaintest1'));
-		$group->Subsites()->add($this->objFromFixture('Subsite', 'domaintest2'));
+		$group->Subsites()->add($this->objFromFixture(Subsite::class, 'domaintest1'));
+		$group->Subsites()->add($this->objFromFixture(Subsite::class, 'domaintest2'));
 		$this->assertEquals($group->getTreeTitle(), 'The A Team <i>(Test 1, Test 2)</i>');
 	}
 }

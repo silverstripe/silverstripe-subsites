@@ -2,6 +2,9 @@
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Control\Director;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Model\SubsiteDomain;
+
 
 class SubsiteTest extends BaseSubsiteTest {
 
@@ -27,7 +30,7 @@ class SubsiteTest extends BaseSubsiteTest {
 		Subsite::$write_hostmap = false;
 		
 		// Create the instance
-		$template = $this->objFromFixture('Subsite', 'main');
+		$template = $this->objFromFixture(Subsite::class, 'main');
 	
 		// Test that changeSubsite is working
 		Subsite::changeSubsite($template->ID);
@@ -65,8 +68,8 @@ class SubsiteTest extends BaseSubsiteTest {
 	 */
 	function testDomainLookup() {
 		// Clear existing fixtures
-		foreach(DataObject::get('Subsite') as $subsite) $subsite->delete();
-		foreach(DataObject::get('SubsiteDomain') as $domain) $domain->delete();
+		foreach(DataObject::get(Subsite::class) as $subsite) $subsite->delete();
+		foreach(DataObject::get(SubsiteDomain::class) as $domain) $domain->delete();
 		
 		// Much more expressive than YML in this case
 		$subsite1 = $this->createSubsiteWithDomains(array(
@@ -135,8 +138,8 @@ class SubsiteTest extends BaseSubsiteTest {
 	
 	function testStrictSubdomainMatching() {
 		// Clear existing fixtures
-		foreach(DataObject::get('Subsite') as $subsite) $subsite->delete();
-		foreach(DataObject::get('SubsiteDomain') as $domain) $domain->delete();
+		foreach(DataObject::get(Subsite::class) as $subsite) $subsite->delete();
+		foreach(DataObject::get(SubsiteDomain::class) as $domain) $domain->delete();
 		
 		// Much more expressive than YML in this case
 		$subsite1 = $this->createSubsiteWithDomains(array(
@@ -224,23 +227,23 @@ class SubsiteTest extends BaseSubsiteTest {
 	 */
 	function testDefaultDomain() {
 		$this->assertEquals('one.example.org', 
-			$this->objFromFixture('Subsite','domaintest1')->domain());
+			$this->objFromFixture(Subsite::class,'domaintest1')->domain());
 
 		$this->assertEquals('two.mysite.com', 
-			$this->objFromFixture('Subsite','domaintest2')->domain());
+			$this->objFromFixture(Subsite::class,'domaintest2')->domain());
 			
 		$originalHTTPHost = $_SERVER['HTTP_HOST'];
 		
 		$_SERVER['HTTP_HOST'] = "www.example.org";
 		$this->assertEquals('three.example.org', 
-			$this->objFromFixture('Subsite','domaintest3')->domain());
+			$this->objFromFixture(Subsite::class,'domaintest3')->domain());
 
 		$_SERVER['HTTP_HOST'] = "mysite.example.org";
 		$this->assertEquals('three.mysite.example.org', 
-			$this->objFromFixture('Subsite','domaintest3')->domain());
+			$this->objFromFixture(Subsite::class,'domaintest3')->domain());
 
-		$this->assertEquals($_SERVER['HTTP_HOST'], singleton('Subsite')->PrimaryDomain);
-		$this->assertEquals('http://'.$_SERVER['HTTP_HOST'].Director::baseURL(), singleton('Subsite')->absoluteBaseURL());
+		$this->assertEquals($_SERVER['HTTP_HOST'], singleton(Subsite::class)->PrimaryDomain);
+		$this->assertEquals('http://'.$_SERVER['HTTP_HOST'].Director::baseURL(), singleton(Subsite::class)->absoluteBaseURL());
 
 		$_SERVER['HTTP_HOST'] = $originalHTTPHost;
 	}
@@ -339,7 +342,7 @@ class SubsiteTest extends BaseSubsiteTest {
 
 	function testDuplicateSubsite() {
 		// get subsite1 & create page
-		$subsite1 = $this->objFromFixture('Subsite','domaintest1');
+		$subsite1 = $this->objFromFixture(Subsite::class,'domaintest1');
 		$subsite1->activate();
 		$page1 = new Page();
 		$page1->Title = 'MyAwesomePage';

@@ -1,6 +1,8 @@
 <?php
 
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Subsites\Model\Subsite;
+
 class BaseSubsiteTest extends SapphireTest {
 
 	function setUp() {

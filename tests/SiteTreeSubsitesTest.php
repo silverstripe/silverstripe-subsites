@@ -8,6 +8,10 @@ use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Core\Convert;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\CMS\Model\ErrorPage;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
+use SilverStripe\Subsites\Extensions\SiteTreeSubsites;
+
 
 class SiteTreeSubsitesTest extends BaseSubsiteTest {
 
@@ -24,8 +28,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 	);
 
 	function testPagesInDifferentSubsitesCanShareURLSegment() {
-		$subsiteMain = $this->objFromFixture('Subsite', 'main');
-		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+		$subsiteMain = $this->objFromFixture(Subsite::class, 'main');
+		$subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
 
 		$pageMain = new SiteTree();
 		$pageMain->URLSegment = 'testpage';
@@ -57,12 +61,12 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		$this->assertTrue(singleton('SilverStripe\\CMS\\Model\\SiteTree')->getSiteConfig() instanceof SiteConfig);
 		// The following assert is breaking in Translatable.
 		$this->assertTrue(singleton('SilverStripe\\CMS\\Model\\SiteTree')->getCMSFields() instanceof FieldList);
-		$this->assertTrue(singleton('SubsitesVirtualPage')->getCMSFields() instanceof FieldList);
-		$this->assertTrue(is_array(singleton('SiteTreeSubsites')->extraStatics()));
+		$this->assertTrue(singleton(SubsitesVirtualPage::class)->getCMSFields() instanceof FieldList);
+		$this->assertTrue(is_array(singleton(SiteTreeSubsites::class)->extraStatics()));
 	}
 
 	function testErrorPageLocations() {
-		$subsite1 = $this->objFromFixture('Subsite', 'domaintest1');
+		$subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
 
 		Subsite::changeSubsite($subsite1->ID);
 		$path = SiteTreeSubsitesTest_ErrorPage::get_error_filename_spy(500);
@@ -78,8 +82,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		$mainpage = $this->objFromFixture('Page', 'home');
 		$subsite1page = $this->objFromFixture('Page', 'subsite1_home');
 		$subsite2page = $this->objFromFixture('Page', 'subsite2_home');
-		$subsite1 = $this->objFromFixture('Subsite', 'subsite1');
-		$subsite2 = $this->objFromFixture('Subsite', 'subsite2');
+		$subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
+		$subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
 
 		// Cant pass member as arguments to canEdit() because of GroupSubsites
 		Session::set("loggedInAs", $admin->ID);
@@ -116,8 +120,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 	 */
 	function testTwoPagesWithSameURLOnDifferentSubsites() {
 		// Set up a couple of pages with the same URL on different subsites
-		$s1 = $this->objFromFixture('Subsite','domaintest1');
-		$s2 = $this->objFromFixture('Subsite','domaintest2');
+		$s1 = $this->objFromFixture(Subsite::class,'domaintest1');
+		$s2 = $this->objFromFixture(Subsite::class,'domaintest2');
 
 		$p1 = new SiteTree();
 		$p1->Title = $p1->URLSegment = "test-page";
@@ -145,8 +149,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 		$editor = $this->objFromFixture('SilverStripe\\Security\\Member', 'editor');
 		Session::set("loggedInAs", $editor->ID);
 
-		$s1 = $this->objFromFixture('Subsite','domaintest1');
-		$s2 = $this->objFromFixture('Subsite','domaintest2');
+		$s1 = $this->objFromFixture(Subsite::class,'domaintest1');
+		$s2 = $this->objFromFixture(Subsite::class,'domaintest2');
 		$page = singleton('SilverStripe\\CMS\\Model\\SiteTree');
 
 		$s1->PageTypeBlacklist = 'SiteTreeSubsitesTest_ClassA,ErrorPage';
@@ -184,8 +188,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest {
 
 		$cmsmain = new CMSMain();
 
-		$s1 = $this->objFromFixture('Subsite','domaintest1');
-		$s2 = $this->objFromFixture('Subsite','domaintest2');
+		$s1 = $this->objFromFixture(Subsite::class,'domaintest1');
+		$s2 = $this->objFromFixture(Subsite::class,'domaintest2');
 
 		$s1->PageTypeBlacklist = 'SiteTreeSubsitesTest_ClassA,ErrorPage';
 		$s1->write();
