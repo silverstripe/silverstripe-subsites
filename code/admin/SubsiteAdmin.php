@@ -13,30 +13,32 @@ use SilverStripe\Subsites\Model\Subsite;
  *
  * @package subsites
  */
-class SubsiteAdmin extends ModelAdmin {
+class SubsiteAdmin extends ModelAdmin
+{
 
-	private static $managed_models = array(Subsite::class);
+    private static $managed_models = [Subsite::class];
 
-	private static $url_segment = 'subsites';
+    private static $url_segment = 'subsites';
 
-	private static $menu_title = "Subsites";
+    private static $menu_title = "Subsites";
 
-	private static $menu_icon = "subsites/images/subsites.png";
+    private static $menu_icon = "subsites/images/subsites.png";
 
-	public $showImportForm=false;
+    public $showImportForm = false;
 
-	private static $tree_class = Subsite::class;
+    private static $tree_class = Subsite::class;
 
-	public function getEditForm($id = null, $fields = null) {
-		$form = parent::getEditForm($id, $fields);
+    public function getEditForm($id = null, $fields = null)
+    {
+        $form = parent::getEditForm($id, $fields);
 
-		$grid=$form->Fields()->dataFieldByName(Subsite::class);
-		if($grid) {
-			$grid->getConfig()->removeComponentsByType('SilverStripe\\Forms\\GridField\\GridFieldDetailForm');
-			$grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());
-		}
+        $grid = $form->Fields()->dataFieldByName(Subsite::class);
+        if ($grid) {
+            $grid->getConfig()->removeComponentsByType('SilverStripe\\Forms\\GridField\\GridFieldDetailForm');
+            $grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());
+        }
 
-		return $form;
-	}
+        return $form;
+    }
 
 }

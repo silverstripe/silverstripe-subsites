@@ -3,11 +3,10 @@
 namespace SilverStripe\Subsites\Forms;
 
 
-use SilverStripe\View\Requirements;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Forms\TreeDropdownField;
-
+use SilverStripe\View\Requirements;
 
 
 /**
@@ -16,40 +15,45 @@ use SilverStripe\Forms\TreeDropdownField;
  *
  * @package subsites
  */
-class SubsitesTreeDropdownField extends TreeDropdownField {
+class SubsitesTreeDropdownField extends TreeDropdownField
+{
 
-	private static $allowed_actions = array(
-		'tree'
-	);
+    private static $allowed_actions = [
+        'tree'
+    ];
 
-	protected $subsiteID = 0;
+    protected $subsiteID = 0;
 
-	protected $extraClasses = array(SubsitesTreeDropdownField::class);
+    protected $extraClasses = [SubsitesTreeDropdownField::class];
 
-	function Field($properties = array()) {
-		$html = parent::Field($properties);
+    function Field($properties = [])
+    {
+        $html = parent::Field($properties);
 
-		Requirements::javascript('subsites/javascript/SubsitesTreeDropdownField.js');
+        Requirements::javascript('subsites/javascript/SubsitesTreeDropdownField.js');
 
-		return $html;
-	}
+        return $html;
+    }
 
-	function setSubsiteID($id) {
-		$this->subsiteID = $id;
-	}
+    function setSubsiteID($id)
+    {
+        $this->subsiteID = $id;
+    }
 
-	function getSubsiteID() {
-		return $this->subsiteID;
-	}
+    function getSubsiteID()
+    {
+        return $this->subsiteID;
+    }
 
-	function tree(HTTPRequest $request) {
-		$oldSubsiteID = Session::get('SubsiteID');
-		Session::set('SubsiteID', $this->subsiteID);
+    function tree(HTTPRequest $request)
+    {
+        $oldSubsiteID = Session::get('SubsiteID');
+        Session::set('SubsiteID', $this->subsiteID);
 
-		$results = parent::tree($request);
+        $results = parent::tree($request);
 
-		Session::set('SubsiteID', $oldSubsiteID);
+        Session::set('SubsiteID', $oldSubsiteID);
 
-		return $results;
-	}
+        return $results;
+    }
 }
