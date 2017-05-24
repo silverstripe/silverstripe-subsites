@@ -583,15 +583,15 @@ class Subsite extends DataObject
      */
     public function getCMSFields()
     {
-        if ($this->ID!=0) {
-            $domainTable = new GridField(
+        if ($this->ID != 0) {
+            $domainTable = GridField::create(
                 "Domains",
                 _t('Subsite.DomainsListTitle', "Domains"),
                 $this->Domains(),
                 GridFieldConfig_RecordEditor::create(10)
             );
         } else {
-            $domainTable = new LiteralField(
+            $domainTable = LiteralField::create(
                 'Domains',
                 '<p>'._t('Subsite.DOMAINSAVEFIRST', 'You can only add domains after saving for the first time').'</p>'
             );
@@ -610,45 +610,49 @@ class Subsite extends DataObject
         }
         asort($pageTypeMap);
 
-        $fields = new FieldList(
-            $subsiteTabs = new TabSet('Root',
-                new Tab(
+        $fields = FieldList::create(
+            $subsiteTabs = TabSet::create('Root',
+                Tab::create(
                     'Configuration',
                     _t('Subsite.TabTitleConfig', 'Configuration'),
-                    new HeaderField($this->getClassName() . ' configuration', 2),
-                    new TextField('Title', $this->fieldLabel('Title'), $this->Title),
+                    HeaderField::create($this->getClassName() . ' configuration', 2),
+                    TextField::create('Title', $this->fieldLabel('Title'), $this->Title),
 
-                    new HeaderField(
+                    HeaderField::create(
                         _t('Subsite.DomainsHeadline', "Domains for this subsite")
                     ),
                     $domainTable,
                     $languageSelector,
                     // new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
-                    new CheckboxField('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
-                    new CheckboxField('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
+                    CheckboxField::create('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
+                    CheckboxField::create('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
 
-                    new DropdownField('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme),
-
-
-                    new LiteralField(
+                    LiteralField::create(
                         'PageTypeBlacklistToggle',
                         sprintf(
                             '<div class="field"><a href="#" id="PageTypeBlacklistToggle">%s</a></div>',
                             _t('Subsite.PageTypeBlacklistField', 'Disallow page types?')
                         )
                     ),
-                    new CheckboxSetField(
+                    CheckboxSetField::create(
                         'PageTypeBlacklist',
                         false,
                         $pageTypeMap
                     )
                 )
             ),
-            new HiddenField('ID', '', $this->ID),
-            new HiddenField('IsSubsite', '', 1)
+            HiddenField::create('ID', '', $this->ID),
+            HiddenField::create('IsSubsite', '', 1)
         );
 
-        $subsiteTabs->addExtraClass('subsite-model');
+		// If there are any themes available, add the dropdown
+		$themes = $this->allowedThemes();
+		if (!empty($themes)) {
+			$fields->addFieldToTab('Root.Configuration',
+				DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '')), 'PageTypeBlacklistToggle');
+		}
+
+		$subsiteTabs->addExtraClass('subsite-model');
 
         $this->extend('updateCMSFields', $fields);
         return $fields;
