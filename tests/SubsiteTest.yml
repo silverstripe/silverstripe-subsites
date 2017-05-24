@@ -13,27 +13,27 @@ SilverStripe\Subsites\Model\Subsite:
     Title: 'Test 3'
 SilverStripe\Subsites\Model\SubsiteDomain:
   subsite1:
-    SubsiteID: =>Subsite.subsite1
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
     Domain: 'subsite1.*'
   subsite2:
-    SubsiteID: =>Subsite.subsite2
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
     Domain: 'subsite2.*'
   dt1a:
-    SubsiteID: =>Subsite.domaintest1
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest1
     Domain: 'one.example.org'
     IsPrimary: 1
   dt1b:
-    SubsiteID: =>Subsite.domaintest1
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest1
     Domain: 'one.*'
   dt2a:
-    SubsiteID: =>Subsite.domaintest2
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest2
     Domain: 'two.mysite.com'
     IsPrimary: 1
   dt2b:
-    SubsiteID: =>Subsite.domaintest2
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest2
     Domain: '*.mysite.com'
   dt3:
-    SubsiteID: =>Subsite.domaintest3
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest3
     Domain: 'three.*'
     IsPrimary: 1
 Page:
@@ -42,38 +42,38 @@ Page:
     SubsiteID: 0
   home:
     Title: 'Home'
-    SubsiteID: =>Subsite.main
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
   about:
     Title: 'About'
-    SubsiteID: =>Subsite.main
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
   linky:
      Title: 'Linky'
-     SubsiteID: =>Subsite.main
+     SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
   staff:
     Title: 'Staff'
     ParentID: =>Page.about
-    SubsiteID: =>Subsite.main
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
   contact:
     Title: 'Contact Us'
-    SubsiteID: =>Subsite.main
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
   importantpage:
     Title: 'Important Page'
-    SubsiteID: =>Subsite.main
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
   subsite1_home:
     Title: 'Home (Subsite 1)'
-    SubsiteID: =>Subsite.subsite1
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
   subsite1_contactus:
     Title: 'Contact Us (Subsite 1)'
-    SubsiteID: =>Subsite.subsite1
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
   subsite1_staff:
     Title: 'Staff'
-    SubsiteID: =>Subsite.subsite1
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
   subsite2_home:
     Title: 'Home (Subsite 2)'
-    SubsiteID: =>Subsite.subsite2
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
   subsite2_contactus:
     Title: 'Contact Us (Subsite 2)'
-    SubsiteID: =>Subsite.subsite2
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
 
 SilverStripe\Security\PermissionRoleCode:
   roleCode1:
@@ -95,17 +95,17 @@ SilverStripe\Security\Group:
     Title: subsite1_group
     Code: subsite1_group
     AccessAllSubsites: 0
-    Subsites: =>Subsite.subsite1
+    Subsites: =>SilverStripe\Subsites\Model\Subsite.subsite1
   subsite2_group:
     Title: subsite2_group
     Code: subsite2_group
     AccessAllSubsites: 0
-    Subsites: =>Subsite.subsite2
+    Subsites: =>SilverStripe\Subsites\Model\Subsite.subsite2
   subsite1admins:
     Title: subsite1admins
     Code: subsite1admins
     AccessAllSubsites: 0
-    Subsites: =>Subsite.subsite1
+    Subsites: =>SilverStripe\Subsites\Model\Subsite.subsite1
   allsubsitesauthors:
     Title: allsubsitesauthors
     Code: allsubsitesauthors
