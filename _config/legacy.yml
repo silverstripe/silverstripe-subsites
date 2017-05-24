@@ -1,0 +1,9 @@
+---
+Name: subsites-legacy
+---
+
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    Subsite: SilverStripe\Subsites\Model\Subsite
+    SubsiteDomain: SilverStripe\Subsites\Model\SubsiteDomain
+    SubsitesVirtualPage: SilverStripe\Subsites\Pages\SubsitesVirtualPage
