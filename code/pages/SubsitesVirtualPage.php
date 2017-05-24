@@ -14,9 +14,6 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Model\VirtualPage;
-use SilverStripe\CMS\Model\VirtualPageController;
-
-
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Forms\SubsitesTreeDropdownField;
 
