@@ -6,7 +6,6 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Subsites\Model\Subsite;
-use SilverStripe\Subsites\Model\Subsite;
 
 
 class ErrorPageSubsite extends DataExtension {

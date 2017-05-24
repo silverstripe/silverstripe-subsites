@@ -13,7 +13,6 @@ use SilverStripe\Control\Session;
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Subsites\Model\Subsite;
-use SilverStripe\Subsites\Model\Subsite;
 
 
 /**
