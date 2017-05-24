@@ -5,6 +5,8 @@ namespace SilverStripe\Subsites\Admin;
 
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm;
+use SilverStripe\Subsites\Model\Subsite;
+
 
 /**
  * Admin interface to manage and create {@link Subsite} instances.
@@ -13,7 +15,7 @@ use SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm;
  */
 class SubsiteAdmin extends ModelAdmin {
 
-	private static $managed_models = array('Subsite');
+	private static $managed_models = array(Subsite::class);
 
 	private static $url_segment = 'subsites';
 
@@ -23,12 +25,12 @@ class SubsiteAdmin extends ModelAdmin {
 
 	public $showImportForm=false;
 
-	private static $tree_class = 'Subsite';
+	private static $tree_class = Subsite::class;
 
 	public function getEditForm($id = null, $fields = null) {
 		$form = parent::getEditForm($id, $fields);
 
-		$grid=$form->Fields()->dataFieldByName('Subsite');
+		$grid=$form->Fields()->dataFieldByName(Subsite::class);
 		if($grid) {
 			$grid->getConfig()->removeComponentsByType('SilverStripe\\Forms\\GridField\\GridFieldDetailForm');
 			$grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());

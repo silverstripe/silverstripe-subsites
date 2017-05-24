@@ -30,6 +30,10 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
+use SilverStripe\Security\Group;
+use SilverStripe\Security\PermissionRole;
+use SilverStripe\Security\PermissionRoleCode;
+
 
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
@@ -125,7 +129,7 @@ class Subsite extends DataObject {
 	 */
 	public static function currentSubsite() {
 		// get_by_id handles caching so we don't have to
-		return DataObject::get_by_id('Subsite', self::currentSubsiteID());
+		return DataObject::get_by_id(Subsite::class, self::currentSubsiteID());
 	}
 
 	/**
@@ -208,10 +212,10 @@ class Subsite extends DataObject {
 
 			$SQL_host = Convert::raw2sql($host);
 			$matchingDomains = DataObject::get(
-				"SubsiteDomain",
+				SubsiteDomain::class,
 				"'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
 				"\"IsPrimary\" DESC"
-			)->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
+			)->innerJoin(Subsite::class, "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
 		}
 
 		if($matchingDomains && $matchingDomains->Count()) {
@@ -226,7 +230,7 @@ class Subsite extends DataObject {
 			}
 
 			$subsiteID = $subsiteIDs[0];
-		} else if($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
+		} else if($default = DataObject::get_one(Subsite::class, "\"DefaultSite\" = 1")) {
 			// Check for a 'default' subsite
 			$subsiteID = $default->ID;
 		} else {
@@ -352,23 +356,23 @@ class Subsite extends DataObject {
 			return self::$_cache_accessible_sites[$cacheKey];
 		}
 
-		$subsites = DataList::create('Subsite')
+		$subsites = DataList::create(Subsite::class)
 			->where("\"Subsite\".\"Title\" != ''")
 			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
-			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
+			->innerJoin(Group::class, "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
 			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
-			->innerJoin('Permission', "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
+			->innerJoin(Permission::class, "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
 
 		if(!$subsites) $subsites = new ArrayList();
 
-		$rolesSubsites = DataList::create('Subsite')
+		$rolesSubsites = DataList::create(Subsite::class)
 			->where("\"Subsite\".\"Title\" != ''")
 			->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
-			->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
+			->innerJoin(Group::class, "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
 			->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
 			->innerJoin('Group_Roles', "\"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"")
-			->innerJoin('PermissionRole', "\"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"")
-			->innerJoin('PermissionRoleCode', "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
+			->innerJoin(PermissionRole::class, "\"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"")
+			->innerJoin(PermissionRoleCode::class, "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
 
 		if(!$subsites && $rolesSubsites) return $rolesSubsites;
 
@@ -411,7 +415,7 @@ class Subsite extends DataObject {
 		if (!$file) $file = Director::baseFolder().'/subsites/host-map.php';
 		$hostmap = array();
 
-		$subsites = DataObject::get('Subsite');
+		$subsites = DataObject::get(Subsite::class);
 
 		if ($subsites) foreach($subsites as $subsite) {
 			$domains = $subsite->Domains();
@@ -510,7 +514,7 @@ class Subsite extends DataObject {
 	 * @var array
 	 */
 	private static $has_many = array(
-		'Domains' => 'SubsiteDomain',
+		'Domains' => SubsiteDomain::class,
 	);
 
 	/**
@@ -714,7 +718,7 @@ class Subsite extends DataObject {
 	 */
 	public function domain() {
 		if($this->ID) {
-			$domains = DataObject::get("SubsiteDomain", "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
+			$domains = DataObject::get(SubsiteDomain::class, "\"SubsiteID\" = $this->ID", "\"IsPrimary\" DESC","", 1);
 			if($domains && $domains->Count()>0) {
 				$domain = $domains->First()->Domain;
 				// If there are wildcards in the primary domain (not recommended), make some

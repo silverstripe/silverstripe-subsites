@@ -9,6 +9,7 @@ use SilverStripe\Reports\ReportWrapper;
 use SilverStripe\Subsites\Model\Subsite;
 
 
+
 /**
  * Creates a subsite-aware version of another report.
  * Pass another report (or its classname) into the constructor.
@@ -47,7 +48,7 @@ class SubsiteReportWrapper extends ReportWrapper {
 
 	function columns() {
 		$columns = parent::columns();
-		$columns['Subsite.Title'] = "Subsite";
+		$columns['Subsite.Title'] = Subsite::class;
 		return $columns;
 	}
 

@@ -14,9 +14,12 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Model\VirtualPage;
-use SilverStripe\CMS\Model\VirtualPage_Controller;
-use SubsitesTreeDropdownField;
-use Subsite;
+use SilverStripe\CMS\Model\VirtualPageController;
+
+
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Forms\SubsitesTreeDropdownField;
+
 
 class SubsitesVirtualPage extends VirtualPage {
 
@@ -32,7 +35,7 @@ class SubsitesVirtualPage extends VirtualPage {
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
 
-		$subsites = DataObject::get('Subsite');
+		$subsites = DataObject::get(Subsite::class);
 		if(!$subsites) {
 			$subsites = new ArrayList();
 		}else {
@@ -45,7 +48,7 @@ class SubsitesVirtualPage extends VirtualPage {
 			'Root.Main',
 			DropdownField::create(
 				"CopyContentFromID_SubsiteID",
-				_t('SubsitesVirtualPage.SubsiteField',"Subsite"),
+				_t('SubsitesVirtualPage.SubsiteField',Subsite::class),
 				$subsites->map('ID', 'Title')
 			)->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
 			'CopyContentFromID'

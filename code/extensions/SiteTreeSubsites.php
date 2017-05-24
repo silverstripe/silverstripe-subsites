@@ -19,6 +19,8 @@ use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Subsites\Model\Subsite;
 use Page;
+use SilverStripe\CMS\Model\SiteTree;
+
 
 
 /**
@@ -27,7 +29,7 @@ use Page;
 class SiteTreeSubsites extends DataExtension {
 
 	private static $has_one = array(
-		'Subsite' => 'Subsite', // The subsite that this page belongs to
+		'Subsite' => Subsite::class, // The subsite that this page belongs to
 	);
 
 	private static $many_many = array(
@@ -63,7 +65,7 @@ class SiteTreeSubsites extends DataExtension {
 		// The foreach is an ugly way of getting the first key :-)
 		foreach($query->getFrom() as $tableName => $info) {
 			// The tableName should be SiteTree or SiteTree_Live...
-			if(strpos($tableName,'SiteTree') === false) break;
+			if(strpos($tableName,SiteTree::class) === false) break;
 			$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
 			break;
 		}

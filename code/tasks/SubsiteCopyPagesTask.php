@@ -8,7 +8,8 @@ use SilverStripe\Dev\BuildTask;
 use InvalidArgumentException;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Versioned\Versioned;
-use SubsitesVirtualPage;
+use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
+
 
 /**
  * Handy alternative to copying pages when creating a subsite through the UI.
@@ -26,12 +27,12 @@ class SubsiteCopyPagesTask extends BuildTask {
 	function run($request) {
 		$subsiteFromId = $request->getVar('from');
 		if(!is_numeric($subsiteFromId)) throw new InvalidArgumentException('Missing "from" parameter');
-		$subsiteFrom = DataObject::get_by_id('Subsite', $subsiteFromId);
+		$subsiteFrom = DataObject::get_by_id(Subsite::class, $subsiteFromId);
 		if(!$subsiteFrom) throw new InvalidArgumentException('Subsite not found');
 
 		$subsiteToId = $request->getVar('to');
 		if(!is_numeric($subsiteToId)) throw new InvalidArgumentException('Missing "to" parameter');
-		$subsiteTo = DataObject::get_by_id('Subsite', $subsiteToId);
+		$subsiteTo = DataObject::get_by_id(Subsite::class, $subsiteToId);
 		if(!$subsiteTo) throw new InvalidArgumentException('Subsite not found');
 
 		$useVirtualPages = (bool)$request->getVar('virtual');

@@ -37,7 +37,7 @@ class SubsiteDomain extends DataObject {
 	 * @var array
 	 */
 	private static $has_one = array(
- 		"Subsite" => "Subsite",
+ 		"Subsite" => Subsite::class,
 	);
 
 	/**
@@ -57,9 +57,9 @@ class SubsiteDomain extends DataObject {
 	public function onAfterWrite() {
 		Subsite::writeHostMap();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return \FieldList
 	 */
 	public function getCMSFields() {
@@ -73,7 +73,7 @@ class SubsiteDomain extends DataObject {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param bool $includerelations
 	 * @return array
 	 */

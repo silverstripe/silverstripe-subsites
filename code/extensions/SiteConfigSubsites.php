@@ -9,6 +9,8 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\SiteConfig\SiteConfig;
+
 
 
 /**
@@ -17,7 +19,7 @@ use SilverStripe\Subsites\Model\Subsite;
 class SiteConfigSubsites extends DataExtension {
 
 	private static $has_one = array(
-		'Subsite' => 'Subsite', // The subsite that this page belongs to
+		'Subsite' => Subsite::class, // The subsite that this page belongs to
 	);
 
 	/**
@@ -39,7 +41,7 @@ class SiteConfigSubsites extends DataExtension {
 		$froms=$query->getFrom();
 		$froms=array_keys($froms);
 		$tableName = array_shift($froms);
-		if($tableName != 'SiteConfig') return;
+		if($tableName != SiteConfig::class) return;
 		$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
 	}
 

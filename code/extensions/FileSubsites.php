@@ -13,6 +13,8 @@ use SilverStripe\Control\Session;
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Model\Subsite;
+
 
 /**
  * Extension for the File object to add subsites support
@@ -26,7 +28,7 @@ class FileSubsites extends DataExtension {
 	static $default_root_folders_global = false;
 
 	private static $has_one=array(
-		'Subsite' => 'Subsite',
+		'Subsite' => Subsite::class,
 	);
 
 	/**
@@ -54,7 +56,7 @@ class FileSubsites extends DataExtension {
 				//Dropdown needed to move folders between subsites
 				$dropdown = new DropdownField(
 					'SubsiteID',
-					_t('FileSubsites.SubsiteFieldLabel','Subsite'),
+					_t('FileSubsites.SubsiteFieldLabel',Subsite::class),
 					$values
 				);
 				$dropdown->addExtraClass('subsites-move-dropdown');

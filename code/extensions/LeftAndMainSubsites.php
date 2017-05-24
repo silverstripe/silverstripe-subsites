@@ -19,6 +19,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Core\Extension;
 use SilverStripe\Subsites\Model\Subsite;
 
+
 /**
  * Decorator designed to add subsites support to LeftAndMain
  *
@@ -316,7 +317,7 @@ class LeftAndMainSubsites extends Extension {
 
 	function copytosubsite($data, $form) {
 		$page = DataObject::get_by_id('SilverStripe\\CMS\\Model\\SiteTree', $data['ID']);
-		$subsite = DataObject::get_by_id('Subsite', $data['CopyToSubsiteID']);
+		$subsite = DataObject::get_by_id(Subsite::class, $data['CopyToSubsiteID']);
 		$newPage = $page->duplicateToSubsite($subsite->ID, true);
 		$response = $this->owner->getResponse();
 		$response->addHeader('X-Reload', true);

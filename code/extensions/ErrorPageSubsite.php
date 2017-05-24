@@ -6,6 +6,8 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Model\Subsite;
+
 
 class ErrorPageSubsite extends DataExtension {
 
@@ -29,7 +31,7 @@ class ErrorPageSubsite extends DataExtension {
 		if(!$subsite) {
 			$subsiteID = Subsite::getSubsiteIDForDomain();
 			if($subsiteID != 0) {
-				$subsite = DataObject::get_by_id("Subsite", $subsiteID);
+				$subsite = DataObject::get_by_id(Subsite::class, $subsiteID);
 			}
 		}
 
