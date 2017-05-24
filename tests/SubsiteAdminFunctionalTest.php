@@ -45,7 +45,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest {
 	function testAdminCanAccessAllSubsites() {
 		$member = $this->objFromFixture('SilverStripe\\Security\\Member', 'admin');
 		Session::set("loggedInAs", $member->ID);
-		
+
 		$this->getAndFollowAll('admin/pages/?SubsiteID=0');
 		$this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site.');
 		$this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
@@ -63,19 +63,19 @@ class SubsiteAdminFunctionalTest extends FunctionalTest {
 	function testAdminIsRedirectedToObjectsSubsite() {
 		$member = $this->objFromFixture('SilverStripe\\Security\\Member', 'admin');
 		Session::set("loggedInAs", $member->ID);
-		
+
 		$mainSubsitePage = $this->objFromFixture('Page', 'mainSubsitePage');
 		$subsite1Home = $this->objFromFixture('Page', 'subsite1_home');
 
 		Config::inst()->nest();
 
-		Config::inst()->update('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', false);
+		Config::modify()->set('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', false);
 		Subsite::changeSubsite(0);
 		$this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
 		$this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading an object switches the subsite');
 		$this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-		Config::inst()->update('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', true);
+		Config::modify()->set('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', true);
 		Subsite::changeSubsite(0);
 		$this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
 		$this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global');

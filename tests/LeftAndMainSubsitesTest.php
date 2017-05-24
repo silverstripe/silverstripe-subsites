@@ -5,7 +5,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 
 class LeftAndMainSubsitesTest extends FunctionalTest {
-	
+
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
 	/**
@@ -45,16 +45,16 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 		$admin = $this->objFromFixture("SilverStripe\\Security\\Member","admin");
 		$this->loginAs($admin);
 		$ids = array();
-		
+
 		$subsite1 = $this->objFromFixture('Subsite', 'domaintest1');
 		$subsite2 = $this->objFromFixture('Subsite', 'domaintest2');
 		$subsite3 = $this->objFromFixture('Subsite', 'domaintest3');
-		
+
 		$ids[] = $subsite1->ID;
 		$ids[] = $subsite2->ID;
 		$ids[] = $subsite3->ID;
 		$ids[] = 0;
-		
+
 		// Enable session-based subsite tracking.
 		Subsite::$use_session_subsiteid = true;
 
@@ -67,20 +67,20 @@ class LeftAndMainSubsitesTest extends FunctionalTest {
 			$this->assertEquals($id, Subsite::currentSubsiteID(),
 				"The current subsite has not been changed in the process of checking permissions for admin user.");
 		}
-		
+
 	}
 
 	function testShouldChangeSubsite() {
 		$l = new LeftAndMain();
 		Config::inst()->nest();
 
-		Config::inst()->update('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', false);
+		Config::modify()->set('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', false);
 		$this->assertTrue($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 5));
 		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 0));
 		$this->assertTrue($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 1, 5));
 		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 1, 1));
 
-		Config::inst()->update('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', true);
+		Config::modify()->set('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 'treats_subsite_0_as_global', true);
 		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 5));
 		$this->assertFalse($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 0, 0));
 		$this->assertTrue($l->shouldChangeSubsite('SilverStripe\\CMS\\Controllers\\CMSPageEditController', 1, 5));
