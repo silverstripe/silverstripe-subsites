@@ -16,10 +16,9 @@ class GridFieldSubsiteDetailForm extends GridFieldDetailForm
 
 class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest
 {
-
-    private static $allowed_actions = [
-        'ItemEditForm',
-    ];
+	private static $allowed_actions = [
+		'ItemEditForm',
+	];
 
     /**
      * Builds an item edit form.  The arguments to getCMSFields() are the popupController and
@@ -32,7 +31,7 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
      * @return Form
      * @see GridFieldDetailForm_ItemRequest::ItemEditForm()
      */
-    function ItemEditForm()
+    public function ItemEditForm()
     {
         $form = parent::ItemEditForm();
 
@@ -52,7 +51,7 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
         return $form;
     }
 
-    function doSave($data, $form)
+    public function doSave($data, $form)
     {
         $new_record = $this->record->ID == 0;
         if ($new_record && isset($data['TemplateID']) && !empty($data['TemplateID'])) {

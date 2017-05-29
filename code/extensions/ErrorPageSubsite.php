@@ -2,28 +2,26 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
-
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\ORM\DataExtension;
 use SilverStripe\Subsites\Model\Subsite;
-
 
 class ErrorPageSubsite extends DataExtension
 {
-
     /**
      * Alter file path to generated a static (static) error page file to handle error page template on different sub-sites
      *
-     * {@see Error::get_error_filename()}
+     * @see Error::get_filepath_for_errorcode()
      *
      * FIXME since {@link Subsite::currentSubsite()} partly relies on Session, viewing other sub-site (including main site) between
      * opening ErrorPage in the CMS and publish ErrorPage causes static error page to get generated incorrectly.
-     *
-     * @param string $name Filename to write to
-     * @param int $statusCode Integer error code
      */
-    public function updateErrorFilename(&$name, $statusCode)
+    public function alternateFilepathForErrorcode($statusCode, $locale = null)
     {
+        $static_filepath = Config::inst()->get($this->owner->ClassName, 'static_filepath');
+        $subdomainPart = "";
 
         // Try to get current subsite from session
         $subsite = Subsite::currentSubsite(false);
@@ -32,17 +30,23 @@ class ErrorPageSubsite extends DataExtension
         if (!$subsite) {
             $subsiteID = Subsite::getSubsiteIDForDomain();
             if ($subsiteID != 0) {
-                $subsite = DataObject::get_by_id(Subsite::class, $subsiteID);
+                $subsite = DataObject::get_by_id("Subsite", $subsiteID);
+            } else {
+                $subsite = null;
             }
         }
 
-        // Without subsite, don't rewrite
         if ($subsite) {
-            // Add subdomain to end of filename, just before .html
-            // This should preserve translatable locale in the filename as well
             $subdomain = $subsite->domain();
-            $name = substr($name, 0, -5) . "-{$subdomain}.html";
+            $subdomainPart = "-{$subdomain}";
         }
-    }
 
+        if (singleton(SiteTree::class)->hasExtension('Translatable') && $locale && $locale != Translatable::default_locale()) {
+            $filepath = $static_filepath . "/error-{$statusCode}-{$locale}{$subdomainPart}.html";
+        } else {
+            $filepath = $static_filepath . "/error-{$statusCode}{$subdomainPart}.html";
+        }
+
+        return $filepath;
+    }
 }

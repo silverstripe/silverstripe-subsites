@@ -1,26 +1,26 @@
 <?php
 
-use SilverStripe\CMS\Controllers\CMSMain;
-use SilverStripe\Control\Director;
+use SilverStripe\Security\Member;
 use SilverStripe\Control\Session;
+use SilverStripe\Control\Director;
+use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Subsites\Model\Subsite;
-
 
 class SubsiteAdminTest extends BaseSubsiteTest
 {
-    static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
-    function adminLoggedInSession()
+    public function adminLoggedInSession()
     {
-        return new Session([
-            'loggedInAs' => $this->idFromFixture('SilverStripe\\Security\\Member', 'admin')
-        ]);
+        return new Session(array(
+            'loggedInAs' => $this->idFromFixture(Member::class, 'admin')
+        ));
     }
 
     /**
      * Test generation of the view
      */
-    function testBasicView()
+    public function testBasicView()
     {
         Subsite::$write_hostmap = false;
         $subsite1ID = $this->objFromFixture(Subsite::class, 'domaintest1')->ID;
@@ -41,9 +41,9 @@ class SubsiteAdminTest extends BaseSubsiteTest
      * Test that the main-site user with ADMIN permissions can access all subsites, regardless
      * of whether he is in a subsite-specific group or not.
      */
-    function testMainsiteAdminCanAccessAllSubsites()
+    public function testMainsiteAdminCanAccessAllSubsites()
     {
-        $member = $this->objFromFixture('SilverStripe\\Security\\Member', 'admin');
+        $member = $this->objFromFixture(Member::class, 'admin');
         Session::set("loggedInAs", $member->ID);
 
         $cmsMain = new CMSMain();
@@ -51,13 +51,11 @@ class SubsiteAdminTest extends BaseSubsiteTest
             $ids[$subsite->ID] = true;
         }
 
-        $this->assertArrayHasKey(0, $ids, "Main site accessible");
-        $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'main'), $ids, "Site with no groups inaccesible");
-        $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'subsite1'), $ids,
-            "Subsite1 Template inaccessible");
-        $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'subsite2'), $ids,
-            "Subsite2 Template inaccessible");
-    }
+		$this->assertArrayHasKey(0, $ids, "Main site accessible");
+		$this->assertArrayHasKey($this->idFromFixture(Subsite::class,'main'), $ids, "Site with no groups inaccesible");
+		$this->assertArrayHasKey($this->idFromFixture(Subsite::class,'subsite1'), $ids, "Subsite1 Template inaccessible");
+		$this->assertArrayHasKey($this->idFromFixture(Subsite::class,'subsite2'), $ids, "Subsite2 Template inaccessible");
+	}
 
 
 }

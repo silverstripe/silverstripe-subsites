@@ -17,19 +17,15 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SiteConfigSubsites extends DataExtension
 {
+	private static $has_one = [
+		'Subsite' => Subsite::class, // The subsite that this page belongs to
+	];
 
-    private static $has_one = [
-        'Subsite' => Subsite::class, // The subsite that this page belongs to
-    ];
-
-    /**
-     * Update any requests to limit the results to the current site
-     */
-    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
-    {
-        if (Subsite::$disable_subsite_filter) {
-            return;
-        }
+	/**
+	 * Update any requests to limit the results to the current site
+	 */
+	public function augmentSQL(SQLSelect$query, DataQuery $dataQuery = null) {
+		if(Subsite::$disable_subsite_filter) {return;}
 
         // If you're querying by ID, ignore the sub-site - this is a bit ugly...
         if ($query->filtersOnID()) {
@@ -42,20 +38,16 @@ class SiteConfigSubsites extends DataExtension
             }
         }
 
-        /*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-        else */
-        $subsiteID = (int)Subsite::currentSubsiteID();
+		$subsiteID = (int)Subsite::currentSubsiteID();
 
-        $froms = $query->getFrom();
-        $froms = array_keys($froms);
-        $tableName = array_shift($froms);
-        if ($tableName != SiteConfig::class) {
-            return;
-        }
-        $query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
-    }
+		$froms=$query->getFrom();
+		$froms=array_keys($froms);
+		$tableName = array_shift($froms);
+		if($tableName != SiteConfig::class) { return;}
+		$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
+	}
 
-    function onBeforeWrite()
+    public function onBeforeWrite()
     {
         if ((!is_numeric($this->owner->ID) || !$this->owner->ID) && !$this->owner->SubsiteID) {
             $this->owner->SubsiteID = Subsite::currentSubsiteID();
@@ -65,12 +57,12 @@ class SiteConfigSubsites extends DataExtension
     /**
      * Return a piece of text to keep DataObject cache keys appropriately specific
      */
-    function cacheKeyComponent()
+    public function cacheKeyComponent()
     {
-        return 'subsite-' . Subsite::currentSubsiteID();
+        return 'subsite-'.Subsite::currentSubsiteID();
     }
 
-    function updateCMSFields(FieldList $fields)
+    public function updateCMSFields(FieldList $fields)
     {
         $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
     }

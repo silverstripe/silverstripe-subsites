@@ -12,7 +12,7 @@ use SilverStripe\View\SSViewer;
  */
 class ControllerSubsites extends Extension
 {
-    function controllerAugmentInit()
+    public function controllerAugmentInit()
     {
         if ($subsite = Subsite::currentSubsite()) {
             if ($theme = $subsite->Theme) {
@@ -21,12 +21,10 @@ class ControllerSubsites extends Extension
         }
     }
 
-    function CurrentSubsite()
+    public function CurrentSubsite()
     {
         if ($subsite = Subsite::currentSubsite()) {
             return $subsite;
         }
     }
 }
-
-?>

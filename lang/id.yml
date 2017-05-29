@@ -1,16 +1,16 @@
 id:
-  SubsiteAdmin:
-    MENUTITLE: Subsitus
   FileSubsites:
     SubsiteFieldLabel: Subsitus
   GroupSubsites:
     SECURITYTABTITLE: Subsitus
   Subsite:
     CustomMetaDescription: Deskripsi
-    CustomMetaKeywords: Kata kunci
+    CustomMetaKeywords: 'Kata kunci'
     CustomMetaTitle: Judul
     PLURALNAME: Subsitus
     SINGULARNAME: Subsitus
+  SubsiteAdmin:
+    MENUTITLE: Subsitus
   SubsiteReportWrapper:
     ReportDropdown: Situs
   Subsites:

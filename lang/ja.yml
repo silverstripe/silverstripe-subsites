@@ -1,17 +1,16 @@
 ja:
-  SubsiteAdmin:
-    MENUTITLE: サブサイト
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'テンプレートから新しく追加'
   GroupSubsites:
     ACCESSALL: '全てのサブサイト'
-    ACCESSONLY: 'これらのサブサイトのみ'
+    ACCESSONLY: これらのサブサイトのみ
     ACCESSRADIOTITLE: 'このグループに選択先へのアクセス権を与える'
     SECURITYTABTITLE: サブサイト
+  SubsiteAdmin:
+    MENUTITLE: サブサイト
   SubsiteDomain:
     DOMAIN: ドメイン
-    IS_PRIMARY: 'プライマリドメイン'
-    PLURALNAME: 'サブサイトのドメイン'
-    SINGULARNAME: 'サブサイトのドメイン'
+    PLURALNAME: サブサイトのドメイン
+    SINGULARNAME: サブサイトのドメイン
   SubsitesVirtualPage:
-    SINGULARNAME: 'サブサイトの仮想ページ'
+    SINGULARNAME: サブサイトの仮想ページ

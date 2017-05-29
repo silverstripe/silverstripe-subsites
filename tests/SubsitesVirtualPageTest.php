@@ -2,19 +2,25 @@
 
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\Assets\Tests\Storage\AssetStoreTest\TestAssetStore;
-use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\Director;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Assets\File;
 use SilverStripe\ORM\DB;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Versioned\Versioned;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
-use SilverStripe\Versioned\Versioned;
-
 
 class SubsitesVirtualPageTest extends BaseSubsiteTest
 {
-    static $fixture_file = [
+    public static $fixture_file = array(
         'subsites/tests/SubsiteTest.yml',
         'subsites/tests/SubsitesVirtualPageTest.yml',
-    ];
+    );
+
+    protected $illegalExtensions = array(
+        'SiteTree' => array('Translatable')
+    );
 
     public function setUp()
     {
@@ -24,8 +30,8 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         TestAssetStore::activate('SubsitesVirtualPageTest');
 
         // Create a test files for each of the fixture references
-        $file = $this->objFromFixture('SilverStripe\\Assets\\File', 'file1');
-        $page = $this->objFromFixture('SilverStripe\\CMS\\Model\\SiteTree', 'page1');
+        $file = $this->objFromFixture(File::class, 'file1');
+        $page = $this->objFromFixture(SiteTree::class, 'page1');
         $fromPath = __DIR__ . '/testscript-test-file.pdf';
         $destPath = TestAssetStore::getLocalPath($file);
         Filesystem::makeFolder(dirname($destPath));
@@ -65,13 +71,14 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $this->assertEquals($svp->Title, $linky->Title);
     }
 
-    function testFileLinkRewritingOnVirtualPages()
+    public function testFileLinkRewritingOnVirtualPages()
     {
         // File setup
         $this->logInWithPermission('ADMIN');
+        touch(Director::baseFolder() . '/assets/testscript-test-file.pdf');
 
         // Publish the source page
-        $page = $this->objFromFixture('SilverStripe\\CMS\\Model\\SiteTree', 'page1');
+        $page = $this->objFromFixture(SiteTree::class, 'page1');
         $this->assertTrue($page->doPublish());
 
         // Create a virtual page from it, and publish that
@@ -81,7 +88,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $svp->doPublish();
 
         // Rename the file
-        $file = $this->objFromFixture('SilverStripe\\Assets\\File', 'file1');
+        $file = $this->objFromFixture(File::class, 'file1');
         $file->Name = 'renamed-test-file.pdf';
         $file->write();
 
@@ -92,7 +99,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
             DB::query("SELECT \"Content\" FROM \"SiteTree_Live\" WHERE \"ID\" = $svp->ID")->value());
     }
 
-    function testSubsiteVirtualPagesArentInappropriatelyPublished()
+    public function testSubsiteVirtualPagesArentInappropriatelyPublished()
     {
         // Fixture
         $p = new Page();
@@ -151,7 +158,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
      * is in a different subsite to the page you are editing and republishing,
      * otherwise the test will pass falsely due to current subsite ID being the same.
      */
-    function testPublishedSubsiteVirtualPagesUpdateIfTargetPageUpdates()
+    public function testPublishedSubsiteVirtualPagesUpdateIfTargetPageUpdates()
     {
         // create page
         $p = new Page();
@@ -193,9 +200,9 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $this->assertEquals($svpdb->Title, $p->Title);
     }
 
-    function testUnpublishingParentPageUnpublishesSubsiteVirtualPages()
+    public function testUnpublishingParentPageUnpublishesSubsiteVirtualPages()
     {
-        Config::modify()->set('StaticPublisher', 'disable_realtime', true);
+        Config::inst()->update('StaticPublisher', 'disable_realtime', true);
 
         // Go to main site, get parent page
         $subsite = $this->objFromFixture(Subsite::class, 'main');
@@ -224,14 +231,12 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $page->doUnpublish();
 
         Subsite::changeSubsite($vp1->SubsiteID);
-        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live',
-            "\"SiteTree_Live\".\"ID\" = " . $vp1->ID);
+        $onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
         $this->assertNull($onLive, 'SVP has been removed from live');
 
         $subsite = $this->objFromFixture(Subsite::class, 'subsite2');
         Subsite::changeSubsite($vp2->SubsiteID);
-        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live',
-            "\"SiteTree_Live\".\"ID\" = " . $vp2->ID);
+        $onLive = Versioned::get_one_by_stage('SubsitesVirtualPage', 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
         $this->assertNull($onLive, 'SVP has been removed from live');
     }
 
@@ -239,7 +244,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
      * Similar to {@link SiteTreeSubsitesTest->testTwoPagesWithSameURLOnDifferentSubsites()}
      * and {@link SiteTreeSubsitesTest->testPagesInDifferentSubsitesCanShareURLSegment()}.
      */
-    function testSubsiteVirtualPageCanHaveSameUrlsegmentAsOtherSubsite()
+    public function testSubsiteVirtualPageCanHaveSameUrlsegmentAsOtherSubsite()
     {
         Subsite::$write_hostmap = false;
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
@@ -275,15 +280,24 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
             $subsite1Page->URLSegment,
             "Does allow explicit URLSegment overrides when only existing in a different subsite"
         );
+
+		// When changing subsites and re-saving this page, it doesn't trigger a change
+		Subsite::changeSubsite($subsite1->ID);
+		$subsite1Page->write();
+		$subsite2Vp->write();
+        $this->assertEquals(
+            $subsite2Vp->URLSegment,
+            $subsite1Page->URLSegment,
+            "SubsiteVirtualPage doesn't change urls when being written in another subsite"
+        );
     }
 
-    function fixVersionNumberCache($page)
+    public function fixVersionNumberCache($page)
     {
         $pages = func_get_args();
         foreach ($pages as $p) {
-            Versioned::prepopulate_versionnumber_cache('SilverStripe\\CMS\\Model\\SiteTree', 'Stage', [$p->ID]);
-            Versioned::prepopulate_versionnumber_cache('SilverStripe\\CMS\\Model\\SiteTree', 'Live', [$p->ID]);
+            Versioned::prepopulate_versionnumber_cache(SiteTree::class, 'Stage', array($p->ID));
+            Versioned::prepopulate_versionnumber_cache(SiteTree::class, 'Live', array($p->ID));
         }
     }
-
 }

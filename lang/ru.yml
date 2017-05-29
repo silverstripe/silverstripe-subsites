@@ -1,0 +1,82 @@
+ru:
+  ASSETADMIN:
+    SUBSITENOTICE: 'Папки и файлы созданные на основном сайте так же доступны для под-сайтов.'
+  DomainNameField:
+    INVALID_DOMAIN: 'Неверный домен'
+  FileSubsites:
+    AllSitesDropdownOpt: 'Все сайты'
+    SubsiteFieldLabel: Подсайт
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Добавить из шаблона'
+  GroupSubsites:
+    ACCESSALL: 'Все подсайты'
+    ACCESSONLY: 'Только эти подсайты'
+    ACCESSRADIOTITLE: 'Разрешить этой группе доступ к'
+    GlobalGroup: 'глобальная группа'
+    MANAGE_SUBSITES: 'Управление подсайтами для групп'
+    MANAGE_SUBSITES_HELP: 'Возможность ограничить права доступа для группы к одному и более подсайтам'
+    SECURITYTABTITLE: Подсайты
+  LeftAndMainSubsites:
+    Saved: 'Сохранено, пожалуйста обновите связанные группы'
+  LeftAndMain_Menu:
+    Hello: Здравствуйте
+    LOGOUT: 'Выход'
+  SiteTreeSubsites:
+    CopyAction: Копировать
+    CopyToSubsite: 'Копировать страницу на подсайт'
+    CopyToSubsiteWithChildren: 'Включая под-страницы?'
+    SubsiteOperations: 'Операции над подсайтами'
+  Subsite:
+    COPYSTRUCTURE: 'Скопировать структуры из:'
+    CopyMessage: 'Создана копия {title}'
+    CustomExtraMeta: 'Пользовательские мета-тэги'
+    CustomMetaDescription: Описание
+    CustomMetaKeywords: 'Ключевые слова'
+    CustomMetaTitle: Заголовок
+    DOMAINSAVEFIRST: 'Вы можете добавлять домены только после первого сохранения'
+    DomainsHeadline: 'Домены для этого подсайта'
+    DomainsListTitle: Домены
+    IsPublicHeaderField: 'Активный подсайт'
+    NOTEMPLATE: 'Нет шаблона'
+    PLURALNAME: Подсайты
+    PageTypeBlacklistField: 'Запретить данные типы страниц?'
+    SINGULARNAME: Подсайт
+    SiteConfigSubtitle: 'ваш слоган здесь'
+    SiteConfigTitle: 'Название сайта'
+    TabTitleConfig: Конфигурация
+    ValidateTitle: 'Пожалуйста, добавьте "Заголовок"'
+  SubsiteAdmin:
+    MENUTITLE: Подсайты
+  SubsiteDomain:
+    DOMAIN: Домен
+    DOMAIN_DESCRIPTION: 'Домен подсайта (без указания протоколов: http:// и https://). Разрешены (*) для обозначения поддоменов.'
+    IS_PRIMARY: 'Это основной домен?'
+    PLURALNAME: 'Домены подсайтов'
+    PROTOCOL_AUTOMATIC: Автоматически
+    PROTOCOL_DESCRIPTION: 'Отметить как основной домен для данного подсайта'
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Протокол
+    SINGULARNAME: 'Домен подсайта'
+  SubsiteReportWrapper:
+    ReportDropdown: Сайты
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
+  Subsites:
+    DefaultSiteFieldLabel: 'Основной сайт'
+    DomainFieldLabel: Домен
+    IsPublicFieldLabel: 'Разрешить публичный доступ'
+    LanguageFieldLabel: Язык
+    MainSiteTitle: 'Основной Сайт'
+    PageTypeBlacklistFieldLabel: 'Запрещённые типы страниц'
+    PrimaryDomainFieldLabel: 'Основной Домен'
+    RedirectURLFieldLabel: 'Ссылка для перенаправления'
+    ThemeFieldLabel: Оформление
+    TitleFieldLabel: 'Название Подсайта'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Отображает содержимое выбранной страницы на другом подсайте'
+    PLURALNAME: 'Базовые страницы'
+    SINGULARNAME: 'Виртуальная страница подсайта'
+    SubsiteField: Подсайт
+  VirtualPage:
+    EDITCONTENT: 'Нажмите для изменения содержимого'

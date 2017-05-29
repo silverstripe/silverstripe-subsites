@@ -1,6 +1,8 @@
 en:
   ASSETADMIN:
     SUBSITENOTICE: 'Folders and files created in the main site are accessible by all subsites.'
+  DomainNameField:
+    INVALID_DOMAIN: 'Invalid domain name'
   FileSubsites:
     AllSitesDropdownOpt: 'All sites'
     SubsiteFieldLabel: Subsite
@@ -22,6 +24,8 @@ en:
   SiteTreeSubsites:
     CopyAction: Copy
     CopyToSubsite: 'Copy page to subsite'
+    CopyToSubsiteWithChildren: 'Include children pages?'
+    SubsiteOperations: 'Subsite Operations'
   Subsite:
     COPYSTRUCTURE: 'Copy structure from:'
     CopyMessage: 'Created a copy of {title}'
@@ -45,8 +49,14 @@ en:
     MENUTITLE: Subsites
   SubsiteDomain:
     DOMAIN: Domain
-    IS_PRIMARY: 'Is Primary Domain'
+    DOMAIN_DESCRIPTION: 'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
+    IS_PRIMARY: 'Is Primary Domain?'
     PLURALNAME: 'Subsite Domains'
+    PROTOCOL_AUTOMATIC: Automatic
+    PROTOCOL_DESCRIPTION: 'Mark this as the default domain for this subsite'
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protocol
     SINGULARNAME: 'Subsite Domain'
   SubsiteReportWrapper:
     ReportDropdown: Sites

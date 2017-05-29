@@ -25,23 +25,22 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class GroupSubsites extends DataExtension implements PermissionProvider
 {
+	private static $db = [
+		'AccessAllSubsites' => 'Boolean'
+	];
 
-    private static $db = [
-        'AccessAllSubsites' => 'Boolean'
-    ];
+	private static $many_many = [
+		'Subsites' => Subsite::class
+	];
 
-    private static $many_many = [
-        'Subsites' => Subsite::class
-    ];
-
-    private static $defaults = [
-        'AccessAllSubsites' => true
-    ];
+	private static $defaults = [
+		'AccessAllSubsites' => true
+	];
 
     /**
      * Migrations for GroupSubsites data.
      */
-    function requireDefaultRecords()
+    public function requireDefaultRecords()
     {
         // Migration for Group.SubsiteID data from when Groups only had a single subsite
         $schema = $this->owner->getSchema();
@@ -65,15 +64,13 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             if (!DB::query('SELECT "Group"."ID" FROM "Group"
 			LEFT JOIN "Group_Subsites" ON "Group_Subsites"."GroupID" = "Group"."ID" AND "Group_Subsites"."SubsiteID" > 0
 			WHERE "AccessAllSubsites" = 1
-			OR "Group_Subsites"."GroupID" IS NOT NULL ')->value()
-            ) {
-
+			OR "Group_Subsites"."GroupID" IS NOT NULL ')->value()) {
                 DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1');
             }
         }
     }
 
-    function updateCMSFields(FieldList $fields)
+    public function updateCMSFields(FieldList $fields)
     {
         if ($this->owner->canEdit()) {
             // i18n tab
@@ -82,37 +79,37 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             $subsites = Subsite::accessible_sites(['ADMIN', 'SECURITY_SUBSITE_GROUP'], true);
             $subsiteMap = $subsites->map();
 
-            // Prevent XSS injection
-            $subsiteMap = Convert::raw2xml($subsiteMap);
+			// Prevent XSS injection
+			$subsiteMap = Convert::raw2xml($subsiteMap->toArray());
 
-            // Interface is different if you have the rights to modify subsite group values on
-            // all subsites
-            if (isset($subsiteMap[0])) {
-                $fields->addFieldToTab("Root.Subsites", new OptionsetField("AccessAllSubsites",
-                    _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-                    [
-                        1 => _t('GroupSubsites.ACCESSALL', "All subsites"),
-                        0 => _t('GroupSubsites.ACCESSONLY', "Only these subsites"),
-                    ]
-                ));
+			// Interface is different if you have the rights to modify subsite group values on
+			// all subsites
+			if(isset($subsiteMap[0])) {
+				$fields->addFieldToTab("Root.Subsites", new OptionsetField("AccessAllSubsites",
+					_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+					[
+						1 => _t('GroupSubsites.ACCESSALL', "All subsites"),
+						0 => _t('GroupSubsites.ACCESSONLY', "Only these subsites"),
+					]
+				));
 
-                unset($subsiteMap[0]);
-                $fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", "",
-                    $subsiteMap));
+				unset($subsiteMap[0]);
+				$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", "",
+					$subsiteMap));
 
-            } else {
-                if (sizeof($subsiteMap) <= 1) {
-                    $fields->addFieldToTab("Root.Subsites", new ReadonlyField("SubsitesHuman",
-                        _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-                        reset($subsiteMap)));
-                } else {
-                    $fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites",
-                        _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-                        $subsiteMap));
-                }
-            }
-        }
-    }
+			} else {
+				if (sizeof($subsiteMap) <= 1) {
+					$fields->addFieldToTab("Root.Subsites", new ReadonlyField("SubsitesHuman",
+						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+						reset($subsiteMap)));
+				} else {
+					$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites",
+						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+						$subsiteMap));
+				}
+			}
+		}
+	}
 
     /**
      * If this group belongs to a subsite,
@@ -120,7 +117,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
      * to make it easy to distinguish in the tree-view
      * of the security admin interface.
      */
-    function alternateTreeTitle()
+    public function alternateTreeTitle()
     {
         if ($this->owner->AccessAllSubsites) {
             $title = _t('GroupSubsites.GlobalGroup', 'global group');
@@ -176,12 +173,12 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             // WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected (e.g. SQL Server)
             $select = $query->getSelect();
             if (isset($select[0]) && !$select[0] == 'COUNT(*)') {
-                $query->orderby = "\"AccessAllSubsites\" DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
+                $query->addOrderBy("AccessAllSubsites", "DESC");
             }
         }
     }
 
-    function onBeforeWrite()
+    public function onBeforeWrite()
     {
         // New record test approximated by checking whether the ID has changed.
         // Note also that the after write test is only used when we're *not* on a subsite
@@ -190,7 +187,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         }
     }
 
-    function onAfterWrite()
+    public function onAfterWrite()
     {
         // New record test approximated by checking whether the ID has changed.
         // Note also that the after write test is only used when we're on a subsite
@@ -200,7 +197,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         }
     }
 
-    function alternateCanEdit()
+    public function alternateCanEdit()
     {
         // Find the sites that this group belongs to and the sites where we have appropriate perm.
         $accessibleSites = Subsite::accessible_sites('CMS_ACCESS_SecurityAdmin')->column('ID');
@@ -211,7 +208,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         return (bool)array_intersect($accessibleSites, $linkedSites);
     }
 
-    function providePermissions()
+    public function providePermissions()
     {
         return [
             'SECURITY_SUBSITE_GROUP' => [
@@ -225,5 +222,3 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     }
 
 }
-
-?>

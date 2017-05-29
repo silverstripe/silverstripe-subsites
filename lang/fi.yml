@@ -1,8 +1,4 @@
 fi:
-  SubsiteAdmin:
-    MENUTITLE: Alasivustot
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   ASSETADMIN:
     SUBSITENOTICE: 'Kansiot ja tiedostot, jotka on luotu pääsivustolla, ovat käytettävissä kaikissa alisivustoissa.'
   FileSubsites:
@@ -14,7 +10,7 @@ fi:
     ACCESSALL: 'Kaikki alasivustot'
     ACCESSONLY: 'Vain nämä alasivustot'
     ACCESSRADIOTITLE: 'Anna tälle ryhmälle pääsy kohteeseen'
-    GlobalGroup: 'Globaaliryhmä'
+    GlobalGroup: Globaaliryhmä
     MANAGE_SUBSITES: 'Hallinnoi ryhmien alisivustoja'
     MANAGE_SUBSITES_HELP: 'Mahdollisuus rajoittaa ryhmän oikeuksia yhdelle tai useammalle alisivustolle.'
     SECURITYTABTITLE: Alisivustot
@@ -38,30 +34,33 @@ fi:
     PLURALNAME: Alasivustot
     PageTypeBlacklistField: 'Kiellä sivutyyppien käyttö?'
     SINGULARNAME: Alisivusto
-    SiteConfigSubtitle: 'Iskulauseesi'
+    SiteConfigSubtitle: Iskulauseesi
     SiteConfigTitle: 'Sivuston nimi'
     TabTitleConfig: Asetukset
     ValidateTitle: 'Lisää "Otsikko"'
+  SubsiteAdmin:
+    MENUTITLE: Alasivustot
   SubsiteDomain:
     DOMAIN: Domain
-    IS_PRIMARY: 'On päädomain'
     PLURALNAME: 'Alisivuston domain-osoitteet'
     SINGULARNAME: 'Alisivuston domain-osoite'
   SubsiteReportWrapper:
     ReportDropdown: Sivustot
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
-    DefaultSiteFieldLabel: 'Oletussivusto'
+    DefaultSiteFieldLabel: Oletussivusto
     DomainFieldLabel: Domain
     IsPublicFieldLabel: 'Aktivoi julkinen pääsy'
     LanguageFieldLabel: Kieli
-    MainSiteTitle: 'Pääsivusto'
+    MainSiteTitle: Pääsivusto
     PageTypeBlacklistFieldLabel: 'Sivutyyppien mustalista'
-    PrimaryDomainFieldLabel: 'Oletusdomain'
+    PrimaryDomainFieldLabel: Oletusdomain
     RedirectURLFieldLabel: 'Edelleenohjaus URL'
     ThemeFieldLabel: Teema
     TitleFieldLabel: 'Alisivuston nimi'
   SubsitesVirtualPage:
     DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
-    PLURALNAME: 'Alisivustojen virtuaaliset sivut'
+    PLURALNAME: Pohjasivut
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
     SubsiteField: Alisivu

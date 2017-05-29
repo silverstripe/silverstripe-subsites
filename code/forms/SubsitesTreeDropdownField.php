@@ -17,16 +17,15 @@ use SilverStripe\View\Requirements;
  */
 class SubsitesTreeDropdownField extends TreeDropdownField
 {
-
-    private static $allowed_actions = [
+    private static $allowed_actions = array(
         'tree'
-    ];
+    );
 
     protected $subsiteID = 0;
 
-    protected $extraClasses = [SubsitesTreeDropdownField::class];
+    protected $extraClasses = array('SubsitesTreeDropdownField');
 
-    function Field($properties = [])
+    public function Field($properties = array())
     {
         $html = parent::Field($properties);
 
@@ -35,17 +34,17 @@ class SubsitesTreeDropdownField extends TreeDropdownField
         return $html;
     }
 
-    function setSubsiteID($id)
+    public function setSubsiteID($id)
     {
         $this->subsiteID = $id;
     }
 
-    function getSubsiteID()
+    public function getSubsiteID()
     {
         return $this->subsiteID;
     }
 
-    function tree(HTTPRequest $request)
+    public function tree(HTTPRequest $request)
     {
         $oldSubsiteID = Session::get('SubsiteID');
         Session::set('SubsiteID', $this->subsiteID);
