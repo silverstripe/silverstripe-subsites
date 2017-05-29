@@ -34,7 +34,7 @@ class SubsiteAdmin extends ModelAdmin
 
         $grid = $form->Fields()->dataFieldByName(Subsite::class);
         if ($grid) {
-            $grid->getConfig()->removeComponentsByType('SilverStripe\\Forms\\GridField\\GridFieldDetailForm');
+            $grid->getConfig()->removeComponentsByType(GridFieldDetailForm::class);
             $grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());
         }
 

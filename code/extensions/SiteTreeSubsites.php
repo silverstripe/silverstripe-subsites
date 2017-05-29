@@ -1,5 +1,9 @@
 <?php
 
+namespace SilverStripe\Subsites\Extensions;
+
+
+use Page;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\Forms\FieldList;
@@ -18,15 +22,17 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\Subsites\Model\Subsite;
+
 
 /**
  * Extension for the SiteTree object to add subsites support
  */
 class SiteTreeSubsites extends DataExtension
 {
-    private static $has_one = array(
-        'Subsite' => 'Subsite', // The subsite that this page belongs to
-    );
+    private static $has_one = [
+        'Subsite' => Subsite::class, // The subsite that this page belongs to
+    ];
 
     private static $many_many = array(
         'CrossSubsiteLinkTracking' => SiteTree::class // Stored separately, as the logic for URL rewriting is different
@@ -74,7 +80,8 @@ class SiteTreeSubsites extends DataExtension
         // The foreach is an ugly way of getting the first key :-)
         foreach ($query->getFrom() as $tableName => $info) {
             // The tableName should be SiteTree or SiteTree_Live...
-            if (strpos($tableName, SiteTree::class) === false) {
+            $siteTreeTableName = SiteTree::getSchema()->tableName(SiteTree::class);
+            if (strpos($tableName, $siteTreeTableName) === false) {
                 break;
             }
             $query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
@@ -285,7 +292,7 @@ class SiteTreeSubsites extends DataExtension
         $subsite = Subsite::currentSubsite();
 
         if ($subsite && $subsite->Theme) {
-            Config::inst()->update(SSViewer::class, 'theme', Subsite::currentSubsite()->Theme);
+            Config::modify()->set(SSViewer::class, 'theme', Subsite::currentSubsite()->Theme);
         }
     }
 

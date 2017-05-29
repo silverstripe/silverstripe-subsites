@@ -11,7 +11,7 @@ use SilverStripe\BehatExtension\Context\BasicContext;
 use SilverStripe\BehatExtension\Context\LoginContext;
 use SilverStripe\BehatExtension\Context\FixtureContext;
 use SilverStripe\Framework\Test\Behaviour\CmsFormsContext;
-use SilverStripe\Framework\Test\Behaviour\CmsUiContext;l
+use SilverStripe\Framework\Test\Behaviour\CmsUiContext;
 use SilverStripe\Cms\Test\Behaviour;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;

@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Pages;
 
 
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Session;
@@ -49,7 +50,7 @@ class SubsitesVirtualPage extends VirtualPage
             'Root.Main',
             DropdownField::create(
                 "CopyContentFromID_SubsiteID",
-                _t('SubsitesVirtualPage.SubsiteField', Subsite::class),
+                _t('SubsitesVirtualPage.SubsiteField', "Subsite"),
                 $subsites->map('ID', 'Title')
             )->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
             'CopyContentFromID'
@@ -162,8 +163,7 @@ class SubsitesVirtualPage extends VirtualPage
         $oldState = Subsite::$disable_subsite_filter;
         Subsite::$disable_subsite_filter = true;
         if ($this->CopyContentFromID) {
-            $this->HasBrokenLink = DataObject::get_by_id('SilverStripe\\CMS\\Model\\SiteTree',
-                $this->CopyContentFromID) ? false : true;
+            $this->HasBrokenLink = DataObject::get_by_id(SiteTree::class, $this->CopyContentFromID) ? false : true;
         }
         Subsite::$disable_subsite_filter = $oldState;
     }
@@ -204,7 +204,7 @@ class SubsitesVirtualPage extends VirtualPage
             $IDFilter = ($this->ID) ? "AND \"SiteTree\".\"ID\" <> $this->ID" : null;
             $parentFilter = null;
 
-            if (Config::inst()->get('SilverStripe\\CMS\\Model\\SiteTree', 'nested_urls')) {
+            if (Config::inst()->get(SiteTree::class, 'nested_urls')) {
                 if ($this->ParentID) {
                     $parentFilter = " AND \"SiteTree\".\"ParentID\" = $this->ParentID";
                 } else {

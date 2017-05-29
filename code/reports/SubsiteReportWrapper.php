@@ -18,7 +18,7 @@ class SubsiteReportWrapper extends ReportWrapper
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Filtering
 
-    function parameterFields()
+    public function parameterFields()
     {
         $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true);
         $options = $subsites->toDropdownMap('ID', 'Title');
@@ -47,7 +47,7 @@ class SubsiteReportWrapper extends ReportWrapper
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Columns
 
-    function columns()
+    public function columns()
     {
         $columns = parent::columns();
         $columns['Subsite.Title'] = Subsite::class;
@@ -57,7 +57,7 @@ class SubsiteReportWrapper extends ReportWrapper
     ///////////////////////////////////////////////////////////////////////////////////////////
     // Querying
 
-    function beforeQuery($params)
+    public function beforeQuery($params)
     {
         // The user has select a few specific sites
         if (!empty($params['Subsites'])) {
@@ -70,8 +70,7 @@ class SubsiteReportWrapper extends ReportWrapper
             Subsite::$force_subsite = join(',', array_keys($options));
         }
     }
-
-    function afterQuery()
+    public function afterQuery()
     {
         // Manually manage the subsite filtering
         Subsite::$force_subsite = null;
