@@ -16,7 +16,7 @@ use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
 class SubsitesVirtualPageTest extends BaseSubsiteTest
 {
     public static $fixture_file = array(
-        'subsites/tests/SubsiteTest.yml',
+        'subsites/tests/php/SubsiteTest.yml',
         'subsites/tests/SubsitesVirtualPageTest.yml',
     );
 
@@ -204,7 +204,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
 
     public function testUnpublishingParentPageUnpublishesSubsiteVirtualPages()
     {
-        Config::inst()->update('StaticPublisher', 'disable_realtime', true);
+        Config::modify()->set('StaticPublisher', 'disable_realtime', true);
 
         // Go to main site, get parent page
         $subsite = $this->objFromFixture(Subsite::class, 'main');

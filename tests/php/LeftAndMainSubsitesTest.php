@@ -13,7 +13,7 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class LeftAndMainSubsitesTest extends FunctionalTest
 {
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
 
     /**
      * Avoid subsites filtering on fixture fetching.
@@ -84,13 +84,13 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         $l = new LeftAndMain();
         Config::inst()->nest();
 
-        Config::inst()->update(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
+        Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
         $this->assertTrue($l->shouldChangeSubsite(CMSPageEditController::class, 0, 5));
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 0, 0));
         $this->assertTrue($l->shouldChangeSubsite(CMSPageEditController::class, 1, 5));
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 1, 1));
 
-        Config::inst()->update(CMSPageEditController::class, 'treats_subsite_0_as_global', true);
+        Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', true);
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 0, 5));
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 0, 0));
         $this->assertTrue($l->shouldChangeSubsite(CMSPageEditController::class, 1, 5));

@@ -12,7 +12,7 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SubsiteAdminFunctionalTest extends FunctionalTest
 {
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
     public static $use_draft_site = true;
 
 	protected $autoFollowRedirection = false;
@@ -80,13 +80,13 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
 		Config::inst()->nest();
 
-        Config::inst()->update(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
+        Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
         $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading an object switches the subsite');
         $this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-        Config::inst()->update(CMSPageEditController::class, 'treats_subsite_0_as_global', true);
+        Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', true);
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
         $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global');

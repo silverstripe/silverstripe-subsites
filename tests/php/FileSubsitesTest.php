@@ -6,13 +6,14 @@ use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
+use SilverStripe\Subsites\Extensions\FileSubsites;
 use SilverStripe\Subsites\Tests\BaseSubsiteTest;
 use SilverStripe\Subsites\Model\Subsite;
 
 class FileSubsitesTest extends BaseSubsiteTest
 {
 
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
 
     /**
      * Disable other file extensions
@@ -31,12 +32,12 @@ class FileSubsitesTest extends BaseSubsiteTest
 
     public function testTrivialFeatures()
     {
-        $this->assertTrue(is_array(singleton('FileSubsites')->extraStatics()));
+        $this->assertTrue(is_array(singleton(FileSubsites::class)->extraStatics()));
         $file = new File();
         $file->Name = 'FileTitle';
         $file->Title = 'FileTitle';
         $this->assertEquals(' * FileTitle', $file->alternateTreeTitle());
-        $file->SubsiteID = $this->objFromFixture('Subsite', 'domaintest1')->ID;
+        $file->SubsiteID = $this->objFromFixture(Subsite::class, 'domaintest1')->ID;
         $this->assertEquals('FileTitle', $file->getTreeTitle());
         $this->assertTrue(singleton(Folder::class)->getCMSFields() instanceof FieldList);
         Subsite::changeSubsite(1);
@@ -47,7 +48,7 @@ class FileSubsitesTest extends BaseSubsiteTest
     {
         $this->objFromFixture(Member::class, 'admin')->logIn();
 
-        $subsite = $this->objFromFixture('Subsite', 'domaintest1');
+        $subsite = $this->objFromFixture(Subsite::class, 'domaintest1');
         FileSubsites::$default_root_folders_global = true;
 
         Subsite::changeSubsite(0);

@@ -10,7 +10,7 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SubsiteAdminTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
 
     public function adminLoggedInSession()
     {

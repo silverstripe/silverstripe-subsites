@@ -22,7 +22,7 @@ use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
 class SiteTreeSubsitesTest extends BaseSubsiteTest
 {
 
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
 
     protected $extraDataObjects = [
         'SiteTreeSubsitesTest_ClassA',
@@ -193,7 +193,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     public function testCopyToSubsite() {
         // Remove baseurl if testing in subdir
-        Config::inst()->update(Director::class, 'alternate_base_url', '/');
+        Config::modify()->set(Director::class, 'alternate_base_url', '/');
 
         /** @var Subsite $otherSubsite */
         $otherSubsite = $this->objFromFixture(Subsite::class, 'subsite1');
@@ -219,7 +219,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     }
 
 	public function testPageTypesBlacklistInCMSMain() {
-		$editor = $this->objFromFixture('Member', 'editor');
+		$editor = $this->objFromFixture(Member::class, 'editor');
 		Session::set("loggedInAs", $editor->ID);
 
 		$cmsmain = new CMSMain();

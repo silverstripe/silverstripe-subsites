@@ -12,7 +12,7 @@ use SilverStripe\Subsites\Model\SubsiteDomain;
 
 class SubsiteTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
 
     /**
      * Original value of {@see SubSite::$strict_subdomain_matching}
@@ -32,7 +32,7 @@ class SubsiteTest extends BaseSubsiteTest
     {
         parent::setUp();
 
-        Config::inst()->update(Director::class, 'alternate_base_url', '/');
+        Config::modify()->set(Director::class, 'alternate_base_url', '/');
         $this->origStrictSubdomainMatching = Subsite::$strict_subdomain_matching;
         $this->origServer = $_SERVER;
         Subsite::$strict_subdomain_matching = false;
