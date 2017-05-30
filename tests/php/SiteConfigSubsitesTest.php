@@ -33,11 +33,11 @@ class SiteConfigSubsitesTest extends BaseSubsiteTest
 		$sc->write();
 
 		Subsite::changeSubsite(0);
-		$this->assertEquals(SiteConfig::current_site_config()->Title, 'RootSite');
+		$this->assertEquals('RootSite', SiteConfig::current_site_config()->Title);
 		Subsite::changeSubsite($subsite1->ID);
-		$this->assertEquals(SiteConfig::current_site_config()->Title, 'Subsite1');
+		$this->assertEquals('Subsite1', SiteConfig::current_site_config()->Title);
 		Subsite::changeSubsite($subsite2->ID);
-		$this->assertEquals(SiteConfig::current_site_config()->Title, 'Subsite2');
+		$this->assertEquals('Subsite2', SiteConfig::current_site_config()->Title);
 
         $keys = SiteConfig::current_site_config()->extend('cacheKeyComponent');
         $this->assertContains('subsite-' . $subsite2->ID, $keys);

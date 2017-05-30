@@ -21,11 +21,14 @@ class SiteConfigSubsites extends DataExtension
         'Subsite' => Subsite::class, // The subsite that this page belongs to
     ];
 
-	/**
-	 * Update any requests to limit the results to the current site
-	 */
-	public function augmentSQL(SQLSelect$query, DataQuery $dataQuery = null) {
-		if(Subsite::$disable_subsite_filter) {return;}
+    /**
+     * Update any requests to limit the results to the current site
+     */
+    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
+    {
+        if (Subsite::$disable_subsite_filter) {
+            return;
+        }
 
         // If you're querying by ID, ignore the sub-site - this is a bit ugly...
         if ($query->filtersOnID()) {
@@ -38,14 +41,16 @@ class SiteConfigSubsites extends DataExtension
             }
         }
 
-		$subsiteID = (int)Subsite::currentSubsiteID();
+        $subsiteID = (int)Subsite::currentSubsiteID();
 
-		$froms=$query->getFrom();
-		$froms=array_keys($froms);
-		$tableName = array_shift($froms);
-		if($tableName != SiteConfig::class) { return;}
-		$query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
-	}
+        $froms = $query->getFrom();
+        $froms = array_keys($froms);
+        $tableName = array_shift($froms);
+        if ($tableName !== SiteConfig::getSchema()->tableName(SiteConfig::class)) {
+            return;
+        }
+        $query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
+    }
 
     public function onBeforeWrite()
     {
@@ -59,7 +64,7 @@ class SiteConfigSubsites extends DataExtension
      */
     public function cacheKeyComponent()
     {
-        return 'subsite-'.Subsite::currentSubsiteID();
+        return 'subsite-' . Subsite::currentSubsiteID();
     }
 
     public function updateCMSFields(FieldList $fields)
