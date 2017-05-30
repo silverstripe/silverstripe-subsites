@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Tests;
 
+use Page;
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\Assets\Tests\Storage\AssetStoreTest\TestAssetStore;
 use SilverStripe\Control\Director;
@@ -17,7 +18,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
 {
     public static $fixture_file = array(
         'subsites/tests/php/SubsiteTest.yml',
-        'subsites/tests/SubsitesVirtualPageTest.yml',
+        'subsites/tests/php/SubsitesVirtualPageTest.yml',
     );
 
     protected $illegalExtensions = array(

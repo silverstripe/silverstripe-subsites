@@ -36,10 +36,6 @@ SilverStripe\SiteConfig\SiteConfig:
   extensions:
     - SilverStripe\Subsites\Extensions\SiteConfigSubsites
 
-SilverStripe\Reports\Report:
-  extensions:
-    - SilverStripe\Subsites\SubsiteReportWrapper
-
 SilverStripe\AssetAdmin\Controller\AssetAdmin:
   extensions:
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension

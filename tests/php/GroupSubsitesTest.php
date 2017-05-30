@@ -14,8 +14,8 @@ class GroupSubsitesTest extends BaseSubsiteTest
     protected $requireDefaultRecordsFrom = [GroupSubsites::class];
     public function testTrivialFeatures()
     {
-        $this->assertTrue(is_array(singleton('GroupSubsites')->extraStatics()));
-        $this->assertTrue(is_array(singleton('GroupSubsites')->providePermissions()));
+        $this->assertTrue(is_array(singleton(GroupSubsites::class)->extraStatics()));
+        $this->assertTrue(is_array(singleton(GroupSubsites::class)->providePermissions()));
         $this->assertTrue(singleton(Group::class)->getCMSFields() instanceof FieldList);
     }
 

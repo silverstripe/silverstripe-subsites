@@ -100,7 +100,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextareaField::create(
                 'CustomMetaKeywords',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote')),
+            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
             'MetaKeywords'
         );
         $fields->addFieldToTab(
@@ -108,7 +108,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextareaField::create(
                 'CustomMetaDescription',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote')),
+            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
             'MetaDescription'
         );
         $fields->addFieldToTab(
@@ -116,7 +116,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextField::create(
                 'CustomExtraMeta',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote')),
+            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
             'ExtraMeta'
         );
 

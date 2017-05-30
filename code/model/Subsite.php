@@ -186,8 +186,8 @@ class Subsite extends DataObject
         Session::set('SubsiteID', (int)$subsiteID);
 
         // Set locale
-        if (is_object($subsite) && $subsite->Language != '') {
-            $locale = i18n::get_locale_from_lang($subsite->Language);
+        if (is_object($subsite) && $subsite->Language !== '') {
+            $locale = (new IntlLocales())->localeFromLang($subsite->Language);
             if ($locale) {
                 i18n::set_locale($locale);
             }

@@ -6,7 +6,6 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Extensions\SiteConfigSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 
-
 class SiteConfigSubsitesTest extends BaseSubsiteTest
 {
     public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';

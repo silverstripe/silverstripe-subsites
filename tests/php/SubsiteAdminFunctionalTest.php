@@ -78,7 +78,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $mainSubsitePage = $this->objFromFixture('Page', 'mainSubsitePage');
         $subsite1Home = $this->objFromFixture('Page', 'subsite1_home');
 
-		Config::inst()->nest();
+		Config::nest();
 
         Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
         Subsite::changeSubsite(0);
@@ -96,7 +96,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $this->assertNotEquals(Subsite::currentSubsiteID(), $mainSubsitePage->SubsiteID, 'Loading a main-site object does not change the subsite if configured with treats_subsite_0_as_global');
         $this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-		Config::inst()->unnest();
+		Config::unnest();
 	}
 
     /**

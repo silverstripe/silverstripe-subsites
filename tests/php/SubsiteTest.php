@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Tests;
 
+use Page;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;

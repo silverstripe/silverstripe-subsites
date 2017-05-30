@@ -42,8 +42,11 @@ class GroupSubsites extends DataExtension implements PermissionProvider
      */
     public function requireDefaultRecords()
     {
+        if (!$this->owner) {
+            return;
+        }
         // Migration for Group.SubsiteID data from when Groups only had a single subsite
-        $schema = $this->owner->getSchema();
+        $schema = $this->owner::getSchema();
         $groupFields = DB::field_list($schema->tableName(Group::class));
 
         // Detection of SubsiteID field is the trigger for old-style-subsiteID migration
