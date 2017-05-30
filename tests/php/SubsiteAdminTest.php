@@ -31,7 +31,7 @@ class SubsiteAdminTest extends BaseSubsiteTest
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
 
         // Confirm that this URL gets you the entire page, with the edit form loaded
-        $response2 = Director::test("admin/subsites/Subsite/EditForm/field/Subsite/item/$subsite1ID/edit", null,
+        $response2 = Director::test("admin/subsites/SilverStripe-Subsites-Model-Subsite/EditForm/field/SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit", null,
             $this->adminLoggedInSession());
         $this->assertTrue(strpos($response2->getBody(), 'id="Form_ItemEditForm_ID"') !== false,
             "Testing Form_ItemEditForm_ID exists");
