@@ -32,6 +32,10 @@ class SubsitesVirtualPage extends VirtualPage
         'CustomExtraMeta' => 'HTMLText'
     ];
 
+    private static $non_virtual_fields = [
+        'SubsiteID'
+    ];
+
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
