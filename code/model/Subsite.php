@@ -232,7 +232,7 @@ class Subsite extends DataObject
                 "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
         }
 
-        if ($matchingDomains && $matchingDomains->Count()) {
+        if ($matchingDomains && $matchingDomains->count()) {
             $subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
             $subsiteDomains = array_unique($matchingDomains->column('Domain'));
             if (sizeof($subsiteIDs) > 1) {

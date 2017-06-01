@@ -8,7 +8,7 @@ use SilverStripe\Subsites\Model\Subsite;
 class CMSPageAddControllerExtension extends Extension
 {
 
-    function updatePageOptions(&$fields)
+    public function updatePageOptions(&$fields)
     {
         $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
     }

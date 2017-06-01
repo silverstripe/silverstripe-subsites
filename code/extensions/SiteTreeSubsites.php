@@ -103,7 +103,7 @@ class SiteTreeSubsites extends DataExtension
     {
         $subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
         $subsitesMap = array();
-        if ($subsites && $subsites->Count()) {
+        if ($subsites && $subsites->count()) {
             $subsitesToMap = $subsites->exclude('ID', $this->owner->SubsiteID);
             $subsitesMap = $subsitesToMap->map('ID', 'Title');
         }

@@ -48,7 +48,7 @@ class LeftAndMainSubsites extends Extension
      */
     public function getCMSTreeTitle()
     {
-        $subsite = Subsite::currentSubSite();
+        $subsite = Subsite::currentSubsite();
         return $subsite ? Convert::raw2xml($subsite->Title) : _t('LeftAndMain.SITECONTENTLEFT');
     }
 
@@ -139,7 +139,7 @@ class LeftAndMainSubsites extends Extension
         $list = $this->Subsites();
         $currentSubsiteID = Subsite::currentSubsiteID();
 
-        if ($list == null || $list->Count() == 1 && $list->First()->DefaultSite == true) {
+        if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
             return false;
         }
 

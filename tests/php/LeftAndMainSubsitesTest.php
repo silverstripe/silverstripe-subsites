@@ -53,7 +53,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest
     public function testAccessChecksDontChangeCurrentSubsite()
     {
         $admin = $this->objFromFixture(Member::class, "admin");
-        $this->loginAs($admin);
+        $this->logInAs($admin);
         $ids = array();
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');

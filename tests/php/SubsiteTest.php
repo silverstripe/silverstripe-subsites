@@ -65,7 +65,7 @@ class SubsiteTest extends BaseSubsiteTest
 
         // Publish all the pages in the template, testing that DataObject::get only returns pages from the chosen subsite
         $pages = DataObject::get(SiteTree::class);
-        $totalPages = $pages->Count();
+        $totalPages = $pages->count();
         foreach ($pages as $page) {
             $this->assertEquals($template->ID, $page->SubsiteID);
             $page->publish('Stage', 'Live');
