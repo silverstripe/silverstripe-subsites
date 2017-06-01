@@ -126,10 +126,10 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         if ($this->owner->AccessAllSubsites) {
             $title = _t('GroupSubsites.GlobalGroup', 'global group');
             return htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(' . $title . ')</i>';
-        } else {
-            $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
-            return htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
         }
+
+        $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
+        return htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
     }
 
     /**

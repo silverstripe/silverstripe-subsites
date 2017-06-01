@@ -740,20 +740,20 @@ class Subsite extends DataObject
     {
         if ($themes = $this->stat('allowed_themes')) {
             return ArrayLib::valuekey($themes);
-        } else {
-            $themes = [];
-            if (is_dir(THEMES_PATH)) {
-                foreach (scandir(THEMES_PATH) as $theme) {
-                    if ($theme[0] == '.') {
-                        continue;
-                    }
-                    $theme = strtok($theme, '_');
-                    $themes[$theme] = $theme;
-                }
-                ksort($themes);
-            }
-            return $themes;
         }
+
+        $themes = [];
+        if (is_dir(THEMES_PATH)) {
+            foreach (scandir(THEMES_PATH) as $theme) {
+                if ($theme[0] == '.') {
+                    continue;
+                }
+                $theme = strtok($theme, '_');
+                $themes[$theme] = $theme;
+            }
+            ksort($themes);
+        }
+        return $themes;
     }
 
     /**
@@ -763,9 +763,9 @@ class Subsite extends DataObject
     {
         if ($this->getField('Language')) {
             return $this->getField('Language');
-        } else {
-            return i18n::get_locale();
         }
+
+        return i18n::get_locale();
     }
 
     /**
