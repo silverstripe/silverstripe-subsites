@@ -16,7 +16,7 @@ class GroupSubsitesTest extends BaseSubsiteTest
     {
         $this->assertTrue(is_array(singleton(GroupSubsites::class)->extraStatics()));
         $this->assertTrue(is_array(singleton(GroupSubsites::class)->providePermissions()));
-        $this->assertTrue(singleton(Group::class)->getCMSFields() instanceof FieldList);
+        $this->assertInstanceOf(FieldList::class, singleton(Group::class)->getCMSFields());
     }
 
     public function testAlternateTreeTitle()

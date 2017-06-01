@@ -67,10 +67,10 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     public function testBasicSanity()
     {
-        $this->assertTrue(singleton(SiteTree::class)->getSiteConfig() instanceof SiteConfig);
+        $this->assertInstanceOf(SiteConfig::class, singleton(SiteTree::class)->getSiteConfig());
         // The following assert is breaking in Translatable.
-        $this->assertTrue(singleton(SiteTree::class)->getCMSFields() instanceof FieldList);
-        $this->assertTrue(singleton(SubsitesVirtualPage::class)->getCMSFields() instanceof FieldList);
+        $this->assertInstanceOf(FieldList::class, singleton(SiteTree::class)->getCMSFields());
+        $this->assertInstanceOf(FieldList::class, singleton(SubsitesVirtualPage::class)->getCMSFields());
         $this->assertTrue(is_array(singleton(SiteTreeSubsites::class)->extraStatics()));
     }
 

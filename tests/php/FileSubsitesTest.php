@@ -39,7 +39,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         $this->assertEquals(' * FileTitle', $file->alternateTreeTitle());
         $file->SubsiteID = $this->objFromFixture(Subsite::class, 'domaintest1')->ID;
         $this->assertEquals('FileTitle', $file->getTreeTitle());
-        $this->assertTrue(singleton(Folder::class)->getCMSFields() instanceof FieldList);
+        $this->assertInstanceOf(FieldList::class, singleton(Folder::class)->getCMSFields());
         Subsite::changeSubsite(1);
         $this->assertEquals('subsite-1', $file->getExtensionInstance(FileSubsites::class)->cacheKeyComponent());
     }
