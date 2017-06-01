@@ -936,7 +936,7 @@ JS;
                     $childClone = $child->duplicateToSubsite($duplicate, false);
                     $childClone->ParentID = $destParentID;
                     $childClone->writeToStage('Stage');
-                    $childClone->publish('Stage', 'Live');
+                    $childClone->copyVersionToStage('Stage', 'Live');
 
                     self::changeSubsite($this->ID); //Change Back to this subsite
 

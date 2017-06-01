@@ -68,7 +68,7 @@ class SubsiteTest extends BaseSubsiteTest
         $totalPages = $pages->count();
         foreach ($pages as $page) {
             $this->assertEquals($template->ID, $page->SubsiteID);
-            $page->publish('Stage', 'Live');
+            $page->copyVersionToStage('Stage', 'Live');
         }
 
         // Create a new site

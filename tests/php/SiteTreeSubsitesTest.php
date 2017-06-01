@@ -42,12 +42,12 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $pageMain = new SiteTree();
         $pageMain->URLSegment = 'testpage';
         $pageMain->write();
-        $pageMain->publish('Stage', 'Live');
+        $pageMain->copyVersionToStage('Stage', 'Live');
 
         $pageMainOther = new SiteTree();
         $pageMainOther->URLSegment = 'testpage';
         $pageMainOther->write();
-        $pageMainOther->publish('Stage', 'Live');
+        $pageMainOther->copyVersionToStage('Stage', 'Live');
 
         $this->assertNotEquals($pageMain->URLSegment, $pageMainOther->URLSegment,
             'Pages in same subsite cant share the same URL'
@@ -58,7 +58,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $pageSubsite1 = new SiteTree();
         $pageSubsite1->URLSegment = 'testpage';
         $pageSubsite1->write();
-        $pageSubsite1->publish('Stage', 'Live');
+        $pageSubsite1->copyVersionToStage('Stage', 'Live');
 
         $this->assertEquals($pageMain->URLSegment, $pageSubsite1->URLSegment,
             'Pages in different subsites can share the same URL'

@@ -71,7 +71,7 @@ class FeatureContext extends SilverStripeContext
         foreach (ClassInfo::subclassesFor(SiteTree::class) as $id => $class) {
             $blueprint = Injector::inst()->create(FixtureBlueprint::class, $class);
             $blueprint->addCallback('afterCreate', function ($obj, $identifier, &$data, &$fixtures) {
-                $obj->publish('Stage', 'Live');
+                $obj->copyVersionToStage('Stage', 'Live');
             });
             $factory->define($class, $blueprint);
         }

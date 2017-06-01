@@ -74,7 +74,7 @@ class SubsiteCopyPagesTask extends BuildTask
 
                     $childClone->ParentID = $destParentID;
                     $childClone->writeToStage('Stage');
-                    $childClone->publish('Stage', 'Live');
+                    $childClone->copyVersionToStage('Stage', 'Live');
                     array_push($stack, array($child->ID, $childClone->ID));
 
                     $this->log(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));

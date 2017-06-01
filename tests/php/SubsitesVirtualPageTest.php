@@ -172,7 +172,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $p->Content = 'Content';
         $p->Title = 'Title';
         $p->writeToStage('Stage');
-        $p->publish('Stage', 'Live');
+        $p->copyVersionToStage('Stage', 'Live');
         $this->assertTrue($p->ExistsOnLive);
 
         // change to subsite
@@ -185,7 +185,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $svp->CopyContentFromID = $p->ID;
         $svp->write();
         $svp->writeToStage('Stage');
-        $svp->publish('Stage', 'Live');
+        $svp->copyVersionToStage('Stage', 'Live');
         $this->assertEquals($svp->SubsiteID, $subsite->ID);
         $this->assertTrue($svp->ExistsOnLive);
 
@@ -196,7 +196,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $p->Title = 'New Title';
         // "save & publish"
         $p->writeToStage('Stage');
-        $p->publish('Stage', 'Live');
+        $p->copyVersionToStage('Stage', 'Live');
         $this->assertNotEquals($p->SubsiteID, $subsite->ID);
 
         // reload SVP from database
