@@ -41,9 +41,9 @@ class SubsiteXHRControllerTest extends FunctionalTest
 		$this->assertEquals(200, $result->getStatusCode());
 		$this->assertEquals('text/json', $result->getHeader('Content-Type'));
 		$body = $result->getBody();
-		$this->assertContains('Main site', $body);
-		$this->assertContains('Test 1', $body);
-		$this->assertContains('Test 2', $body);
-		$this->assertContains('Test 3', $body);
+		static::assertContains('Main site', $body);
+		static::assertContains('Test 1', $body);
+		static::assertContains('Test 2', $body);
+		static::assertContains('Test 3', $body);
 	}
 }

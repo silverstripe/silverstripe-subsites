@@ -242,16 +242,16 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         Subsite::changeSubsite($s1);
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
         $classes = $hints['Root']['disallowedChildren'];
-        $this->assertContains(ErrorPage::class, $classes);
-        $this->assertContains(SiteTreeSubsitesTest_ClassA::class, $classes);
-        $this->assertNotContains(SiteTreeSubsitesTest_ClassB::class, $classes);
+        static::assertContains(ErrorPage::class, $classes);
+        static::assertContains(SiteTreeSubsitesTest_ClassA::class, $classes);
+        static::assertNotContains(SiteTreeSubsitesTest_ClassB::class, $classes);
 
         Subsite::changeSubsite($s2);
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
         $classes = $hints['Root']['disallowedChildren'];
-        $this->assertNotContains(ErrorPage::class, $classes);
-        $this->assertNotContains(SiteTreeSubsitesTest_ClassA::class, $classes);
-        $this->assertNotContains(SiteTreeSubsitesTest_ClassB::class, $classes);
+        static::assertNotContains(ErrorPage::class, $classes);
+        static::assertNotContains(SiteTreeSubsitesTest_ClassA::class, $classes);
+        static::assertNotContains(SiteTreeSubsitesTest_ClassB::class, $classes);
     }
 
     /**

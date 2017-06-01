@@ -40,6 +40,6 @@ class SiteConfigSubsitesTest extends BaseSubsiteTest
 		$this->assertEquals('Subsite2', SiteConfig::current_site_config()->Title);
 
         $keys = SiteConfig::current_site_config()->extend('cacheKeyComponent');
-        $this->assertContains('subsite-' . $subsite2->ID, $keys);
+        static::assertContains('subsite-' . $subsite2->ID, $keys);
     }
 }
