@@ -28,7 +28,7 @@ class ErrorPageSubsite extends DataExtension
         $subdomainPart = '';
 
         // Try to get current subsite from session
-        $subsite = Subsite::currentSubsite(false);
+        $subsite = Subsite::currentSubsite();
 
         // since this function is called from Page class before the controller is created, we have to get subsite from domain instead
         if (!$subsite) {
