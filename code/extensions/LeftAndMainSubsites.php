@@ -6,9 +6,9 @@ use SilverStripe\Admin\CMSMenu;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Session;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extension;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -27,7 +27,7 @@ use SilverStripe\View\Requirements;
 class LeftAndMainSubsites extends Extension
 {
 
-    private static $allowed_actions = array('CopyToSubsite');
+    private static $allowed_actions = ['CopyToSubsite'];
 
     /**
      * Normally SubsiteID=0 on a DataObject means it is only accessible from the special "main site".
@@ -85,7 +85,7 @@ class LeftAndMainSubsites extends Extension
 
         // Collect permissions - honour the LeftAndMain::required_permission_codes, current model requires
         // us to check if the user satisfies ALL permissions. Code partly copied from LeftAndMain::canView.
-        $codes = array();
+        $codes = [];
         $extraCodes = Config::inst()->get($this->owner->class, 'required_permission_codes');
         if ($extraCodes !== false) {
             if ($extraCodes) {
@@ -99,8 +99,8 @@ class LeftAndMainSubsites extends Extension
         }
 
         // Find subsites satisfying all permissions for the Member.
-        $codesPerSite = array();
-        $sitesArray = array();
+        $codesPerSite = [];
+        $sitesArray = [];
         foreach ($codes as $code) {
             $sites = Subsite::accessible_sites($code, $includeMainSite, $mainSiteTitle, $member);
             foreach ($sites as $site) {
@@ -115,7 +115,7 @@ class LeftAndMainSubsites extends Extension
         // Find sites that satisfy all codes conjuncitvely.
         $accessibleSites = new ArrayList();
         foreach ($codesPerSite as $siteID => $siteCodes) {
-            if (count($siteCodes)==count($codes)) {
+            if (count($siteCodes) == count($codes)) {
                 $accessibleSites->push($sitesArray[$siteID]);
             }
         }
@@ -154,11 +154,11 @@ class LeftAndMainSubsites extends Extension
         foreach ($list as $subsite) {
             $CurrentState = $subsite->ID == $currentSubsiteID ? 'selected' : '';
 
-            $output->push(new ArrayData(array(
+            $output->push(new ArrayData([
                 'CurrentState' => $CurrentState,
                 'ID' => $subsite->ID,
                 'Title' => Convert::raw2xml($subsite->Title)
-            )));
+            ]));
         }
 
         return $output;
@@ -196,10 +196,10 @@ class LeftAndMainSubsites extends Extension
      */
     public function shouldChangeSubsite($adminClass, $recordSubsiteID, $currentSubsiteID)
     {
-        if (Config::inst()->get($adminClass, 'treats_subsite_0_as_global') && $recordSubsiteID==0) {
+        if (Config::inst()->get($adminClass, 'treats_subsite_0_as_global') && $recordSubsiteID == 0) {
             return false;
         }
-        if ($recordSubsiteID!=$currentSubsiteID) {
+        if ($recordSubsiteID != $currentSubsiteID) {
             return true;
         }
         return false;
@@ -213,10 +213,12 @@ class LeftAndMainSubsites extends Extension
         // Admin can access everything, no point in checking.
         $member = Member::currentUser();
         if ($member &&
-        (
-            Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
-            Permission::checkMember($member, 'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections' in SecurityAdmin
-        )) {
+            (
+                Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
+                Permission::checkMember($member,
+                    'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections' in SecurityAdmin
+            )
+        ) {
             return true;
         }
 
@@ -273,18 +275,20 @@ class LeftAndMainSubsites extends Extension
         // Automatically redirect the session to appropriate subsite when requesting a record.
         // This is needed to properly initialise the session in situations where someone opens the CMS via a link.
         $record = $this->owner->currentPage();
-        if ($record && isset($record->SubsiteID) && is_numeric($record->SubsiteID) && isset($this->owner->urlParams['ID'])) {
-            if ($this->shouldChangeSubsite($this->owner->class, $record->SubsiteID, Subsite::currentSubsiteID())) {
-                // Update current subsite in session
-                Subsite::changeSubsite($record->SubsiteID);
+        if ($record
+            && isset($record->SubsiteID, $this->owner->urlParams['ID'])
+            && is_numeric($record->SubsiteID)
+            && $this->shouldChangeSubsite($this->owner->class, $record->SubsiteID, Subsite::currentSubsiteID())
+        ) {
+            // Update current subsite in session
+            Subsite::changeSubsite($record->SubsiteID);
 
-                if ($this->owner->canView(Member::currentUser())) {
-                    //Redirect to clear the current page
-                    return $this->owner->redirect($this->owner->Link());
-                }
-                //Redirect to the default CMS section
-                return $this->owner->redirect('admin/');
+            if ($this->owner->canView(Member::currentUser())) {
+                //Redirect to clear the current page
+                return $this->owner->redirect($this->owner->Link());
             }
+            //Redirect to the default CMS section
+            return $this->owner->redirect('admin/');
         }
 
         // SECOND, check if we need to change subsites due to lack of permissions.
@@ -295,7 +299,7 @@ class LeftAndMainSubsites extends Extension
             // Current section is not accessible, try at least to stick to the same subsite.
             $menu = CMSMenu::get_menu_items();
             foreach ($menu as $candidate) {
-                if ($candidate->controller && $candidate->controller!=$this->owner->class) {
+                if ($candidate->controller && $candidate->controller != $this->owner->class) {
                     $accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
                     if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
                         // Section is accessible, redirect there.
@@ -331,14 +335,15 @@ class LeftAndMainSubsites extends Extension
     public function onAfterSave($record)
     {
         if ($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
-            $this->owner->response->addHeader('X-Status', rawurlencode(_t('LeftAndMainSubsites.Saved', 'Saved, please update related pages.')));
+            $this->owner->response->addHeader('X-Status',
+                rawurlencode(_t('LeftAndMainSubsites.Saved', 'Saved, please update related pages.')));
         }
     }
 
-	/**
-	 * @param array $data
-	 * @param Form $form
-	 */
+    /**
+     * @param array $data
+     * @param Form $form
+     */
     public function copytosubsite($data, $form)
     {
         $page = DataObject::get_by_id(SiteTree::class, $data['ID']);
