@@ -31,7 +31,7 @@ class ErrorPageSubsite extends DataExtension
         if (!$subsite) {
             $subsiteID = Subsite::getSubsiteIDForDomain();
             if ($subsiteID != 0) {
-                $subsite = DataObject::get_by_id("Subsite", $subsiteID);
+                $subsite = DataObject::get_by_id(Subsite::class, $subsiteID);
             } else {
                 $subsite = null;
             }
