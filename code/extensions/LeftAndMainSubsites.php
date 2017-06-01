@@ -176,15 +176,10 @@ class LeftAndMainSubsites extends Extension
             return true;
         }
 
-        $controller = singleton($controllerName);
-        if ($controller->hasMethod('subsiteCMSShowInMenu') && $controller->subsiteCMSShowInMenu()) {
-            return true;
-        }
-
         // It's not necessary to check access permissions here. Framework calls canView on the controller,
         // which in turn uses the Permission API which is augmented by our GroupSubsites.
-
-        return false;
+        $controller = singleton($controllerName);
+        return $controller->hasMethod('subsiteCMSShowInMenu') && $controller->subsiteCMSShowInMenu();
     }
 
     public function CanAddSubsites()
@@ -227,12 +222,7 @@ class LeftAndMainSubsites extends Extension
 
         // Check if we have access to current section on the current subsite.
         $accessibleSites = $this->owner->sectionSites(true, 'Main site', $member);
-        if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
-            // Current section can be accessed on the current site, all good.
-            return true;
-        }
-
-        return false;
+        return $accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID());
     }
 
     /**

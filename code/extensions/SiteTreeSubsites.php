@@ -45,10 +45,7 @@ class SiteTreeSubsites extends DataExtension
 
     public function isMainSite()
     {
-        if ($this->owner->SubsiteID == 0) {
-            return true;
-        }
-        return false;
+        return $this->owner->SubsiteID == 0;
     }
 
     /**
