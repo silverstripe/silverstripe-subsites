@@ -345,7 +345,7 @@ class LeftAndMainSubsites extends Extension
     {
         $page = DataObject::get_by_id(SiteTree::class, $data['ID']);
         $subsite = DataObject::get_by_id('Subsite', $data['CopyToSubsiteID']);
-        $includeChildren = (isset($data['CopyToSubsiteWithChildren'])) ? $data['CopyToSubsiteWithChildren'] : false;
+        $includeChildren = isset($data['CopyToSubsiteWithChildren']) ? $data['CopyToSubsiteWithChildren'] : false;
 
         $newPage = $page->duplicateToSubsite($subsite->ID, $includeChildren);
         $response = $this->owner->getResponse();

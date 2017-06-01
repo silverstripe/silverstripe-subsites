@@ -140,7 +140,7 @@ class SubsitesVirtualPage extends VirtualPage
 
     public function getCopyContentFromID_SubsiteID()
     {
-        return ($this->CopyContentFromID) ? (int)$this->CopyContentFrom()->SubsiteID : (int)Session::get('SubsiteID');
+        return $this->CopyContentFromID ? (int)$this->CopyContentFrom()->SubsiteID : (int)Session::get('SubsiteID');
     }
 
     public function getVirtualFields()
@@ -204,7 +204,7 @@ class SubsitesVirtualPage extends VirtualPage
         // Veto the validation rules if its false. In this case, some logic
         // needs to be duplicated from parent to find out the exact reason the validation failed.
         if (!$isValid) {
-            $IDFilter = ($this->ID) ? "AND \"SiteTree\".\"ID\" <> $this->ID" : null;
+            $IDFilter = $this->ID ? "AND \"SiteTree\".\"ID\" <> $this->ID" : null;
             $parentFilter = null;
 
             if (Config::inst()->get(SiteTree::class, 'nested_urls')) {
