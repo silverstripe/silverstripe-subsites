@@ -203,6 +203,7 @@ class Subsite extends DataObject
      * and all subdomains on *.example.org on another.
      *
      * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
+     * @param bool $checkPermissions
      * @return int Subsite ID
      */
     public static function getSubsiteIDForDomain($host = null, $checkPermissions = true)
@@ -279,6 +280,7 @@ class Subsite extends DataObject
 
     /**
      * Disable the sub-site filtering; queries will select from all subsites
+     * @param bool $disabled
      */
     public static function disable_subsite_filter($disabled = true)
     {
@@ -297,7 +299,10 @@ class Subsite extends DataObject
     /**
      * Return all subsites, regardless of permissions (augmented with main site).
      *
-     * @return SS_List List of {@link Subsite} objects (DataList or ArrayList).
+     * @param bool $includeMainSite
+     * @param string $mainSiteTitle
+     * @return SS_List List of <a href='psi_element://Subsite'>Subsite</a> objects (DataList or ArrayList).
+     * objects (DataList or ArrayList).
      */
     public static function all_sites($includeMainSite = true, $mainSiteTitle = 'Main site')
     {
@@ -362,10 +367,11 @@ class Subsite extends DataObject
      * Sites will only be included if they have a Title.
      *
      * @param $permCode array|string Either a single permission code or an array of permission codes.
-     * @param $includeMainSite If true, the main site will be included if appropriate.
-     * @param $mainSiteTitle The label to give to the main site
+     * @param bool|If $includeMainSite If true, the main site will be included if appropriate.
+     * @param The|string $mainSiteTitle The label to give to the main site
      * @param $member
-     * @return DataList of {@link Subsite} instances
+     * @return DataList of <a href='psi_element://Subsite'>Subsite</a> instances
+     * instances
      */
     public static function accessible_sites(
         $permCode,
@@ -516,8 +522,8 @@ class Subsite extends DataObject
      * @todo Allow permission inheritance through group hierarchy.
      *
      * @param Member Member to check against. Defaults to currently logged in member
-     * @param Array Permission code strings. Defaults to "ADMIN".
-     * @return boolean
+     * @param array $permissionCodes
+     * @return bool
      */
     public static function hasMainSitePermission($member = null, $permissionCodes = ['ADMIN'])
     {
@@ -623,7 +629,8 @@ class Subsite extends DataObject
 
     /**
      * @todo Possible security issue, don't grant edit permissions to everybody.
-     * @return boolean
+     * @param bool $member
+     * @return bool
      */
     public function canEdit($member = false)
     {
@@ -910,6 +917,8 @@ JS;
 
     /**
      * Duplicate this subsite
+     * @param bool $doWrite
+     * @return DataObject
      */
     public function duplicate($doWrite = true)
     {

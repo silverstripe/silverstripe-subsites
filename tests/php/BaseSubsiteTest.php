@@ -16,9 +16,12 @@ class BaseSubsiteTest extends SapphireTest
 		Subsite::$force_subsite = null;
     }
 
-	/**
-	 * Avoid subsites filtering on fixture fetching.
-	 */
+    /**
+     * Avoid subsites filtering on fixture fetching.
+     * @param string $class
+     * @param string $id
+     * @return \SilverStripe\ORM\DataObject
+     */
 	public function objFromFixture($class, $id)
 		{Subsite::disable_subsite_filter(true);
 		$obj = parent::objFromFixture($class, $id);

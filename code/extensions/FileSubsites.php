@@ -43,6 +43,7 @@ class FileSubsites extends DataExtension
 
     /**
      * Add subsites-specific fields to the folder editor.
+     * @param FieldList $fields
      */
     public function updateCMSFields(FieldList $fields)
     {
@@ -76,6 +77,8 @@ class FileSubsites extends DataExtension
 
     /**
      * Update any requests to limit the results to the current site
+     * @param SQLSelect $query
+     * @param DataQuery|null $dataQuery
      */
     public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {

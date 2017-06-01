@@ -176,7 +176,8 @@ class SiteTreeSubsites extends DataExtension
      * - Is in a group which has access to the subsite this page belongs to
      * - Is in a group with edit permissions on the "main site"
      *
-     * @return boolean
+     * @param null $member
+     * @return bool
      */
     public function canEdit($member = null)
     {
@@ -205,7 +206,8 @@ class SiteTreeSubsites extends DataExtension
     }
 
     /**
-     * @return boolean
+     * @param null $member
+     * @return bool
      */
     public function canDelete($member = null)
     {
@@ -217,7 +219,8 @@ class SiteTreeSubsites extends DataExtension
     }
 
     /**
-     * @return boolean
+     * @param null $member
+     * @return bool
      */
     public function canAddChildren($member = null)
     {
@@ -229,7 +232,8 @@ class SiteTreeSubsites extends DataExtension
     }
 
     /**
-     * @return boolean
+     * @param null $member
+     * @return bool
      */
     public function canPublish($member = null)
     {
@@ -288,6 +292,7 @@ class SiteTreeSubsites extends DataExtension
 
     /**
      * Called by ContentController::init();
+     * @param $controller
      */
     public static function contentcontrollerInit($controller)
     {
@@ -312,6 +317,8 @@ class SiteTreeSubsites extends DataExtension
     /**
      * Use the CMS domain for iframed CMS previews to prevent single-origin violations
      * and SSL cert problems.
+     * @param null $action
+     * @return string
      */
     public function alternatePreviewLink($action = null)
     {
@@ -324,6 +331,8 @@ class SiteTreeSubsites extends DataExtension
 
     /**
      * Inject the subsite ID into the content so it can be used by frontend scripts.
+     * @param $tags
+     * @return string
      */
     public function MetaTags(&$tags)
     {

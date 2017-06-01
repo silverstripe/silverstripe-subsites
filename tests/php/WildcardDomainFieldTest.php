@@ -14,6 +14,7 @@ class WildcardDomainFieldTest extends SapphireTest {
      * Check that valid domains are accepted
      *
      * @dataProvider validDomains
+     * @param $domain
      */
     public function testValidDomains($domain) {
         $field = new WildcardDomainField('DomainField');
@@ -24,6 +25,7 @@ class WildcardDomainFieldTest extends SapphireTest {
      * Check that valid domains are accepted
      *
      * @dataProvider invalidDomains
+     * @param $domain
      */
     public function testInvalidDomains($domain) {
         $field = new WildcardDomainField('DomainField');
@@ -34,6 +36,7 @@ class WildcardDomainFieldTest extends SapphireTest {
      * Check that valid domains are accepted
      *
      * @dataProvider validWildcards
+     * @param $domain
      */
     public function testValidWildcards($domain) {
         $field = new WildcardDomainField('DomainField');

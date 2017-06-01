@@ -17,6 +17,9 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
     /**
      * Avoid subsites filtering on fixture fetching.
+     * @param string $class
+     * @param string $id
+     * @return \SilverStripe\ORM\DataObject
      */
     public function objFromFixture($class, $id)
     {

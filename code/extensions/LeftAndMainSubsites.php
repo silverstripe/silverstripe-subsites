@@ -60,7 +60,11 @@ class LeftAndMainSubsites extends Extension
     /**
      * Find all subsites accessible for current user on this controller.
      *
-     * @return ArrayList of {@link Subsite} instances.
+     * @param bool $includeMainSite
+     * @param string $mainSiteTitle
+     * @param null $member
+     * @return ArrayList of <a href='psi_element://Subsite'>Subsite</a> instances.
+     * instances.
      */
     public function sectionSites($includeMainSite = true, $mainSiteTitle = 'Main site', $member = null)
     {
@@ -190,6 +194,10 @@ class LeftAndMainSubsites extends Extension
 
     /**
      * Helper for testing if the subsite should be adjusted.
+     * @param $adminClass
+     * @param $recordSubsiteID
+     * @param $currentSubsiteID
+     * @return bool
      */
     public function shouldChangeSubsite($adminClass, $recordSubsiteID, $currentSubsiteID)
     {

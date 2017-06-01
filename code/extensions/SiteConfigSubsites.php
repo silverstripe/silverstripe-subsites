@@ -23,6 +23,8 @@ class SiteConfigSubsites extends DataExtension
 
     /**
      * Update any requests to limit the results to the current site
+     * @param SQLSelect $query
+     * @param DataQuery|null $dataQuery
      */
     public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {

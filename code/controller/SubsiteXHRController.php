@@ -16,6 +16,8 @@ class SubsiteXHRController extends LeftAndMain
 
     /**
      * Relax the access permissions, so anyone who has access to any CMS subsite can access this controller.
+     * @param null $member
+     * @return bool
      */
     public function canView($member = null)
     {

@@ -19,6 +19,8 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
     /**
      * Helper: FunctionalTest is only able to follow redirection once, we want to go all the way.
+     * @param $url
+     * @return \SilverStripe\Control\HTTPResponse
      */
     public function getAndFollowAll($url)
     {

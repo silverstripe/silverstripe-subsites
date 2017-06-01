@@ -18,6 +18,9 @@ class ErrorPageSubsite extends DataExtension
      *
      * FIXME since {@link Subsite::currentSubsite()} partly relies on Session, viewing other sub-site (including main site) between
      * opening ErrorPage in the CMS and publish ErrorPage causes static error page to get generated incorrectly.
+     * @param $statusCode
+     * @param null $locale
+     * @return string
      */
     public function alternateFilepathForErrorcode($statusCode, $locale = null)
     {
