@@ -35,7 +35,7 @@ class FileSubsites extends DataExtension
     public function alternateTreeTitle()
     {
         if ($this->owner->SubsiteID == 0) {
-            return " * " . $this->owner->Title;
+            return ' * ' . $this->owner->Title;
         }
 
         return $this->owner->Title;
@@ -105,7 +105,7 @@ class FileSubsites extends DataExtension
 
         // Ordering when deleting or counting doesn't apply
         if (!$isCounting) {
-            $query->addOrderBy("\"SubsiteID\"");
+            $query->addOrderBy('"SubsiteID"');
         }
     }
 

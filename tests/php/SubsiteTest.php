@@ -268,11 +268,11 @@ class SubsiteTest extends BaseSubsiteTest
         $this->assertEquals('two.mysite.com',
             $this->objFromFixture(Subsite::class, 'domaintest2')->domain());
 
-        $_SERVER['HTTP_HOST'] = "www.example.org";
+        $_SERVER['HTTP_HOST'] = 'www.example.org';
         $this->assertEquals('three.example.org',
             $this->objFromFixture(Subsite::class, 'domaintest3')->domain());
 
-        $_SERVER['HTTP_HOST'] = "mysite.example.org";
+        $_SERVER['HTTP_HOST'] = 'mysite.example.org';
         $this->assertEquals('three.mysite.example.org',
             $this->objFromFixture(Subsite::class, 'domaintest3')->domain());
 
@@ -356,15 +356,15 @@ class SubsiteTest extends BaseSubsiteTest
      */
     public function testAccessibleSites()
     {
-        $member1Sites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", false, null,
+        $member1Sites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', false, null,
             $this->objFromFixture(Member::class, 'subsite1member'));
-        $member1SiteTitles = $member1Sites->column("Title");
+        $member1SiteTitles = $member1Sites->column('Title');
         sort($member1SiteTitles);
         $this->assertEquals('Subsite1 Template', $member1SiteTitles[0], 'Member can get to a subsite via a group');
 
-        $adminSites = Subsite::accessible_sites("CMS_ACCESS_CMSMain", false, null,
+        $adminSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', false, null,
             $this->objFromFixture(Member::class, 'admin'));
-        $adminSiteTitles = $adminSites->column("Title");
+        $adminSiteTitles = $adminSites->column('Title');
         sort($adminSiteTitles);
         $this->assertEquals(array(
             'Subsite1 Template',
@@ -378,10 +378,10 @@ class SubsiteTest extends BaseSubsiteTest
         ), array_values($adminSiteTitles));
 
         $member2Sites = Subsite::accessible_sites(
-            "CMS_ACCESS_CMSMain", false, null,
+            'CMS_ACCESS_CMSMain', false, null,
             $this->objFromFixture(Member::class, 'subsite1member2')
         );
-        $member2SiteTitles = $member2Sites->column("Title");
+        $member2SiteTitles = $member2Sites->column('Title');
         sort($member2SiteTitles);
         $this->assertEquals('Subsite1 Template', $member2SiteTitles[0], 'Member can get to subsite via a group role');
     }
@@ -398,31 +398,31 @@ class SubsiteTest extends BaseSubsiteTest
             'Default permissions granted for super-admin'
         );
         $this->assertTrue(
-            Subsite::hasMainSitePermission($admin, array("ADMIN")),
+            Subsite::hasMainSitePermission($admin, array('ADMIN')),
             'ADMIN permissions granted for super-admin'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1admin, array("ADMIN")),
+            Subsite::hasMainSitePermission($subsite1admin, array('ADMIN')),
             'ADMIN permissions (on main site) denied for subsite1 admin'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1admin, array("CMS_ACCESS_CMSMain")),
+            Subsite::hasMainSitePermission($subsite1admin, array('CMS_ACCESS_CMSMain')),
             'CMS_ACCESS_CMSMain (on main site) denied for subsite1 admin'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($allsubsitesauthor, array("ADMIN")),
+            Subsite::hasMainSitePermission($allsubsitesauthor, array('ADMIN')),
             'ADMIN permissions (on main site) denied for CMS author with edit rights on all subsites'
         );
         $this->assertTrue(
-            Subsite::hasMainSitePermission($allsubsitesauthor, array("CMS_ACCESS_CMSMain")),
+            Subsite::hasMainSitePermission($allsubsitesauthor, array('CMS_ACCESS_CMSMain')),
             'CMS_ACCESS_CMSMain (on main site) granted for CMS author with edit rights on all subsites'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1member, array("ADMIN")),
+            Subsite::hasMainSitePermission($subsite1member, array('ADMIN')),
             'ADMIN (on main site) denied for subsite1 subsite1 cms author'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1member, array("CMS_ACCESS_CMSMain")),
+            Subsite::hasMainSitePermission($subsite1member, array('CMS_ACCESS_CMSMain')),
             'CMS_ACCESS_CMSMain (on main site) denied for subsite1 cms author'
         );
     }

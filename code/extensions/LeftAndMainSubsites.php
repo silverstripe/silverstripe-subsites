@@ -62,7 +62,7 @@ class LeftAndMainSubsites extends Extension
      *
      * @return ArrayList of {@link Subsite} instances.
      */
-    public function sectionSites($includeMainSite = true, $mainSiteTitle = "Main site", $member = null)
+    public function sectionSites($includeMainSite = true, $mainSiteTitle = 'Main site', $member = null)
     {
         if ($mainSiteTitle == 'Main site') {
             $mainSiteTitle = _t('Subsites.MainSiteTitle', 'Main site');
@@ -185,7 +185,7 @@ class LeftAndMainSubsites extends Extension
 
     public function CanAddSubsites()
     {
-        return Permission::check("ADMIN", "any", null, "all");
+        return Permission::check('ADMIN', 'any', null, 'all');
     }
 
     /**
@@ -218,7 +218,7 @@ class LeftAndMainSubsites extends Extension
         }
 
         // Check if we have access to current section on the current subsite.
-        $accessibleSites = $this->owner->sectionSites(true, "Main site", $member);
+        $accessibleSites = $this->owner->sectionSites(true, 'Main site', $member);
         if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
             // Current section can be accessed on the current site, all good.
             return true;

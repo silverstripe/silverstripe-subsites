@@ -28,15 +28,15 @@ class SubsiteDomain extends DataObject
      *
      * @var string
      */
-    private static $default_sort = "\"IsPrimary\" DESC";
+    private static $default_sort = '"IsPrimary" DESC';
 
     /** *
      * @var array
      */
     private static $db = [
-        "Domain" => "Varchar(255)",
-        "Protocol" => "Enum('http,https,automatic','automatic')",
-        "IsPrimary" => "Boolean",
+        'Domain' => 'Varchar(255)',
+        'Protocol' => "Enum('http,https,automatic','automatic')",
+        'IsPrimary' => 'Boolean',
     ];
 
     /**
@@ -69,7 +69,7 @@ class SubsiteDomain extends DataObject
      * @var array
      */
     private static $has_one = [
-        "Subsite" => Subsite::class,
+        'Subsite' => Subsite::class,
     ];
 
     /**
@@ -203,7 +203,7 @@ class SubsiteDomain extends DataObject
 
         // Default to "subsite." prefix for first wildcard
         // TODO Whats the significance of "subsite" inthiscontext?!
-        $domain = preg_replace('/^\*\./', "subsite.", $domain);
+        $domain = preg_replace('/^\*\./', 'subsite.', $domain);
 
         // *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'
         $domain = str_replace('.www.', '.', $domain);

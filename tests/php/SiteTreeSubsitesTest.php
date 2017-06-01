@@ -100,7 +100,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
 
         // Cant pass member as arguments to canEdit() because of GroupSubsites
-        Session::set("loggedInAs", $admin->ID);
+        Session::set('loggedInAs', $admin->ID);
         $this->assertTrue(
             (bool)$subsite1page->canEdit(),
             'Administrators can edit all subsites'
@@ -109,13 +109,13 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         // @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
         Subsite::changeSubsite($subsite1);
 
-        Session::set("loggedInAs", $subsite1member->ID);
+        Session::set('loggedInAs', $subsite1member->ID);
         $this->assertTrue(
             (bool)$subsite1page->canEdit(),
             'Members can edit pages on a subsite if they are in a group belonging to this subsite'
         );
 
-        Session::set("loggedInAs", $subsite2member->ID);
+        Session::set('loggedInAs', $subsite2member->ID);
         $this->assertFalse(
             (bool)$subsite1page->canEdit(),
             'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
@@ -139,12 +139,12 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
         $p1 = new SiteTree();
-        $p1->Title = $p1->URLSegment = "test-page";
+        $p1->Title = $p1->URLSegment = 'test-page';
         $p1->SubsiteID = $s1->ID;
         $p1->write();
 
         $p2 = new SiteTree();
-        $p2->Title = $p1->URLSegment = "test-page";
+        $p2->Title = $p1->URLSegment = 'test-page';
         $p2->SubsiteID = $s2->ID;
         $p2->write();
 
@@ -163,7 +163,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     public function testPageTypesBlacklistInClassDropdown()
     {
         $editor = $this->objFromFixture(Member::class, 'editor');
-        Session::set("loggedInAs", $editor->ID);
+        Session::set('loggedInAs', $editor->ID);
 
         $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
@@ -229,7 +229,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     public function testPageTypesBlacklistInCMSMain()
     {
         $editor = $this->objFromFixture(Member::class, 'editor');
-        Session::set("loggedInAs", $editor->ID);
+        Session::set('loggedInAs', $editor->ID);
 
         $cmsmain = new CMSMain();
 

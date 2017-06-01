@@ -22,7 +22,7 @@ class ErrorPageSubsite extends DataExtension
     public function alternateFilepathForErrorcode($statusCode, $locale = null)
     {
         $static_filepath = Config::inst()->get($this->owner->ClassName, 'static_filepath');
-        $subdomainPart = "";
+        $subdomainPart = '';
 
         // Try to get current subsite from session
         $subsite = Subsite::currentSubsite(false);

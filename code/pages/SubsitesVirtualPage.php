@@ -52,8 +52,8 @@ class SubsitesVirtualPage extends VirtualPage
         $fields->addFieldToTab(
             'Root.Main',
             DropdownField::create(
-                "CopyContentFromID_SubsiteID",
-                _t('SubsitesVirtualPage.SubsiteField', "Subsite"),
+                'CopyContentFromID_SubsiteID',
+                _t('SubsitesVirtualPage.SubsiteField', 'Subsite'),
                 $subsites->map('ID', 'Title')
             )->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
             'CopyContentFromID'
@@ -61,11 +61,11 @@ class SubsitesVirtualPage extends VirtualPage
 
         // Setup the linking to the original page.
         $pageSelectionField = new SubsitesTreeDropdownField(
-            "CopyContentFromID",
-            _t('VirtualPage.CHOOSE', "Choose a page to link to"),
+            'CopyContentFromID',
+            _t('VirtualPage.CHOOSE', 'Choose a page to link to'),
             "SilverStripe\\CMS\\Model\\SiteTree",
-            "ID",
-            "MenuTitle"
+            'ID',
+            'MenuTitle'
         );
 
         if (Controller::has_curr() && Controller::curr()->getRequest()) {
@@ -80,10 +80,10 @@ class SubsitesVirtualPage extends VirtualPage
             $linkToContent = "
 				<a class=\"cmsEditlink\" href=\"$editLink\">" .
                 _t('VirtualPage.EDITCONTENT', 'Click here to edit the content') .
-                "</a>";
-            $fields->removeByName("VirtualPageContentLinkLabel");
+                '</a>';
+            $fields->removeByName('VirtualPageContentLinkLabel');
             $fields->addFieldToTab(
-                "Root.Main",
+                'Root.Main',
                 $linkToContentLabelField = new LabelField('VirtualPageContentLinkLabel', $linkToContent),
                 'Title'
             );

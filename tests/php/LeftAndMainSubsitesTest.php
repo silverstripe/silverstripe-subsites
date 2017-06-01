@@ -32,19 +32,19 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         $member = $this->objFromFixture(Member::class, 'subsite1member');
 
         $cmsmain = singleton(CMSMain::class);
-        $subsites = $cmsmain->sectionSites(true, "Main site", $member);
+        $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
         $this->assertDOSEquals(array(
             array('Title' =>'Subsite1 Template')
         ), $subsites, 'Lists member-accessible sites for the accessible controller.');
 
         $assetadmin = singleton(AssetAdmin::class);
-        $subsites = $assetadmin->sectionSites(true, "Main site", $member);
+        $subsites = $assetadmin->sectionSites(true, 'Main site', $member);
         $this->assertDOSEquals([], $subsites, 'Does not list any sites for forbidden controller.');
 
         $member = $this->objFromFixture(Member::class, 'editor');
 
         $cmsmain = singleton(CMSMain::class);
-        $subsites = $cmsmain->sectionSites(true, "Main site", $member);
+        $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
         $this->assertDOSContains(array(
             array('Title' =>'Main site')
         ), $subsites, 'Includes the main site for members who can access all sites.');
@@ -52,7 +52,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
     public function testAccessChecksDontChangeCurrentSubsite()
     {
-        $admin = $this->objFromFixture(Member::class, "admin");
+        $admin = $this->objFromFixture(Member::class, 'admin');
         $this->logInAs($admin);
         $ids = array();
 
@@ -74,7 +74,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 			$left = new LeftAndMain();
 			$this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
 			$this->assertEquals($id, Subsite::currentSubsiteID(),
-				"The current subsite has not been changed in the process of checking permissions for admin user.");
+                'The current subsite has not been changed in the process of checking permissions for admin user.');
 		}
 
 	}

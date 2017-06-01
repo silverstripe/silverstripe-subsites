@@ -40,7 +40,7 @@ class SiteTreeSubsites extends DataExtension
     );
 
     private static $many_many_extraFields = array(
-        "CrossSubsiteLinkTracking" => array("FieldName" => "Varchar")
+        'CrossSubsiteLinkTracking' => array('FieldName' => 'Varchar')
     );
 
     public function isMainSite()
@@ -101,7 +101,7 @@ class SiteTreeSubsites extends DataExtension
 
     public function updateCMSFields(FieldList $fields)
     {
-        $subsites = Subsite::accessible_sites("CMS_ACCESS_CMSMain");
+        $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
         $subsitesMap = array();
         if ($subsites && $subsites->count()) {
             $subsitesToMap = $subsites->exclude('ID', $this->owner->SubsiteID);
@@ -117,11 +117,12 @@ class SiteTreeSubsites extends DataExtension
                 ToggleCompositeField::create('SubsiteOperations',
                     _t('SiteTreeSubsites.SubsiteOperations', 'Subsite Operations'),
                     array(
-                        new DropdownField("CopyToSubsiteID", _t('SiteTreeSubsites.CopyToSubsite', "Copy page to subsite"), $subsitesMap),
-                        new CheckboxField("CopyToSubsiteWithChildren", _t('SiteTreeSubsites.CopyToSubsiteWithChildren', 'Include children pages?')),
+                        new DropdownField('CopyToSubsiteID', _t('SiteTreeSubsites.CopyToSubsite',
+                            'Copy page to subsite'), $subsitesMap),
+                        new CheckboxField('CopyToSubsiteWithChildren', _t('SiteTreeSubsites.CopyToSubsiteWithChildren', 'Include children pages?')),
                         $copyAction = new InlineFormAction(
-                            "copytosubsite",
-                            _t('SiteTreeSubsites.CopyAction', "Copy")
+                            'copytosubsite',
+                            _t('SiteTreeSubsites.CopyAction', 'Copy')
                         )
                     )
                 )->setHeadingLevel(4)
@@ -327,7 +328,7 @@ class SiteTreeSubsites extends DataExtension
     public function MetaTags(&$tags)
     {
         if ($this->owner->SubsiteID) {
-            $tags .= "<meta name=\"x-subsite-id\" content=\"" . $this->owner->SubsiteID . "\" />\n";
+            $tags .= '<meta name="x-subsite-id" content="' . $this->owner->SubsiteID . "\" />\n";
         }
 
         return $tags;

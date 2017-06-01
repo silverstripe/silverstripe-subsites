@@ -89,25 +89,25 @@ class GroupSubsites extends DataExtension implements PermissionProvider
 			// Interface is different if you have the rights to modify subsite group values on
 			// all subsites
 			if(isset($subsiteMap[0])) {
-				$fields->addFieldToTab("Root.Subsites", new OptionsetField("AccessAllSubsites",
+				$fields->addFieldToTab('Root.Subsites', new OptionsetField('AccessAllSubsites',
 					_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
 					[
-						1 => _t('GroupSubsites.ACCESSALL', "All subsites"),
-						0 => _t('GroupSubsites.ACCESSONLY', "Only these subsites"),
+						1 => _t('GroupSubsites.ACCESSALL', 'All subsites'),
+						0 => _t('GroupSubsites.ACCESSONLY', 'Only these subsites'),
 					]
 				));
 
 				unset($subsiteMap[0]);
-				$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", "",
+				$fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites', '',
 					$subsiteMap));
 
 			} else {
 				if (sizeof($subsiteMap) <= 1) {
-					$fields->addFieldToTab("Root.Subsites", new ReadonlyField("SubsitesHuman",
+					$fields->addFieldToTab('Root.Subsites', new ReadonlyField('SubsitesHuman',
 						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
 						reset($subsiteMap)));
 				} else {
-					$fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites",
+					$fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites',
 						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
 						$subsiteMap));
 				}
@@ -127,7 +127,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             $title = _t('GroupSubsites.GlobalGroup', 'global group');
             return htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(' . $title . ')</i>';
         } else {
-            $subsites = Convert::raw2xml(implode(", ", $this->owner->Subsites()->column('Title')));
+            $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
             return htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
         }
     }
@@ -165,19 +165,19 @@ class GroupSubsites extends DataExtension implements PermissionProvider
 
             if (!$hasGroupSubsites) {
                 if ($subsiteID) {
-                    $query->addLeftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\"
+                    $query->addLeftJoin('Group_Subsites', "\"Group_Subsites\".\"GroupID\"
 						= \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
-                    $query->addWhere("(\"Group_Subsites\".\"SubsiteID\" IS NOT NULL OR
-						\"Group\".\"AccessAllSubsites\" = 1)");
+                    $query->addWhere('("Group_Subsites"."SubsiteID" IS NOT NULL OR
+						"Group"."AccessAllSubsites" = 1)');
                 } else {
-                    $query->addWhere("\"Group\".\"AccessAllSubsites\" = 1");
+                    $query->addWhere('"Group"."AccessAllSubsites" = 1');
                 }
             }
 
             // WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected (e.g. SQL Server)
             $select = $query->getSelect();
             if (isset($select[0]) && !$select[0] == 'COUNT(*)') {
-                $query->addOrderBy("AccessAllSubsites", "DESC");
+                $query->addOrderBy('AccessAllSubsites', 'DESC');
             }
         }
     }

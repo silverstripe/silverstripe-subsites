@@ -24,8 +24,8 @@ class WildcardDomainField extends TextField
 
         $validator->validationError(
             $this->getName(),
-            _t("DomainNameField.INVALID_DOMAIN", "Invalid domain name"),
-            "validation"
+            _t('DomainNameField.INVALID_DOMAIN', 'Invalid domain name'),
+            'validation'
         );
 
         return false;

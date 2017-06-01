@@ -108,7 +108,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $this->markTestSkipped('Needs some update or refactoring');
         // Fixture
         $p = new Page();
-        $p->Content = "test content";
+        $p->Content = 'test content';
         $p->write();
         $vp = new SubsitesVirtualPage();
         $vp->CopyContentFromID = $p->ID;
@@ -129,7 +129,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $this->assertTrue($vp2->IsAddedToStage);
 
         // Also remains orange after a republish
-        $p->Content = "new content";
+        $p->Content = 'new content';
         $p->write();
         $p->doPublish();
         $this->fixVersionNumberCache($vp2);
@@ -143,7 +143,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $this->assertFalse($vp->IsModifiedOnStage);
 
         // P edited, VP and P both go green
-        $p->Content = "third content";
+        $p->Content = 'third content';
         $p->write();
 
         $this->fixVersionNumberCache($vp, $p);
@@ -238,12 +238,12 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $page->doUnpublish();
 
         Subsite::changeSubsite($vp1->SubsiteID);
-        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp1->ID);
+        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', '"SiteTree_Live"."ID" = ' .$vp1->ID);
         $this->assertNull($onLive, 'SVP has been removed from live');
 
         $subsite = $this->objFromFixture(Subsite::class, 'subsite2');
         Subsite::changeSubsite($vp2->SubsiteID);
-        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', "\"SiteTree_Live\".\"ID\" = ".$vp2->ID);
+        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', '"SiteTree_Live"."ID" = ' .$vp2->ID);
         $this->assertNull($onLive, 'SVP has been removed from live');
     }
 
@@ -285,7 +285,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $this->assertEquals(
             $subsite2Vp->URLSegment,
             $subsite1Page->URLSegment,
-            "Does allow explicit URLSegment overrides when only existing in a different subsite"
+            'Does allow explicit URLSegment overrides when only existing in a different subsite'
         );
 
 		// When changing subsites and re-saving this page, it doesn't trigger a change
