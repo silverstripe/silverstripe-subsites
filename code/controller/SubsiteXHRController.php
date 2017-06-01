@@ -37,11 +37,11 @@ class SubsiteXHRController extends LeftAndMain
      */
     public function canAccess()
     {
-		// Allow if any cms access is available
-        return Permission::check(array(
-			'CMS_ACCESS', // Supported by 3.1.14 and up
-			'CMS_ACCESS_LeftAndMain'
-		));
+        // Allow if any cms access is available
+        return Permission::check([
+            'CMS_ACCESS', // Supported by 3.1.14 and up
+            'CMS_ACCESS_LeftAndMain'
+        ]);
     }
 
     public function getResponseNegotiator()

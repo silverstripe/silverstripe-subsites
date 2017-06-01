@@ -6,19 +6,18 @@ if (!class_exists('SilverStripe\BehatExtension\Context\SilverStripeContext')) {
     return;
 }
 
-use SilverStripe\BehatExtension\Context\SilverStripeContext;
 use SilverStripe\BehatExtension\Context\BasicContext;
-use SilverStripe\BehatExtension\Context\LoginContext;
 use SilverStripe\BehatExtension\Context\FixtureContext;
-use SilverStripe\Framework\Test\Behaviour\CmsFormsContext;
-use SilverStripe\Framework\Test\Behaviour\CmsUiContext;
-use SilverStripe\Cms\Test\Behaviour;
+use SilverStripe\BehatExtension\Context\LoginContext;
+use SilverStripe\BehatExtension\Context\SilverStripeContext;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\BehatFixtureFactory;
 use SilverStripe\Dev\FixtureBlueprint;
 use SilverStripe\Dev\FixtureFactory;
+use SilverStripe\Framework\Test\Behaviour\CmsFormsContext;
+use SilverStripe\Framework\Test\Behaviour\CmsUiContext;
 use SilverStripe\Security\Member;
 
 // PHPUnit
@@ -32,7 +31,7 @@ require_once 'PHPUnit/Framework/Assert/Functions.php';
  * Uses subcontexts to extend functionality.
  */
 class FeatureContext extends SilverStripeContext
-    {
+{
     /**
      * @var FixtureFactory
      */

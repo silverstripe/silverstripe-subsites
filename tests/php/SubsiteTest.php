@@ -27,7 +27,7 @@ class SubsiteTest extends BaseSubsiteTest
      *
      * @var array
      */
-    protected $origServer = array();
+    protected $origServer = [];
 
     public function setUp()
     {
@@ -59,7 +59,7 @@ class SubsiteTest extends BaseSubsiteTest
 
         // Test that changeSubsite is working
         Subsite::changeSubsite($template->ID);
-		$this->assertEquals($template->ID, Subsite::currentSubsiteID());
+        $this->assertEquals($template->ID, Subsite::currentSubsiteID());
         $tmplStaff = $this->objFromFixture('Page', 'staff');
         $tmplHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
 
@@ -103,20 +103,20 @@ class SubsiteTest extends BaseSubsiteTest
         }
 
         // Much more expressive than YML in this case
-        $subsite1 = $this->createSubsiteWithDomains(array(
+        $subsite1 = $this->createSubsiteWithDomains([
             'one.example.org' => true,
             'one.*' => false,
-        ));
-        $subsite2 = $this->createSubsiteWithDomains(array(
+        ]);
+        $subsite2 = $this->createSubsiteWithDomains([
             'two.mysite.com' => true,
             '*.mysite.com' => false,
             'subdomain.onmultiplesubsites.com' => false,
-        ));
-        $subsite3 = $this->createSubsiteWithDomains(array(
+        ]);
+        $subsite3 = $this->createSubsiteWithDomains([
             'three.*' => true, // wildcards in primary domain are not recommended
             'subdomain.unique.com' => false,
             '*.onmultiplesubsites.com' => false,
-        ));
+        ]);
 
         $this->assertEquals(
             $subsite3->ID,
@@ -177,15 +177,15 @@ class SubsiteTest extends BaseSubsiteTest
         }
 
         // Much more expressive than YML in this case
-        $subsite1 = $this->createSubsiteWithDomains(array(
+        $subsite1 = $this->createSubsiteWithDomains([
             'example.org' => true,
             'example.com' => false,
             '*.wildcard.com' => false,
-        ));
-        $subsite2 = $this->createSubsiteWithDomains(array(
+        ]);
+        $subsite2 = $this->createSubsiteWithDomains([
             'www.example.org' => true,
             'www.wildcard.com' => false,
-        ));
+        ]);
 
         Subsite::$strict_subdomain_matching = false;
 
@@ -241,16 +241,16 @@ class SubsiteTest extends BaseSubsiteTest
 
     protected function createSubsiteWithDomains($domains)
     {
-        $subsite = new Subsite(array(
+        $subsite = new Subsite([
             'Title' => 'My Subsite'
-        ));
+        ]);
         $subsite->write();
         foreach ($domains as $domainStr => $isPrimary) {
-            $domain = new SubsiteDomain(array(
+            $domain = new SubsiteDomain([
                 'Domain' => $domainStr,
                 'IsPrimary' => $isPrimary,
                 'SubsiteID' => $subsite->ID
-            ));
+            ]);
             $domain->write();
         }
 
@@ -277,13 +277,15 @@ class SubsiteTest extends BaseSubsiteTest
             $this->objFromFixture(Subsite::class, 'domaintest3')->domain());
 
         $this->assertEquals($_SERVER['HTTP_HOST'], singleton(Subsite::class)->PrimaryDomain);
-        $this->assertEquals('http://'.$_SERVER['HTTP_HOST'].Director::baseURL(), singleton(Subsite::class)->absoluteBaseURL());
+        $this->assertEquals('http://' . $_SERVER['HTTP_HOST'] . Director::baseURL(),
+            singleton(Subsite::class)->absoluteBaseURL());
     }
 
     /**
      * Tests that Subsite and SubsiteDomain both respect http protocol correctly
      */
-    public function testDomainProtocol() {
+    public function testDomainProtocol()
+    {
         // domaintest2 has 'protocol'
         $subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
         $domain2a = $this->objFromFixture(SubsiteDomain::class, 'dt2a');
@@ -328,17 +330,17 @@ class SubsiteTest extends BaseSubsiteTest
     public function testAllSites()
     {
         $subsites = Subsite::all_sites();
-        $this->assertDOSEquals(array(
-            array('Title' =>'Main site'),
-            array('Title' =>'Template'),
-            array('Title' =>'Subsite1 Template'),
-            array('Title' =>'Subsite2 Template'),
-            array('Title' =>'Test 1'),
-            array('Title' =>'Test 2'),
-            array('Title' =>'Test 3'),
-            array('Title' => 'Test Non-SSL'),
-            array('Title' => 'Test SSL')
-        ), $subsites, 'Lists all subsites');
+        $this->assertDOSEquals([
+            ['Title' => 'Main site'],
+            ['Title' => 'Template'],
+            ['Title' => 'Subsite1 Template'],
+            ['Title' => 'Subsite2 Template'],
+            ['Title' => 'Test 1'],
+            ['Title' => 'Test 2'],
+            ['Title' => 'Test 3'],
+            ['Title' => 'Test Non-SSL'],
+            ['Title' => 'Test SSL']
+        ], $subsites, 'Lists all subsites');
     }
 
     public function testAllAccessibleSites()
@@ -346,9 +348,9 @@ class SubsiteTest extends BaseSubsiteTest
         $member = $this->objFromFixture(Member::class, 'subsite1member');
 
         $subsites = Subsite::all_accessible_sites(true, 'Main site', $member);
-        $this->assertDOSEquals(array(
-            array('Title' =>'Subsite1 Template')
-        ), $subsites, 'Lists member-accessible sites.');
+        $this->assertDOSEquals([
+            ['Title' => 'Subsite1 Template']
+        ], $subsites, 'Lists member-accessible sites.');
     }
 
     /**
@@ -366,7 +368,7 @@ class SubsiteTest extends BaseSubsiteTest
             $this->objFromFixture(Member::class, 'admin'));
         $adminSiteTitles = $adminSites->column('Title');
         sort($adminSiteTitles);
-        $this->assertEquals(array(
+        $this->assertEquals([
             'Subsite1 Template',
             'Subsite2 Template',
             'Template',
@@ -375,7 +377,7 @@ class SubsiteTest extends BaseSubsiteTest
             'Test 3',
             'Test Non-SSL',
             'Test SSL'
-        ), array_values($adminSiteTitles));
+        ], array_values($adminSiteTitles));
 
         $member2Sites = Subsite::accessible_sites(
             'CMS_ACCESS_CMSMain', false, null,
@@ -398,31 +400,31 @@ class SubsiteTest extends BaseSubsiteTest
             'Default permissions granted for super-admin'
         );
         $this->assertTrue(
-            Subsite::hasMainSitePermission($admin, array('ADMIN')),
+            Subsite::hasMainSitePermission($admin, ['ADMIN']),
             'ADMIN permissions granted for super-admin'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1admin, array('ADMIN')),
+            Subsite::hasMainSitePermission($subsite1admin, ['ADMIN']),
             'ADMIN permissions (on main site) denied for subsite1 admin'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1admin, array('CMS_ACCESS_CMSMain')),
+            Subsite::hasMainSitePermission($subsite1admin, ['CMS_ACCESS_CMSMain']),
             'CMS_ACCESS_CMSMain (on main site) denied for subsite1 admin'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($allsubsitesauthor, array('ADMIN')),
+            Subsite::hasMainSitePermission($allsubsitesauthor, ['ADMIN']),
             'ADMIN permissions (on main site) denied for CMS author with edit rights on all subsites'
         );
         $this->assertTrue(
-            Subsite::hasMainSitePermission($allsubsitesauthor, array('CMS_ACCESS_CMSMain')),
+            Subsite::hasMainSitePermission($allsubsitesauthor, ['CMS_ACCESS_CMSMain']),
             'CMS_ACCESS_CMSMain (on main site) granted for CMS author with edit rights on all subsites'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1member, array('ADMIN')),
+            Subsite::hasMainSitePermission($subsite1member, ['ADMIN']),
             'ADMIN (on main site) denied for subsite1 subsite1 cms author'
         );
         $this->assertFalse(
-            Subsite::hasMainSitePermission($subsite1member, array('CMS_ACCESS_CMSMain')),
+            Subsite::hasMainSitePermission($subsite1member, ['CMS_ACCESS_CMSMain']),
             'CMS_ACCESS_CMSMain (on main site) denied for subsite1 cms author'
         );
     }

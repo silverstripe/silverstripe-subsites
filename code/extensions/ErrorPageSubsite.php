@@ -2,10 +2,10 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
-use SilverStripe\Core\Config\Config;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Model\Subsite;
 
 class ErrorPageSubsite extends DataExtension

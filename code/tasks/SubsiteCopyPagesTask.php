@@ -55,7 +55,7 @@ class SubsiteCopyPagesTask extends BuildTask
         // This will make sure that the new parents on the new subsite are correct, and there are no funny
         // issues with having to check whether or not the new parents have been added to the site tree
         // when a page, etc, is duplicated
-        $stack = array(array(0,0));
+        $stack = [[0, 0]];
         while (count($stack) > 0) {
             list($sourceParentID, $destParentID) = array_pop($stack);
 
@@ -75,7 +75,7 @@ class SubsiteCopyPagesTask extends BuildTask
                     $childClone->ParentID = $destParentID;
                     $childClone->writeToStage('Stage');
                     $childClone->copyVersionToStage('Stage', 'Live');
-                    array_push($stack, array($child->ID, $childClone->ID));
+                    array_push($stack, [$child->ID, $childClone->ID]);
 
                     $this->log(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));
                 }

@@ -2,13 +2,13 @@
 
 namespace SilverStripe\Subsites\Tests;
 
-use SilverStripe\AssetAdmin\Controller\AssetAdmin;
-use SilverStripe\Security\Member;
-use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Admin\LeftAndMain;
-use SilverStripe\Core\Config\Config;
+use SilverStripe\AssetAdmin\Controller\AssetAdmin;
+use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Model\Subsite;
 
 class LeftAndMainSubsitesTest extends FunctionalTest
@@ -36,9 +36,9 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
         $cmsmain = singleton(CMSMain::class);
         $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
-        $this->assertDOSEquals(array(
-            array('Title' =>'Subsite1 Template')
-        ), $subsites, 'Lists member-accessible sites for the accessible controller.');
+        $this->assertDOSEquals([
+            ['Title' => 'Subsite1 Template']
+        ], $subsites, 'Lists member-accessible sites for the accessible controller.');
 
         $assetadmin = singleton(AssetAdmin::class);
         $subsites = $assetadmin->sectionSites(true, 'Main site', $member);
@@ -48,16 +48,16 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
         $cmsmain = singleton(CMSMain::class);
         $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
-        $this->assertDOSContains(array(
-            array('Title' =>'Main site')
-        ), $subsites, 'Includes the main site for members who can access all sites.');
+        $this->assertDOSContains([
+            ['Title' => 'Main site']
+        ], $subsites, 'Includes the main site for members who can access all sites.');
     }
 
     public function testAccessChecksDontChangeCurrentSubsite()
     {
         $admin = $this->objFromFixture(Member::class, 'admin');
         $this->logInAs($admin);
-        $ids = array();
+        $ids = [];
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
@@ -74,13 +74,13 @@ class LeftAndMainSubsitesTest extends FunctionalTest
             Subsite::changeSubsite($id);
             $this->assertEquals($id, Subsite::currentSubsiteID());
 
-			$left = new LeftAndMain();
-			$this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
-			$this->assertEquals($id, Subsite::currentSubsiteID(),
+            $left = new LeftAndMain();
+            $this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
+            $this->assertEquals($id, Subsite::currentSubsiteID(),
                 'The current subsite has not been changed in the process of checking permissions for admin user.');
-		}
+        }
 
-	}
+    }
 
     public function testShouldChangeSubsite()
     {

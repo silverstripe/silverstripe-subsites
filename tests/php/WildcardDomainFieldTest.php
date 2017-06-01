@@ -8,7 +8,8 @@ use SilverStripe\Subsites\Forms\WildcardDomainField;
 /**
  * Tests {@see WildcardDomainField}
  */
-class WildcardDomainFieldTest extends SapphireTest {
+class WildcardDomainFieldTest extends SapphireTest
+{
 
     /**
      * Check that valid domains are accepted
@@ -16,7 +17,8 @@ class WildcardDomainFieldTest extends SapphireTest {
      * @dataProvider validDomains
      * @param $domain
      */
-    public function testValidDomains($domain) {
+    public function testValidDomains($domain)
+    {
         $field = new WildcardDomainField('DomainField');
         $this->assertTrue($field->checkHostname($domain), "Validate that {$domain} is a valid domain name");
     }
@@ -27,7 +29,8 @@ class WildcardDomainFieldTest extends SapphireTest {
      * @dataProvider invalidDomains
      * @param $domain
      */
-    public function testInvalidDomains($domain) {
+    public function testInvalidDomains($domain)
+    {
         $field = new WildcardDomainField('DomainField');
         $this->assertFalse($field->checkHostname($domain), "Validate that {$domain} is an invalid domain name");
     }
@@ -38,43 +41,47 @@ class WildcardDomainFieldTest extends SapphireTest {
      * @dataProvider validWildcards
      * @param $domain
      */
-    public function testValidWildcards($domain) {
+    public function testValidWildcards($domain)
+    {
         $field = new WildcardDomainField('DomainField');
         $this->assertTrue($field->checkHostname($domain), "Validate that {$domain} is a valid domain wildcard");
     }
 
-    public function validDomains() {
-        return array(
-            array('www.mysite.com'),
-            array('domain7'),
-            array('mysite.co.n-z'),
-            array('subdomain.my-site.com'),
-            array('subdomain.mysite')
-        );
+    public function validDomains()
+    {
+        return [
+            ['www.mysite.com'],
+            ['domain7'],
+            ['mysite.co.n-z'],
+            ['subdomain.my-site.com'],
+            ['subdomain.mysite']
+        ];
     }
 
-    public function invalidDomains() {
-        return array(
-            array('-mysite'),
-            array('.mysite'),
-            array('mys..ite'),
-            array('mysite-'),
-            array('mysite.'),
-            array('-mysite.*'),
-            array('.mysite.*'),
-            array('mys..ite.*'),
-            array('*.mysite-'),
-            array('*.mysite.')
-        );
+    public function invalidDomains()
+    {
+        return [
+            ['-mysite'],
+            ['.mysite'],
+            ['mys..ite'],
+            ['mysite-'],
+            ['mysite.'],
+            ['-mysite.*'],
+            ['.mysite.*'],
+            ['mys..ite.*'],
+            ['*.mysite-'],
+            ['*.mysite.']
+        ];
     }
 
-    public function validWildcards() {
-        return array(
-            array('*.mysite.com'),
-            array('mys*ite.com'),
-            array('*.my-site.*'),
-            array('*')
-        );
+    public function validWildcards()
+    {
+        return [
+            ['*.mysite.com'],
+            ['mys*ite.com'],
+            ['*.my-site.*'],
+            ['*']
+        ];
     }
 
 }

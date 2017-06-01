@@ -17,15 +17,15 @@ use SilverStripe\View\Requirements;
  */
 class SubsitesTreeDropdownField extends TreeDropdownField
 {
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'tree'
-    );
+    ];
 
     protected $subsiteID = 0;
 
-    protected $extraClasses = array('SubsitesTreeDropdownField');
+    protected $extraClasses = ['SubsitesTreeDropdownField'];
 
-    public function Field($properties = array())
+    public function Field($properties = [])
     {
         $html = parent::Field($properties);
 

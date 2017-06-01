@@ -13,7 +13,7 @@ class BaseSubsiteTest extends SapphireTest
         parent::setUp();
 
         Subsite::$use_session_subsiteid = true;
-		Subsite::$force_subsite = null;
+        Subsite::$force_subsite = null;
     }
 
     /**
@@ -22,18 +22,20 @@ class BaseSubsiteTest extends SapphireTest
      * @param string $id
      * @return \SilverStripe\ORM\DataObject
      */
-	public function objFromFixture($class, $id)
-		{Subsite::disable_subsite_filter(true);
-		$obj = parent::objFromFixture($class, $id);
-		Subsite::disable_subsite_filter(false);
+    public function objFromFixture($class, $id)
+    {
+        Subsite::disable_subsite_filter(true);
+        $obj = parent::objFromFixture($class, $id);
+        Subsite::disable_subsite_filter(false);
 
         return $obj;
     }
 
-	/**
-	 * Tests the initial state of disable_subsite_filter
-	 */
-	public function testDisableSubsiteFilter()
-		{$this->assertFalse(Subsite::$disable_subsite_filter);
-	}
+    /**
+     * Tests the initial state of disable_subsite_filter
+     */
+    public function testDisableSubsiteFilter()
+    {
+        $this->assertFalse(Subsite::$disable_subsite_filter);
+    }
 }

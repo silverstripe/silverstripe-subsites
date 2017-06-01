@@ -9,9 +9,9 @@ use SilverStripe\Subsites\Model\Subsite;
 class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest
 {
 
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'ItemEditForm',
-    );
+    ];
 
     /**
      * Builds an item edit form.  The arguments to getCMSFields() are the popupController and
@@ -26,16 +26,17 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
      */
     public function ItemEditForm()
     {
-        $form=parent::ItemEditForm();
+        $form = parent::ItemEditForm();
 
         if ($this->record->ID == 0) {
             $templates = Subsite::get()->sort('Title');
-            $templateArray = array();
+            $templateArray = [];
             if ($templates) {
                 $templateArray = $templates->map('ID', 'Title');
             }
 
-            $templateDropdown = new DropdownField('TemplateID', _t('Subsite.COPYSTRUCTURE', 'Copy structure from:'), $templateArray);
+            $templateDropdown = new DropdownField('TemplateID', _t('Subsite.COPYSTRUCTURE', 'Copy structure from:'),
+                $templateArray);
             $templateDropdown->setEmptyString('(' . _t('Subsite.NOTEMPLATE', 'No template') . ')');
             $form->Fields()->addFieldToTab('Root.Configuration', $templateDropdown);
         }

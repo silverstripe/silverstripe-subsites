@@ -3,27 +3,27 @@
 namespace SilverStripe\Subsites\Tests;
 
 use Page;
+use SilverStripe\Assets\File;
 use SilverStripe\Assets\Filesystem;
 use SilverStripe\Assets\Tests\Storage\AssetStoreTest\TestAssetStore;
-use SilverStripe\Control\Director;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Assets\File;
-use SilverStripe\ORM\DB;
+use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\ORM\DB;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
+use SilverStripe\Versioned\Versioned;
 
 class SubsitesVirtualPageTest extends BaseSubsiteTest
 {
-    public static $fixture_file = array(
+    public static $fixture_file = [
         'subsites/tests/php/SubsiteTest.yml',
         'subsites/tests/php/SubsitesVirtualPageTest.yml',
-    );
+    ];
 
-    protected $illegalExtensions = array(
-        'SiteTree' => array('Translatable')
-    );
+    protected $illegalExtensions = [
+        'SiteTree' => ['Translatable']
+    ];
 
     public function setUp()
     {
@@ -238,12 +238,12 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $page->doUnpublish();
 
         Subsite::changeSubsite($vp1->SubsiteID);
-        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', '"SiteTree_Live"."ID" = ' .$vp1->ID);
+        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', '"SiteTree_Live"."ID" = ' . $vp1->ID);
         $this->assertNull($onLive, 'SVP has been removed from live');
 
         $subsite = $this->objFromFixture(Subsite::class, 'subsite2');
         Subsite::changeSubsite($vp2->SubsiteID);
-        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', '"SiteTree_Live"."ID" = ' .$vp2->ID);
+        $onLive = Versioned::get_one_by_stage(SubsitesVirtualPage::class, 'Live', '"SiteTree_Live"."ID" = ' . $vp2->ID);
         $this->assertNull($onLive, 'SVP has been removed from live');
     }
 
@@ -288,10 +288,10 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
             'Does allow explicit URLSegment overrides when only existing in a different subsite'
         );
 
-		// When changing subsites and re-saving this page, it doesn't trigger a change
-		Subsite::changeSubsite($subsite1->ID);
-		$subsite1Page->write();
-		$subsite2Vp->write();
+        // When changing subsites and re-saving this page, it doesn't trigger a change
+        Subsite::changeSubsite($subsite1->ID);
+        $subsite1Page->write();
+        $subsite2Vp->write();
         $this->assertEquals(
             $subsite2Vp->URLSegment,
             $subsite1Page->URLSegment,
@@ -303,8 +303,8 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
     {
         $pages = func_get_args();
         foreach ($pages as $p) {
-            Versioned::prepopulate_versionnumber_cache(SiteTree::class, 'Stage', array($p->ID));
-            Versioned::prepopulate_versionnumber_cache(SiteTree::class, 'Live', array($p->ID));
+            Versioned::prepopulate_versionnumber_cache(SiteTree::class, 'Stage', [$p->ID]);
+            Versioned::prepopulate_versionnumber_cache(SiteTree::class, 'Live', [$p->ID]);
         }
     }
 }

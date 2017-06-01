@@ -7,7 +7,6 @@ use SilverStripe\Assets\Folder;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Extensions\FileSubsites;
-use SilverStripe\Subsites\Tests\BaseSubsiteTest;
 use SilverStripe\Subsites\Model\Subsite;
 
 class FileSubsitesTest extends BaseSubsiteTest
@@ -20,15 +19,15 @@ class FileSubsitesTest extends BaseSubsiteTest
      *
      * @var array
      */
-    protected $illegalExtensions = array(
-        'File' => array(
+    protected $illegalExtensions = [
+        'File' => [
             'SecureFileExtension',
             'VersionedFileExtension'
-        ),
-        'SiteTree' => array(
+        ],
+        'SiteTree' => [
             'Translatable',
-        )
-    );
+        ]
+    ];
 
     public function testTrivialFeatures()
     {
@@ -92,7 +91,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         $source = array_values($file->getCMSFields()->dataFieldByName('SubsiteID')->getSource());
         asort($source);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'Main site',
             'Subsite1 Template',
             'Subsite2 Template',
@@ -102,6 +101,6 @@ class FileSubsitesTest extends BaseSubsiteTest
             'Test 3',
             'Test Non-SSL',
             'Test SSL',
-        ), array_values($source));
+        ], array_values($source));
     }
 }

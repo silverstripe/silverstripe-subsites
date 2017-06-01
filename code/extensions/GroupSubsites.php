@@ -25,17 +25,17 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class GroupSubsites extends DataExtension implements PermissionProvider
 {
-	private static $db = [
-		'AccessAllSubsites' => 'Boolean'
-	];
+    private static $db = [
+        'AccessAllSubsites' => 'Boolean'
+    ];
 
-	private static $many_many = [
-		'Subsites' => Subsite::class
-	];
+    private static $many_many = [
+        'Subsites' => Subsite::class
+    ];
 
-	private static $defaults = [
-		'AccessAllSubsites' => true
-	];
+    private static $defaults = [
+        'AccessAllSubsites' => true
+    ];
 
     /**
      * Migrations for GroupSubsites data.
@@ -68,7 +68,8 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             if (!DB::query('SELECT "Group"."ID" FROM "Group"
 			LEFT JOIN "Group_Subsites" ON "Group_Subsites"."GroupID" = "Group"."ID" AND "Group_Subsites"."SubsiteID" > 0
 			WHERE "AccessAllSubsites" = 1
-			OR "Group_Subsites"."GroupID" IS NOT NULL ')->value()) {
+			OR "Group_Subsites"."GroupID" IS NOT NULL ')->value()
+            ) {
                 DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1');
             }
         }
@@ -83,37 +84,37 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             $subsites = Subsite::accessible_sites(['ADMIN', 'SECURITY_SUBSITE_GROUP'], true);
             $subsiteMap = $subsites->map();
 
-			// Prevent XSS injection
-			$subsiteMap = Convert::raw2xml($subsiteMap->toArray());
+            // Prevent XSS injection
+            $subsiteMap = Convert::raw2xml($subsiteMap->toArray());
 
-			// Interface is different if you have the rights to modify subsite group values on
-			// all subsites
-			if(isset($subsiteMap[0])) {
-				$fields->addFieldToTab('Root.Subsites', new OptionsetField('AccessAllSubsites',
-					_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-					[
-						1 => _t('GroupSubsites.ACCESSALL', 'All subsites'),
-						0 => _t('GroupSubsites.ACCESSONLY', 'Only these subsites'),
-					]
-				));
+            // Interface is different if you have the rights to modify subsite group values on
+            // all subsites
+            if (isset($subsiteMap[0])) {
+                $fields->addFieldToTab('Root.Subsites', new OptionsetField('AccessAllSubsites',
+                    _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+                    [
+                        1 => _t('GroupSubsites.ACCESSALL', 'All subsites'),
+                        0 => _t('GroupSubsites.ACCESSONLY', 'Only these subsites'),
+                    ]
+                ));
 
-				unset($subsiteMap[0]);
-				$fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites', '',
-					$subsiteMap));
+                unset($subsiteMap[0]);
+                $fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites', '',
+                    $subsiteMap));
 
-			} else {
-				if (sizeof($subsiteMap) <= 1) {
-					$fields->addFieldToTab('Root.Subsites', new ReadonlyField('SubsitesHuman',
-						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-						reset($subsiteMap)));
-				} else {
-					$fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites',
-						_t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-						$subsiteMap));
-				}
-			}
-		}
-	}
+            } else {
+                if (sizeof($subsiteMap) <= 1) {
+                    $fields->addFieldToTab('Root.Subsites', new ReadonlyField('SubsitesHuman',
+                        _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+                        reset($subsiteMap)));
+                } else {
+                    $fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites',
+                        _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+                        $subsiteMap));
+                }
+            }
+        }
+    }
 
     /**
      * If this group belongs to a subsite,

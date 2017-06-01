@@ -169,7 +169,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
         $page = singleton(SiteTree::class);
 
-        $s1->PageTypeBlacklist = implode(',', [SiteTreeSubsitesTest_ClassA::class , ErrorPage::class]);
+        $s1->PageTypeBlacklist = implode(',', [SiteTreeSubsitesTest_ClassA::class, ErrorPage::class]);
         $s1->write();
 
         Subsite::changeSubsite($s1);
@@ -236,7 +236,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
-        $s1->PageTypeBlacklist = implode(',', [SiteTreeSubsitesTest_ClassA::class , ErrorPage::class]);
+        $s1->PageTypeBlacklist = implode(',', [SiteTreeSubsitesTest_ClassA::class, ErrorPage::class]);
         $s1->write();
 
         Subsite::changeSubsite($s1);
