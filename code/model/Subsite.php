@@ -193,7 +193,7 @@ class Subsite extends DataObject
             }
         }
 
-        Permission::flush_permission_cache();
+        Permission::reset();
     }
 
     /**
@@ -918,9 +918,10 @@ JS;
     /**
      * Duplicate this subsite
      * @param bool $doWrite
+     * @param string $manyMany
      * @return DataObject
      */
-    public function duplicate($doWrite = true)
+    public function duplicate($doWrite = true, $manyMany = 'many_many')
     {
         $duplicate = parent::duplicate($doWrite);
 
