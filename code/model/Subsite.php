@@ -27,6 +27,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
@@ -127,11 +128,11 @@ class Subsite extends DataObject
      * Gets the subsite currently set in the session.
      *
      * @uses ControllerSubsites->controllerAugmentInit()
-     * @return Subsite
+     * @return DataObject The current Subsite
      */
     public static function currentSubsite()
-    {// get_by_id handles caching so we don't have to
-        return DataObject::get_by_id(Subsite::class, self::currentSubsiteID());
+    {
+        return Subsite::get()->byID(self::currentSubsiteID());
     }
 
     /**
@@ -202,7 +203,7 @@ class Subsite extends DataObject
      * for example matching all subdomains on *.example.com with one subsite,
      * and all subdomains on *.example.org on another.
      *
-     * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
+     * @param $host string The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
      * @param bool $checkPermissions
      * @return int Subsite ID
      */
@@ -367,11 +368,10 @@ class Subsite extends DataObject
      * Sites will only be included if they have a Title.
      *
      * @param $permCode array|string Either a single permission code or an array of permission codes.
-     * @param bool|If $includeMainSite If true, the main site will be included if appropriate.
-     * @param The|string $mainSiteTitle The label to give to the main site
-     * @param $member
-     * @return DataList of <a href='psi_element://Subsite'>Subsite</a> instances
-     * instances
+     * @param $includeMainSite bool If true, the main site will be included if appropriate.
+     * @param $mainSiteTitle string The label to give to the main site
+     * @param $member int|Member The member attempting to access the sites
+     * @return DataList|ArrayList of {@link Subsite} instances
      */
     public static function accessible_sites(
         $permCode,
@@ -777,7 +777,7 @@ class Subsite extends DataObject
 
     /**
      *
-     * @return ValidationResult
+     * @return \SilverStripe\ORM\ValidationResult
      */
     public function validate()
     {
