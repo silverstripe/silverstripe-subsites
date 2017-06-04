@@ -348,12 +348,11 @@ class LeftAndMainSubsites extends Extension
 
     /**
      * @param array $data
-     * @param Form $form
      */
-    public function copytosubsite($data, $form)
+    public function copytosubsite($data)
     {
-        $page = DataObject::get_by_id(SiteTree::class, $data['ID']);
-        $subsite = DataObject::get_by_id('Subsite', $data['CopyToSubsiteID']);
+        $page = SiteTree::get()->byID($data['ID']);
+        $subsite = Subsite::get()->byID($data['CopyToSubsiteID']);
         $includeChildren = isset($data['CopyToSubsiteWithChildren']) ? $data['CopyToSubsiteWithChildren'] : false;
 
         $newPage = $page->duplicateToSubsite($subsite->ID, $includeChildren);

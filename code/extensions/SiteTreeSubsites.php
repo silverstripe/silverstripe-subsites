@@ -12,7 +12,7 @@ use SilverStripe\Core\Convert;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\InlineFormAction;
+use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
@@ -109,7 +109,7 @@ class SiteTreeSubsites extends DataExtension
         $isDefaultSubsite = $this->owner->SubsiteID == 0 || $this->owner->Subsite()->DefaultSite;
 
         if ($isDefaultSubsite && $subsitesMap) {
-            $fields->addFieldsToTab(
+            $fields->addFieldToTab(
                 'Root.Main',
                 ToggleCompositeField::create('SubsiteOperations',
                     _t('SiteTreeSubsites.SubsiteOperations', 'Subsite Operations'),
@@ -118,7 +118,7 @@ class SiteTreeSubsites extends DataExtension
                             'Copy page to subsite'), $subsitesMap),
                         new CheckboxField('CopyToSubsiteWithChildren',
                             _t('SiteTreeSubsites.CopyToSubsiteWithChildren', 'Include children pages?')),
-                        $copyAction = new InlineFormAction(
+                        $copyAction = new FormAction(
                             'copytosubsite',
                             _t('SiteTreeSubsites.CopyAction', 'Copy')
                         )
