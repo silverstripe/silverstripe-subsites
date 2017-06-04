@@ -13,6 +13,11 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SubsiteXHRController extends LeftAndMain
 {
+    /**
+     * @todo Temporary addition due to new requirements for LeftAndMain
+     *       descendants in SS4. Consider alternate implementation.
+     */
+    private static $url_segment = 'subsite_xhr';
 
     /**
      * Relax the access permissions, so anyone who has access to any CMS subsite can access this controller.

@@ -15,6 +15,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
+use SilverStripe\Subsites\Controller\SubsiteXHRController;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
@@ -167,6 +168,11 @@ class LeftAndMainSubsites extends Extension
     public function alternateMenuDisplayCheck($controllerName)
     {
         if (!class_exists($controllerName)) {
+            return false;
+        }
+
+        // Don't display SubsiteXHRController
+        if ($controllerName == SubsiteXHRController::class) {
             return false;
         }
 
