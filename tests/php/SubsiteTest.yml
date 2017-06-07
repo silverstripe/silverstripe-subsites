@@ -3,6 +3,7 @@ SilverStripe\Subsites\Model\Subsite:
     Title: Template
   subsite1:
     Title: Subsite1 Template
+    Theme: subsiteTheme
   subsite2:
     Title: Subsite2 Template
   domaintest1:
