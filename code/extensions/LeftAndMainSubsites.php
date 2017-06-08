@@ -149,17 +149,16 @@ class LeftAndMainSubsites extends Extension
         if (Subsite::currentSubsiteID() == 0) {
             // Main site always supports everything.
             return true;
-        } else {
-            $controller = singleton($controllerName);
-            if ($controller->hasMethod('subsiteCMSShowInMenu') && $controller->subsiteCMSShowInMenu()) {
-                return true;
-            }
+        }
+
+        $controller = singleton($controllerName);
+        if($controller->hasMethod('subsiteCMSShowInMenu')) {
+            return $controller->subsiteCMSShowInMenu();
         }
 
         // It's not necessary to check access permissions here. Framework calls canView on the controller,
         // which in turn uses the Permission API which is augmented by our GroupSubsites.
-
-        return false;
+        return true;
     }
 
     public function CanAddSubsites()
