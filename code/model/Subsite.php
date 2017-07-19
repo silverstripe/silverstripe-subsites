@@ -198,7 +198,7 @@ class Subsite extends DataObject
             }
 
             $subsiteID = $subsiteIDs[0];
-        } elseif ($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
+        } elseif ($default = Subsite::get()->filter('DefaultSite', 1)->setQueriedColumns(array('ID'))->first()) {
             // Check for a 'default' subsite
             $subsiteID = $default->ID;
         } else {
