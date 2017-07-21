@@ -297,7 +297,7 @@ class SiteTreeSubsites extends DataExtension
         $subsite = Subsite::currentSubsite();
 
         if ($subsite && $subsite->Theme) {
-            Config::modify()->set(SSViewer::class, 'theme', Subsite::currentSubsite()->Theme);
+            SSViewer::set_themes(array_merge([$subsite->Theme], SSViewer::get_themes()));
         }
     }
 

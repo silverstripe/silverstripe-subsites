@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Tests;
 
 use Page;
 use SilverStripe\CMS\Controllers\CMSMain;
+use SilverStripe\CMS\Controllers\ModelAsController;
 use SilverStripe\CMS\Model\ErrorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
@@ -18,6 +19,7 @@ use SilverStripe\Subsites\Extensions\SiteTreeSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\SSViewer;
 
 class SiteTreeSubsitesTest extends BaseSubsiteTest
 {
@@ -336,6 +338,32 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $moved = $page->duplicateToSubsite($newSubsite->ID, false);
         $this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
         $this->assertEquals($moved->AllChildren()->count(), 0, 'All pages are copied across');
+    }
+
+    /**
+     * @todo: move to a functional test?
+     */
+    public function testIfSubsiteThemeIsSetToThemeList()
+    {
+        $defaultThemes = ['default'];
+        SSViewer::set_themes($defaultThemes);
+
+        $subsitePage = $this->objFromFixture(Page::class, 'home');
+        Subsite::changeSubsite($subsitePage->SubsiteID);
+        $controller = ModelAsController::controller_for($subsitePage);
+        SiteTree::singleton()->extend('contentcontrollerInit', $controller);
+
+        $this->assertEquals(SSViewer::get_themes(), $defaultThemes,
+            'Themes should not be modified when Subsite has no theme defined');
+
+        $pageWithTheme = $this->objFromFixture(Page::class, 'subsite1_home');
+        Subsite::changeSubsite($pageWithTheme->SubsiteID);
+        $controller = ModelAsController::controller_for($pageWithTheme);
+        SiteTree::singleton()->extend('contentcontrollerInit', $controller);
+        $subsiteTheme = $pageWithTheme->Subsite()->Theme;
+        $this->assertEquals(SSViewer::get_themes(), array_merge([$subsiteTheme], $defaultThemes),
+            'Themes should be modified when Subsite has theme defined');
+
     }
 }
 
