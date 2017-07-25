@@ -257,13 +257,15 @@ class LeftAndMainSubsites extends Extension
         // We are accessing the CMS, so we need to let Subsites know we will be using the session.
         Subsite::$use_session_subsiteid = true;
 
+        $session = Controller::curr()->getRequest()->getSession();
+
         // FIRST, check if we need to change subsites due to the URL.
 
         // Catch forced subsite changes that need to cause CMS reloads.
         if (isset($_GET['SubsiteID'])) {
             // Clear current page when subsite changes (or is set for the first time)
-            if (!Session::get('SubsiteID') || $_GET['SubsiteID'] != Session::get('SubsiteID')) {
-                Session::clear("{$this->owner->class}.currentPage");
+            if (!$session->get('SubsiteID') || $_GET['SubsiteID'] != $session->get('SubsiteID')) {
+                $session->clear("{$this->owner->class}.currentPage");
             }
 
             // Update current subsite in session

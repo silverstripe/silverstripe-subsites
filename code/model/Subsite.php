@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Model;
 
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Convert;
@@ -154,7 +155,7 @@ class Subsite extends DataObject
         if (isset($_GET['SubsiteID'])) {
             $id = (int)$_GET['SubsiteID'];
         } elseif (Subsite::$use_session_subsiteid) {
-            $id = Session::get('SubsiteID');
+            $id = Controller::curr()->getRequest()->getSession()->get('SubsiteID');
         }
 
         if ($id === null) {
@@ -184,7 +185,7 @@ class Subsite extends DataObject
             $subsiteID = $subsite;
         }
 
-        Session::set('SubsiteID', (int)$subsiteID);
+        Controller::curr()->getRequest()->getSession()->set('SubsiteID', (int)$subsiteID);
 
         // Set locale
         if (is_object($subsite) && $subsite->Language !== '') {
@@ -677,7 +678,7 @@ class Subsite extends DataObject
                 new Tab(
                     'Configuration',
                     _t('Subsite.TabTitleConfig', 'Configuration'),
-                    new HeaderField('ConfigForSubsiteHeaderField', $this->getClassName() . ' configuration'),
+                    new HeaderField('ConfigForSubsiteHeaderField', 'Subsite Configuration'),
                     new TextField('Title', $this->fieldLabel('Title'), $this->Title),
 
                     new HeaderField(
@@ -783,7 +784,7 @@ class Subsite extends DataObject
     {
         $result = parent::validate();
         if (!$this->Title) {
-            $result->error(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
+            $result->addError(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
         }
         return $result;
     }
@@ -853,14 +854,6 @@ class Subsite extends DataObject
 
         // Fall back to the current base url
         return Director::absoluteBaseURL();
-    }
-
-    /**
-     * @todo getClassName is redundant, already stored as a database field?
-     */
-    public function getClassName()
-    {
-        return $this->class;
     }
 
     /**

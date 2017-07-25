@@ -15,14 +15,13 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SubsiteAdmin extends ModelAdmin
 {
-
     private static $managed_models = [Subsite::class];
 
     private static $url_segment = 'subsites';
 
     private static $menu_title = 'Subsites';
 
-    private static $menu_icon = 'subsites/images/subsites.png';
+    private static $menu_icon_class = 'font-icon-tree';
 
     public $showImportForm = false;
 
@@ -40,5 +39,4 @@ class SubsiteAdmin extends ModelAdmin
 
         return $form;
     }
-
 }
