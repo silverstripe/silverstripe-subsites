@@ -1,6 +1,8 @@
 # See https://github.com/silverstripe-labs/silverstripe-travis-support for setup details
 
-language: php 
+language: php
+
+sudo: false
 
 sudo: false
 
@@ -29,6 +31,6 @@ before_script:
  - php ~/travis-support/travis_setup_selenium.php --if-env BEHAT_TEST
  - php ~/travis-support/travis_setup_php54_webserver.php --if-env BEHAT_TEST
 
-script: 
+script:
  - "if [ \"$BEHAT_TEST\" = \"\" ]; then vendor/bin/phpunit subsites/tests; fi"
  - "if [ \"$BEHAT_TEST\" = \"1\" ]; then vendor/bin/behat @subsites; fi"
