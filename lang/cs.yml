@@ -1,0 +1,34 @@
+cs:
+  LeftAndMain_Menu:
+    Hello: Ahoj
+    LOGOUT: 'Odhlásit se'
+  SiteTreeSubsites:
+    CopyAction: Kopírovat
+  Subsite:
+    CustomExtraMeta: 'Vlastní meta tagy'
+    CustomMetaDescription: Popis
+    CustomMetaKeywords: 'Klíčová slova'
+    CustomMetaTitle: Název
+    DOMAINSAVEFIRST: 'Domény můžete přidávat až po uložení'
+    DomainsHeadline: 'Domény pro tento web'
+    DomainsListTitle: Domény
+    SiteConfigSubtitle: 'Slogan Vašeho webu'
+    SiteConfigTitle: 'Název Vašeho webu'
+    TabTitleConfig: Konfigurace
+    ValidateTitle: 'Prosím vložte "Název"'
+  SubsiteAdmin:
+    MENUTITLE: Subsites
+  SubsiteDomain:
+    DOMAIN: Doména
+    PLURALNAME: 'Domény webů'
+    SINGULARNAME: 'Doména webu'
+  SubsiteReportWrapper:
+    ReportDropdown: Weby
+  Subsites:
+    DefaultSiteFieldLabel: 'Výchozí web'
+    DomainFieldLabel: Doména
+    LanguageFieldLabel: Jazyk
+    ThemeFieldLabel: Téma
+    TitleFieldLabel: 'Název subsite'
+  SubsitesVirtualPage:
+    PLURALNAME: 'Základní stránky'

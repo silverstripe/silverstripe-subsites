@@ -1,13 +1,9 @@
 mi:
-  SubsiteAdmin:
-    MENUTITLE: Ngā pae iti
-  SubsiteXHRController:
-    MENUTITLE: ManaXHRPaeiti
   ASSETADMIN:
     SUBSITENOTICE: 'Ka taea ngā kōpaki me ngā kōnae kua hangaia i te pae matua te uru mā ngā pae iti katoa.'
   FileSubsites:
     AllSitesDropdownOpt: 'Ngā pae katoa'
-    SubsiteFieldLabel: Pae iti
+    SubsiteFieldLabel: 'Pae iti'
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Tāpiri Hōu mai i te Tātauira'
   GroupSubsites:
@@ -17,7 +13,7 @@ mi:
     GlobalGroup: 'Rōpū Hurinoa'
     MANAGE_SUBSITES: 'Whakahaere pae iti mō ngā rōpū'
     MANAGE_SUBSITES_HELP: 'Te āheinga ki te whakawhāiti whakaaetanga mō tētahi rōpū ki tētahi neke atu rānei o ngā pae iti.'
-    SECURITYTABTITLE: Ngā pae iti
+    SECURITYTABTITLE: 'Ngā pae iti'
   LeftAndMainSubsites:
     Saved: 'Kua tiakina, whakahoutia ngā whārangi pāhono.'
   SiteTreeSubsites:
@@ -28,27 +24,30 @@ mi:
     CopyMessage: 'I hangaia he tārua o {title}'
     CustomExtraMeta: 'Ngā Tūtohu Meta Ritenga'
     CustomMetaDescription: Whakaahuatanga
-    CustomMetaKeywords: Ngā kupumatua
+    CustomMetaKeywords: 'Ngā kupumatua'
     CustomMetaTitle: Taitara
     DOMAINSAVEFIRST: 'Ka taea noa iho te tāpiri rohe i muri i te tiakinga tuatahitanga'
     DomainsHeadline: 'Ngā rohe mō tēnei pae iti'
-    DomainsListTitle: Ngā Rohe
+    DomainsListTitle: 'Ngā Rohe'
     IsPublicHeaderField: 'Pae iti hohe'
     NOTEMPLATE: 'Kāore he tātauira'
-    PLURALNAME: Ngā pae iti
+    PLURALNAME: 'Ngā pae iti'
     PageTypeBlacklistField: 'Me whakakāhore ngā momo whārangi?'
-    SINGULARNAME: Pae iti
+    SINGULARNAME: 'Pae iti'
     SiteConfigSubtitle: 'Tō rārangi tautuhinga ki konei'
     SiteConfigTitle: 'Tō Ingoa Pae'
     TabTitleConfig: Whirihoranga
     ValidateTitle: 'Tāurua he "Taitara"'
+  SubsiteAdmin:
+    MENUTITLE: 'Ngā pae iti'
   SubsiteDomain:
     DOMAIN: Rohe
-    IS_PRIMARY: 'Ko Te Rohe Matua'
     PLURALNAME: 'Ngā Rohe Pae Iti'
     SINGULARNAME: 'Rohe Pae Iti'
   SubsiteReportWrapper:
-    ReportDropdown: Ngā Pae
+    ReportDropdown: 'Ngā Pae'
+  SubsiteXHRController:
+    MENUTITLE: ManaXHRPaeiti
   Subsites:
     DefaultSiteFieldLabel: 'Pae taunoa'
     DomainFieldLabel: Rohe
@@ -62,6 +61,5 @@ mi:
     TitleFieldLabel: 'Ingoa Pae Iti'
   SubsitesVirtualPage:
     DESCRIPTION: 'Ka whakaatu i ngā ihirangi o tētahi whārangi ki tētahi atu pae iti'
-    PLURALNAME: 'Ngā Whārangi Taketake'
     SINGULARNAME: 'Whārangi Mariko Pae Iti'
-    SubsiteField: Pae iti
+    SubsiteField: 'Pae iti'

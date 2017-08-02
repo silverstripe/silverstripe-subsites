@@ -1,0 +1,80 @@
+hr:
+  ASSETADMIN:
+    SUBSITENOTICE: 'Direktoriji i datoteke kreirane u glavnom sajtu su dostupne svim podsajtovima.'
+  DomainNameField:
+    INVALID_DOMAIN: 'Netočan naziv domene'
+  FileSubsites:
+    AllSitesDropdownOpt: 'Svi sajtovi'
+    SubsiteFieldLabel: Podsajt
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Dodaj novi iz predloška'
+  GroupSubsites:
+    ACCESSALL: 'Svi podsajtovi'
+    ACCESSONLY: 'Samo ovi podsajtovi'
+    ACCESSRADIOTITLE: 'Dodijeli ovoj grupi pristup za'
+    GlobalGroup: 'globalna grupa'
+    MANAGE_SUBSITES: 'Upravljaj podsajtove za grupe'
+    MANAGE_SUBSITES_HELP: 'Mogućnost limitiranja prava za grupu za jedan ili više podsajtova.'
+    SECURITYTABTITLE: Podsajtovi
+  LeftAndMainSubsites:
+    Saved: 'Spremljeno, molimo osvježite povezane stranice.'
+  LeftAndMain_Menu:
+    Hello: Pozdrav
+    LOGOUT: Odjava
+  SiteTreeSubsites:
+    CopyAction: Kopiraj
+    CopyToSubsite: 'Kopiraj stranicu u podsajt'
+  Subsite:
+    COPYSTRUCTURE: 'Kopiraj strukturu od:'
+    CopyMessage: 'Kreirana kopija od {title}'
+    CustomExtraMeta: 'Prilagođeni Meta tagovi'
+    CustomMetaDescription: Opis
+    CustomMetaKeywords: 'Ključne riječi'
+    CustomMetaTitle: Naslov
+    DOMAINSAVEFIRST: 'Možete dodati domene nakon prvog spremanja'
+    DomainsHeadline: 'Domene za ove podsajtove'
+    DomainsListTitle: Domene
+    IsPublicHeaderField: 'Aktivni podsajtovi'
+    NOTEMPLATE: 'Nema predloška'
+    PLURALNAME: Podsajtovi
+    PageTypeBlacklistField: 'Ne dopuštaj tipove stranica?'
+    SINGULARNAME: Podsajt
+    SiteConfigSubtitle: 'vaš slogan ovdje'
+    SiteConfigTitle: 'Naziv vašeg weba'
+    TabTitleConfig: Konfiguracija
+    ValidateTitle: 'Molimo dodajte "Naslov"'
+  SubsiteAdmin:
+    MENUTITLE: Podsajtovi
+  SubsiteDomain:
+    DOMAIN: Domena
+    DOMAIN_DESCRIPTION: 'Hostname ovog podsajta (bez protokola). Omogućava wildcard (*).'
+    IS_PRIMARY: 'Da li je glavna domena?'
+    PLURALNAME: 'Domene podsajtova'
+    PROTOCOL_AUTOMATIC: Automatsko
+    PROTOCOL_DESCRIPTION: 'Označi kao zadanu domenu za ovu podstranicu'
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protokol
+    SINGULARNAME: 'Domena podsajta'
+  SubsiteReportWrapper:
+    ReportDropdown: Sajtovi
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
+  Subsites:
+    DefaultSiteFieldLabel: 'Zadani sajt'
+    DomainFieldLabel: Domena
+    IsPublicFieldLabel: 'Omogućni javni pristup'
+    LanguageFieldLabel: Jezik
+    MainSiteTitle: 'Glavni sajt'
+    PageTypeBlacklistFieldLabel: 'Crna lista tipova stranica'
+    PrimaryDomainFieldLabel: 'Glavna domena'
+    RedirectURLFieldLabel: 'Link preusmjeravanja'
+    ThemeFieldLabel: Tema
+    TitleFieldLabel: 'Naziv podsajta'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Prikazuje sadržaj stranice na drugom podsajtu'
+    PLURALNAME: 'Bazna stranica'
+    SINGULARNAME: 'Virtualna stranica podsajta'
+    SubsiteField: Podsajt
+  VirtualPage:
+    EDITCONTENT: 'Klikni ovdje za uređivanje sadržaja'
