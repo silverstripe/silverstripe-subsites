@@ -1,11 +1,11 @@
 # These need to come first so that SiteTree has the link meta-data written.
-SilverStripe\Assets\File:
+File:
   file1:
     FileFilename: testscript-test-file.pdf
     FileHash: 464dedb70af0dc7f8f3360e7f3ae43cbbf1cdf4e
     Name: testscript-test-file.pdf
 
-SilverStripe\CMS\Model\SiteTree:
+SiteTree:   
   page1:
     Title: page1
     URLSegment: page1

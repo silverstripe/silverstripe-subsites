@@ -1,7 +1,4 @@
 <?php
-
-use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\DataExtension;
 class ErrorPageSubsite extends DataExtension {
 	
 	/**

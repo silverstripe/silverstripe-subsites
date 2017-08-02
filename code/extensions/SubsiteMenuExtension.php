@@ -1,7 +1,5 @@
 <?php
 
-use SilverStripe\Core\Extension;
-
 /*
  * Simple extension to show admins in the menu of subsites.
  * If an admin area should be available to a subsite, you can attach 

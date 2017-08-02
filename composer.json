@@ -12,8 +12,7 @@
 	"require":
 	{
 		"silverstripe/framework": "~4.0",
-		"silverstripe/cms": "~4.0",
-        "silverstripe/asset-admin": "~1.0.0"
+		"silverstripe/cms": "~4.0"
 	},
 	"require-dev": {
 		"phpunit/PHPUnit": "~4.8@stable"

@@ -1,7 +1,5 @@
 <?php
 
-use SilverStripe\SiteConfig\SiteConfig;
-
 class SiteConfigSubsitesTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 	

@@ -1,8 +1,5 @@
 <?php
 
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Security\Group;
-
 class GroupSubsitesTest extends BaseSubsiteTest {
 	static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 	
@@ -11,7 +8,7 @@ class GroupSubsitesTest extends BaseSubsiteTest {
 	function testTrivialFeatures() {
 		$this->assertTrue(is_array(singleton('GroupSubsites')->extraStatics()));
 		$this->assertTrue(is_array(singleton('GroupSubsites')->providePermissions()));
-		$this->assertTrue(singleton('SilverStripe\\Security\\Group')->getCMSFields() instanceof FieldList);
+		$this->assertTrue(singleton('Group')->getCMSFields() instanceof FieldList);
 	}
 	
 	function testAlternateTreeTitle() {
