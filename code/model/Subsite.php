@@ -198,7 +198,7 @@ class Subsite extends DataObject
             }
 
             $subsiteID = $subsiteIDs[0];
-        } elseif ($default = DataObject::get_one('Subsite', "\"DefaultSite\" = 1")) {
+        } elseif ($default = Subsite::get()->filter('DefaultSite', 1)->setQueriedColumns(array('ID'))->first()) {
             // Check for a 'default' subsite
             $subsiteID = $default->ID;
         } else {
@@ -488,7 +488,7 @@ class Subsite extends DataObject
 			INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
 			INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
 			WHERE \"Permission\".\"Code\" IN ('$SQL_perms')
-			AND \"MemberID\" = {$memberID}
+			AND \"Group_Members\".\"MemberID\" = {$memberID}
 		")->value();
 
         // Count this user's groups which have a role that can access the main site
@@ -501,7 +501,7 @@ class Subsite extends DataObject
 			INNER JOIN \"PermissionRoleCode\" ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
 			WHERE \"PermissionRoleCode\".\"Code\" IN ('$SQL_perms')
 			AND \"Group\".\"AccessAllSubsites\" = 1
-			AND \"MemberID\" = {$memberID}
+			AND \"Group_Members\".\"MemberID\" = {$memberID}
 		")->value();
 
         // There has to be at least one that allows access.
