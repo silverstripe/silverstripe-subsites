@@ -9,3 +9,7 @@ SilverStripe\AssetAdmin\Controller\AssetAdmin:
 Director:
   rules:
     SubsiteXHRController: SilverStripe\Subsites\Controller\SubsiteXHRController
+
+SilverStripe\Reports\Report:
+  excluded_reports:
+    - SilverStripe\Subsites\Reports\SubsiteReportWrapper
