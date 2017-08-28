@@ -713,7 +713,8 @@ class Subsite extends DataObject
         $themes = $this->allowedThemes();
         if (!empty($themes)) {
             $fields->addFieldToTab('Root.Configuration',
-                DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '')), 'PageTypeBlacklistToggle');
+                DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)
+                    ->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '-')), 'PageTypeBlacklistToggle');
         }
 
         $subsiteTabs->addExtraClass('subsite-model');
