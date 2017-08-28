@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
-
 use SilverStripe\Control\Cookie;
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\CheckboxSetField;
@@ -16,7 +15,6 @@ use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Subsites\Model\Subsite;
-
 
 /**
  * Extension for the Group object to add subsites support
@@ -151,6 +149,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         if (!$query->filtersOnID()) {
 
             /*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
+
             else */
             $subsiteID = (int)Subsite::currentSubsiteID();
 
@@ -169,9 +168,9 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             if (!$hasGroupSubsites) {
                 if ($subsiteID) {
                     $query->addLeftJoin('Group_Subsites', "\"Group_Subsites\".\"GroupID\"
-						= \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
+                        = \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
                     $query->addWhere('("Group_Subsites"."SubsiteID" IS NOT NULL OR
-						"Group"."AccessAllSubsites" = 1)');
+                        "Group"."AccessAllSubsites" = 1)');
                 } else {
                     $query->addWhere('"Group"."AccessAllSubsites" = 1');
                 }
@@ -227,5 +226,4 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             ]
         ];
     }
-
 }

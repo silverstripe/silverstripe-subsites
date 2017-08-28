@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Tasks;
 
 
 use InvalidArgumentException;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Model\Subsite;
@@ -24,7 +25,6 @@ use SilverStripe\Versioned\Versioned;
 class SubsiteCopyPagesTask extends BuildTask
 {
     protected $title = 'Copy pages to different subsite';
-
     protected $description = '';
 
     public function run($request)
@@ -33,7 +33,7 @@ class SubsiteCopyPagesTask extends BuildTask
         if (!is_numeric($subsiteFromId)) {
             throw new InvalidArgumentException('Missing "from" parameter');
         }
-        $subsiteFrom = DataObject::get_by_id('Subsite', $subsiteFromId);
+        $subsiteFrom = DataObject::get_by_id(Subsite::class, $subsiteFromId);
         if (!$subsiteFrom) {
             throw new InvalidArgumentException('Subsite not found');
         }
@@ -42,7 +42,7 @@ class SubsiteCopyPagesTask extends BuildTask
         if (!is_numeric($subsiteToId)) {
             throw new InvalidArgumentException('Missing "to" parameter');
         }
-        $subsiteTo = DataObject::get_by_id('Subsite', $subsiteToId);
+        $subsiteTo = DataObject::get_by_id(Subsite::class, $subsiteToId);
         if (!$subsiteTo) {
             throw new InvalidArgumentException('Subsite not found');
         }

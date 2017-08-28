@@ -10,7 +10,6 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class ErrorPageSubsite extends DataExtension
 {
-
     /**
      * Alter file path to generated a static (static) error page file to handle error page template on different sub-sites
      *
@@ -53,5 +52,4 @@ class ErrorPageSubsite extends DataExtension
 
         return $filepath;
     }
-
 }

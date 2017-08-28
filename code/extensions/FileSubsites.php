@@ -158,5 +158,4 @@ class FileSubsites extends DataExtension
     {
         return 'subsite-' . Subsite::currentSubsiteID();
     }
-
 }

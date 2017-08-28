@@ -102,7 +102,7 @@ class SubsiteDomain extends DataObject
 
     /**
      *
-     * @return \FieldList
+     * @return FieldList
      */
     public function getCMSFields()
     {
@@ -122,11 +122,13 @@ class SubsiteDomain extends DataObject
                     'SubsiteDomain.PROTOCOL_DESCRIPTION',
                     'When generating links to this subsite, use the selected protocol. <br />' .
                     'Selecting \'Automatic\' means subsite links will default to the current protocol.'
-                )), CheckboxField::create('IsPrimary', $this->fieldLabel('IsPrimary'))
-            ->setDescription(_t(
-                'SubsiteDomain.PROTOCOL_DESCRIPTION',
-                'Mark this as the default domain for this subsite'
-            )));
+                )),
+            CheckboxField::create('IsPrimary', $this->fieldLabel('IsPrimary'))
+                ->setDescription(_t(
+                    'SubsiteDomain.PROTOCOL_DESCRIPTION',
+                    'Mark this as the default domain for this subsite'
+                ))
+        );
 
         $this->extend('updateCMSFields', $fields);
         return $fields;
@@ -145,15 +147,6 @@ class SubsiteDomain extends DataObject
         $labels['IsPrimary'] = _t('SubsiteDomain.IS_PRIMARY', 'Is Primary Domain?');
 
         return $labels;
-    }
-
-    /**
-     * Before writing the Subsite Domain, strip out any HTML the user has entered.
-     * @return void
-     */
-    public function onBeforeWrite()
-    {
-        parent::onBeforeWrite();
     }
 
     /**
@@ -202,8 +195,8 @@ class SubsiteDomain extends DataObject
         $domain = preg_replace('/\.\*$/', ".{$currentHost}", $this->Domain);
 
         // Default to "subsite." prefix for first wildcard
-        // TODO Whats the significance of "subsite" inthiscontext?!
-        $domain = preg_replace('/^\*\./', 'subsite.', $domain);
+        // TODO Whats the significance of "subsite" in this context?!
+        $domain = preg_replace('/^\*\./', "subsite.", $domain);
 
         // *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'
         $domain = str_replace('.www.', '.', $domain);
@@ -230,6 +223,7 @@ class SubsiteDomain extends DataObject
     {
         return Controller::join_links(
             $this->getAbsoluteLink(),
-            Director::baseURL());
+            Director::baseURL()
+        );
     }
 }

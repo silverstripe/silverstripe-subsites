@@ -18,10 +18,8 @@ use SilverStripe\Core\Extension;
 
 class SubsiteMenuExtension extends Extension
 {
-
     public function subsiteCMSShowInMenu()
     {
         return true;
     }
-
 }

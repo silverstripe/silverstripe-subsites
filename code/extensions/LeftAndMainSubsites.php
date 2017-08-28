@@ -27,7 +27,6 @@ use SilverStripe\View\Requirements;
  */
 class LeftAndMainSubsites extends Extension
 {
-
     private static $allowed_actions = ['CopyToSubsite'];
 
     /**
@@ -219,12 +218,10 @@ class LeftAndMainSubsites extends Extension
         // Admin can access everything, no point in checking.
         $member = Member::currentUser();
         if ($member &&
-            (
-                Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
-                Permission::checkMember($member,
-                    'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections' in SecurityAdmin
-            )
-        ) {
+        (
+            Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
+            Permission::checkMember($member, 'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections' in SecurityAdmin
+        )) {
             return true;
         }
 
@@ -348,14 +345,15 @@ class LeftAndMainSubsites extends Extension
         }
     }
 
-    /**
-     * @param array $data
-     */
-    public function copytosubsite($data)
+	/**
+	 * @param array $data
+	 * @param Form $form
+	 */
+    public function copytosubsite($data, $form)
     {
-        $page = SiteTree::get()->byID($data['ID']);
-        $subsite = Subsite::get()->byID($data['CopyToSubsiteID']);
-        $includeChildren = isset($data['CopyToSubsiteWithChildren']) ? $data['CopyToSubsiteWithChildren'] : false;
+        $page = DataObject::get_by_id('SiteTree', $data['ID']);
+        $subsite = DataObject::get_by_id('Subsite', $data['CopyToSubsiteID']);
+        $includeChildren = (isset($data['CopyToSubsiteWithChildren'])) ? $data['CopyToSubsiteWithChildren'] : false;
 
         $newPage = $page->duplicateToSubsite($subsite->ID, $includeChildren);
         $response = $this->owner->getResponse();
@@ -366,5 +364,4 @@ class LeftAndMainSubsites extends Extension
             $newPage->ID
         ));
     }
-
 }

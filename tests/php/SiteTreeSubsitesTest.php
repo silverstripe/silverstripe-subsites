@@ -378,7 +378,6 @@ class SiteTreeSubsitesTest_ClassB extends SiteTree implements TestOnly
 
 class SiteTreeSubsitesTest_ErrorPage extends ErrorPage implements TestOnly
 {
-
     /**
      * Helper method to call protected members
      *

@@ -13,5 +13,4 @@ class CMSPageAddControllerExtension extends Extension
     {
         $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
     }
-
 }

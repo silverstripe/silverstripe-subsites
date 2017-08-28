@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Forms;
 
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\Form;
 use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
 use SilverStripe\Subsites\Model\Subsite;
 

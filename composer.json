@@ -1,33 +1,32 @@
 {
-	"name": "silverstripe/subsites",
-	"description": "Run multiple sites from a single SilverStripe install.",
-	"license": "BSD-3-Clause",
-	"type": "silverstripe-module",
-	"keywords": ["silverstripe", "subsites", "multisite"],
-	"authors": [
-		{
-			"name": "Sam Minnee",
-			"email": "sam@silverstripe.com"
-		}
-	],
-	"require":
-	{
-		"silverstripe/framework": "~4.0",
-		"silverstripe/cms": "~4.0",
+    "name": "silverstripe/subsites",
+    "description": "Run multiple sites from a single SilverStripe install.",
+    "license": "BSD-3-Clause",
+    "type": "silverstripe-module",
+    "keywords": ["silverstripe", "subsites", "multisite"],
+    "authors": [
+        {
+            "name": "Sam Minnee",
+            "email": "sam@silverstripe.com"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "~4.0",
+        "silverstripe/cms": "~4.0",
         "silverstripe/asset-admin": "~1.0.0"
-	},
-	"require-dev": {
-		"phpunit/PHPUnit": "~4.8@stable"
-	},
-  "autoload": {
-    "psr-4": {
-      "SilverStripe\\Subsites\\": "code/",
-      "SilverStripe\\Subsites\\Tests\\": "tests/php/"
+    },
+    "require-dev": {
+        "phpunit/PHPUnit": "~4.8@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "SilverStripe\\Subsites\\": "code/",
+            "SilverStripe\\Subsites\\Tests\\": "tests/php/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
     }
-  },
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.0.x-dev"
-		}
-	}
 }

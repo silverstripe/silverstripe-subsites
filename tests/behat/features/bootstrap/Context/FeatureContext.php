@@ -79,7 +79,6 @@ class FeatureContext extends SilverStripeContext
     public function setMinkParameters(array $parameters)
     {
         parent::setMinkParameters($parameters);
-
         if (isset($parameters['files_path'])) {
             $this->getSubcontext('FixtureContext')->setFilesPath($parameters['files_path']);
         }
