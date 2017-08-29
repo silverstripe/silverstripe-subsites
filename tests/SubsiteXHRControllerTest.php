@@ -1,11 +1,7 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: dmooyman
- * Date: 27/05/16
- * Time: 3:10 PM
- */
+use SilverStripe\Dev\FunctionalTest;
+
 class SubsiteXHRControllerTest extends FunctionalTest
 {
 	protected static $fixture_file = 'SubsiteTest.yml';

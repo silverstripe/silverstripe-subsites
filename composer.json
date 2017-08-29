@@ -11,12 +11,19 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "~4.0",
-        "silverstripe/cms": "~4.0",
-        "silverstripe/asset-admin": "~1.0.0"
+        "silverstripe/framework": "^4",
+        "silverstripe/cms": "^4",
+        "silverstripe/admin": "^1",
+        "silverstripe/asset-admin": "^1",
+        "silverstripe/errorpage": "^1",
+        "silverstripe/versioned": "^1"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "~4.8@stable"
+        "phpunit/phpunit": "^5.7",
+        "squizlabs/php_codesniffer": "^3.0",
+        "silverstripe/behat-extension": "^3",
+        "silverstripe/serve": "dev-master",
+        "se/selenium-server-standalone": "2.41.0"
     },
     "autoload": {
         "psr-4": {
@@ -28,5 +35,7 @@
         "branch-alias": {
             "dev-master": "2.0.x-dev"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
