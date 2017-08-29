@@ -3,7 +3,6 @@
 namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Assets\Folder;
-use SilverStripe\Control\Session;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
@@ -12,6 +11,7 @@ use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Permission;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 /**
  * Extension for the File object to add subsites support
@@ -96,7 +96,10 @@ class FileSubsites extends DataExtension
             return;
         }
 
-        $subsiteID = (int)Subsite::currentSubsiteID();
+        $subsiteID = SubsiteState::singleton()->getSubsiteId();
+        if ($subsiteID === null) {
+            return;
+        }
 
         // The foreach is an ugly way of getting the first key :-)
         foreach ($query->getFrom() as $tableName => $info) {
@@ -120,7 +123,7 @@ class FileSubsites extends DataExtension
             if (self::$default_root_folders_global) {
                 $this->owner->SubsiteID = 0;
             } else {
-                $this->owner->SubsiteID = Subsite::currentSubsiteID();
+                $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();
             }
         }
     }
@@ -131,7 +134,7 @@ class FileSubsites extends DataExtension
         if ($this->owner->Parent()) {
             $this->owner->SubsiteID = $this->owner->Parent()->SubsiteID;
         } else {
-            $this->owner->SubsiteID = Subsite::currentSubsiteID();
+            $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();
         }
         $this->owner->write();
     }
@@ -139,16 +142,16 @@ class FileSubsites extends DataExtension
     public function canEdit($member = null)
     {
         // Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
-        $subsiteID = Session::get('SubsiteID');
+        $subsiteID = SubsiteState::singleton()->getSubsiteId();
         if ($subsiteID && $subsiteID == $this->owner->SubsiteID) {
             return true;
         }
 
-        Session::set('SubsiteID', $this->owner->SubsiteID);
-        $access = Permission::check(['CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain']);
-        Session::set('SubsiteID', $subsiteID);
+        return SubsiteState::singleton()->withState(function ($newState) {
+            $newState->setSubsiteId($this->owner->SubsiteID);
 
-        return $access;
+            return Permission::check(['CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain']);
+        });
     }
 
     /**
@@ -158,6 +161,6 @@ class FileSubsites extends DataExtension
      */
     public function cacheKeyComponent()
     {
-        return 'subsite-' . Subsite::currentSubsiteID();
+        return 'subsite-' . SubsiteState::singleton()->getSubsiteId();
     }
 }

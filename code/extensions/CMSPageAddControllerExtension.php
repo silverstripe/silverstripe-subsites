@@ -3,14 +3,14 @@
 namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Core\Extension;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 class CMSPageAddControllerExtension extends Extension
 {
-
-    public function updatePageOptions(&$fields)
+    public function updatePageOptions(FieldList $fields)
     {
-        $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
+        $fields->push(HiddenField::create('SubsiteID', 'SubsiteID', SubsiteState::singleton()->getSubsiteId()));
     }
 }

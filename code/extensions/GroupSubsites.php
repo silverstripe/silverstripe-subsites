@@ -15,6 +15,7 @@ use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 /**
  * Extension for the Group object to add subsites support
@@ -154,10 +155,10 @@ class GroupSubsites extends DataExtension implements PermissionProvider
 
         // If you're querying by ID, ignore the sub-site - this is a bit ugly...
         if (!$query->filtersOnID()) {
-            /*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-
-            else */
-            $subsiteID = (int)Subsite::currentSubsiteID();
+            $subsiteID = SubsiteState::singleton()->getSubsiteId();
+            if ($subsiteID === null) {
+                return;
+            }
 
             // Don't filter by Group_Subsites if we've already done that
             $hasGroupSubsites = false;
@@ -198,7 +199,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     {
         // New record test approximated by checking whether the ID has changed.
         // Note also that the after write test is only used when we're *not* on a subsite
-        if ($this->owner->isChanged('ID') && !Subsite::currentSubsiteID()) {
+        if ($this->owner->isChanged('ID') && !SubsiteState::singleton()->getSubsiteId()) {
             $this->owner->AccessAllSubsites = 1;
         }
     }
@@ -207,7 +208,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     {
         // New record test approximated by checking whether the ID has changed.
         // Note also that the after write test is only used when we're on a subsite
-        if ($this->owner->isChanged('ID') && $currentSubsiteID = Subsite::currentSubsiteID()) {
+        if ($this->owner->isChanged('ID') && $currentSubsiteID = SubsiteState::singleton()->getSubsiteId()) {
             $subsites = $this->owner->Subsites();
             $subsites->add($currentSubsiteID);
         }

@@ -8,7 +8,6 @@ use SilverStripe\CMS\Controllers\ModelAsController;
 use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
-use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\FieldList;
@@ -107,7 +106,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
 
         // Cant pass member as arguments to canEdit() because of GroupSubsites
-        Session::set('loggedInAs', $admin->ID);
+        $this->logInAs($admin);
+
         $this->assertTrue(
             (bool)$subsite1page->canEdit(),
             'Administrators can edit all subsites'
@@ -116,13 +116,13 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         // @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
         Subsite::changeSubsite($subsite1);
 
-        Session::set('loggedInAs', $subsite1member->ID);
+        $this->logInAs($subsite1member->ID);
         $this->assertTrue(
             (bool)$subsite1page->canEdit(),
             'Members can edit pages on a subsite if they are in a group belonging to this subsite'
         );
 
-        Session::set('loggedInAs', $subsite2member->ID);
+        $this->logInAs($subsite2member->ID);
         $this->assertFalse(
             (bool)$subsite1page->canEdit(),
             'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
@@ -169,8 +169,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     public function testPageTypesBlacklistInClassDropdown()
     {
-        $editor = $this->objFromFixture(Member::class, 'editor');
-        Session::set('loggedInAs', $editor->ID);
+        $this->logInAs('editor');
 
         $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
@@ -241,8 +240,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     public function testPageTypesBlacklistInCMSMain()
     {
-        $editor = $this->objFromFixture(Member::class, 'editor');
-        Session::set('loggedInAs', $editor->ID);
+        $this->logInAs('editor');
 
         $cmsmain = new CMSMain();
 

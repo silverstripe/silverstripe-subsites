@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use Page;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -20,6 +21,7 @@ use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\View\SSViewer;
 
 /**
@@ -64,12 +66,15 @@ class SiteTreeSubsites extends DataExtension
             return;
         }
 
+        $subsiteID = null;
         if (Subsite::$force_subsite) {
             $subsiteID = Subsite::$force_subsite;
         } else {
-            /*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-            else */
-            $subsiteID = (int)Subsite::currentSubsiteID();
+            $subsiteID = SubsiteState::singleton()->getSubsiteId();
+        }
+
+        if ($subsiteID === null) {
+            return;
         }
 
         // The foreach is an ugly way of getting the first key :-)
@@ -87,7 +92,7 @@ class SiteTreeSubsites extends DataExtension
     public function onBeforeWrite()
     {
         if (!$this->owner->ID && !$this->owner->SubsiteID) {
-            $this->owner->SubsiteID = Subsite::currentSubsiteID();
+            $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();
         }
 
         parent::onBeforeWrite();
@@ -128,7 +133,7 @@ class SiteTreeSubsites extends DataExtension
                 )->setHeadingLevel(4)
             );
 
-
+            // @todo check if this needs re-implementation
 //            $copyAction->includeDefaultJS(false);
         }
 
@@ -163,7 +168,7 @@ class SiteTreeSubsites extends DataExtension
             $subsiteID = $subsiteID->ID;
         }
 
-        $oldSubsite = Subsite::currentSubsiteID();
+        $oldSubsite = SubsiteState::singleton()->getSubsiteId();
         if ($subsiteID) {
             Subsite::changeSubsite($subsiteID);
         } else {
@@ -276,7 +281,7 @@ class SiteTreeSubsites extends DataExtension
             //
             // We do the second best: fetch the likely SubsiteID from the session. The drawback is this might
             // make it possible to force relations to point to other (forbidden) subsites.
-            $subsiteID = Subsite::currentSubsiteID();
+            $subsiteID = SubsiteState::singleton()->getSubsiteId();
         }
 
         // Return true if they have access to this object's site
@@ -427,7 +432,7 @@ class SiteTreeSubsites extends DataExtension
     public function augmentValidURLSegment()
     {
         // If this page is being filtered in the current subsite, then no custom validation query is required.
-        $subsite = Subsite::$force_subsite ?: Subsite::currentSubsiteID();
+        $subsite = Subsite::$force_subsite ?: SubsiteState::singleton()->getSubsiteId();
         if (empty($this->owner->SubsiteID) || $subsite == $this->owner->SubsiteID) {
             return null;
         }
@@ -450,7 +455,7 @@ class SiteTreeSubsites extends DataExtension
      */
     public function cacheKeyComponent()
     {
-        return 'subsite-' . Subsite::currentSubsiteID();
+        return 'subsite-' . SubsiteState::singleton()->getSubsiteId();
     }
 
     /**
