@@ -8,7 +8,7 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SiteConfigSubsitesTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     public function testEachSubsiteHasAUniqueSiteConfig()
     {

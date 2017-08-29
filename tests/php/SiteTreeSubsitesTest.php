@@ -11,7 +11,6 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
-use SilverStripe\Dev\TestOnly;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -26,7 +25,7 @@ use SilverStripe\View\SSViewer;
 
 class SiteTreeSubsitesTest extends BaseSubsiteTest
 {
-    protected static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     protected static $extra_dataobjects = [
         TestClassA::class,

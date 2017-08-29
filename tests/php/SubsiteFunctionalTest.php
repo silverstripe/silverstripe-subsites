@@ -9,7 +9,7 @@ use SilverStripe\View\SSViewer;
 
 class SubsiteFunctionalTest extends FunctionalTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     /**
      * @todo: remove test from SiteTreeSubsitesTest when this one works. Seems domain lookup is broken atm

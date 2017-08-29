@@ -112,14 +112,14 @@ Page:
       SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
       URLSegment: contact-us
 
-PermissionRoleCode:
+SilverStripe\Security\PermissionRoleCode:
   roleCode1:
     Code: CMS_ACCESS_CMSMain
-PermissionRole:
+SilverStripe\Security\PermissionRole:
   role1:
     Title: role1
-    Codes: =>PermissionRoleCode.roleCode1
-Group:
+    Codes: =>SilverStripe\Security\PermissionRoleCode.roleCode1
+SilverStripe\Security\Group:
   admin:
     Title: Admin
     Code: admin
@@ -151,71 +151,71 @@ Group:
     Title: subsite1_group_via_role
     Code: subsite1_group_via_role
     AccessAllSubsites: 1
-    Roles: =>PermissionRole.role1
-Permission:
+    Roles: =>SilverStripe\Security\PermissionRole.role1
+SilverStripe\Security\Permission:
   admin:
     Code: ADMIN
-    GroupID: =>Group.admin
+    GroupID: =>SilverStripe\Security\Group.admin
   editor1:
     Code: CMS_ACCESS_CMSMain
-    GroupID: =>Group.editor
+    GroupID: =>SilverStripe\Security\Group.editor
   editor2:
     Code: SITETREE_VIEW_ALL
-    GroupID: =>Group.editor
+    GroupID: =>SilverStripe\Security\Group.editor
   editor3:
     Code: VIEW_DRAFT_CONTENT
-    GroupID: =>Group.editor
+    GroupID: =>SilverStripe\Security\Group.editor
   accesscmsmain1:
     Code: CMS_ACCESS_CMSMain
-    GroupID: =>Group.subsite1_group
+    GroupID: =>SilverStripe\Security\Group.subsite1_group
   accesscmsmain2:
     Code: CMS_ACCESS_CMSMain
-    GroupID: =>Group.subsite2_group
+    GroupID: =>SilverStripe\Security\Group.subsite2_group
   accesscmsmain3:
     Code: CMS_ACCESS_CMSMain
-    GroupID: =>Group.subsite1admins
+    GroupID: =>SilverStripe\Security\Group.subsite1admins
   accesscmsmain4:
     Code: CMS_ACCESS_CMSMain
-    GroupID: =>Group.allsubsitesauthors
+    GroupID: =>SilverStripe\Security\Group.allsubsitesauthors
   securityaccess1:
     Code: CMS_ACCESS_SecurityAdmin
-    GroupID: =>Group.subsite1_group
+    GroupID: =>SilverStripe\Security\Group.subsite1_group
   securityaccess2:
     Code: CMS_ACCESS_SecurityAdmin
-    GroupID: =>Group.subsite2_group
+    GroupID: =>SilverStripe\Security\Group.subsite2_group
   adminsubsite1:
     Code: ADMIN
-    GroupID: =>Group.subsite1admins
+    GroupID: =>SilverStripe\Security\Group.subsite1admins
 
-Member:
+SilverStripe\Security\Member:
   admin:
     FirstName: Admin
     Surname: User
     Email: admin@test.com
     Password: rangi
-    Groups: =>Group.admin
+    Groups: =>SilverStripe\Security\Group.admin
   editor:
     FirstName: Editor
     Surname: User
     Email: editor@test.com
     Password: rangi
-    Groups: =>Group.editor
+    Groups: =>SilverStripe\Security\Group.editor
   subsite1member:
     Email: subsite1member@test.com
-    Groups: =>Group.subsite1_group
+    Groups: =>SilverStripe\Security\Group.subsite1_group
   subsite2member:
     Email: subsite2member@test.com
-    Groups: =>Group.subsite2_group
+    Groups: =>SilverStripe\Security\Group.subsite2_group
   subsite1admin:
     Email: subsite1admin@test.com
-    Groups: =>Group.subsite1admins
+    Groups: =>SilverStripe\Security\Group.subsite1admins
   allsubsitesauthor:
     Email: allsubsitesauthor@test.com
-    Groups: =>Group.allsubsitesauthors
+    Groups: =>SilverStripe\Security\Group.allsubsitesauthors
   subsite1member2:
     Email: subsite1member2@test.com
-    Groups: =>Group.subsite1_group_via_role
+    Groups: =>SilverStripe\Security\Group.subsite1_group_via_role
 
-SiteConfig:
+SilverStripe\SiteConfig\SiteConfig:
   config:
     CanCreateTopLevelType: LoggedInUsers
