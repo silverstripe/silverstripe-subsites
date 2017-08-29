@@ -123,20 +123,20 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     }
 
     /**
-     * If this group belongs to a subsite,
-     * append the subsites title to the group title
-     * to make it easy to distinguish in the tree-view
-     * of the security admin interface.
+     * If this group belongs to a subsite, append the subsites title to the group title to make it easy to
+     * distinguish in the tree-view of the security admin interface.
+     *
+     * @param string $title
      */
-    public function alternateTreeTitle()
+    public function updateTreeTitle(&$title)
     {
         if ($this->owner->AccessAllSubsites) {
             $title = _t('GroupSubsites.GlobalGroup', 'global group');
-            return htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(' . $title . ')</i>';
+            $title = htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(' . $title . ')</i>';
+        } else {
+            $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
+            $title = htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
         }
-
-        $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
-        return htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
     }
 
     /**
