@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Tasks;
 
-
 use InvalidArgumentException;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\BuildTask;
@@ -10,7 +9,6 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
 use SilverStripe\Versioned\Versioned;
-
 
 /**
  * Handy alternative to copying pages when creating a subsite through the UI.

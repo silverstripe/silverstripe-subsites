@@ -5,6 +5,7 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\Core\Extension;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\View\SSViewer;
+
 /**
  * @package subsites
  */

@@ -10,7 +10,6 @@ use SilverStripe\Forms\OptionsetField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Forms\WildcardDomainField;
 
-
 /**
  * @property string $Domain domain name of this subsite. Can include wildcards. Do not include the URL scheme here
  * @property string $Protocol Required protocol (http or https) if only one is supported. 'automatic' implies

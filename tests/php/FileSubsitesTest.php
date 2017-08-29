@@ -11,22 +11,15 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class FileSubsitesTest extends BaseSubsiteTest
 {
-
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     /**
      * Disable other file extensions
      *
      * @var array
      */
-    protected $illegalExtensions = [
-        'File' => [
-            'SecureFileExtension',
-            'VersionedFileExtension'
-        ],
-        'SiteTree' => [
-            'Translatable',
-        ]
+    protected static $illegal_extensions = [
+        SiteTree::class => ['Translatable'], // @todo implement namespace for Translatable
     ];
 
     public function testTrivialFeatures()
@@ -45,7 +38,7 @@ class FileSubsitesTest extends BaseSubsiteTest
 
     public function testWritingSubsiteID()
     {
-        $this->objFromFixture(Member::class, 'admin')->logIn();
+        $this->logInAs('admin');
 
         $subsite = $this->objFromFixture(Subsite::class, 'domaintest1');
         FileSubsites::$default_root_folders_global = true;
@@ -84,7 +77,7 @@ class FileSubsitesTest extends BaseSubsiteTest
 
     public function testSubsitesFolderDropdown()
     {
-        $this->objFromFixture(Member::class, 'admin')->logIn();
+        $this->logInAs('admin');
 
         $file = new Folder();
 

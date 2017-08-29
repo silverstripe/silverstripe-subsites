@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Pages;
 
-
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Control\Controller;

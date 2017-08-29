@@ -13,18 +13,18 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class LeftAndMainSubsitesTest extends FunctionalTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     /**
      * Avoid subsites filtering on fixture fetching.
-     * @param string $class
-     * @param string $id
+     * @param string $className
+     * @param string $identifier
      * @return \SilverStripe\ORM\DataObject
      */
-    public function objFromFixture($class, $id)
+    protected function objFromFixture($className, $identifier)
     {
         Subsite::disable_subsite_filter(true);
-        $obj = parent::objFromFixture($class, $id);
+        $obj = parent::objFromFixture($classname, $identifier);
         Subsite::disable_subsite_filter(false);
 
         return $obj;
@@ -55,8 +55,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
     public function testAccessChecksDontChangeCurrentSubsite()
     {
-        $admin = $this->objFromFixture(Member::class, 'admin');
-        $this->logInAs($admin);
+        $this->logInAs('admin');
         $ids = [];
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
@@ -76,10 +75,12 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
             $left = new LeftAndMain();
             $this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
-            $this->assertEquals($id, Subsite::currentSubsiteID(),
-                'The current subsite has not been changed in the process of checking permissions for admin user.');
+            $this->assertEquals(
+                $id,
+                Subsite::currentSubsiteID(),
+                'The current subsite has not been changed in the process of checking permissions for admin user.'
+            );
         }
-
     }
 
     public function testShouldChangeSubsite()

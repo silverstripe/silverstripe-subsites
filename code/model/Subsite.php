@@ -35,7 +35,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
 
-
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
  * You can simulate subsite access without setting up virtual hosts by appending ?SubsiteID=<ID> to the request.
@@ -231,8 +230,10 @@ class Subsite extends DataObject
                 SubsiteDomain::class,
                 "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
                 '"IsPrimary" DESC'
-            )->innerJoin('Subsite',
-                '"Subsite"."ID" = "SubsiteDomain"."SubsiteID" AND "Subsite"."IsPublic"=1');
+            )->innerJoin(
+                'Subsite',
+                '"Subsite"."ID" = "SubsiteDomain"."SubsiteID" AND "Subsite"."IsPublic"=1'
+            );
         }
 
         if ($matchingDomains && $matchingDomains->count()) {
@@ -379,8 +380,8 @@ class Subsite extends DataObject
         $includeMainSite = true,
         $mainSiteTitle = 'Main site',
         $member = null
-    )
-    {
+    ) {
+    
         // Rationalise member arguments
         if (!$member) {
             $member = Member::currentUser();
@@ -408,12 +409,18 @@ class Subsite extends DataObject
         $subsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
             ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
-            ->innerJoin('Group',
-                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1')
-            ->innerJoin('Group_Members',
-                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
-            ->innerJoin('Permission',
-                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
+            ->innerJoin(
+                'Group',
+                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1'
+            )
+            ->innerJoin(
+                'Group_Members',
+                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID"
+            )
+            ->innerJoin(
+                'Permission',
+                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
+            );
 
         if (!$subsites) {
             $subsites = new ArrayList();
@@ -423,14 +430,20 @@ class Subsite extends DataObject
         $rolesSubsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
             ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
-            ->innerJoin('Group',
-                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1')
-            ->innerJoin('Group_Members',
-                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
+            ->innerJoin(
+                'Group',
+                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1'
+            )
+            ->innerJoin(
+                'Group_Members',
+                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID"
+            )
             ->innerJoin('Group_Roles', '"Group_Roles"."GroupID"="Group"."ID"')
             ->innerJoin('PermissionRole', '"Group_Roles"."PermissionRoleID"="PermissionRole"."ID"')
-            ->innerJoin('PermissionRoleCode',
-                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
+            ->innerJoin(
+                'PermissionRoleCode',
+                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
+            );
 
         if (!$subsites && $rolesSubsites) {
             return $rolesSubsites;
@@ -655,8 +668,10 @@ class Subsite extends DataObject
         } else {
             $domainTable = new LiteralField(
                 'Domains',
-                '<p>' . _t('Subsite.DOMAINSAVEFIRST',
-                    'You can only add domains after saving for the first time') . '</p>'
+                '<p>' . _t(
+                    'Subsite.DOMAINSAVEFIRST',
+                    'You can only add domains after saving for the first time'
+                ) . '</p>'
             );
         }
 
@@ -674,13 +689,13 @@ class Subsite extends DataObject
         asort($pageTypeMap);
 
         $fields = new FieldList(
-            $subsiteTabs = new TabSet('Root',
+            $subsiteTabs = new TabSet(
+                'Root',
                 new Tab(
                     'Configuration',
                     _t('Subsite.TabTitleConfig', 'Configuration'),
                     HeaderField::create('ConfigForSubsiteHeaderField', 'Subsite Configuration'),
                     TextField::create('Title', $this->fieldLabel('Title'), $this->Title),
-
                     HeaderField::create(
                         'DomainsForSubsiteHeaderField',
                         _t('Subsite.DomainsHeadline', 'Domains for this subsite')
@@ -690,7 +705,6 @@ class Subsite extends DataObject
                     // new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
                     CheckboxField::create('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
                     CheckboxField::create('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
-
                     LiteralField::create(
                         'PageTypeBlacklistToggle',
                         sprintf(
@@ -712,9 +726,12 @@ class Subsite extends DataObject
         // If there are any themes available, add the dropdown
         $themes = $this->allowedThemes();
         if (!empty($themes)) {
-            $fields->addFieldToTab('Root.Configuration',
+            $fields->addFieldToTab(
+                'Root.Configuration',
                 DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)
-                    ->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '-')), 'PageTypeBlacklistToggle');
+                ->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '-')),
+                'PageTypeBlacklistToggle'
+            );
         }
 
         $subsiteTabs->addExtraClass('subsite-model');

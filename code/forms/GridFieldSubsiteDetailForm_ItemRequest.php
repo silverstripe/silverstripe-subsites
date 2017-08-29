@@ -36,8 +36,11 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
                 $templateArray = $templates->map('ID', 'Title');
             }
 
-            $templateDropdown = new DropdownField('TemplateID', _t('Subsite.COPYSTRUCTURE', 'Copy structure from:'),
-                $templateArray);
+            $templateDropdown = new DropdownField(
+                'TemplateID',
+                _t('Subsite.COPYSTRUCTURE', 'Copy structure from:'),
+                $templateArray
+            );
             $templateDropdown->setEmptyString('(' . _t('Subsite.NOTEMPLATE', 'No template') . ')');
             $form->Fields()->addFieldToTab('Root.Configuration', $templateDropdown);
         }
@@ -57,5 +60,4 @@ class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemReq
 
         return parent::doSave($data, $form);
     }
-
 }

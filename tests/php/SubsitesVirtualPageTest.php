@@ -16,16 +16,16 @@ use SilverStripe\Versioned\Versioned;
 
 class SubsitesVirtualPageTest extends BaseSubsiteTest
 {
-    public static $fixture_file = [
-        'subsites/tests/php/SubsiteTest.yml',
-        'subsites/tests/php/SubsitesVirtualPageTest.yml',
+    protected static $fixture_file = [
+        'SubsiteTest.yml',
+        'SubsitesVirtualPageTest.yml',
     ];
 
-    protected $illegalExtensions = [
-        'SiteTree' => ['Translatable']
+    protected static $illegal_extensions = [
+        SiteTree::class => ['Translatable'] // @todo implement Translatable namespace
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -61,7 +61,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         Subsite::changeSubsite($subsite->ID);
         Subsite::$disable_subsite_filter = false;
 
-        $linky = $this->objFromFixture('Page', 'linky');
+        $linky = $this->objFromFixture(Page::class, 'linky');
 
         $svp = new SubsitesVirtualPage();
         $svp->CopyContentFromID = $linky->ID;
@@ -97,10 +97,14 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $file->write();
 
         // Verify that the draft and publish virtual pages both have the corrected link
-        static::assertContains('<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
-            DB::query("SELECT \"Content\" FROM \"SiteTree\" WHERE \"ID\" = $svp->ID")->value());
-        static::assertContains('<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
-            DB::query("SELECT \"Content\" FROM \"SiteTree_Live\" WHERE \"ID\" = $svp->ID")->value());
+        $this->assertContains(
+            '<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
+            DB::query("SELECT \"Content\" FROM \"SiteTree\" WHERE \"ID\" = $svp->ID")->value()
+        );
+        $this->assertContains(
+            '<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
+            DB::query("SELECT \"Content\" FROM \"SiteTree_Live\" WHERE \"ID\" = $svp->ID")->value()
+        );
     }
 
     public function testSubsiteVirtualPagesArentInappropriatelyPublished()
@@ -299,7 +303,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         );
     }
 
-    public function fixVersionNumberCache($page)
+    protected function fixVersionNumberCache($page)
     {
         $pages = func_get_args();
         foreach ($pages as $p) {
