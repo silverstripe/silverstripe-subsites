@@ -1,0 +1,20 @@
+mappings:
+  SubsiteAdmin: SilverStripe\Subsites\Admin\SubsiteAdmin
+  SubsiteXHRController: SilverStripe\Subsites\Controller\SubsiteXHRController
+  CMSPageAddControllerExtension: SilverStripe\Subsites\Extensions\CMSPageAddControllerExtension
+  ControllerSubsites: SilverStripe\Subsites\Extensions\ControllerSubsites
+  ErrorPageSubsite: SilverStripe\Subsites\Extensions\ErrorPageSubsite
+  FileSubsites: SilverStripe\Subsites\Extensions\FileSubsites
+  GroupSubsites: SilverStripe\Subsites\Extensions\GroupSubsites
+  LeftAndMainSubsites: SilverStripe\Subsites\Extensions\LeftAndMainSubsites
+  SiteConfigSubsites: SilverStripe\Subsites\Extensions\SiteConfigSubsites
+  SiteTreeSubsites: SilverStripe\Subsites\Extensions\SiteTreeSubsites
+  SubsiteMenuExtension: SilverStripe\Subsites\Extensions\SubsiteMenuExtension
+  GridFieldSubsiteDetailForm: SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm
+  GridFieldSubsiteDetailForm_ItemRequest: SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm_ItemRequest
+  SubsitesTreeDropdownField: SilverStripe\Subsites\Forms\SubsitesTreeDropdownField
+  Subsite: SilverStripe\Subsites\Model\Subsite
+  SubsiteDomain: SilverStripe\Subsites\Model\SubsiteDomain
+  SubsitesVirtualPage: SilverStripe\Subsites\Pages\SubsitesVirtualPage
+  SubsiteReportWrapper: SilverStripe\Subsites\Reports\SubsiteReportWrapper
+  SubsiteCopyPagesTask: SilverStripe\Subsites\Tasks\SubsiteCopyPagesTask

@@ -1,4 +1,41 @@
 <?php
+
+namespace SilverStripe\Subsites\Model;
+
+use SilverStripe\Admin\CMSMenu;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
+use SilverStripe\Control\Session;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\HeaderField;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\TabSet;
+use SilverStripe\Forms\TextField;
+use SilverStripe\i18n\Data\Intl\IntlLocales;
+use SilverStripe\i18n\i18n;
+use SilverStripe\ORM\ArrayLib;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\DB;
+use SilverStripe\ORM\SS_List;
+use SilverStripe\Security\Group;
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Permission;
+use SilverStripe\Versioned\Versioned;
+use UnexpectedValueException;
+
+
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
  * You can simulate subsite access without setting up virtual hosts by appending ?SubsiteID=<ID> to the request.
@@ -7,6 +44,9 @@
  */
 class Subsite extends DataObject
 {
+
+    private static $table_name = 'Subsite';
+
     /**
      * @var $use_session_subsiteid Boolean Set to TRUE when using the CMS and FALSE
      * when browsing the frontend of a website.
@@ -39,21 +79,21 @@ class Subsite extends DataObject
      *
      * @array
      */
-    private static $_cache_accessible_sites = array();
+    private static $_cache_accessible_sites = [];
 
     /**
      * Memory cache of subsite id for domains
      *
      * @var array
      */
-    private static $_cache_subsite_for_domain = array();
+    private static $_cache_subsite_for_domain = [];
 
     /**
      * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
      * Corresponds to subfolder names within the /themes folder. By default, all themes contained in this folder
      * are listed.
      */
-    private static $allowed_themes = array();
+    private static $allowed_themes = [];
 
     /**
      * @var Boolean If set to TRUE, don't assume 'www.example.com' and 'example.com' are the same.
@@ -67,14 +107,13 @@ class Subsite extends DataObject
      */
     public static $check_is_public = true;
 
-    /**
-     * @return array
+    /*** @return array
      */
-    private static $summary_fields = array(
+    private static $summary_fields = [
         'Title',
         'PrimaryDomain',
         'IsPublic'
-    );
+    ];
 
     /**
      * Set allowed themes
@@ -90,12 +129,11 @@ class Subsite extends DataObject
      * Gets the subsite currently set in the session.
      *
      * @uses ControllerSubsites->controllerAugmentInit()
-     * @return Subsite
+     * @return DataObject The current Subsite
      */
     public static function currentSubsite()
     {
-        // get_by_id handles caching so we don't have to
-        return DataObject::get_by_id('Subsite', self::currentSubsiteID());
+        return Subsite::get()->byID(self::currentSubsiteID());
     }
 
     /**
@@ -117,7 +155,7 @@ class Subsite extends DataObject
         if (isset($_GET['SubsiteID'])) {
             $id = (int)$_GET['SubsiteID'];
         } elseif (Subsite::$use_session_subsiteid) {
-            $id = Session::get('SubsiteID');
+            $id = Controller::curr()->getRequest()->getSession()->get('SubsiteID');
         }
 
         if ($id === null) {
@@ -147,17 +185,17 @@ class Subsite extends DataObject
             $subsiteID = $subsite;
         }
 
-        Session::set('SubsiteID', (int)$subsiteID);
+        Controller::curr()->getRequest()->getSession()->set('SubsiteID', (int)$subsiteID);
 
         // Set locale
-        if (is_object($subsite) && $subsite->Language != '') {
-            $locale = i18n::get_locale_from_lang($subsite->Language);
+        if (is_object($subsite) && $subsite->Language !== '') {
+            $locale = (new IntlLocales())->localeFromLang($subsite->Language);
             if ($locale) {
                 i18n::set_locale($locale);
             }
         }
 
-        Permission::flush_permission_cache();
+        Permission::reset();
     }
 
     /**
@@ -166,7 +204,8 @@ class Subsite extends DataObject
      * for example matching all subdomains on *.example.com with one subsite,
      * and all subdomains on *.example.org on another.
      *
-     * @param $host The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
+     * @param $host string The host to find the subsite for.  If not specified, $_SERVER['HTTP_HOST'] is used.
+     * @param bool $checkPermissions
      * @return int Subsite ID
      */
     public static function getSubsiteIDForDomain($host = null, $checkPermissions = true)
@@ -182,20 +221,21 @@ class Subsite extends DataObject
                 $host = preg_replace('/^www\./', '', $host);
             }
 
-            $cacheKey = implode('_', array($host, Member::currentUserID(), self::$check_is_public));
+            $cacheKey = implode('_', [$host, Member::currentUserID(), self::$check_is_public]);
             if (isset(self::$_cache_subsite_for_domain[$cacheKey])) {
                 return self::$_cache_subsite_for_domain[$cacheKey];
             }
 
             $SQL_host = Convert::raw2sql($host);
             $matchingDomains = DataObject::get(
-                "SubsiteDomain",
+                SubsiteDomain::class,
                 "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
-                "\"IsPrimary\" DESC"
-            )->innerJoin('Subsite', "\"Subsite\".\"ID\" = \"SubsiteDomain\".\"SubsiteID\" AND \"Subsite\".\"IsPublic\"=1");
+                '"IsPrimary" DESC'
+            )->innerJoin('Subsite',
+                '"Subsite"."ID" = "SubsiteDomain"."SubsiteID" AND "Subsite"."IsPublic"=1');
         }
 
-        if ($matchingDomains && $matchingDomains->Count()) {
+        if ($matchingDomains && $matchingDomains->count()) {
             $subsiteIDs = array_unique($matchingDomains->column('SubsiteID'));
             $subsiteDomains = array_unique($matchingDomains->column('Domain'));
             if (sizeof($subsiteIDs) > 1) {
@@ -207,12 +247,14 @@ class Subsite extends DataObject
             }
 
             $subsiteID = $subsiteIDs[0];
-        } elseif ($default = Subsite::get()->filter('DefaultSite', 1)->setQueriedColumns(array('ID'))->first()) {
-            // Check for a 'default' subsite
-            $subsiteID = $default->ID;
         } else {
-            // Default subsite id = 0, the main site
-            $subsiteID = 0;
+            if ($default = DataObject::get_one(Subsite::class, '"DefaultSite" = 1')) {
+                // Check for a 'default' subsite
+                $subsiteID = $default->ID;
+            } else {
+                // Default subsite id = 0, the main site
+                $subsiteID = 0;
+            }
         }
 
         if ($cacheKey) {
@@ -231,7 +273,7 @@ class Subsite extends DataObject
      * @param string $limit
      * @return DataList
      */
-    public static function get_from_all_subsites($className, $filter = "", $sort = "", $join = "", $limit = "")
+    public static function get_from_all_subsites($className, $filter = '', $sort = '', $join = '', $limit = '')
     {
         $result = DataObject::get($className, $filter, $sort, $join, $limit);
         $result = $result->setDataQueryParam('Subsite.filter', false);
@@ -240,6 +282,7 @@ class Subsite extends DataObject
 
     /**
      * Disable the sub-site filtering; queries will select from all subsites
+     * @param bool $disabled
      */
     public static function disable_subsite_filter($disabled = true)
     {
@@ -251,16 +294,19 @@ class Subsite extends DataObject
      */
     public static function on_db_reset()
     {
-        self::$_cache_accessible_sites = array();
-        self::$_cache_subsite_for_domain = array();
+        self::$_cache_accessible_sites = [];
+        self::$_cache_subsite_for_domain = [];
     }
 
     /**
      * Return all subsites, regardless of permissions (augmented with main site).
      *
-     * @return SS_List List of {@link Subsite} objects (DataList or ArrayList).
+     * @param bool $includeMainSite
+     * @param string $mainSiteTitle
+     * @return SS_List List of <a href='psi_element://Subsite'>Subsite</a> objects (DataList or ArrayList).
+     * objects (DataList or ArrayList).
      */
-    public static function all_sites($includeMainSite = true, $mainSiteTitle = "Main site")
+    public static function all_sites($includeMainSite = true, $mainSiteTitle = 'Main site')
     {
         $subsites = Subsite::get();
 
@@ -283,7 +329,7 @@ class Subsite extends DataObject
      *
      * @return ArrayList of {@link Subsite} instances.
      */
-    public static function all_accessible_sites($includeMainSite = true, $mainSiteTitle = "Main site", $member = null)
+    public static function all_accessible_sites($includeMainSite = true, $mainSiteTitle = 'Main site', $member = null)
     {
         // Rationalise member arguments
         if (!$member) {
@@ -293,7 +339,7 @@ class Subsite extends DataObject
             return new ArrayList();
         }
         if (!is_object($member)) {
-            $member = DataObject::get_by_id('Member', $member);
+            $member = DataObject::get_by_id(Member::class, $member);
         }
 
         $subsites = new ArrayList();
@@ -323,12 +369,17 @@ class Subsite extends DataObject
      * Sites will only be included if they have a Title.
      *
      * @param $permCode array|string Either a single permission code or an array of permission codes.
-     * @param $includeMainSite If true, the main site will be included if appropriate.
-     * @param $mainSiteTitle The label to give to the main site
-     * @param $member
-     * @return DataList of {@link Subsite} instances
+     * @param $includeMainSite bool If true, the main site will be included if appropriate.
+     * @param $mainSiteTitle string The label to give to the main site
+     * @param $member int|Member The member attempting to access the sites
+     * @return DataList|ArrayList of {@link Subsite} instances
      */
-    public static function accessible_sites($permCode, $includeMainSite = true, $mainSiteTitle = "Main site", $member = null)
+    public static function accessible_sites(
+        $permCode,
+        $includeMainSite = true,
+        $mainSiteTitle = 'Main site',
+        $member = null
+    )
     {
         // Rationalise member arguments
         if (!$member) {
@@ -338,7 +389,7 @@ class Subsite extends DataObject
             return new ArrayList();
         }
         if (!is_object($member)) {
-            $member = DataObject::get_by_id('Member', $member);
+            $member = DataObject::get_by_id(Member::class, $member);
         }
 
         // Rationalise permCode argument
@@ -354,25 +405,32 @@ class Subsite extends DataObject
             return self::$_cache_accessible_sites[$cacheKey];
         }
 
-        $subsites = DataList::create('Subsite')
+        $subsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
-            ->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
-            ->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
-            ->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
-            ->innerJoin('Permission', "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
+            ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
+            ->innerJoin('Group',
+                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1')
+            ->innerJoin('Group_Members',
+                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
+            ->innerJoin('Permission',
+                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
 
         if (!$subsites) {
             $subsites = new ArrayList();
         }
 
-        $rolesSubsites = DataList::create('Subsite')
+        /** @var DataList $rolesSubsites */
+        $rolesSubsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
-            ->leftJoin('Group_Subsites', "\"Group_Subsites\".\"SubsiteID\" = \"Subsite\".\"ID\"")
-            ->innerJoin('Group', "\"Group\".\"ID\" = \"Group_Subsites\".\"GroupID\" OR \"Group\".\"AccessAllSubsites\" = 1")
-            ->innerJoin('Group_Members', "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
-            ->innerJoin('Group_Roles', "\"Group_Roles\".\"GroupID\"=\"Group\".\"ID\"")
-            ->innerJoin('PermissionRole', "\"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"")
-            ->innerJoin('PermissionRoleCode', "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
+            ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
+            ->innerJoin('Group',
+                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1')
+            ->innerJoin('Group_Members',
+                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID")
+            ->innerJoin('Group_Roles', '"Group_Roles"."GroupID"="Group"."ID"')
+            ->innerJoin('PermissionRole', '"Group_Roles"."PermissionRoleID"="PermissionRole"."ID"')
+            ->innerJoin('PermissionRoleCode',
+                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')");
 
         if (!$subsites && $rolesSubsites) {
             return $rolesSubsites;
@@ -390,15 +448,15 @@ class Subsite extends DataObject
 
         if ($includeMainSite) {
             if (!is_array($permCode)) {
-                $permCode = array($permCode);
+                $permCode = [$permCode];
             }
             if (self::hasMainSitePermission($member, $permCode)) {
-                $subsites=$subsites->toArray();
+                $subsites = $subsites->toArray();
 
                 $mainSite = new Subsite();
                 $mainSite->Title = $mainSiteTitle;
                 array_unshift($subsites, $mainSite);
-                $subsites=ArrayList::create($subsites);
+                $subsites = ArrayList::create($subsites);
             }
         }
 
@@ -422,11 +480,11 @@ class Subsite extends DataObject
         }
 
         if (!$file) {
-            $file = Director::baseFolder().'/subsites/host-map.php';
+            $file = Director::baseFolder() . '/subsites/host-map.php';
         }
-        $hostmap = array();
+        $hostmap = [];
 
-        $subsites = DataObject::get('Subsite');
+        $subsites = DataObject::get(Subsite::class);
 
         if ($subsites) {
             foreach ($subsites as $subsite) {
@@ -465,10 +523,10 @@ class Subsite extends DataObject
      * @todo Allow permission inheritance through group hierarchy.
      *
      * @param Member Member to check against. Defaults to currently logged in member
-     * @param Array Permission code strings. Defaults to "ADMIN".
-     * @return boolean
+     * @param array $permissionCodes
+     * @return bool
      */
-    public static function hasMainSitePermission($member = null, $permissionCodes = array('ADMIN'))
+    public static function hasMainSitePermission($member = null, $permissionCodes = ['ADMIN'])
     {
         if (!is_array($permissionCodes)) {
             user_error('Permissions must be passed to Subsite::hasMainSitePermission as an array', E_USER_ERROR);
@@ -482,8 +540,8 @@ class Subsite extends DataObject
             return false;
         }
 
-        if (!in_array("ADMIN", $permissionCodes)) {
-            $permissionCodes[] = "ADMIN";
+        if (!in_array('ADMIN', $permissionCodes)) {
+            $permissionCodes[] = 'ADMIN';
         }
 
         $SQLa_perm = Convert::raw2sql($permissionCodes);
@@ -518,10 +576,9 @@ class Subsite extends DataObject
     }
 
     /**
-     *
      * @var array
      */
-    private static $db = array(
+    private static $db = [
         'Title' => 'Varchar(255)',
         'RedirectURL' => 'Varchar(255)',
         'DefaultSite' => 'Boolean',
@@ -534,51 +591,47 @@ class Subsite extends DataObject
 
         // Comma-separated list of disallowed page types
         'PageTypeBlacklist' => 'Text',
-    );
+    ];
 
     /**
-     *
      * @var array
      */
-    private static $has_many = array(
-        'Domains' => 'SubsiteDomain',
-    );
+    private static $has_many = [
+        'Domains' => SubsiteDomain::class,
+    ];
 
     /**
-     *
      * @var array
      */
-    private static $belongs_many_many = array(
-        "Groups" => "Group",
-    );
+    private static $belongs_many_many = [
+        'Groups' => Group::class,
+    ];
 
     /**
-     *
      * @var array
      */
-    private static $defaults = array(
+    private static $defaults = [
         'IsPublic' => 1
-    );
+    ];
 
     /**
-     *
      * @var array
      */
-    private static $searchable_fields = array(
+    private static $searchable_fields = [
         'Title',
         'Domains.Domain',
         'IsPublic',
-    );
+    ];
 
     /**
-     *
      * @var string
      */
-    private static $default_sort = "\"Title\" ASC";
+    private static $default_sort = '"Title" ASC';
 
     /**
      * @todo Possible security issue, don't grant edit permissions to everybody.
-     * @return boolean
+     * @param bool $member
+     * @return bool
      */
     public function canEdit($member = false)
     {
@@ -593,42 +646,44 @@ class Subsite extends DataObject
     public function getCMSFields()
     {
         if ($this->ID != 0) {
-            $domainTable = GridField::create(
-                "Domains",
-                _t('Subsite.DomainsListTitle', "Domains"),
+            $domainTable = new GridField(
+                'Domains',
+                _t('Subsite.DomainsListTitle', 'Domains'),
                 $this->Domains(),
                 GridFieldConfig_RecordEditor::create(10)
             );
         } else {
-            $domainTable = LiteralField::create(
+            $domainTable = new LiteralField(
                 'Domains',
-                '<p>'._t('Subsite.DOMAINSAVEFIRST', 'You can only add domains after saving for the first time').'</p>'
+                '<p>' . _t('Subsite.DOMAINSAVEFIRST',
+                    'You can only add domains after saving for the first time') . '</p>'
             );
         }
 
         $languageSelector = new DropdownField(
             'Language',
             $this->fieldLabel('Language'),
-            i18n::get_common_locales()
+            Injector::inst()->get(IntlLocales::class)->getLocales()
         );
 
-        $pageTypeMap = array();
+        $pageTypeMap = [];
         $pageTypes = SiteTree::page_type_classes();
         foreach ($pageTypes as $pageType) {
             $pageTypeMap[$pageType] = singleton($pageType)->i18n_singular_name();
         }
         asort($pageTypeMap);
 
-        $fields = FieldList::create(
-            $subsiteTabs = TabSet::create('Root',
-                Tab::create(
+        $fields = new FieldList(
+            $subsiteTabs = new TabSet('Root',
+                new Tab(
                     'Configuration',
                     _t('Subsite.TabTitleConfig', 'Configuration'),
-                    HeaderField::create($this->getClassName() . ' configuration', 2),
+                    HeaderField::create('ConfigForSubsiteHeaderField', 'Subsite Configuration'),
                     TextField::create('Title', $this->fieldLabel('Title'), $this->Title),
 
                     HeaderField::create(
-                        _t('Subsite.DomainsHeadline', "Domains for this subsite")
+                        'DomainsForSubsiteHeaderField',
+                        _t('Subsite.DomainsHeadline', 'Domains for this subsite')
                     ),
                     $domainTable,
                     $languageSelector,
@@ -658,7 +713,8 @@ class Subsite extends DataObject
         $themes = $this->allowedThemes();
         if (!empty($themes)) {
             $fields->addFieldToTab('Root.Configuration',
-                DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '')), 'PageTypeBlacklistToggle');
+                DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)
+                    ->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '-')), 'PageTypeBlacklistToggle');
         }
 
         $subsiteTabs->addExtraClass('subsite-model');
@@ -697,20 +753,20 @@ class Subsite extends DataObject
     {
         if ($themes = $this->stat('allowed_themes')) {
             return ArrayLib::valuekey($themes);
-        } else {
-            $themes = array();
-            if (is_dir(THEMES_PATH)) {
-                foreach (scandir(THEMES_PATH) as $theme) {
-                    if ($theme[0] == '.') {
-                        continue;
-                    }
-                    $theme = strtok($theme, '_');
-                    $themes[$theme] = $theme;
-                }
-                ksort($themes);
-            }
-            return $themes;
         }
+
+        $themes = [];
+        if (is_dir(THEMES_PATH)) {
+            foreach (scandir(THEMES_PATH) as $theme) {
+                if ($theme[0] == '.') {
+                    continue;
+                }
+                $theme = strtok($theme, '_');
+                $themes[$theme] = $theme;
+            }
+            ksort($themes);
+        }
+        return $themes;
     }
 
     /**
@@ -720,20 +776,20 @@ class Subsite extends DataObject
     {
         if ($this->getField('Language')) {
             return $this->getField('Language');
-        } else {
-            return i18n::get_locale();
         }
+
+        return i18n::get_locale();
     }
 
     /**
      *
-     * @return ValidationResult
+     * @return \SilverStripe\ORM\ValidationResult
      */
     public function validate()
     {
         $result = parent::validate();
         if (!$this->Title) {
-            $result->error(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
+            $result->addError(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
         }
         return $result;
     }
@@ -806,14 +862,6 @@ class Subsite extends DataObject
     }
 
     /**
-     * @todo getClassName is redundant, already stored as a database field?
-     */
-    public function getClassName()
-    {
-        return $this->class;
-    }
-
-    /**
      * Javascript admin action to duplicate this subsite
      *
      * @return string - javascript
@@ -824,7 +872,7 @@ class Subsite extends DataObject
         $message = _t(
             'Subsite.CopyMessage',
             'Created a copy of {title}',
-            array('title' => Convert::raw2js($this->Title))
+            ['title' => Convert::raw2js($this->Title)]
         );
 
         return <<<JS
@@ -846,7 +894,7 @@ JS;
      * @param array $permissionCodes
      * @return DataList
      */
-    public function getMembersByPermission($permissionCodes = array('ADMIN'))
+    public function getMembersByPermission($permissionCodes = ['ADMIN'])
     {
         if (!is_array($permissionCodes)) {
             user_error('Permissions must be passed to Subsite::getMembersByPermission as an array', E_USER_ERROR);
@@ -856,19 +904,22 @@ JS;
         $SQL_permissionCodes = join("','", $SQL_permissionCodes);
 
         return DataObject::get(
-            'Member',
+            Member::class,
             "\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
             '',
-            "LEFT JOIN \"Group_Members\" ON \"Member\".\"ID\" = \"Group_Members\".\"MemberID\"
-            LEFT JOIN \"Group\" ON \"Group\".\"ID\" = \"Group_Members\".\"GroupID\"
-            LEFT JOIN \"Permission\" ON \"Permission\".\"GroupID\" = \"Group\".\"ID\""
+            'LEFT JOIN "Group_Members" ON "Member"."ID" = "Group_Members"."MemberID"
+            LEFT JOIN "Group" ON "Group"."ID" = "Group_Members"."GroupID"
+            LEFT JOIN "Permission" ON "Permission"."GroupID" = "Group"."ID"'
         );
     }
 
     /**
      * Duplicate this subsite
+     * @param bool $doWrite
+     * @param string $manyMany
+     * @return DataObject
      */
-    public function duplicate($doWrite = true)
+    public function duplicate($doWrite = true, $manyMany = 'many_many')
     {
         $duplicate = parent::duplicate($doWrite);
 
@@ -881,7 +932,7 @@ JS;
          * issues with having to check whether or not the new parents have been added to the site tree
          * when a page, etc, is duplicated
          */
-        $stack = array(array(0,0));
+        $stack = [[0, 0]];
         while (count($stack) > 0) {
             list($sourceParentID, $destParentID) = array_pop($stack);
             $children = Versioned::get_by_stage('Page', 'Live', "\"ParentID\" = $sourceParentID", '');
@@ -893,11 +944,11 @@ JS;
                     $childClone = $child->duplicateToSubsite($duplicate, false);
                     $childClone->ParentID = $destParentID;
                     $childClone->writeToStage('Stage');
-                    $childClone->publish('Stage', 'Live');
+                    $childClone->copyVersionToStage('Stage', 'Live');
 
                     self::changeSubsite($this->ID); //Change Back to this subsite
 
-                    array_push($stack, array($child->ID, $childClone->ID));
+                    array_push($stack, [$child->ID, $childClone->ID]);
                 }
             }
         }

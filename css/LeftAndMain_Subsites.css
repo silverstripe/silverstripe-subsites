@@ -2,95 +2,101 @@
  * Styling for the subsite actions section in the CMS
  */
 #SubsiteActions {
-	position: absolute;
-	padding: 0;
-	margin: 0;
-	right: 0;
-	top: 0;
-	width: 350px;
-	text-align: right;
-	margin-right: 130px;
-	height: 51px;
-	border-bottom: 3px solid #d4d0c8;
-	color: #fff;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    right: 0;
+    top: 0;
+    width: 350px;
+    text-align: right;
+    margin-right: 130px;
+    height: 51px;
+    border-bottom: 3px solid #d4d0c8;
+    color: #fff;
 }
-	#SubsiteActions fieldset {
-		padding: 3px;
-		border-style: none;
-		margin-top: 1px;
-		background: none;
-	}
-		#SubsiteActions fieldset span {
-			padding: 3px;
-		}
 
-.cms-menu .cms-subsites{
-	padding:3px 0px 15px;
+#SubsiteActions fieldset {
+    padding: 3px;
+    border-style: none;
+    margin-top: 1px;
+    background: none;
 }
-.cms-menu .cms-subsites .field.dropdown{
-	padding-bottom:0;
-	margin-bottom:0;
+
+#SubsiteActions fieldset span {
+    padding: 3px;
 }
+
+.cms-menu .cms-subsites {
+    padding: 3px 0 15px;
+}
+
+.cms-menu .cms-subsites .field.dropdown {
+    margin: 0 10px;
+    padding-bottom: 0;
+}
+
 .cms-menu.collapsed .cms-subsites {
-	display: none;
+    display: none;
 }
 
 /* Custom chzn styles for dark blue background */
 .cms-subsites .chzn-container-single .chzn-single,
 .cms-subsites .chzn-container-active .chzn-single {
-	filter: none; /* Fix for IE9 */
-	border: 1px solid #152338;
-	background:#213557;
-	-webkit-box-shadow: inset 1px 0 0 rgba(255,255,255,.125), inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-	box-shadow: inset 1px 0 0 rgba(255,255,255,.125), inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    filter: none; /* Fix for IE9 */
+    border: 1px solid #152338;
+    background: #213557;
+    -webkit-box-shadow: inset 1px 0 0 rgba(255, 255, 255, .125), inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, .125), inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
 }
 
-.cms-menu .cms-subsites .dropdown span{
-	padding-left:5px;
-}
-.cms-subsites .chzn-container-single .chzn-single div b{
-	background: url(../images/chosen-sprite-light.png) 3px 0 no-repeat;
-}
-.cms-subsites .chzn-container .chzn-drop{
-	padding-left:5px;
-	background:#213557;
-	border: 1px solid #152338;
-	border-top:0;
-	color:#fff;
-	-webkit-box-shadow: inset 1px 0 0 rgba(255,255,255,.125);
-	box-shadow: inset 1px 0 0 rgba(255,255,255,.125);
+.cms-menu .cms-subsites .dropdown span {
+    padding-left: 5px;
+    color: black;
 }
 
+.cms-subsites .chzn-container-single .chzn-single div b {
+    background: url(../images/chosen-sprite-light.png) 3px 0 no-repeat;
+}
+
+.cms-subsites .chzn-container .chzn-drop {
+    padding-left: 5px;
+    background: #213557;
+    border: 1px solid #152338;
+    border-top: 0;
+    color: #fff;
+    -webkit-box-shadow: inset 1px 0 0 rgba(255, 255, 255, .125);
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, .125);
+}
 
 #AddSubsiteLink {
-	display: block;
-	font-size: 80%;
-	margin-left: 3px;
+    display: block;
+    font-size: 80%;
+    margin-left: 3px;
 }
 
 #Form_AddSubsiteForm .field {
-	margin-left: 100px;
+    margin-left: 100px;
 }
 
 #Form_AddSubsiteForm label.left {
-	float: left;
-	width: 100px;
-	margin-left: -100px;
+    float: left;
+    width: 100px;
+    margin-left: -100px;
 }
 
 body.SubsiteAdmin .right form #URL .fieldgroup * {
-	font-size: 11px;
+    font-size: 11px;
 }
 
 .cms-add-form #PageType li .class-SubsitesVirtualPage {
-	background-position: 0 -32px !important;
+    background-position: 0 -32px !important;
 }
 
-.subsites-move-dropdown{
-	display:none;
+.subsites-move-dropdown {
+    display: none;
 }
 
 #Root_DetailsView .subsites-move-dropdown,
 #Form_ItemEditForm .subsites-move-dropdown {
-	display:block;
+    display: block;
 }

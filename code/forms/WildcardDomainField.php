@@ -1,5 +1,7 @@
 <?php
+namespace SilverStripe\Subsites\Forms;
 
+use SilverStripe\Forms\TextField;
 /**
  * A text field that accepts only valid domain names, but allows the wildcard (*) character
  */
@@ -19,8 +21,8 @@ class WildcardDomainField extends TextField
 
         $validator->validationError(
             $this->getName(),
-            _t("DomainNameField.INVALID_DOMAIN", "Invalid domain name"),
-            "validation"
+            _t('DomainNameField.INVALID_DOMAIN', 'Invalid domain name'),
+            'validation'
         );
         return false;
     }

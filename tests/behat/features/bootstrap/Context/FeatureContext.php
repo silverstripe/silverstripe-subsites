@@ -1,18 +1,24 @@
 <?php
 
-namespace Subsites\Test\Behaviour;
+namespace SilverStripe\Subsites\Tests\Behaviour;
 
 if (!class_exists('SilverStripe\BehatExtension\Context\SilverStripeContext')) {
     return;
 }
 
-use SilverStripe\BehatExtension\Context\SilverStripeContext;
 use SilverStripe\BehatExtension\Context\BasicContext;
-use SilverStripe\BehatExtension\Context\LoginContext;
 use SilverStripe\BehatExtension\Context\FixtureContext;
+use SilverStripe\BehatExtension\Context\LoginContext;
+use SilverStripe\BehatExtension\Context\SilverStripeContext;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\BehatFixtureFactory;
+use SilverStripe\Dev\FixtureBlueprint;
+use SilverStripe\Dev\FixtureFactory;
 use SilverStripe\Framework\Test\Behaviour\CmsFormsContext;
 use SilverStripe\Framework\Test\Behaviour\CmsUiContext;
-use SilverStripe\Cms\Test\Behaviour;
+use SilverStripe\Security\Member;
 
 // PHPUnit
 require_once 'PHPUnit/Autoload.php';
@@ -52,19 +58,19 @@ class FeatureContext extends SilverStripeContext
 
         // Use blueprints to set user name from identifier
         $factory = $fixtureContext->getFixtureFactory();
-        $blueprint = \Injector::inst()->create('FixtureBlueprint', 'Member');
+        $blueprint = Injector::inst()->create(FixtureBlueprint::class, Member::class);
         $blueprint->addCallback('beforeCreate', function ($identifier, &$data, &$fixtures) {
             if (!isset($data['FirstName'])) {
                 $data['FirstName'] = $identifier;
             }
         });
-        $factory->define('Member', $blueprint);
+        $factory->define(Member::class, $blueprint);
 
         // Auto-publish pages
-        foreach (\ClassInfo::subclassesFor('SiteTree') as $id => $class) {
-            $blueprint = \Injector::inst()->create('FixtureBlueprint', $class);
+        foreach (ClassInfo::subclassesFor(SiteTree::class) as $id => $class) {
+            $blueprint = Injector::inst()->create(FixtureBlueprint::class, $class);
             $blueprint->addCallback('afterCreate', function ($obj, $identifier, &$data, &$fixtures) {
-                $obj->publish('Stage', 'Live');
+                $obj->copyVersionToStage('Stage', 'Live');
             });
             $factory->define($class, $blueprint);
         }
@@ -73,7 +79,6 @@ class FeatureContext extends SilverStripeContext
     public function setMinkParameters(array $parameters)
     {
         parent::setMinkParameters($parameters);
-        
         if (isset($parameters['files_path'])) {
             $this->getSubcontext('FixtureContext')->setFilesPath($parameters['files_path']);
         }
@@ -85,7 +90,7 @@ class FeatureContext extends SilverStripeContext
     public function getFixtureFactory()
     {
         if (!$this->fixtureFactory) {
-            $this->fixtureFactory = \Injector::inst()->create('BehatFixtureFactory');
+            $this->fixtureFactory = Injector::inst()->create(BehatFixtureFactory::class);
         }
 
         return $this->fixtureFactory;

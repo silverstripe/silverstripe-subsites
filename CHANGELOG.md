@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.0 (unreleased)]
+
+* Updating to be compatible with SilverStripe 4
+* Subsite specific theme is now added to default theme, as themes are now cascadable
+
 ## [1.2.3]
 
 * BUG Fix issue with urlsegment being renamed in subsites

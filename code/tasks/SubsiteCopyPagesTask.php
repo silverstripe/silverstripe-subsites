@@ -1,8 +1,21 @@
 <?php
+
+namespace SilverStripe\Subsites\Tasks;
+
+
+use InvalidArgumentException;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Dev\BuildTask;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
+use SilverStripe\Versioned\Versioned;
+
+
 /**
  * Handy alternative to copying pages when creating a subsite through the UI.
  *
- * Can be used to batch-add new pages after subsite creation, or simply to 
+ * Can be used to batch-add new pages after subsite creation, or simply to
  * process a large site outside of the UI.
  *
  * Example: sake dev/tasks/SubsiteCopyPagesTask from=<subsite-source> to=<subsite-target>
@@ -12,7 +25,6 @@
 class SubsiteCopyPagesTask extends BuildTask
 {
     protected $title = 'Copy pages to different subsite';
-    
     protected $description = '';
 
     public function run($request)
@@ -21,7 +33,7 @@ class SubsiteCopyPagesTask extends BuildTask
         if (!is_numeric($subsiteFromId)) {
             throw new InvalidArgumentException('Missing "from" parameter');
         }
-        $subsiteFrom = DataObject::get_by_id('Subsite', $subsiteFromId);
+        $subsiteFrom = DataObject::get_by_id(Subsite::class, $subsiteFromId);
         if (!$subsiteFrom) {
             throw new InvalidArgumentException('Subsite not found');
         }
@@ -30,7 +42,7 @@ class SubsiteCopyPagesTask extends BuildTask
         if (!is_numeric($subsiteToId)) {
             throw new InvalidArgumentException('Missing "to" parameter');
         }
-        $subsiteTo = DataObject::get_by_id('Subsite', $subsiteToId);
+        $subsiteTo = DataObject::get_by_id(Subsite::class, $subsiteToId);
         if (!$subsiteTo) {
             throw new InvalidArgumentException('Subsite not found');
         }
@@ -43,11 +55,11 @@ class SubsiteCopyPagesTask extends BuildTask
         // This will make sure that the new parents on the new subsite are correct, and there are no funny
         // issues with having to check whether or not the new parents have been added to the site tree
         // when a page, etc, is duplicated
-        $stack = array(array(0,0));
+        $stack = [[0, 0]];
         while (count($stack) > 0) {
             list($sourceParentID, $destParentID) = array_pop($stack);
 
-            $children = Versioned::get_by_stage('SiteTree', 'Live', "\"ParentID\" = $sourceParentID", '');
+            $children = Versioned::get_by_stage(SiteTree::class, 'Live', "\"ParentID\" = $sourceParentID", '');
 
             if ($children) {
                 foreach ($children as $child) {
@@ -59,11 +71,11 @@ class SubsiteCopyPagesTask extends BuildTask
                     } else {
                         $childClone = $child->duplicateToSubsite($subsiteTo->ID, true);
                     }
-                    
+
                     $childClone->ParentID = $destParentID;
                     $childClone->writeToStage('Stage');
-                    $childClone->publish('Stage', 'Live');
-                    array_push($stack, array($child->ID, $childClone->ID));
+                    $childClone->copyVersionToStage('Stage', 'Live');
+                    array_push($stack, [$child->ID, $childClone->ID]);
 
                     $this->log(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));
                 }

@@ -1,115 +1,116 @@
-Subsite:
+SilverStripe\Subsites\Model\Subsite:
   main:
-    Title: 'Template'
+    Title: Template
   subsite1:
-    Title: 'Subsite1 Template'
+    Title: Subsite1 Template
+    Theme: subsiteTheme
   subsite2:
-    Title: 'Subsite2 Template'
+    Title: Subsite2 Template
   domaintest1:
-    Title: 'Test 1'
+    Title: Test 1
   domaintest2:
-    Title: 'Test 2'
+    Title: Test 2
   domaintest3:
-    Title: 'Test 3'
+    Title: Test 3
   domaintest4:
     Title: 'Test SSL'
   domaintest5:
     Title: 'Test Non-SSL'
-SubsiteDomain:
+SilverStripe\Subsites\Model\SubsiteDomain:
   subsite1:
-    SubsiteID: =>Subsite.subsite1
-    Domain: 'subsite1.*'
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
+    Domain: subsite1.*
     Protocol: automatic
   subsite2:
-    SubsiteID: =>Subsite.subsite2
-    Domain: 'subsite2.*'
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
+    Domain: subsite2.*
     Protocol: automatic
   dt1a:
-    SubsiteID: =>Subsite.domaintest1
-    Domain: 'one.example.org'
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest1
+    Domain: one.example.org
     Protocol: automatic
     IsPrimary: 1
   dt1b:
-    SubsiteID: =>Subsite.domaintest1
-    Domain: 'one.*'
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest1
+    Domain: one.*
     Protocol: automatic
   dt2a:
-    SubsiteID: =>Subsite.domaintest2
-    Domain: 'two.mysite.com'
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest2
+    Domain: two.mysite.com
     Protocol: automatic
     IsPrimary: 1
   dt2b:
-    SubsiteID: =>Subsite.domaintest2
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest2
     Domain: '*.mysite.com'
     Protocol: automatic
   dt3:
-    SubsiteID: =>Subsite.domaintest3
-    Domain: 'three.*'
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest3
+    Domain: three.*
     Protocol: automatic
     IsPrimary: 1
   dt4a:
-    SubsiteID: =>Subsite.domaintest4
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest4
     Domain: www.primary.com
     Protocol: https
   dt4b:
-    SubsiteID: =>Subsite.domaintest4
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest4
     Domain: www.secondary.com
     Protocol: http
   dt5:
-    SubsiteID: =>Subsite.domaintest5
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest5
     Domain: www.tertiary.com
     Protocol: http
     IsPrimary: 1
 Page:
-  mainSubsitePage:
-    Title: 'MainSubsitePage'
-    SubsiteID: 0
-    URLSegment: mainsubsitepage
-  home:
-    Title: 'Home'
-    SubsiteID: =>Subsite.main
-    URLSegment: home
-  about:
-    Title: 'About'
-    SubsiteID: =>Subsite.main
-    URLSegment: about
-  linky:
-     Title: 'Linky'
-     SubsiteID: =>Subsite.main
-     URLSegment: linky
-  staff:
-    Title: 'Staff'
-    ParentID: =>Page.about
-    SubsiteID: =>Subsite.main
-    URLSegment: staff
-  contact:
-    Title: 'Contact Us'
-    SubsiteID: =>Subsite.main
-    URLSegment: contact-us
-  importantpage:
-    Title: 'Important Page'
-    SubsiteID: =>Subsite.main
-    URLSegment: important-page
-  subsite1_home:
-    Title: 'Home (Subsite 1)'
-    SubsiteID: =>Subsite.subsite1
-    URLSegment: home
-  subsite1_contactus:
-    Title: 'Contact Us (Subsite 1)'
-    SubsiteID: =>Subsite.subsite1
-    URLSegment: contact-us
-  subsite1_staff:
-    Title: 'Staff'
-    SubsiteID: =>Subsite.subsite1
-    URLSegment: staff
-  subsite2_home:
-    Title: 'Home (Subsite 2)'
-    SubsiteID: =>Subsite.subsite2
-    URLSegment: home
-  subsite2_contactus:
-    Title: 'Contact Us (Subsite 2)'
-    SubsiteID: =>Subsite.subsite2
-    URLSegment: contact-us
+   mainSubsitePage:
+      Title: 'MainSubsitePage'
+      SubsiteID: 0
+      URLSegment: mainsubsitepage
+   home:
+      Title: 'Home'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
+      URLSegment: home
+   about:
+      Title: 'About'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
+      URLSegment: about
+   linky:
+      Title: 'Linky'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
+      URLSegment: linky
+   staff:
+      Title: 'Staff'
+      ParentID: =>Page.about
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
+      URLSegment: staff
+   contact:
+      Title: 'Contact Us'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
+      URLSegment: contact-us
+   importantpage:
+      Title: 'Important Page'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.main
+      URLSegment: important-page
+   subsite1_home:
+      Title: 'Home (Subsite 1)'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
+      URLSegment: home
+   subsite1_contactus:
+      Title: 'Contact Us (Subsite 1)'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
+      URLSegment: contact-us
+   subsite1_staff:
+      Title: 'Staff'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
+      URLSegment: staff
+   subsite2_home:
+      Title: 'Home (Subsite 2)'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
+      URLSegment: home
+   subsite2_contactus:
+      Title: 'Contact Us (Subsite 2)'
+      SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
+      URLSegment: contact-us
 
 PermissionRoleCode:
   roleCode1:
@@ -131,17 +132,17 @@ Group:
     Title: subsite1_group
     Code: subsite1_group
     AccessAllSubsites: 0
-    Subsites: =>Subsite.subsite1
+    Subsites: =>SilverStripe\Subsites\Model\Subsite.subsite1
   subsite2_group:
     Title: subsite2_group
     Code: subsite2_group
     AccessAllSubsites: 0
-    Subsites: =>Subsite.subsite2
+    Subsites: =>SilverStripe\Subsites\Model\Subsite.subsite2
   subsite1admins:
     Title: subsite1admins
     Code: subsite1admins
     AccessAllSubsites: 0
-    Subsites: =>Subsite.subsite1
+    Subsites: =>SilverStripe\Subsites\Model\Subsite.subsite1
   allsubsitesauthors:
     Title: allsubsitesauthors
     Code: allsubsitesauthors

@@ -1,33 +1,55 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
+use Page;
+use SilverStripe\CMS\Controllers\CMSMain;
+use SilverStripe\CMS\Controllers\ModelAsController;
+use SilverStripe\CMS\Model\ErrorPage;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Director;
+use SilverStripe\Control\Session;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Convert;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Security\Member;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Subsites\Extensions\SiteTreeSubsites;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\SSViewer;
+
 class SiteTreeSubsitesTest extends BaseSubsiteTest
 {
-    protected static $fixture_file = 'subsites/tests/SubsiteTest.yml';
 
-    protected $extraDataObjects = array(
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+
+    protected $extraDataObjects = [
         'SiteTreeSubsitesTest_ClassA',
         'SiteTreeSubsitesTest_ClassB',
         'SiteTreeSubsitesTest_ErrorPage'
-    );
+    ];
 
-    protected $illegalExtensions = array(
-        'SiteTree' => array('Translatable')
-    );
+    protected $illegalExtensions = [
+        SiteTree::class => ['Translatable']
+    ];
 
     public function testPagesInDifferentSubsitesCanShareURLSegment()
     {
-        $subsiteMain = $this->objFromFixture('Subsite', 'main');
-        $subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+        $subsiteMain = $this->objFromFixture(Subsite::class, 'main');
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
 
         $pageMain = new SiteTree();
         $pageMain->URLSegment = 'testpage';
         $pageMain->write();
-        $pageMain->publish('Stage', 'Live');
+        $pageMain->copyVersionToStage('Stage', 'Live');
 
         $pageMainOther = new SiteTree();
         $pageMainOther->URLSegment = 'testpage';
         $pageMainOther->write();
-        $pageMainOther->publish('Stage', 'Live');
+        $pageMainOther->copyVersionToStage('Stage', 'Live');
 
         $this->assertNotEquals($pageMain->URLSegment, $pageMainOther->URLSegment,
             'Pages in same subsite cant share the same URL'
@@ -38,7 +60,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $pageSubsite1 = new SiteTree();
         $pageSubsite1->URLSegment = 'testpage';
         $pageSubsite1->write();
-        $pageSubsite1->publish('Stage', 'Live');
+        $pageSubsite1->copyVersionToStage('Stage', 'Live');
 
         $this->assertEquals($pageMain->URLSegment, $pageSubsite1->URLSegment,
             'Pages in different subsites can share the same URL'
@@ -47,37 +69,40 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     public function testBasicSanity()
     {
-        $this->assertTrue(singleton('SiteTree')->getSiteConfig() instanceof SiteConfig);
+        $this->assertInstanceOf(SiteConfig::class, singleton(SiteTree::class)->getSiteConfig());
         // The following assert is breaking in Translatable.
-        $this->assertTrue(singleton('SiteTree')->getCMSFields() instanceof FieldList);
-        $this->assertTrue(singleton('SubsitesVirtualPage')->getCMSFields() instanceof FieldList);
-        $this->assertTrue(is_array(singleton('SiteTreeSubsites')->extraStatics()));
+        $this->assertInstanceOf(FieldList::class, singleton(SiteTree::class)->getCMSFields());
+        $this->assertInstanceOf(FieldList::class, singleton(SubsitesVirtualPage::class)->getCMSFields());
+        $this->assertTrue(is_array(singleton(SiteTreeSubsites::class)->extraStatics()));
     }
 
     public function testErrorPageLocations()
     {
-        $subsite1 = $this->objFromFixture('Subsite', 'domaintest1');
+        $this->markTestSkipped('needs refactoring');
+
+        $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
 
         Subsite::changeSubsite($subsite1->ID);
-        $path = SiteTreeSubsitesTest_ErrorPage::get_error_filename_spy(500);
+        $path = ErrorPage::get_filepath_for_errorcode(500);
 
-        $expected_path = 'error-500-'.$subsite1->domain().'.html';
+        $static_path = Config::inst()->get(ErrorPage::class, 'static_filepath');
+        $expected_path = $static_path . '/error-500-' . $subsite1->domain() . '.html';
         $this->assertEquals($expected_path, $path);
     }
 
     public function testCanEditSiteTree()
     {
-        $admin = $this->objFromFixture('Member', 'admin');
-        $subsite1member = $this->objFromFixture('Member', 'subsite1member');
-        $subsite2member = $this->objFromFixture('Member', 'subsite2member');
+        $admin = $this->objFromFixture(Member::class, 'admin');
+        $subsite1member = $this->objFromFixture(Member::class, 'subsite1member');
+        $subsite2member = $this->objFromFixture(Member::class, 'subsite2member');
         $mainpage = $this->objFromFixture('Page', 'home');
         $subsite1page = $this->objFromFixture('Page', 'subsite1_home');
         $subsite2page = $this->objFromFixture('Page', 'subsite2_home');
-        $subsite1 = $this->objFromFixture('Subsite', 'subsite1');
-        $subsite2 = $this->objFromFixture('Subsite', 'subsite2');
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
+        $subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
 
         // Cant pass member as arguments to canEdit() because of GroupSubsites
-        Session::set("loggedInAs", $admin->ID);
+        Session::set('loggedInAs', $admin->ID);
         $this->assertTrue(
             (bool)$subsite1page->canEdit(),
             'Administrators can edit all subsites'
@@ -86,13 +111,13 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         // @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
         Subsite::changeSubsite($subsite1);
 
-        Session::set("loggedInAs", $subsite1member->ID);
+        Session::set('loggedInAs', $subsite1member->ID);
         $this->assertTrue(
             (bool)$subsite1page->canEdit(),
             'Members can edit pages on a subsite if they are in a group belonging to this subsite'
         );
 
-        Session::set("loggedInAs", $subsite2member->ID);
+        Session::set('loggedInAs', $subsite2member->ID);
         $this->assertFalse(
             (bool)$subsite1page->canEdit(),
             'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
@@ -112,16 +137,16 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     public function testTwoPagesWithSameURLOnDifferentSubsites()
     {
         // Set up a couple of pages with the same URL on different subsites
-        $s1 = $this->objFromFixture('Subsite', 'domaintest1');
-        $s2 = $this->objFromFixture('Subsite', 'domaintest2');
+        $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
+        $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
         $p1 = new SiteTree();
-        $p1->Title = $p1->URLSegment = "test-page";
+        $p1->Title = $p1->URLSegment = 'test-page';
         $p1->SubsiteID = $s1->ID;
         $p1->write();
 
         $p2 = new SiteTree();
-        $p2->Title = $p1->URLSegment = "test-page";
+        $p2->Title = $p1->URLSegment = 'test-page';
         $p2->SubsiteID = $s2->ID;
         $p2->write();
 
@@ -139,38 +164,38 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     public function testPageTypesBlacklistInClassDropdown()
     {
-        $editor = $this->objFromFixture('Member', 'editor');
-        Session::set("loggedInAs", $editor->ID);
+        $editor = $this->objFromFixture(Member::class, 'editor');
+        Session::set('loggedInAs', $editor->ID);
 
-        $s1 = $this->objFromFixture('Subsite', 'domaintest1');
-        $s2 = $this->objFromFixture('Subsite', 'domaintest2');
-        $page = singleton('SiteTree');
+        $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
+        $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
+        $page = singleton(SiteTree::class);
 
-        $s1->PageTypeBlacklist = 'SiteTreeSubsitesTest_ClassA,ErrorPage';
+        $s1->PageTypeBlacklist = implode(',', [SiteTreeSubsitesTest_ClassA::class, ErrorPage::class]);
         $s1->write();
 
         Subsite::changeSubsite($s1);
         $settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
 
-        $this->assertArrayNotHasKey('ErrorPage',
+        $this->assertArrayNotHasKey(ErrorPage::class,
             $settingsFields
         );
-        $this->assertArrayNotHasKey('SiteTreeSubsitesTest_ClassA',
+        $this->assertArrayNotHasKey(SiteTreeSubsitesTest_ClassA::class,
             $settingsFields
         );
-        $this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB',
+        $this->assertArrayHasKey(SiteTreeSubsitesTest_ClassB::class,
             $settingsFields
         );
 
         Subsite::changeSubsite($s2);
         $settingsFields = $page->getSettingsFields()->dataFieldByName('ClassName')->getSource();
-        $this->assertArrayHasKey('ErrorPage',
+        $this->assertArrayHasKey(ErrorPage::class,
             $settingsFields
         );
-        $this->assertArrayHasKey('SiteTreeSubsitesTest_ClassA',
+        $this->assertArrayHasKey(SiteTreeSubsitesTest_ClassA::class,
             $settingsFields
         );
-        $this->assertArrayHasKey('SiteTreeSubsitesTest_ClassB',
+        $this->assertArrayHasKey(SiteTreeSubsitesTest_ClassB::class,
             $settingsFields
         );
     }
@@ -178,10 +203,10 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     public function testCopyToSubsite()
     {
         // Remove baseurl if testing in subdir
-        Config::inst()->update('Director', 'alternate_base_url', '/');
+        Config::modify()->set(Director::class, 'alternate_base_url', '/');
 
         /** @var Subsite $otherSubsite */
-        $otherSubsite = $this->objFromFixture('Subsite', 'subsite1');
+        $otherSubsite = $this->objFromFixture(Subsite::class, 'subsite1');
         $staffPage = $this->objFromFixture('Page', 'staff'); // nested page
         $contactPage = $this->objFromFixture('Page', 'contact'); // top level page
 
@@ -199,36 +224,36 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
         // Staff is shifted to top level and given a unique url segment
         $domain = $otherSubsite->domain();
-        $this->assertEquals('http://'.$domain.'/staff-2/', $staffPage2->AbsoluteLink());
-        $this->assertEquals('http://'.$domain.'/contact-us-2/', $contactPage2->AbsoluteLink());
+        $this->assertEquals('http://' . $domain . '/staff-2/', $staffPage2->AbsoluteLink());
+        $this->assertEquals('http://' . $domain . '/contact-us-2/', $contactPage2->AbsoluteLink());
     }
 
     public function testPageTypesBlacklistInCMSMain()
     {
-        $editor = $this->objFromFixture('Member', 'editor');
-        Session::set("loggedInAs", $editor->ID);
+        $editor = $this->objFromFixture(Member::class, 'editor');
+        Session::set('loggedInAs', $editor->ID);
 
         $cmsmain = new CMSMain();
 
-        $s1 = $this->objFromFixture('Subsite', 'domaintest1');
-        $s2 = $this->objFromFixture('Subsite', 'domaintest2');
+        $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
+        $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
-        $s1->PageTypeBlacklist = 'SiteTreeSubsitesTest_ClassA,ErrorPage';
+        $s1->PageTypeBlacklist = implode(',', [SiteTreeSubsitesTest_ClassA::class, ErrorPage::class]);
         $s1->write();
 
         Subsite::changeSubsite($s1);
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
         $classes = $hints['Root']['disallowedChildren'];
-        $this->assertContains('ErrorPage', $classes);
-        $this->assertContains('SiteTreeSubsitesTest_ClassA', $classes);
-        $this->assertNotContains('SiteTreeSubsitesTest_ClassB', $classes);
+        static::assertContains(ErrorPage::class, $classes);
+        static::assertContains(SiteTreeSubsitesTest_ClassA::class, $classes);
+        static::assertNotContains(SiteTreeSubsitesTest_ClassB::class, $classes);
 
         Subsite::changeSubsite($s2);
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
         $classes = $hints['Root']['disallowedChildren'];
-        $this->assertNotContains('ErrorPage', $classes);
-        $this->assertNotContains('SiteTreeSubsitesTest_ClassA', $classes);
-        $this->assertNotContains('SiteTreeSubsitesTest_ClassB', $classes);
+        static::assertNotContains(ErrorPage::class, $classes);
+        static::assertNotContains(SiteTreeSubsitesTest_ClassA::class, $classes);
+        static::assertNotContains(SiteTreeSubsitesTest_ClassB::class, $classes);
     }
 
     /**
@@ -239,7 +264,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->logInWithPermission('ADMIN');
         // Saving existing page in the same subsite doesn't change urls
         $mainHome = $this->objFromFixture('Page', 'home');
-        $mainSubsiteID = $this->idFromFixture('Subsite', 'main');
+        $mainSubsiteID = $this->idFromFixture(Subsite::class, 'main');
         Subsite::changeSubsite($mainSubsiteID);
         $mainHome->Content = '<p>Some new content</p>';
         $mainHome->write();
@@ -255,11 +280,12 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1Home->write();
         $this->assertEquals('home', $subsite1Home->URLSegment);
         $subsite1Home->doPublish();
-        $subsite1HomeLive = Versioned::get_one_by_stage('Page', 'Live', sprintf('"SiteTree"."ID" = \'%d\'', $subsite1Home->ID));
+        $subsite1HomeLive = Versioned::get_one_by_stage('Page', 'Live',
+            sprintf('"SiteTree"."ID" = \'%d\'', $subsite1Home->ID));
         $this->assertEquals('home', $subsite1HomeLive->URLSegment);
 
         // Creating a new page in a subsite doesn't conflict with urls in other subsites
-        $subsite1ID = $this->idFromFixture('Subsite', 'subsite1');
+        $subsite1ID = $this->idFromFixture(Subsite::class, 'subsite1');
         Subsite::changeSubsite($subsite1ID);
         $subsite1NewPage = new Page();
         $subsite1NewPage->SubsiteID = $subsite1ID;
@@ -268,7 +294,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1NewPage->write();
         $this->assertEquals('important-page', $subsite1NewPage->URLSegment);
         $subsite1NewPage->doPublish();
-        $subsite1NewPageLive = Versioned::get_one_by_stage('Page', 'Live', sprintf('"SiteTree"."ID" = \'%d\'', $subsite1NewPage->ID));
+        $subsite1NewPageLive = Versioned::get_one_by_stage('Page', 'Live',
+            sprintf('"SiteTree"."ID" = \'%d\'', $subsite1NewPage->ID));
         $this->assertEquals('important-page', $subsite1NewPageLive->URLSegment);
 
         // Creating a new page in a subsite DOES conflict with urls in the same subsite
@@ -279,7 +306,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1NewPage2->write();
         $this->assertEquals('important-page-2', $subsite1NewPage2->URLSegment);
         $subsite1NewPage2->doPublish();
-        $subsite1NewPage2Live = Versioned::get_one_by_stage('Page', 'Live', sprintf('"SiteTree"."ID" = \'%d\'', $subsite1NewPage2->ID));
+        $subsite1NewPage2Live = Versioned::get_one_by_stage('Page', 'Live',
+            sprintf('"SiteTree"."ID" = \'%d\'', $subsite1NewPage2->ID));
         $this->assertEquals('important-page-2', $subsite1NewPage2Live->URLSegment);
 
         // Original page is left un-modified
@@ -291,24 +319,54 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertEquals('important-page', $mainSubsiteImportantPage->URLSegment);
     }
 
-    function testCopySubsiteWithChildren() {
+    public function testCopySubsiteWithChildren()
+    {
         $page = $this->objFromFixture('Page', 'about');
-        $newSubsite = $this->objFromFixture('Subsite', 'subsite1');
+        $newSubsite = $this->objFromFixture(Subsite::class, 'subsite1');
 
         $moved = $page->duplicateToSubsite($newSubsite->ID, true);
         $this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
-        $this->assertEquals($moved->AllChildren()->count(), $page->AllChildren()->count(), 'All pages are copied across');
+        $this->assertEquals($moved->AllChildren()->count(), $page->AllChildren()->count(),
+            'All pages are copied across');
     }
 
-    function testCopySubsiteWithoutChildren() {
+    public function testCopySubsiteWithoutChildren()
+    {
         $page = $this->objFromFixture('Page', 'about');
-        $newSubsite = $this->objFromFixture('Subsite', 'subsite2');
+        $newSubsite = $this->objFromFixture(Subsite::class, 'subsite2');
 
         $moved = $page->duplicateToSubsite($newSubsite->ID, false);
         $this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
         $this->assertEquals($moved->AllChildren()->count(), 0, 'All pages are copied across');
     }
+
+    /**
+     * @todo: move to a functional test?
+     */
+    public function testIfSubsiteThemeIsSetToThemeList()
+    {
+        $defaultThemes = ['default'];
+        SSViewer::set_themes($defaultThemes);
+
+        $subsitePage = $this->objFromFixture(Page::class, 'home');
+        Subsite::changeSubsite($subsitePage->SubsiteID);
+        $controller = ModelAsController::controller_for($subsitePage);
+        SiteTree::singleton()->extend('contentcontrollerInit', $controller);
+
+        $this->assertEquals(SSViewer::get_themes(), $defaultThemes,
+            'Themes should not be modified when Subsite has no theme defined');
+
+        $pageWithTheme = $this->objFromFixture(Page::class, 'subsite1_home');
+        Subsite::changeSubsite($pageWithTheme->SubsiteID);
+        $controller = ModelAsController::controller_for($pageWithTheme);
+        SiteTree::singleton()->extend('contentcontrollerInit', $controller);
+        $subsiteTheme = $pageWithTheme->Subsite()->Theme;
+        $this->assertEquals(SSViewer::get_themes(), array_merge([$subsiteTheme], $defaultThemes),
+            'Themes should be modified when Subsite has theme defined');
+
+    }
 }
+
 
 class SiteTreeSubsitesTest_ClassA extends SiteTree implements TestOnly
 {
@@ -320,14 +378,14 @@ class SiteTreeSubsitesTest_ClassB extends SiteTree implements TestOnly
 
 class SiteTreeSubsitesTest_ErrorPage extends ErrorPage implements TestOnly
 {
-   /**
-    * Helper method to call protected members
-    *
-    * @param int $statusCode
-    * @return string
-    */
-   public static function get_error_filename_spy($statusCode)
-   {
-       return self::get_error_filename($statusCode);
-   }
+    /**
+     * Helper method to call protected members
+     *
+     * @param int $statusCode
+     * @return string
+     */
+    public static function get_error_filename_spy($statusCode)
+    {
+        return self::get_error_filename($statusCode);
+    }
 }

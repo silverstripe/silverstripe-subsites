@@ -1,14 +1,26 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
+use SilverStripe\CMS\Controllers\CMSPageEditController;
+use SilverStripe\Control\Session;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Security\Member;
+use SilverStripe\Subsites\Controller\SubsiteXHRController;
+use SilverStripe\Subsites\Model\Subsite;
+
 class SubsiteAdminFunctionalTest extends FunctionalTest
 {
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
     public static $use_draft_site = true;
 
     protected $autoFollowRedirection = false;
 
     /**
      * Helper: FunctionalTest is only able to follow redirection once, we want to go all the way.
+     * @param $url
+     * @return \SilverStripe\Control\HTTPResponse
      */
     public function getAndFollowAll($url)
     {
@@ -29,7 +41,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $response = $this->getAndFollowAll('admin/pages/?SubsiteID=0');
         $this->assertRegExp('#^Security/login.*#', $this->mainSession->lastUrl(), 'Admin is disallowed');
 
-        $subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $response = $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
         $this->assertRegExp('#^Security/login.*#', $this->mainSession->lastUrl(), 'Admin is disallowed');
 
@@ -43,50 +55,53 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
      */
     public function testAdminCanAccessAllSubsites()
     {
-        $member = $this->objFromFixture('Member', 'admin');
-        Session::set("loggedInAs", $member->ID);
-        
+        $member = $this->objFromFixture(Member::class, 'admin');
+        Session::set('loggedInAs', $member->ID);
+
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
         $this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-        $subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
         $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Can access other subsite.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-        $response = $this->getAndFollowAll('SubsiteXHRController');
+        $response = $this->getAndFollowAll(SubsiteXHRController::class);
         $this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(),
             'SubsiteXHRController is reachable');
     }
 
     public function testAdminIsRedirectedToObjectsSubsite()
     {
-        $member = $this->objFromFixture('Member', 'admin');
-        Session::set("loggedInAs", $member->ID);
-        
+        $member = $this->objFromFixture(Member::class, 'admin');
+        Session::set('loggedInAs', $member->ID);
+
         $mainSubsitePage = $this->objFromFixture('Page', 'mainSubsitePage');
         $subsite1Home = $this->objFromFixture('Page', 'subsite1_home');
 
-        Config::inst()->nest();
+        Config::nest();
 
-        Config::inst()->update('CMSPageEditController', 'treats_subsite_0_as_global', false);
+        Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading an object switches the subsite');
-        $this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
+        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID,
+            'Loading an object switches the subsite');
+        $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-        Config::inst()->update('CMSPageEditController', 'treats_subsite_0_as_global', true);
+        Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', true);
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID, 'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global');
-        $this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
+        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID,
+            'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global');
+        $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $this->getAndFollowAll("admin/pages/edit/show/$mainSubsitePage->ID");
-        $this->assertNotEquals(Subsite::currentSubsiteID(), $mainSubsitePage->SubsiteID, 'Loading a main-site object does not change the subsite if configured with treats_subsite_0_as_global');
-        $this->assertRegExp("#^admin/pages.*#", $this->mainSession->lastUrl(), 'Lands on the correct section');
+        $this->assertNotEquals(Subsite::currentSubsiteID(), $mainSubsitePage->SubsiteID,
+            'Loading a main-site object does not change the subsite if configured with treats_subsite_0_as_global');
+        $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-        Config::inst()->unnest();
+        Config::unnest();
     }
 
     /**
@@ -95,14 +110,14 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
      */
     public function testEditorCanAccessAllSubsites()
     {
-        $member = $this->objFromFixture('Member', 'editor');
-        Session::set("loggedInAs", $member->ID);
+        $member = $this->objFromFixture(Member::class, 'editor');
+        Session::set('loggedInAs', $member->ID);
 
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
         $this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
-        $subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
         $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Can access other subsite.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
@@ -117,10 +132,10 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
      */
     public function testSubsiteAdmin()
     {
-        $member = $this->objFromFixture('Member', 'subsite1member');
-        Session::set("loggedInAs", $member->ID);
+        $member = $this->objFromFixture(Member::class, 'subsite1member');
+        Session::set('loggedInAs', $member->ID);
 
-        $subsite1 = $this->objFromFixture('Subsite', 'subsite1');
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
 
         // Check allowed URL.
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
@@ -134,16 +149,16 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
             'Is redirected away from forbidden section');
 
         // Check forbidden site, on a section that's allowed on another subsite
-        $this->getAndFollowAll("admin/pages/?SubsiteID=0");
+        $this->getAndFollowAll('admin/pages/?SubsiteID=0');
         $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Is redirected to permitted subsite.');
 
         // Check forbidden site, on a section that's not allowed on any other subsite
-        $this->getAndFollowAll("admin/assets/?SubsiteID=0");
+        $this->getAndFollowAll('admin/assets/?SubsiteID=0');
         $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Is redirected to first permitted subsite.');
         $this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(), 'Is not denied access');
 
         // Check the standalone XHR controller.
-        $response = $this->getAndFollowAll('SubsiteXHRController');
+        $response = $this->getAndFollowAll(SubsiteXHRController::class);
         $this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(),
             'SubsiteXHRController is reachable');
     }

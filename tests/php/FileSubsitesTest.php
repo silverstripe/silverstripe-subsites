@@ -1,43 +1,53 @@
 <?php
 
+namespace SilverStripe\Subsites\Tests;
+
+use SilverStripe\Assets\File;
+use SilverStripe\Assets\Folder;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Security\Member;
+use SilverStripe\Subsites\Extensions\FileSubsites;
+use SilverStripe\Subsites\Model\Subsite;
+
 class FileSubsitesTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/SubsiteTest.yml';
+
+    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
 
     /**
      * Disable other file extensions
      *
      * @var array
      */
-	protected $illegalExtensions = array(
-        'File' => array(
+    protected $illegalExtensions = [
+        'File' => [
             'SecureFileExtension',
             'VersionedFileExtension'
-        ),
-		'SiteTree' => array(
-			'Translatable',
-		)
-	);
+        ],
+        'SiteTree' => [
+            'Translatable',
+        ]
+    ];
 
     public function testTrivialFeatures()
     {
-        $this->assertTrue(is_array(singleton('FileSubsites')->extraStatics()));
+        $this->assertTrue(is_array(singleton(FileSubsites::class)->extraStatics()));
         $file = new File();
         $file->Name = 'FileTitle';
         $file->Title = 'FileTitle';
         $this->assertEquals(' * FileTitle', $file->alternateTreeTitle());
-        $file->SubsiteID = $this->objFromFixture('Subsite', 'domaintest1')->ID;
+        $file->SubsiteID = $this->objFromFixture(Subsite::class, 'domaintest1')->ID;
         $this->assertEquals('FileTitle', $file->getTreeTitle());
-        $this->assertTrue(singleton('Folder')->getCMSFields() instanceof FieldList);
+        $this->assertInstanceOf(FieldList::class, singleton(Folder::class)->getCMSFields());
         Subsite::changeSubsite(1);
-        $this->assertEquals($file->cacheKeyComponent(), 'subsite-1');
+        $this->assertEquals('subsite-1', $file->getExtensionInstance(FileSubsites::class)->cacheKeyComponent());
     }
 
     public function testWritingSubsiteID()
     {
-        $this->objFromFixture('Member', 'admin')->logIn();
+        $this->objFromFixture(Member::class, 'admin')->logIn();
 
-        $subsite = $this->objFromFixture('Subsite', 'domaintest1');
+        $subsite = $this->objFromFixture(Subsite::class, 'domaintest1');
         FileSubsites::$default_root_folders_global = true;
 
         Subsite::changeSubsite(0);
@@ -74,14 +84,14 @@ class FileSubsitesTest extends BaseSubsiteTest
 
     public function testSubsitesFolderDropdown()
     {
-        $this->objFromFixture('Member', 'admin')->logIn();
+        $this->objFromFixture(Member::class, 'admin')->logIn();
 
         $file = new Folder();
 
         $source = array_values($file->getCMSFields()->dataFieldByName('SubsiteID')->getSource());
         asort($source);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'Main site',
             'Subsite1 Template',
             'Subsite2 Template',
@@ -91,6 +101,6 @@ class FileSubsitesTest extends BaseSubsiteTest
             'Test 3',
             'Test Non-SSL',
             'Test SSL',
-        ), array_values($source));
+        ], array_values($source));
     }
 }

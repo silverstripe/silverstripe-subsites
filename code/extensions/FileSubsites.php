@@ -1,4 +1,18 @@
 <?php
+
+namespace SilverStripe\Subsites\Extensions;
+
+use SilverStripe\Assets\Folder;
+use SilverStripe\Control\Session;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\Security\Permission;
+use SilverStripe\Subsites\Model\Subsite;
+
 /**
  * Extension for the File object to add subsites support
  *
@@ -10,9 +24,9 @@ class FileSubsites extends DataExtension
     // considered 'global', unless set otherwise
     public static $default_root_folders_global = false;
 
-    private static $has_one=array(
-        'Subsite' => 'Subsite',
-    );
+    private static $has_one = [
+        'Subsite' => Subsite::class,
+    ];
 
     /**
      * Amends the CMS tree title for folders in the Files & Images section.
@@ -21,20 +35,21 @@ class FileSubsites extends DataExtension
     public function alternateTreeTitle()
     {
         if ($this->owner->SubsiteID == 0) {
-            return " * " . $this->owner->Title;
-        } else {
-            return $this->owner->Title;
+            return ' * ' . $this->owner->Title;
         }
+
+        return $this->owner->Title;
     }
 
     /**
      * Add subsites-specific fields to the folder editor.
+     * @param FieldList $fields
      */
     public function updateCMSFields(FieldList $fields)
     {
         if ($this->owner instanceof Folder) {
             $sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-            $values = array();
+            $values = [];
             $values[0] = _t('FileSubsites.AllSitesDropdownOpt', 'All sites');
             foreach ($sites as $site) {
                 $values[$site->ID] = $site->Title;
@@ -44,16 +59,17 @@ class FileSubsites extends DataExtension
                 //Dropdown needed to move folders between subsites
                 $dropdown = new DropdownField(
                     'SubsiteID',
-                    _t('FileSubsites.SubsiteFieldLabel', 'Subsite'),
+                    _t('FileSubsites.SubsiteFieldLabel', Subsite::class),
                     $values
                 );
                 $dropdown->addExtraClass('subsites-move-dropdown');
                 $fields->push($dropdown);
                 $fields->push(new LiteralField(
                     'Message',
-                    '<p class="message notice">'.
-                    _t('ASSETADMIN.SUBSITENOTICE', 'Folders and files created in the main site are accessible by all subsites.')
-                    .'</p>'
+                    '<p class="message notice">' .
+                    _t('ASSETADMIN.SUBSITENOTICE',
+                        'Folders and files created in the main site are accessible by all subsites.')
+                    . '</p>'
                 ));
             }
         }
@@ -61,6 +77,8 @@ class FileSubsites extends DataExtension
 
     /**
      * Update any requests to limit the results to the current site
+     * @param SQLSelect $query
+     * @param DataQuery|null $dataQuery
      */
     public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {
@@ -76,7 +94,7 @@ class FileSubsites extends DataExtension
             return;
         }
 
-        $subsiteID = (int) Subsite::currentSubsiteID();
+        $subsiteID = (int)Subsite::currentSubsiteID();
 
         // The foreach is an ugly way of getting the first key :-)
         foreach ($query->getFrom() as $tableName => $info) {
@@ -85,12 +103,12 @@ class FileSubsites extends DataExtension
             break;
         }
 
-        $sect=array_values($query->getSelect());
+        $sect = array_values($query->getSelect());
         $isCounting = strpos($sect[0], 'COUNT') !== false;
 
         // Ordering when deleting or counting doesn't apply
         if (!$isCounting) {
-            $query->addOrderBy("\"SubsiteID\"");
+            $query->addOrderBy('"SubsiteID"');
         }
     }
 
@@ -120,22 +138,24 @@ class FileSubsites extends DataExtension
     {
         // Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
         $subsiteID = Session::get('SubsiteID');
-        if ($subsiteID&&$subsiteID == $this->owner->SubsiteID) {
+        if ($subsiteID && $subsiteID == $this->owner->SubsiteID) {
             return true;
-        } else {
-            Session::set('SubsiteID', $this->owner->SubsiteID);
-            $access = Permission::check(array('CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain'));
-            Session::set('SubsiteID', $subsiteID);
-
-            return $access;
         }
+
+        Session::set('SubsiteID', $this->owner->SubsiteID);
+        $access = Permission::check(['CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain']);
+        Session::set('SubsiteID', $subsiteID);
+
+        return $access;
     }
 
     /**
      * Return a piece of text to keep DataObject cache keys appropriately specific
+     *
+     * @return string
      */
     public function cacheKeyComponent()
     {
-        return 'subsite-'.Subsite::currentSubsiteID();
+        return 'subsite-' . Subsite::currentSubsiteID();
     }
 }

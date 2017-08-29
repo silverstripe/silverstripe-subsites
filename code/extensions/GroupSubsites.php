@@ -1,4 +1,21 @@
 <?php
+
+namespace SilverStripe\Subsites\Extensions;
+
+use SilverStripe\Control\Cookie;
+use SilverStripe\Core\Convert;
+use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\ORM\DB;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\Security\Group;
+use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Subsites\Model\Subsite;
+
 /**
  * Extension for the Group object to add subsites support
  *
@@ -6,25 +23,30 @@
  */
 class GroupSubsites extends DataExtension implements PermissionProvider
 {
-    private static $db = array(
+    private static $db = [
         'AccessAllSubsites' => 'Boolean'
-    );
+    ];
 
-    private static $many_many = array(
-        'Subsites' => 'Subsite'
-    );
+    private static $many_many = [
+        'Subsites' => Subsite::class
+    ];
 
-    private static $defaults = array(
+    private static $defaults = [
         'AccessAllSubsites' => true
-    );
+    ];
 
     /**
      * Migrations for GroupSubsites data.
      */
     public function requireDefaultRecords()
     {
+        if (!$this->owner) {
+            return;
+        }
         // Migration for Group.SubsiteID data from when Groups only had a single subsite
-        $groupFields = DB::field_list('Group');
+        $ownerClass = get_class($this->owner);
+        $schema = $ownerClass::getSchema();
+        $groupFields = DB::field_list($schema->tableName(Group::class));
 
         // Detection of SubsiteID field is the trigger for old-style-subsiteID migration
         if (isset($groupFields['SubsiteID'])) {
@@ -36,51 +58,55 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1 WHERE "SubsiteID" = 0');
 
             // Move the field out of the way so that this migration doesn't get executed again
-            DB::get_schema()->renameField('Group', 'SubsiteID', '_obsolete_SubsiteID');
+            DB::get_schema()->renameField(Group::class, 'SubsiteID', '_obsolete_SubsiteID');
 
-        // No subsite access on anything means that we've just installed the subsites module.
-        // Make all previous groups global-access groups
-        } elseif (!DB::query('SELECT "Group"."ID" FROM "Group"
+            // No subsite access on anything means that we've just installed the subsites module.
+            // Make all previous groups global-access groups
+        } else {
+            if (!DB::query('SELECT "Group"."ID" FROM "Group"
 			LEFT JOIN "Group_Subsites" ON "Group_Subsites"."GroupID" = "Group"."ID" AND "Group_Subsites"."SubsiteID" > 0
 			WHERE "AccessAllSubsites" = 1
-			OR "Group_Subsites"."GroupID" IS NOT NULL ')->value()) {
-			DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1');
-		}
-	}
+			OR "Group_Subsites"."GroupID" IS NOT NULL ')->value()
+            ) {
+                DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1');
+            }
+        }
+    }
 
-	public function updateCMSFields(FieldList $fields)
+    public function updateCMSFields(FieldList $fields)
     {
         if ($this->owner->canEdit()) {
             // i18n tab
             $fields->findOrMakeTab('Root.Subsites', _t('GroupSubsites.SECURITYTABTITLE', 'Subsites'));
 
-            $subsites = Subsite::accessible_sites(array('ADMIN', 'SECURITY_SUBSITE_GROUP'), true);
+            $subsites = Subsite::accessible_sites(['ADMIN', 'SECURITY_SUBSITE_GROUP'], true);
             $subsiteMap = $subsites->map();
 
             // Prevent XSS injection
-            $subsiteMap = Convert::raw2xml($subsiteMap);
+            $subsiteMap = Convert::raw2xml($subsiteMap->toArray());
 
             // Interface is different if you have the rights to modify subsite group values on
             // all subsites
             if (isset($subsiteMap[0])) {
-                $fields->addFieldToTab("Root.Subsites", new OptionsetField("AccessAllSubsites",
+                $fields->addFieldToTab('Root.Subsites', new OptionsetField('AccessAllSubsites',
                     _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
-                    array(
-                        1 => _t('GroupSubsites.ACCESSALL', "All subsites"),
-                        0 => _t('GroupSubsites.ACCESSONLY', "Only these subsites"),
-                    )
+                    [
+                        1 => _t('GroupSubsites.ACCESSALL', 'All subsites'),
+                        0 => _t('GroupSubsites.ACCESSONLY', 'Only these subsites'),
+                    ]
                 ));
 
                 unset($subsiteMap[0]);
-                $fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites", "",
+                $fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites', '',
                     $subsiteMap));
+
             } else {
                 if (sizeof($subsiteMap) <= 1) {
-                    $fields->addFieldToTab("Root.Subsites", new ReadonlyField("SubsitesHuman",
+                    $fields->addFieldToTab('Root.Subsites', new ReadonlyField('SubsitesHuman',
                         _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
                         reset($subsiteMap)));
                 } else {
-                    $fields->addFieldToTab("Root.Subsites", new CheckboxSetField("Subsites",
+                    $fields->addFieldToTab('Root.Subsites', new CheckboxSetField('Subsites',
                         _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
                         $subsiteMap));
                 }
@@ -88,7 +114,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         }
     }
 
-	/**
+    /**
      * If this group belongs to a subsite,
      * append the subsites title to the group title
      * to make it easy to distinguish in the tree-view
@@ -99,16 +125,18 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         if ($this->owner->AccessAllSubsites) {
             $title = _t('GroupSubsites.GlobalGroup', 'global group');
             return htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(' . $title . ')</i>';
-        } else {
-            $subsites = Convert::raw2xml(implode(", ", $this->owner->Subsites()->column('Title')));
-            return htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
         }
+
+        $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
+        return htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
     }
 
-	/**
-	 * Update any requests to limit the results to the current site
-	 */
-	public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
+    /**
+     * Update any requests to limit the results to the current site
+     * @param SQLSelect $query
+     * @param DataQuery|null $dataQuery
+     */
+    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {
         if (Subsite::$disable_subsite_filter) {
             return;
@@ -121,12 +149,17 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         if (!$query->filtersOnID()) {
 
             /*if($context = DataObject::context_obj()) $subsiteID = (int)$context->SubsiteID;
-            else */$subsiteID = (int)Subsite::currentSubsiteID();
+
+            else */
+            $subsiteID = (int)Subsite::currentSubsiteID();
 
             // Don't filter by Group_Subsites if we've already done that
             $hasGroupSubsites = false;
             foreach ($query->getFrom() as $item) {
-                if ((is_array($item) && strpos($item['table'], 'Group_Subsites')!==false) || (!is_array($item) && strpos($item, 'Group_Subsites')!==false)) {
+                if ((is_array($item) && strpos($item['table'],
+                            'Group_Subsites') !== false) || (!is_array($item) && strpos($item,
+                            'Group_Subsites') !== false)
+                ) {
                     $hasGroupSubsites = true;
                     break;
                 }
@@ -134,19 +167,19 @@ class GroupSubsites extends DataExtension implements PermissionProvider
 
             if (!$hasGroupSubsites) {
                 if ($subsiteID) {
-                    $query->addLeftJoin("Group_Subsites", "\"Group_Subsites\".\"GroupID\"
-						= \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
-                    $query->addWhere("(\"Group_Subsites\".\"SubsiteID\" IS NOT NULL OR
-						\"Group\".\"AccessAllSubsites\" = 1)");
+                    $query->addLeftJoin('Group_Subsites', "\"Group_Subsites\".\"GroupID\"
+                        = \"Group\".\"ID\" AND \"Group_Subsites\".\"SubsiteID\" = $subsiteID");
+                    $query->addWhere('("Group_Subsites"."SubsiteID" IS NOT NULL OR
+                        "Group"."AccessAllSubsites" = 1)');
                 } else {
-                    $query->addWhere("\"Group\".\"AccessAllSubsites\" = 1");
+                    $query->addWhere('"Group"."AccessAllSubsites" = 1');
                 }
             }
 
             // WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected (e.g. SQL Server)
-            $select=$query->getSelect();
+            $select = $query->getSelect();
             if (isset($select[0]) && !$select[0] == 'COUNT(*)') {
-                $query->orderby = "\"AccessAllSubsites\" DESC" . ($query->orderby ? ', ' : '') . $query->orderby;
+                $query->addOrderBy('AccessAllSubsites', 'DESC');
             }
         }
     }
@@ -183,13 +216,14 @@ class GroupSubsites extends DataExtension implements PermissionProvider
 
     public function providePermissions()
     {
-        return array(
-            'SECURITY_SUBSITE_GROUP' => array(
+        return [
+            'SECURITY_SUBSITE_GROUP' => [
                 'name' => _t('GroupSubsites.MANAGE_SUBSITES', 'Manage subsites for groups'),
                 'category' => _t('Permissions.PERMISSIONS_CATEGORY', 'Roles and access permissions'),
-                'help' => _t('GroupSubsites.MANAGE_SUBSITES_HELP', 'Ability to limit the permissions for a group to one or more subsites.'),
+                'help' => _t('GroupSubsites.MANAGE_SUBSITES_HELP',
+                    'Ability to limit the permissions for a group to one or more subsites.'),
                 'sort' => 200
-            )
-        );
+            ]
+        ];
     }
 }

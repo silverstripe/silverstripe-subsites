@@ -1,12 +1,15 @@
 ---
 Name: subsiteconfig
 After:
- - 'framework/*'
- - 'cms/*'
+  - 'framework/*'
 ---
-AssetAdmin:
+SilverStripe\AssetAdmin\Controller\AssetAdmin:
   treats_subsite_0_as_global: true
 
 Director:
   rules:
-    'SubsiteXHRController': 'SubsiteXHRController'
+    SubsiteXHRController: SilverStripe\Subsites\Controller\SubsiteXHRController
+
+SilverStripe\Reports\Report:
+  excluded_reports:
+    - SilverStripe\Subsites\Reports\SubsiteReportWrapper

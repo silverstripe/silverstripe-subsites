@@ -1,33 +1,59 @@
 <?php
+
+namespace SilverStripe\Subsites\Pages;
+
+
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\CMS\Model\VirtualPage;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Session;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\LabelField;
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Subsites\Forms\SubsitesTreeDropdownField;
+use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\View\ArrayData;
+
 class SubsitesVirtualPage extends VirtualPage
 {
+
+    private static $table_name = 'SubsitesVirtualPage';
+
     private static $description = 'Displays the content of a page on another subsite';
 
-    private static $db = array(
+    private static $db = [
         'CustomMetaTitle' => 'Varchar(255)',
         'CustomMetaKeywords' => 'Varchar(255)',
         'CustomMetaDescription' => 'Text',
         'CustomExtraMeta' => 'HTMLText'
-    );
+    ];
+
+    private static $non_virtual_fields = [
+        'SubsiteID'
+    ];
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
 
-        $subsites = DataObject::get('Subsite');
+        $subsites = DataObject::get(Subsite::class);
         if (!$subsites) {
             $subsites = new ArrayList();
         } else {
-            $subsites=ArrayList::create($subsites->toArray());
+            $subsites = ArrayList::create($subsites->toArray());
         }
 
-        $subsites->push(new ArrayData(array('Title' => 'Main site', 'ID' => 0)));
+        $subsites->push(new ArrayData(['Title' => 'Main site', 'ID' => 0]));
 
         $fields->addFieldToTab(
             'Root.Main',
             DropdownField::create(
-                "CopyContentFromID_SubsiteID",
-                _t('SubsitesVirtualPage.SubsiteField', "Subsite"),
+                'CopyContentFromID_SubsiteID',
+                _t('SubsitesVirtualPage.SubsiteField', 'Subsite'),
                 $subsites->map('ID', 'Title')
             )->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
             'CopyContentFromID'
@@ -35,11 +61,11 @@ class SubsitesVirtualPage extends VirtualPage
 
         // Setup the linking to the original page.
         $pageSelectionField = new SubsitesTreeDropdownField(
-            "CopyContentFromID",
-            _t('VirtualPage.CHOOSE', "Choose a page to link to"),
-            "SiteTree",
-            "ID",
-            "MenuTitle"
+            'CopyContentFromID',
+            _t('VirtualPage.CHOOSE', 'Choose a page to link to'),
+            "SilverStripe\\CMS\\Model\\SiteTree",
+            'ID',
+            'MenuTitle'
         );
 
         if (Controller::has_curr() && Controller::curr()->getRequest()) {
@@ -54,10 +80,10 @@ class SubsitesVirtualPage extends VirtualPage
             $linkToContent = "
 				<a class=\"cmsEditlink\" href=\"$editLink\">" .
                 _t('VirtualPage.EDITCONTENT', 'Click here to edit the content') .
-                "</a>";
-            $fields->removeByName("VirtualPageContentLinkLabel");
+                '</a>';
+            $fields->removeByName('VirtualPageContentLinkLabel');
             $fields->addFieldToTab(
-                "Root.Main",
+                'Root.Main',
                 $linkToContentLabelField = new LabelField('VirtualPageContentLinkLabel', $linkToContent),
                 'Title'
             );
@@ -78,7 +104,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextareaField::create(
                 'CustomMetaKeywords',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote')),
+            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
             'MetaKeywords'
         );
         $fields->addFieldToTab(
@@ -86,7 +112,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextareaField::create(
                 'CustomMetaDescription',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote')),
+            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
             'MetaDescription'
         );
         $fields->addFieldToTab(
@@ -94,7 +120,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextField::create(
                 'CustomExtraMeta',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote')),
+            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
             'ExtraMeta'
         );
 
@@ -114,7 +140,7 @@ class SubsitesVirtualPage extends VirtualPage
 
     public function getCopyContentFromID_SubsiteID()
     {
-        return ($this->CopyContentFromID) ? (int)$this->CopyContentFrom()->SubsiteID : (int)Session::get('SubsiteID');
+        return $this->CopyContentFromID ? (int)$this->CopyContentFrom()->SubsiteID : (int)Session::get('SubsiteID');
     }
 
     public function getVirtualFields()
@@ -140,7 +166,7 @@ class SubsitesVirtualPage extends VirtualPage
         $oldState = Subsite::$disable_subsite_filter;
         Subsite::$disable_subsite_filter = true;
         if ($this->CopyContentFromID) {
-            $this->HasBrokenLink = DataObject::get_by_id('SiteTree', $this->CopyContentFromID) ? false : true;
+            $this->HasBrokenLink = DataObject::get_by_id(SiteTree::class, $this->CopyContentFromID) ? false : true;
         }
         Subsite::$disable_subsite_filter = $oldState;
     }
@@ -170,24 +196,44 @@ class SubsitesVirtualPage extends VirtualPage
             $this->ExtraMeta = $this->ContentSource()->ExtraMeta ? $this->ContentSource()->ExtraMeta : $this->ExtraMeta;
         }
     }
-}
 
-class SubsitesVirtualPage_Controller extends VirtualPage_Controller
-{
-    public function reloadContent()
+    public function validURLSegment()
     {
-        $this->failover->copyFrom($this->failover->CopyContentFrom());
-        $this->failover->write();
-        return;
-    }
+        $isValid = parent::validURLSegment();
 
-    public function init()
-    {
-        $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
-        Subsite::$disable_subsite_filter = true;
+        // Veto the validation rules if its false. In this case, some logic
+        // needs to be duplicated from parent to find out the exact reason the validation failed.
+        if (!$isValid) {
+            $IDFilter = $this->ID ? "AND \"SiteTree\".\"ID\" <> $this->ID" : null;
+            $parentFilter = null;
 
-        parent::init();
+            if (Config::inst()->get(SiteTree::class, 'nested_urls')) {
+                if ($this->ParentID) {
+                    $parentFilter = " AND \"SiteTree\".\"ParentID\" = $this->ParentID";
+                } else {
+                    $parentFilter = ' AND "SiteTree"."ParentID" = 0';
+                }
+            }
 
-        Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
+            $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
+            Subsite::$disable_subsite_filter = true;
+            $existingPage = DataObject::get_one(
+                'SilverStripe\\CMS\\Model\\SiteTree',
+                "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
+                false // disable cache, it doesn't include subsite status in the key
+            );
+            Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
+            $existingPageInSubsite = DataObject::get_one(
+                'SilverStripe\\CMS\\Model\\SiteTree',
+                "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
+                false // disable cache, it doesn't include subsite status in the key
+            );
+
+            // If URL has been vetoed because of an existing page,
+            // be more specific and allow same URLSegments in different subsites
+            $isValid = !($existingPage && $existingPageInSubsite);
+        }
+
+        return $isValid;
     }
 }
