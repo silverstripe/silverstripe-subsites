@@ -97,11 +97,11 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $file->write();
 
         // Verify that the draft and publish virtual pages both have the corrected link
-        static::assertContains(
+        $this->assertContains(
             '<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
             DB::query("SELECT \"Content\" FROM \"SiteTree\" WHERE \"ID\" = $svp->ID")->value()
         );
-        static::assertContains(
+        $this->assertContains(
             '<img src="/assets/SubsitesVirtualPageTest/464dedb70a/renamed-test-file.pdf"',
             DB::query("SELECT \"Content\" FROM \"SiteTree_Live\" WHERE \"ID\" = $svp->ID")->value()
         );
