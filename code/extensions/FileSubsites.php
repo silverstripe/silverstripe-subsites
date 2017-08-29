@@ -67,8 +67,10 @@ class FileSubsites extends DataExtension
                 $fields->push(new LiteralField(
                     'Message',
                     '<p class="message notice">' .
-                    _t('ASSETADMIN.SUBSITENOTICE',
-                        'Folders and files created in the main site are accessible by all subsites.')
+                    _t(
+                        'ASSETADMIN.SUBSITENOTICE',
+                        'Folders and files created in the main site are accessible by all subsites.'
+                    )
                     . '</p>'
                 ));
             }

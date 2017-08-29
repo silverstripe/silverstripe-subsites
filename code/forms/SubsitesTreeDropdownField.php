@@ -2,13 +2,11 @@
 
 namespace SilverStripe\Subsites\Forms;
 
-
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\View\Requirements;
-
 
 /**
  * Wraps around a TreedropdownField to add ability for temporary

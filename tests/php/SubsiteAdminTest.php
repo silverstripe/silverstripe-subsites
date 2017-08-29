@@ -10,9 +10,9 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SubsiteAdminTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
-    public function adminLoggedInSession()
+    protected function adminLoggedInSession()
     {
         return new Session([
             'loggedInAs' => $this->idFromFixture(Member::class, 'admin')
@@ -31,11 +31,15 @@ class SubsiteAdminTest extends BaseSubsiteTest
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
 
         // Confirm that this URL gets you the entire page, with the edit form loaded
-        $response2 = Director::test("admin/subsites/SilverStripe-Subsites-Model-Subsite/EditForm/field/SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit",
+        $response2 = Director::test(
+            "admin/subsites/SilverStripe-Subsites-Model-Subsite/EditForm/field/SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit",
             null,
-            $this->adminLoggedInSession());
-        $this->assertTrue(strpos($response2->getBody(), 'id="Form_ItemEditForm_ID"') !== false,
-            'Testing Form_ItemEditForm_ID exists');
+            $this->adminLoggedInSession()
+        );
+        $this->assertTrue(
+            strpos($response2->getBody(), 'id="Form_ItemEditForm_ID"') !== false,
+            'Testing Form_ItemEditForm_ID exists'
+        );
         $this->assertTrue(strpos($response2->getBody(), '<head') !== false, 'Testing <head> exists');
     }
 
@@ -46,8 +50,7 @@ class SubsiteAdminTest extends BaseSubsiteTest
      */
     public function testMainsiteAdminCanAccessAllSubsites()
     {
-        $member = $this->objFromFixture(Member::class, 'admin');
-        Session::set('loggedInAs', $member->ID);
+        $this->logInAs('admin');
 
         $cmsMain = new CMSMain();
         foreach ($cmsMain->Subsites() as $subsite) {
@@ -56,12 +59,15 @@ class SubsiteAdminTest extends BaseSubsiteTest
 
         $this->assertArrayHasKey(0, $ids, 'Main site accessible');
         $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'main'), $ids, 'Site with no groups inaccesible');
-        $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'subsite1'), $ids,
-            'Subsite1 Template inaccessible');
-        $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'subsite2'), $ids,
-            'Subsite2 Template inaccessible');
+        $this->assertArrayHasKey(
+            $this->idFromFixture(Subsite::class, 'subsite1'),
+            $ids,
+            'Subsite1 Template inaccessible'
+        );
+        $this->assertArrayHasKey(
+            $this->idFromFixture(Subsite::class, 'subsite2'),
+            $ids,
+            'Subsite2 Template inaccessible'
+        );
     }
-
-
 }
-

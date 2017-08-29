@@ -7,8 +7,7 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class BaseSubsiteTest extends SapphireTest
 {
-
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -18,14 +17,14 @@ class BaseSubsiteTest extends SapphireTest
 
     /**
      * Avoid subsites filtering on fixture fetching.
-     * @param string $class
-     * @param string $id
+     * @param string $className
+     * @param string $identifier
      * @return \SilverStripe\ORM\DataObject
      */
-    public function objFromFixture($class, $id)
+    protected function objFromFixture($className, $identifier)
     {
         Subsite::disable_subsite_filter(true);
-        $obj = parent::objFromFixture($class, $id);
+        $obj = parent::objFromFixture($className, $identifier);
         Subsite::disable_subsite_filter(false);
 
         return $obj;

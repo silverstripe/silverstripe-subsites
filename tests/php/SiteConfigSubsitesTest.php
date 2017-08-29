@@ -8,7 +8,7 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SiteConfigSubsitesTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     public function testEachSubsiteHasAUniqueSiteConfig()
     {
@@ -40,6 +40,6 @@ class SiteConfigSubsitesTest extends BaseSubsiteTest
         $this->assertEquals('Subsite2', SiteConfig::current_site_config()->Title);
 
         $keys = SiteConfig::current_site_config()->extend('cacheKeyComponent');
-        static::assertContains('subsite-' . $subsite2->ID, $keys);
+        $this->assertContains('subsite-' . $subsite2->ID, $keys);
     }
 }

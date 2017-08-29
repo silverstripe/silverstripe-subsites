@@ -2,12 +2,10 @@
 
 namespace SilverStripe\Subsites\Reports;
 
-
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\Reports\ReportWrapper;
 use SilverStripe\Subsites\Model\Subsite;
-
 
 /**
  * Creates a subsite-aware version of another report.
@@ -84,5 +82,4 @@ class SubsiteReportWrapper extends ReportWrapper
         // Manually manage the subsite filtering
         Subsite::$force_subsite = null;
     }
-
 }
