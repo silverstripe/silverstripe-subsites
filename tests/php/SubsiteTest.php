@@ -82,7 +82,9 @@ class SubsiteTest extends BaseSubsiteTest
 
         $siteHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
         $this->assertNotEquals($siteHome, false, 'Home Page for subsite not found');
-        $this->assertEquals($subsite->ID, $siteHome->SubsiteID,
+        $this->assertEquals(
+            $subsite->ID,
+            $siteHome->SubsiteID,
             'createInstance() copies existing pages retaining the same URLSegment'
         );
 
@@ -262,23 +264,33 @@ class SubsiteTest extends BaseSubsiteTest
      */
     public function testDefaultDomain()
     {
-        $this->assertEquals('one.example.org',
-            $this->objFromFixture(Subsite::class, 'domaintest1')->domain());
+        $this->assertEquals(
+            'one.example.org',
+            $this->objFromFixture(Subsite::class, 'domaintest1')->domain()
+        );
 
-        $this->assertEquals('two.mysite.com',
-            $this->objFromFixture(Subsite::class, 'domaintest2')->domain());
+        $this->assertEquals(
+            'two.mysite.com',
+            $this->objFromFixture(Subsite::class, 'domaintest2')->domain()
+        );
 
         $_SERVER['HTTP_HOST'] = 'www.example.org';
-        $this->assertEquals('three.example.org',
-            $this->objFromFixture(Subsite::class, 'domaintest3')->domain());
+        $this->assertEquals(
+            'three.example.org',
+            $this->objFromFixture(Subsite::class, 'domaintest3')->domain()
+        );
 
         $_SERVER['HTTP_HOST'] = 'mysite.example.org';
-        $this->assertEquals('three.mysite.example.org',
-            $this->objFromFixture(Subsite::class, 'domaintest3')->domain());
+        $this->assertEquals(
+            'three.mysite.example.org',
+            $this->objFromFixture(Subsite::class, 'domaintest3')->domain()
+        );
 
         $this->assertEquals($_SERVER['HTTP_HOST'], singleton(Subsite::class)->PrimaryDomain);
-        $this->assertEquals('http://' . $_SERVER['HTTP_HOST'] . Director::baseURL(),
-            singleton(Subsite::class)->absoluteBaseURL());
+        $this->assertEquals(
+            'http://' . $_SERVER['HTTP_HOST'] . Director::baseURL(),
+            singleton(Subsite::class)->absoluteBaseURL()
+        );
     }
 
     /**
@@ -358,14 +370,22 @@ class SubsiteTest extends BaseSubsiteTest
      */
     public function testAccessibleSites()
     {
-        $member1Sites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', false, null,
-            $this->objFromFixture(Member::class, 'subsite1member'));
+        $member1Sites = Subsite::accessible_sites(
+            'CMS_ACCESS_CMSMain',
+            false,
+            null,
+            $this->objFromFixture(Member::class, 'subsite1member')
+        );
         $member1SiteTitles = $member1Sites->column('Title');
         sort($member1SiteTitles);
         $this->assertEquals('Subsite1 Template', $member1SiteTitles[0], 'Member can get to a subsite via a group');
 
-        $adminSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', false, null,
-            $this->objFromFixture(Member::class, 'admin'));
+        $adminSites = Subsite::accessible_sites(
+            'CMS_ACCESS_CMSMain',
+            false,
+            null,
+            $this->objFromFixture(Member::class, 'admin')
+        );
         $adminSiteTitles = $adminSites->column('Title');
         sort($adminSiteTitles);
         $this->assertEquals([
@@ -380,7 +400,9 @@ class SubsiteTest extends BaseSubsiteTest
         ], array_values($adminSiteTitles));
 
         $member2Sites = Subsite::accessible_sites(
-            'CMS_ACCESS_CMSMain', false, null,
+            'CMS_ACCESS_CMSMain',
+            false,
+            null,
             $this->objFromFixture(Member::class, 'subsite1member2')
         );
         $member2SiteTitles = $member2Sites->column('Title');

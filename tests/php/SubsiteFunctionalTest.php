@@ -2,7 +2,6 @@
 
 namespace subsites\tests\php;
 
-
 use Page;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Subsites\Model\Subsite;
@@ -24,15 +23,20 @@ class SubsiteFunctionalTest extends FunctionalTest
         $subsitePage = $this->objFromFixture(Page::class, 'contact');
         $this->get($subsitePage->AbsoluteLink());
         $this->assertEquals($subsitePage->SubsiteID, Subsite::currentSubsiteID(), 'Subsite should be changed');
-        $this->assertEquals(SSViewer::get_themes(), $defaultThemes,
-            'Themes should not be modified when Subsite has no theme defined');
+        $this->assertEquals(
+            SSViewer::get_themes(),
+            $defaultThemes,
+            'Themes should not be modified when Subsite has no theme defined'
+        );
 
         $pageWithTheme = $this->objFromFixture(Page::class, 'subsite1_contactus');
         $this->get($pageWithTheme->AbsoluteLink());
         $subsiteTheme = $pageWithTheme->Subsite()->Theme;
         $this->assertEquals($pageWithTheme->SubsiteID, Subsite::currentSubsiteID(), 'Subsite should be changed');
-        $this->assertEquals(SSViewer::get_themes(), array_merge([$subsiteTheme], $defaultThemes),
-            'Themes should be modified when Subsite has theme defined');
-
+        $this->assertEquals(
+            SSViewer::get_themes(),
+            array_merge([$subsiteTheme], $defaultThemes),
+            'Themes should be modified when Subsite has theme defined'
+        );
     }
 }

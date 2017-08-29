@@ -2,11 +2,9 @@
 
 namespace SilverStripe\Subsites\Controller;
 
-
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Security\Permission;
 use SilverStripe\Subsites\Model\Subsite;
-
 
 /**
  * Section-agnostic PJAX controller.
@@ -69,5 +67,4 @@ class SubsiteXHRController extends LeftAndMain
     {
         return $this->renderWith('Includes/SubsiteList');
     }
-
 }

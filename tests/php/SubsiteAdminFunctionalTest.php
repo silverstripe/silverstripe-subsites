@@ -46,8 +46,11 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $this->assertRegExp('#^Security/login.*#', $this->mainSession->lastUrl(), 'Admin is disallowed');
 
         $response = $this->getAndFollowAll('SubsiteXHRController');
-        $this->assertRegExp('#^Security/login.*#', $this->mainSession->lastUrl(),
-            'SubsiteXHRController is disallowed');
+        $this->assertRegExp(
+            '#^Security/login.*#',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is disallowed'
+        );
     }
 
     /**
@@ -68,8 +71,11 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $response = $this->getAndFollowAll(SubsiteXHRController::class);
-        $this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(),
-            'SubsiteXHRController is reachable');
+        $this->assertNotRegExp(
+            '#^Security/login.*#',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is reachable'
+        );
     }
 
     public function testAdminIsRedirectedToObjectsSubsite()
@@ -85,20 +91,29 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID,
-            'Loading an object switches the subsite');
+        $this->assertEquals(
+            Subsite::currentSubsiteID(),
+            $subsite1Home->SubsiteID,
+            'Loading an object switches the subsite'
+        );
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', true);
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1Home->SubsiteID,
-            'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global');
+        $this->assertEquals(
+            Subsite::currentSubsiteID(),
+            $subsite1Home->SubsiteID,
+            'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global'
+        );
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $this->getAndFollowAll("admin/pages/edit/show/$mainSubsitePage->ID");
-        $this->assertNotEquals(Subsite::currentSubsiteID(), $mainSubsitePage->SubsiteID,
-            'Loading a main-site object does not change the subsite if configured with treats_subsite_0_as_global');
+        $this->assertNotEquals(
+            Subsite::currentSubsiteID(),
+            $mainSubsitePage->SubsiteID,
+            'Loading a main-site object does not change the subsite if configured with treats_subsite_0_as_global'
+        );
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         Config::unnest();
@@ -123,8 +138,11 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $response = $this->getAndFollowAll('SubsiteXHRController');
-        $this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(),
-            'SubsiteXHRController is reachable');
+        $this->assertNotRegExp(
+            '#^Security/login.*#',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is reachable'
+        );
     }
 
     /**
@@ -145,8 +163,11 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         // Check forbidden section in allowed subsite.
         $this->getAndFollowAll("admin/assets/?SubsiteID={$subsite1->ID}");
         $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Is redirected within subsite.');
-        $this->assertNotRegExp('#^admin/assets/.*#', $this->mainSession->lastUrl(),
-            'Is redirected away from forbidden section');
+        $this->assertNotRegExp(
+            '#^admin/assets/.*#',
+            $this->mainSession->lastUrl(),
+            'Is redirected away from forbidden section'
+        );
 
         // Check forbidden site, on a section that's allowed on another subsite
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
@@ -159,7 +180,10 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
         // Check the standalone XHR controller.
         $response = $this->getAndFollowAll(SubsiteXHRController::class);
-        $this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(),
-            'SubsiteXHRController is reachable');
+        $this->assertNotRegExp(
+            '#^Security/login.*#',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is reachable'
+        );
     }
 }

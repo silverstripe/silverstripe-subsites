@@ -340,15 +340,17 @@ class LeftAndMainSubsites extends Extension
     public function onAfterSave($record)
     {
         if ($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
-            $this->owner->response->addHeader('X-Status',
-                rawurlencode(_t('LeftAndMainSubsites.Saved', 'Saved, please update related pages.')));
+            $this->owner->response->addHeader(
+                'X-Status',
+                rawurlencode(_t('LeftAndMainSubsites.Saved', 'Saved, please update related pages.'))
+            );
         }
     }
 
-	/**
-	 * @param array $data
-	 * @param Form $form
-	 */
+    /**
+     * @param array $data
+     * @param Form $form
+     */
     public function copytosubsite($data, $form)
     {
         $page = DataObject::get_by_id('SiteTree', $data['ID']);

@@ -31,11 +31,15 @@ class SubsiteAdminTest extends BaseSubsiteTest
         $response1 = Director::test('admin/subsites/', null, $this->adminLoggedInSession());
 
         // Confirm that this URL gets you the entire page, with the edit form loaded
-        $response2 = Director::test("admin/subsites/SilverStripe-Subsites-Model-Subsite/EditForm/field/SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit",
+        $response2 = Director::test(
+            "admin/subsites/SilverStripe-Subsites-Model-Subsite/EditForm/field/SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit",
             null,
-            $this->adminLoggedInSession());
-        $this->assertTrue(strpos($response2->getBody(), 'id="Form_ItemEditForm_ID"') !== false,
-            'Testing Form_ItemEditForm_ID exists');
+            $this->adminLoggedInSession()
+        );
+        $this->assertTrue(
+            strpos($response2->getBody(), 'id="Form_ItemEditForm_ID"') !== false,
+            'Testing Form_ItemEditForm_ID exists'
+        );
         $this->assertTrue(strpos($response2->getBody(), '<head') !== false, 'Testing <head> exists');
     }
 
@@ -56,12 +60,15 @@ class SubsiteAdminTest extends BaseSubsiteTest
 
         $this->assertArrayHasKey(0, $ids, 'Main site accessible');
         $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'main'), $ids, 'Site with no groups inaccesible');
-        $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'subsite1'), $ids,
-            'Subsite1 Template inaccessible');
-        $this->assertArrayHasKey($this->idFromFixture(Subsite::class, 'subsite2'), $ids,
-            'Subsite2 Template inaccessible');
+        $this->assertArrayHasKey(
+            $this->idFromFixture(Subsite::class, 'subsite1'),
+            $ids,
+            'Subsite1 Template inaccessible'
+        );
+        $this->assertArrayHasKey(
+            $this->idFromFixture(Subsite::class, 'subsite2'),
+            $ids,
+            'Subsite2 Template inaccessible'
+        );
     }
-
-
 }
-

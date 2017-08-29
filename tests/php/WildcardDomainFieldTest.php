@@ -83,5 +83,4 @@ class WildcardDomainFieldTest extends SapphireTest
             ['*']
         ];
     }
-
 }
