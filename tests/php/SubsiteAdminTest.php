@@ -10,9 +10,9 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SubsiteAdminTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
-    public function adminLoggedInSession()
+    protected function adminLoggedInSession()
     {
         return new Session([
             'loggedInAs' => $this->idFromFixture(Member::class, 'admin')
@@ -50,8 +50,7 @@ class SubsiteAdminTest extends BaseSubsiteTest
      */
     public function testMainsiteAdminCanAccessAllSubsites()
     {
-        $member = $this->objFromFixture(Member::class, 'admin');
-        Session::set('loggedInAs', $member->ID);
+        $this->logInAs('admin');
 
         $cmsMain = new CMSMain();
         foreach ($cmsMain->Subsites() as $subsite) {

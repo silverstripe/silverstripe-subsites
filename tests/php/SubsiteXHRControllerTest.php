@@ -5,12 +5,6 @@ namespace SilverStripe\Subsites\Tests;
 use SilverStripe\Control\Session;
 use SilverStripe\Dev\FunctionalTest;
 
-/**
- * Created by PhpStorm.
- * User: dmooyman
- * Date: 27/05/16
- * Time: 3:10 PM
- */
 class SubsiteXHRControllerTest extends FunctionalTest
 {
     protected static $fixture_file = 'SubsiteTest.yml';
@@ -18,7 +12,8 @@ class SubsiteXHRControllerTest extends FunctionalTest
     public function testCanView()
     {
         // Test unauthenticated access
-        Session::clear('MemberID');
+        $this->logOut();
+
         $result = $this->get('SubsiteXHRController', null, [
             'X-Pjax' => 'SubsiteList',
             'X-Requested-With' => 'XMLHttpRequest'

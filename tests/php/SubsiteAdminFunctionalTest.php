@@ -12,14 +12,14 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class SubsiteAdminFunctionalTest extends FunctionalTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
-    public static $use_draft_site = true;
+    protected static $fixture_file = 'SubsiteTest.yml';
+    protected static $use_draft_site = true;
 
     protected $autoFollowRedirection = false;
 
     /**
      * Helper: FunctionalTest is only able to follow redirection once, we want to go all the way.
-     * @param $url
+     * @param string $url
      * @return \SilverStripe\Control\HTTPResponse
      */
     public function getAndFollowAll($url)
@@ -58,8 +58,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
      */
     public function testAdminCanAccessAllSubsites()
     {
-        $member = $this->objFromFixture(Member::class, 'admin');
-        Session::set('loggedInAs', $member->ID);
+        $this->logInAs('admin');
 
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
         $this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site.');
@@ -80,8 +79,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
     public function testAdminIsRedirectedToObjectsSubsite()
     {
-        $member = $this->objFromFixture(Member::class, 'admin');
-        Session::set('loggedInAs', $member->ID);
+        $this->logInAs('admin');
 
         $mainSubsitePage = $this->objFromFixture('Page', 'mainSubsitePage');
         $subsite1Home = $this->objFromFixture('Page', 'subsite1_home');
@@ -125,8 +123,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
      */
     public function testEditorCanAccessAllSubsites()
     {
-        $member = $this->objFromFixture(Member::class, 'editor');
-        Session::set('loggedInAs', $member->ID);
+        $this->logInAs('editor');
 
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
         $this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site.');

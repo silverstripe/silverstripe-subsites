@@ -13,18 +13,18 @@ use SilverStripe\Subsites\Model\Subsite;
 
 class LeftAndMainSubsitesTest extends FunctionalTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     /**
      * Avoid subsites filtering on fixture fetching.
-     * @param string $class
-     * @param string $id
+     * @param string $className
+     * @param string $identifier
      * @return \SilverStripe\ORM\DataObject
      */
-    public function objFromFixture($class, $id)
+    protected function objFromFixture($className, $identifier)
     {
         Subsite::disable_subsite_filter(true);
-        $obj = parent::objFromFixture($class, $id);
+        $obj = parent::objFromFixture($classname, $identifier);
         Subsite::disable_subsite_filter(false);
 
         return $obj;
@@ -55,8 +55,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
     public function testAccessChecksDontChangeCurrentSubsite()
     {
-        $admin = $this->objFromFixture(Member::class, 'admin');
-        $this->logInAs($admin);
+        $this->logInAs('admin');
         $ids = [];
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');

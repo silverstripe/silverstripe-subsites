@@ -13,7 +13,7 @@ use SilverStripe\Subsites\Model\SubsiteDomain;
 
 class SubsiteTest extends BaseSubsiteTest
 {
-    public static $fixture_file = 'subsites/tests/php/SubsiteTest.yml';
+    protected static $fixture_file = 'SubsiteTest.yml';
 
     /**
      * Original value of {@see SubSite::$strict_subdomain_matching}
@@ -29,7 +29,7 @@ class SubsiteTest extends BaseSubsiteTest
      */
     protected $origServer = [];
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -39,7 +39,7 @@ class SubsiteTest extends BaseSubsiteTest
         Subsite::$strict_subdomain_matching = false;
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         $_SERVER = $this->origServer;
         Subsite::$strict_subdomain_matching = $this->origStrictSubdomainMatching;
