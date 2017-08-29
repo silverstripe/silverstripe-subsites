@@ -2,11 +2,9 @@
 
 namespace SilverStripe\Subsites\Admin;
 
-
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm;
 use SilverStripe\Subsites\Model\Subsite;
-
 
 /**
  * Admin interface to manage and create {@link Subsite} instances.

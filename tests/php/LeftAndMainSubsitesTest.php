@@ -76,10 +76,12 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
             $left = new LeftAndMain();
             $this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
-            $this->assertEquals($id, Subsite::currentSubsiteID(),
-                'The current subsite has not been changed in the process of checking permissions for admin user.');
+            $this->assertEquals(
+                $id,
+                Subsite::currentSubsiteID(),
+                'The current subsite has not been changed in the process of checking permissions for admin user.'
+            );
         }
-
     }
 
     public function testShouldChangeSubsite()

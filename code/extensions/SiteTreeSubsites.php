@@ -108,13 +108,18 @@ class SiteTreeSubsites extends DataExtension
         if ($isDefaultSubsite && $subsitesMap) {
             $fields->addFieldToTab(
                 'Root.Main',
-                ToggleCompositeField::create('SubsiteOperations',
+                ToggleCompositeField::create(
+                    'SubsiteOperations',
                     _t('SiteTreeSubsites.SubsiteOperations', 'Subsite Operations'),
                     [
-                        new DropdownField('CopyToSubsiteID', _t('SiteTreeSubsites.CopyToSubsite',
-                            'Copy page to subsite'), $subsitesMap),
-                        new CheckboxField('CopyToSubsiteWithChildren',
-                            _t('SiteTreeSubsites.CopyToSubsiteWithChildren', 'Include children pages?')),
+                        new DropdownField('CopyToSubsiteID', _t(
+                            'SiteTreeSubsites.CopyToSubsite',
+                            'Copy page to subsite'
+                        ), $subsitesMap),
+                        new CheckboxField(
+                            'CopyToSubsiteWithChildren',
+                            _t('SiteTreeSubsites.CopyToSubsiteWithChildren', 'Include children pages?')
+                        ),
                         $copyAction = new FormAction(
                             'copytosubsite',
                             _t('SiteTreeSubsites.CopyAction', 'Copy')
@@ -393,9 +398,11 @@ class SiteTreeSubsites extends DataExtension
 
                         $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
                         Subsite::disable_subsite_filter(true);
-                        $candidatePage = DataObject::get_one(SiteTree::class,
+                        $candidatePage = DataObject::get_one(
+                            SiteTree::class,
                             "\"URLSegment\" = '" . Convert::raw2sql(urldecode($rest)) . "' AND \"SubsiteID\" = " . $subsiteID,
-                            false);
+                            false
+                        );
                         Subsite::disable_subsite_filter($origDisableSubsiteFilter);
 
                         if ($candidatePage) {
