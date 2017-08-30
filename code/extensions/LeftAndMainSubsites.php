@@ -77,10 +77,10 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
         // Rationalise member arguments
         if (!$member) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
         if (!$member) {
-            return new ArrayList();
+            return ArrayList::create();
         }
         if (!is_object($member)) {
             $member = DataObject::get_by_id(Member::class, $member);
@@ -89,12 +89,12 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         // Collect permissions - honour the LeftAndMain::required_permission_codes, current model requires
         // us to check if the user satisfies ALL permissions. Code partly copied from LeftAndMain::canView.
         $codes = [];
-        $extraCodes = Config::inst()->get($this->owner->class, 'required_permission_codes');
+        $extraCodes = Config::inst()->get(get_class($this->owner), 'required_permission_codes');
         if ($extraCodes !== false) {
             if ($extraCodes) {
                 $codes = array_merge($codes, (array)$extraCodes);
             } else {
-                $codes[] = "CMS_ACCESS_{$this->owner->class}";
+                $codes[] = sprintf('CMS_ACCESS_%s', get_class($this->owner));
             }
         } else {
             // Check overriden - all subsites accessible.
@@ -220,7 +220,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
     public function canAccess()
     {
         // Admin can access everything, no point in checking.
-        $member = Member::currentUser();
+        $member = Security::getCurrentUser();
         if ($member &&
         (
             Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
@@ -258,22 +258,23 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         // We are accessing the CMS, so we need to let Subsites know we will be using the session.
         Subsite::$use_session_subsiteid = true;
 
-        $session = Controller::curr()->getRequest()->getSession();
+        $request = Controller::curr()->getRequest();
+        $session = $request->getSession();
 
         // FIRST, check if we need to change subsites due to the URL.
 
         // Catch forced subsite changes that need to cause CMS reloads.
-        if (isset($_GET['SubsiteID'])) {
+        if ($request->getVar('SubsiteID')) {
             // Clear current page when subsite changes (or is set for the first time)
-            if (!$session->get('SubsiteID') || $_GET['SubsiteID'] != $session->get('SubsiteID')) {
-                $session->clear("{$this->owner->class}.currentPage");
+            if (!$session->get('SubsiteID') || $request->getVar('SubsiteID') != $session->get('SubsiteID')) {
+                $session->clear(sprintf('%s.currentPage', get_class($this->owner)));
             }
 
             // Update current subsite in session
             Subsite::changeSubsite($_GET['SubsiteID']);
 
             //Redirect to clear the current page
-            if ($this->owner->canView(Member::currentUser())) {
+            if ($this->owner->canView(Security::getCurrentUser())) {
                 //Redirect to clear the current page
                 return $this->owner->redirect($this->owner->Link());
             }
@@ -288,7 +289,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             && isset($record->SubsiteID, $this->owner->urlParams['ID'])
             && is_numeric($record->SubsiteID)
             && $this->shouldChangeSubsite(
-                $this->owner->class,
+                get_class($this->owner),
                 $record->SubsiteID,
                 SubsiteState::singleton()->getSubsiteId()
             )
@@ -296,7 +297,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             // Update current subsite in session
             Subsite::changeSubsite($record->SubsiteID);
 
-            if ($this->owner->canView(Member::currentUser())) {
+            if ($this->owner->canView(Security::getCurrentUser())) {
                 //Redirect to clear the current page
                 return $this->owner->redirect($this->owner->Link());
             }
@@ -307,12 +308,12 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         // SECOND, check if we need to change subsites due to lack of permissions.
 
         if (!$this->owner->canAccess()) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
 
             // Current section is not accessible, try at least to stick to the same subsite.
             $menu = CMSMenu::get_menu_items();
             foreach ($menu as $candidate) {
-                if ($candidate->controller && $candidate->controller != $this->owner->class) {
+                if ($candidate->controller && $candidate->controller != get_class($this->owner)) {
                     $accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
                     if ($accessibleSites->count()
                         && $accessibleSites->find('ID', SubsiteState::singleton()->getSubsiteId())
@@ -344,7 +345,8 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
     public function augmentNewSiteTreeItem(&$item)
     {
-        $item->SubsiteID = isset($_POST['SubsiteID']) ? $_POST['SubsiteID'] : SubsiteState::singleton()->getSubsiteId();
+        $request = Controller::curr()->getRequest();
+        $item->SubsiteID = $request->postVar('SubsiteID') ?: SubsiteState::singleton()->getSubsiteId();
     }
 
     public function onAfterSave($record)
@@ -363,8 +365,8 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      */
     public function copytosubsite($data, $form)
     {
-        $page = DataObject::get_by_id('SiteTree', $data['ID']);
-        $subsite = DataObject::get_by_id('Subsite', $data['CopyToSubsiteID']);
+        $page = DataObject::get_by_id(SiteTree::class, $data['ID']);
+        $subsite = DataObject::get_by_id(Subsite::class, $data['CopyToSubsiteID']);
         $includeChildren = (isset($data['CopyToSubsiteWithChildren'])) ? $data['CopyToSubsiteWithChildren'] : false;
 
         $newPage = $page->duplicateToSubsite($subsite->ID, $includeChildren);

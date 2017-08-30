@@ -209,7 +209,8 @@ class Subsite extends DataObject
                 $host = preg_replace('/^www\./', '', $host);
             }
 
-            $cacheKey = implode('_', [$host, Member::currentUserID(), self::$check_is_public]);
+            $currentUserId = Security::getCurrentUser() ? Security::getCurrentUser()->ID : 0;
+            $cacheKey = implode('_', [$host, $currentUserId, self::$check_is_public]);
             if (isset(self::$_cache_subsite_for_domain[$cacheKey])) {
                 return self::$_cache_subsite_for_domain[$cacheKey];
             }
@@ -323,16 +324,16 @@ class Subsite extends DataObject
     {
         // Rationalise member arguments
         if (!$member) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
         if (!$member) {
-            return new ArrayList();
+            return ArrayList::create();
         }
         if (!is_object($member)) {
             $member = DataObject::get_by_id(Member::class, $member);
         }
 
-        $subsites = new ArrayList();
+        $subsites = ArrayList::create();
 
         // Collect subsites for all sections.
         $menu = CMSMenu::get_viewable_menu_items();
@@ -535,7 +536,7 @@ class Subsite extends DataObject
         }
 
         if (!$member && $member !== false) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
 
         if (!$member) {

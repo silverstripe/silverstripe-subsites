@@ -18,7 +18,7 @@ use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
-use SilverStripe\Security\Member;
+use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
@@ -267,7 +267,7 @@ class SiteTreeSubsites extends DataExtension
     public function canEdit($member = null)
     {
         if (!$member) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
 
         // Find the sites that this user has access to
@@ -297,7 +297,7 @@ class SiteTreeSubsites extends DataExtension
     public function canDelete($member = null)
     {
         if (!$member && $member !== false) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
 
         return $this->canEdit($member);
@@ -310,7 +310,7 @@ class SiteTreeSubsites extends DataExtension
     public function canAddChildren($member = null)
     {
         if (!$member && $member !== false) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
 
         return $this->canEdit($member);
@@ -323,7 +323,7 @@ class SiteTreeSubsites extends DataExtension
     public function canPublish($member = null)
     {
         if (!$member && $member !== false) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
 
         return $this->canEdit($member);
