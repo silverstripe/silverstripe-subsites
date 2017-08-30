@@ -10,6 +10,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 class LeftAndMainSubsitesTest extends FunctionalTest
 {
@@ -24,7 +25,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest
     protected function objFromFixture($className, $identifier)
     {
         Subsite::disable_subsite_filter(true);
-        $obj = parent::objFromFixture($classname, $identifier);
+        $obj = parent::objFromFixture($className, $identifier);
         Subsite::disable_subsite_filter(false);
 
         return $obj;
@@ -71,13 +72,13 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
         foreach ($ids as $id) {
             Subsite::changeSubsite($id);
-            $this->assertEquals($id, Subsite::currentSubsiteID());
+            $this->assertEquals($id, SubsiteState::singleton()->getSubsiteId());
 
             $left = new LeftAndMain();
             $this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
             $this->assertEquals(
                 $id,
-                Subsite::currentSubsiteID(),
+                SubsiteState::singleton()->getSubsiteId(),
                 'The current subsite has not been changed in the process of checking permissions for admin user.'
             );
         }
@@ -86,7 +87,6 @@ class LeftAndMainSubsitesTest extends FunctionalTest
     public function testShouldChangeSubsite()
     {
         $l = new LeftAndMain();
-        Config::nest();
 
         Config::modify()->set(CMSPageEditController::class, 'treats_subsite_0_as_global', false);
         $this->assertTrue($l->shouldChangeSubsite(CMSPageEditController::class, 0, 5));
@@ -99,7 +99,5 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 0, 0));
         $this->assertTrue($l->shouldChangeSubsite(CMSPageEditController::class, 1, 5));
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 1, 1));
-
-        Config::unnest();
     }
 }

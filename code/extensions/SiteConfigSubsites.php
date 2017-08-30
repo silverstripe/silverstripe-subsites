@@ -9,6 +9,7 @@ use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 /**
  * Extension for the SiteConfig object to add subsites support
@@ -41,7 +42,10 @@ class SiteConfigSubsites extends DataExtension
             }
         }
 
-        $subsiteID = (int)Subsite::currentSubsiteID();
+        $subsiteID = SubsiteState::singleton()->getSubsiteId();
+        if ($subsiteID === null) {
+            return;
+        }
 
         $froms = $query->getFrom();
         $froms = array_keys($froms);
@@ -55,7 +59,7 @@ class SiteConfigSubsites extends DataExtension
     public function onBeforeWrite()
     {
         if ((!is_numeric($this->owner->ID) || !$this->owner->ID) && !$this->owner->SubsiteID) {
-            $this->owner->SubsiteID = Subsite::currentSubsiteID();
+            $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();
         }
     }
 
@@ -64,11 +68,11 @@ class SiteConfigSubsites extends DataExtension
      */
     public function cacheKeyComponent()
     {
-        return 'subsite-' . Subsite::currentSubsiteID();
+        return 'subsite-' . SubsiteState::singleton()->getSubsiteId();
     }
 
     public function updateCMSFields(FieldList $fields)
     {
-        $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
+        $fields->push(HiddenField::create('SubsiteID', 'SubsiteID', SubsiteState::singleton()->getSubsiteId()));
     }
 }

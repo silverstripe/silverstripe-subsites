@@ -1,0 +1,10 @@
+---
+Name: subsitesmiddleware
+After:
+  - requestprocessors
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Control\Director:
+    properties:
+      Middlewares:
+        SubsitesStateMiddleware: %$SilverStripe\Subsites\Middleware\InitStateMiddleware

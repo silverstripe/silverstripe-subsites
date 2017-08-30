@@ -3,12 +3,11 @@
 namespace SilverStripe\Subsites\Tests;
 
 use SilverStripe\CMS\Controllers\CMSPageEditController;
-use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Controller\SubsiteXHRController;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 class SubsiteAdminFunctionalTest extends FunctionalTest
 {
@@ -61,12 +60,12 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $this->logInAs('admin');
 
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
-        $this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), '0', 'Can access main site.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Can access other subsite.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), $subsite1->ID, 'Can access other subsite.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $response = $this->getAndFollowAll(SubsiteXHRController::class);
@@ -90,7 +89,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
         $this->assertEquals(
-            Subsite::currentSubsiteID(),
+            SubsiteState::singleton()->getSubsiteId(),
             $subsite1Home->SubsiteID,
             'Loading an object switches the subsite'
         );
@@ -100,7 +99,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         Subsite::changeSubsite(0);
         $this->getAndFollowAll("admin/pages/edit/show/$subsite1Home->ID");
         $this->assertEquals(
-            Subsite::currentSubsiteID(),
+            SubsiteState::singleton()->getSubsiteId(),
             $subsite1Home->SubsiteID,
             'Loading a non-main-site object still switches the subsite if configured with treats_subsite_0_as_global'
         );
@@ -108,7 +107,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
         $this->getAndFollowAll("admin/pages/edit/show/$mainSubsitePage->ID");
         $this->assertNotEquals(
-            Subsite::currentSubsiteID(),
+            SubsiteState::singleton()->getSubsiteId(),
             $mainSubsitePage->SubsiteID,
             'Loading a main-site object does not change the subsite if configured with treats_subsite_0_as_global'
         );
@@ -126,12 +125,12 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $this->logInAs('editor');
 
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
-        $this->assertEquals(Subsite::currentSubsiteID(), '0', 'Can access main site.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), '0', 'Can access main site.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Can access other subsite.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), $subsite1->ID, 'Can access other subsite.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $response = $this->getAndFollowAll('SubsiteXHRController');
@@ -147,19 +146,18 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
      */
     public function testSubsiteAdmin()
     {
-        $member = $this->objFromFixture(Member::class, 'subsite1member');
-        Session::set('loggedInAs', $member->ID);
+        $this->logInAs('subsite1member');
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
 
         // Check allowed URL.
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Can access own subsite.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), $subsite1->ID, 'Can access own subsite.');
         $this->assertRegExp('#^admin/pages.*#', $this->mainSession->lastUrl(), 'Can access permitted section.');
 
         // Check forbidden section in allowed subsite.
         $this->getAndFollowAll("admin/assets/?SubsiteID={$subsite1->ID}");
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Is redirected within subsite.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), $subsite1->ID, 'Is redirected within subsite.');
         $this->assertNotRegExp(
             '#^admin/assets/.*#',
             $this->mainSession->lastUrl(),
@@ -168,11 +166,11 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
         // Check forbidden site, on a section that's allowed on another subsite
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Is redirected to permitted subsite.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), $subsite1->ID, 'Is redirected to permitted subsite.');
 
         // Check forbidden site, on a section that's not allowed on any other subsite
         $this->getAndFollowAll('admin/assets/?SubsiteID=0');
-        $this->assertEquals(Subsite::currentSubsiteID(), $subsite1->ID, 'Is redirected to first permitted subsite.');
+        $this->assertEquals(SubsiteState::singleton()->getSubsiteId(), $subsite1->ID, 'Is redirected to first permitted subsite.');
         $this->assertNotRegExp('#^Security/login.*#', $this->mainSession->lastUrl(), 'Is not denied access');
 
         // Check the standalone XHR controller.

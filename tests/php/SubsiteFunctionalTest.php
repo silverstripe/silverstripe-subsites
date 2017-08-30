@@ -1,6 +1,6 @@
 <?php
 
-namespace subsites\tests\php;
+namespace SilverStripe\Subsites\Tests;
 
 use Page;
 use SilverStripe\Dev\FunctionalTest;
@@ -22,7 +22,7 @@ class SubsiteFunctionalTest extends FunctionalTest
 
         $subsitePage = $this->objFromFixture(Page::class, 'contact');
         $this->get($subsitePage->AbsoluteLink());
-        $this->assertEquals($subsitePage->SubsiteID, Subsite::currentSubsiteID(), 'Subsite should be changed');
+        $this->assertEquals($subsitePage->SubsiteID, SubsiteState::singleton()->getSubsiteId(), 'Subsite should be changed');
         $this->assertEquals(
             SSViewer::get_themes(),
             $defaultThemes,
@@ -32,7 +32,7 @@ class SubsiteFunctionalTest extends FunctionalTest
         $pageWithTheme = $this->objFromFixture(Page::class, 'subsite1_contactus');
         $this->get($pageWithTheme->AbsoluteLink());
         $subsiteTheme = $pageWithTheme->Subsite()->Theme;
-        $this->assertEquals($pageWithTheme->SubsiteID, Subsite::currentSubsiteID(), 'Subsite should be changed');
+        $this->assertEquals($pageWithTheme->SubsiteID, SubsiteState::singleton()->getSubsiteId(), 'Subsite should be changed');
         $this->assertEquals(
             SSViewer::get_themes(),
             array_merge([$subsiteTheme], $defaultThemes),

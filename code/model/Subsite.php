@@ -4,7 +4,6 @@ namespace SilverStripe\Subsites\Model;
 
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Convert;
@@ -32,6 +31,7 @@ use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
+use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
 
@@ -132,7 +132,7 @@ class Subsite extends DataObject
      */
     public static function currentSubsite()
     {
-        return Subsite::get()->byID(self::currentSubsiteID());
+        return Subsite::get()->byID(SubsiteState::singleton()->getSubsiteId());
     }
 
     /**
@@ -143,25 +143,14 @@ class Subsite extends DataObject
      *
      * You can simulate subsite access without creating virtual hosts by appending ?SubsiteID=<ID> to the request.
      *
-     * @todo Pass $request object from controller so we don't have to rely on $_GET
-     *
      * @return int ID of the current subsite instance
+     *
+     * @deprecated 2.0..3.0 Use SubsiteState::singleton()->getSubsiteId() instead
      */
     public static function currentSubsiteID()
     {
-        $id = null;
-
-        if (isset($_GET['SubsiteID'])) {
-            $id = (int)$_GET['SubsiteID'];
-        } elseif (Subsite::$use_session_subsiteid) {
-            $id = Controller::curr()->getRequest()->getSession()->get('SubsiteID');
-        }
-
-        if ($id === null) {
-            $id = self::getSubsiteIDForDomain();
-        }
-
-        return (int)$id;
+        Deprecation::notice('3.0', 'Use SubsiteState::singleton()->getSubsiteId() instead');
+        return SubsiteState::singleton()->getSubsiteId();
     }
 
     /**
@@ -184,7 +173,7 @@ class Subsite extends DataObject
             $subsiteID = $subsite;
         }
 
-        Controller::curr()->getRequest()->getSession()->set('SubsiteID', (int)$subsiteID);
+        SubsiteState::singleton()->setSubsiteId($subsiteID);
 
         // Set locale
         if (is_object($subsite) && $subsite->Language !== '') {
@@ -381,7 +370,7 @@ class Subsite extends DataObject
         $mainSiteTitle = 'Main site',
         $member = null
     ) {
-    
+
         // Rationalise member arguments
         if (!$member) {
             $member = Member::currentUser();
@@ -940,7 +929,7 @@ JS;
     {
         $duplicate = parent::duplicate($doWrite);
 
-        $oldSubsiteID = Session::get('SubsiteID');
+        $oldSubsiteID = SubsiteState::singleton()->getSubsiteId();
         self::changeSubsite($this->ID);
 
         /*

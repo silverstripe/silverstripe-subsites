@@ -3,12 +3,12 @@
 namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Admin\CMSMenu;
+use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
-use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
-use SilverStripe\Core\Extension;
+use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -17,6 +17,7 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\Subsites\Controller\SubsiteXHRController;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
@@ -25,7 +26,7 @@ use SilverStripe\View\Requirements;
  *
  * @package subsites
  */
-class LeftAndMainSubsites extends Extension
+class LeftAndMainSubsites extends LeftAndMainExtension
 {
     private static $allowed_actions = ['CopyToSubsite'];
 
@@ -38,9 +39,11 @@ class LeftAndMainSubsites extends Extension
 
     public function init()
     {
-        Requirements::css('subsites/css/LeftAndMain_Subsites.css');
-        Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
-        Requirements::javascript('subsites/javascript/VirtualPage_Subsites.js');
+        $module = ModuleLoader::getModule('silverstripe/subsites');
+
+        Requirements::css($module->getRelativeResourcePath('css/LeftAndMain_Subsites.css'));
+        Requirements::javascript($module->getRelativeResourcePath('javascript/LeftAndMain_Subsites.js'));
+        Requirements::javascript($module->getRelativeResourcePath('javascript/VirtualPage_Subsites.js'));
     }
 
     /**
@@ -54,7 +57,7 @@ class LeftAndMainSubsites extends Extension
 
     public function updatePageOptions(&$fields)
     {
-        $fields->push(new HiddenField('SubsiteID', 'SubsiteID', Subsite::currentSubsiteID()));
+        $fields->push(HiddenField::create('SubsiteID', 'SubsiteID', SubsiteState::singleton()->getSubsiteId()));
     }
 
     /**
@@ -141,13 +144,14 @@ class LeftAndMainSubsites extends Extension
     public function ListSubsites()
     {
         $list = $this->Subsites();
-        $currentSubsiteID = Subsite::currentSubsiteID();
+        $currentSubsiteID = SubsiteState::singleton()->getSubsiteId();
 
         if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
             return false;
         }
 
-        Requirements::javascript('subsites/javascript/LeftAndMain_Subsites.js');
+        $module = ModuleLoader::getModule('silverstripe/subsites');
+        Requirements::javascript($module->getRelativeResourcePath('javascript/LeftAndMain_Subsites.js'));
 
         $output = new ArrayList();
 
@@ -176,7 +180,7 @@ class LeftAndMainSubsites extends Extension
         }
 
         // Check subsite support.
-        if (Subsite::currentSubsiteID() == 0) {
+        if (SubsiteState::singleton()->getSubsiteId() == 0) {
             // Main site always supports everything.
             return true;
         }
@@ -194,9 +198,9 @@ class LeftAndMainSubsites extends Extension
 
     /**
      * Helper for testing if the subsite should be adjusted.
-     * @param $adminClass
-     * @param $recordSubsiteID
-     * @param $currentSubsiteID
+     * @param string $adminClass
+     * @param int $recordSubsiteID
+     * @param int $currentSubsiteID
      * @return bool
      */
     public function shouldChangeSubsite($adminClass, $recordSubsiteID, $currentSubsiteID)
@@ -227,7 +231,7 @@ class LeftAndMainSubsites extends Extension
 
         // Check if we have access to current section on the current subsite.
         $accessibleSites = $this->owner->sectionSites(true, 'Main site', $member);
-        return $accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID());
+        return $accessibleSites->count() && $accessibleSites->find('ID', SubsiteState::singleton()->getSubsiteId());
     }
 
     /**
@@ -283,7 +287,11 @@ class LeftAndMainSubsites extends Extension
         if ($record
             && isset($record->SubsiteID, $this->owner->urlParams['ID'])
             && is_numeric($record->SubsiteID)
-            && $this->shouldChangeSubsite($this->owner->class, $record->SubsiteID, Subsite::currentSubsiteID())
+            && $this->shouldChangeSubsite(
+                $this->owner->class,
+                $record->SubsiteID,
+                SubsiteState::singleton()->getSubsiteId()
+            )
         ) {
             // Update current subsite in session
             Subsite::changeSubsite($record->SubsiteID);
@@ -306,7 +314,9 @@ class LeftAndMainSubsites extends Extension
             foreach ($menu as $candidate) {
                 if ($candidate->controller && $candidate->controller != $this->owner->class) {
                     $accessibleSites = singleton($candidate->controller)->sectionSites(true, 'Main site', $member);
-                    if ($accessibleSites->count() && $accessibleSites->find('ID', Subsite::currentSubsiteID())) {
+                    if ($accessibleSites->count()
+                        && $accessibleSites->find('ID', SubsiteState::singleton()->getSubsiteId())
+                    ) {
                         // Section is accessible, redirect there.
                         return $this->owner->redirect(singleton($candidate->controller)->Link());
                     }
@@ -334,7 +344,7 @@ class LeftAndMainSubsites extends Extension
 
     public function augmentNewSiteTreeItem(&$item)
     {
-        $item->SubsiteID = isset($_POST['SubsiteID']) ? $_POST['SubsiteID'] : Subsite::currentSubsiteID();
+        $item->SubsiteID = isset($_POST['SubsiteID']) ? $_POST['SubsiteID'] : SubsiteState::singleton()->getSubsiteId();
     }
 
     public function onAfterSave($record)

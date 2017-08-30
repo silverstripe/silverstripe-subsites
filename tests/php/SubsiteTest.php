@@ -10,6 +10,8 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Model\SubsiteDomain;
+use SilverStripe\Subsites\State\SubsiteState;
+use UnexpectedValueException;
 
 class SubsiteTest extends BaseSubsiteTest
 {
@@ -59,7 +61,7 @@ class SubsiteTest extends BaseSubsiteTest
 
         // Test that changeSubsite is working
         Subsite::changeSubsite($template->ID);
-        $this->assertEquals($template->ID, Subsite::currentSubsiteID());
+        $this->assertEquals($template->ID, SubsiteState::singleton()->getSubsiteId());
         $tmplStaff = $this->objFromFixture('Page', 'staff');
         $tmplHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
 
