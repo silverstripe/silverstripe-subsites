@@ -28,7 +28,7 @@ SilverStripe\Assets\File:
   extensions:
     - SilverStripe\Subsites\Extensions\FileSubsites
 
-SilverStripe\CMS\Model\ErrorPage:
+SilverStripe\ErrorPage\ErrorPage:
   extensions:
     - SilverStripe\Subsites\Extensions\ErrorPageSubsite
 

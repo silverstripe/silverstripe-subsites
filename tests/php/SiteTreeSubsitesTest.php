@@ -82,12 +82,10 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     public function testErrorPageLocations()
     {
-        $this->markTestSkipped('needs refactoring');
-
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
 
         Subsite::changeSubsite($subsite1->ID);
-        $path = ErrorPage::get_filepath_for_errorcode(500);
+        $path = TestErrorPage::get_error_filename_spy(500);
 
         $static_path = Config::inst()->get(ErrorPage::class, 'static_filepath');
         $expected_path = $static_path . '/error-500-' . $subsite1->domain() . '.html';

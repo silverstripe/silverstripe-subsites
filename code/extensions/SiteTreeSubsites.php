@@ -469,7 +469,7 @@ class SiteTreeSubsites extends DataExtension
         if ($subsite && $subsite->exists() && $subsite->PageTypeBlacklist) {
             $blacklisted = explode(',', $subsite->PageTypeBlacklist);
             // All subclasses need to be listed explicitly
-            if (in_array($this->owner->class, $blacklisted)) {
+            if (in_array(get_class($this->owner), $blacklisted)) {
                 return false;
             }
         }
