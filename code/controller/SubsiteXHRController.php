@@ -11,11 +11,9 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SubsiteXHRController extends LeftAndMain
 {
-    /**
-     * @todo Temporary addition due to new requirements for LeftAndMain
-     *       descendants in SS4. Consider alternate implementation.
-     */
     private static $url_segment = 'subsite_xhr';
+
+    private static $ignore_menuitem = true;
 
     /**
      * Relax the access permissions, so anyone who has access to any CMS subsite can access this controller.
@@ -24,7 +22,7 @@ class SubsiteXHRController extends LeftAndMain
      */
     public function canView($member = null)
     {
-        if (parent::canView()) {
+        if (parent::canView($member)) {
             return true;
         }
 
@@ -50,11 +48,10 @@ class SubsiteXHRController extends LeftAndMain
     public function getResponseNegotiator()
     {
         $negotiator = parent::getResponseNegotiator();
-        $self = $this;
 
         // Register a new callback
-        $negotiator->setCallback('SubsiteList', function () use (&$self) {
-            return $self->SubsiteList();
+        $negotiator->setCallback('SubsiteList', function () {
+            return $this->SubsiteList();
         });
 
         return $negotiator;

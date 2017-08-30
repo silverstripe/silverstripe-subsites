@@ -68,7 +68,7 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         $ids[] = 0;
 
         // Enable session-based subsite tracking.
-        Subsite::$use_session_subsiteid = true;
+        SubsiteState::singleton()->setUseSessions(true);
 
         foreach ($ids as $id) {
             Subsite::changeSubsite($id);

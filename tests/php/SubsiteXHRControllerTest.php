@@ -14,7 +14,7 @@ class SubsiteXHRControllerTest extends FunctionalTest
         // Test unauthenticated access
         $this->logOut();
 
-        $result = $this->get('SubsiteXHRController', null, [
+        $result = $this->get('admin/subsite_xhr', null, [
             'X-Pjax' => 'SubsiteList',
             'X-Requested-With' => 'XMLHttpRequest'
         ]);
@@ -22,7 +22,7 @@ class SubsiteXHRControllerTest extends FunctionalTest
 
         // Login with NO permissions
         $this->logInWithPermission('NOT_CMS_PERMISSION');
-        $result = $this->get('SubsiteXHRController', null, [
+        $result = $this->get('admin/subsite_xhr', null, [
             'X-Pjax' => 'SubsiteList',
             'X-Requested-With' => 'XMLHttpRequest'
         ]);
@@ -30,12 +30,14 @@ class SubsiteXHRControllerTest extends FunctionalTest
 
         // Test cms user
         $this->logInWithPermission('CMS_ACCESS_CMSMain');
-        $result = $this->get('SubsiteXHRController', null, [
+        $result = $this->get('admin/subsite_xhr', null, [
             'X-Pjax' => 'SubsiteList',
             'X-Requested-With' => 'XMLHttpRequest'
         ]);
+
         $this->assertEquals(200, $result->getStatusCode());
         $this->assertEquals('text/json', $result->getHeader('Content-Type'));
+
         $body = $result->getBody();
         $this->assertContains('Main site', $body);
         $this->assertContains('Test 1', $body);

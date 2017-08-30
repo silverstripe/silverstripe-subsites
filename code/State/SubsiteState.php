@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\State;
 
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 
@@ -16,6 +17,11 @@ class SubsiteState
      * @var int|null
      */
     protected $subsiteId;
+
+    /**
+     * @var bool
+     */
+    protected $useSessions;
 
     /**
      * Get the current subsite ID
@@ -37,6 +43,36 @@ class SubsiteState
     {
         $this->subsiteId = (int) $id;
 
+        // Persist to session, if they are enabled
+        if ($this->getUseSessions() && Injector::inst()->has(HTTPRequest::class)) {
+            Injector::inst()
+                ->get(HTTPRequest::class)
+                ->getSession()
+                ->set('SubsiteID', $id);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get whether to use sessions for storing the subsite ID
+     *
+     * @return bool
+     */
+    public function getUseSessions()
+    {
+        return $this->useSessions;
+    }
+
+    /**
+     * Set whether to use sessions for storing the subsite ID
+     *
+     * @param bool $useSessions
+     * @return $this
+     */
+    public function setUseSessions($useSessions)
+    {
+        $this->useSessions = $useSessions;
         return $this;
     }
 

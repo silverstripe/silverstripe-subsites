@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\CMS\Model\SiteTree;
@@ -153,13 +154,13 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         $module = ModuleLoader::getModule('silverstripe/subsites');
         Requirements::javascript($module->getRelativeResourcePath('javascript/LeftAndMain_Subsites.js'));
 
-        $output = new ArrayList();
+        $output = ArrayList::create();
 
         foreach ($list as $subsite) {
-            $CurrentState = $subsite->ID == $currentSubsiteID ? 'selected' : '';
+            $currentState = $subsite->ID == $currentSubsiteID ? 'selected' : '';
 
-            $output->push(new ArrayData([
-                'CurrentState' => $CurrentState,
+            $output->push(ArrayData::create([
+                'CurrentState' => $currentState,
                 'ID' => $subsite->ID,
                 'Title' => Convert::raw2xml($subsite->Title)
             ]));
@@ -175,7 +176,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         }
 
         // Don't display SubsiteXHRController
-        if ($controllerName == SubsiteXHRController::class) {
+        if (singleton($controllerName) instanceof SubsiteXHRController) {
             return false;
         }
 
@@ -255,31 +256,28 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      */
     public function onBeforeInit()
     {
-        // We are accessing the CMS, so we need to let Subsites know we will be using the session.
-        Subsite::$use_session_subsiteid = true;
-
         $request = Controller::curr()->getRequest();
         $session = $request->getSession();
 
         // FIRST, check if we need to change subsites due to the URL.
 
         // Catch forced subsite changes that need to cause CMS reloads.
-        if ($request->getVar('SubsiteID')) {
+        if ($request->getVar('SubsiteID') !== null) {
             // Clear current page when subsite changes (or is set for the first time)
             if (!$session->get('SubsiteID') || $request->getVar('SubsiteID') != $session->get('SubsiteID')) {
                 $session->clear(sprintf('%s.currentPage', get_class($this->owner)));
             }
 
             // Update current subsite in session
-            Subsite::changeSubsite($_GET['SubsiteID']);
+            Subsite::changeSubsite($request->getVar('SubsiteID'));
 
-            //Redirect to clear the current page
+            // Redirect to clear the current page
             if ($this->owner->canView(Security::getCurrentUser())) {
-                //Redirect to clear the current page
                 return $this->owner->redirect($this->owner->Link());
             }
-            //Redirect to the default CMS section
-            return $this->owner->redirect('admin/');
+
+            // Redirect to the default CMS section
+            return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
         }
 
         // Automatically redirect the session to appropriate subsite when requesting a record.

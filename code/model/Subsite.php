@@ -31,6 +31,7 @@ use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
@@ -45,15 +46,6 @@ class Subsite extends DataObject
 {
 
     private static $table_name = 'Subsite';
-
-    /**
-     * @var $use_session_subsiteid Boolean Set to TRUE when using the CMS and FALSE
-     * when browsing the frontend of a website.
-     *
-     * @todo Remove flag once the Subsite CMS works without session state,
-     * similarly to the Translatable module.
-     */
-    public static $use_session_subsiteid = false;
 
     /**
      * @var boolean $disable_subsite_filter If enabled, bypasses the query decoration
@@ -155,7 +147,7 @@ class Subsite extends DataObject
 
     /**
      * Switch to another subsite through storing the subsite identifier in the current PHP session.
-     * Only takes effect when {@link Subsite::$use_session_subsiteid} is set to TRUE.
+     * Only takes effect when {@link SubsiteState::singleton()->getUseSessions()} is set to TRUE.
      *
      * @param int|Subsite $subsite Either the ID of the subsite, or the subsite object itself
      */
@@ -163,7 +155,7 @@ class Subsite extends DataObject
     {
         // Session subsite change only meaningful if the session is active.
         // Otherwise we risk setting it to wrong value, e.g. if we rely on currentSubsiteID.
-        if (!Subsite::$use_session_subsiteid) {
+        if (!SubsiteState::singleton()->getUseSessions()) {
             return;
         }
 
@@ -216,6 +208,12 @@ class Subsite extends DataObject
             }
 
             $SQL_host = Convert::raw2sql($host);
+
+            if (!in_array('SubsiteDomain', DB::table_list())) {
+                // Table hasn't been created yet. Might be a dev/build, skip.
+                return 0;
+            }
+
             $matchingDomains = DataObject::get(
                 SubsiteDomain::class,
                 "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
