@@ -5,7 +5,6 @@ namespace SilverStripe\Subsites\Pages;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Control\Controller;
-use SilverStripe\Control\Session;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\LabelField;
@@ -15,6 +14,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Forms\SubsitesTreeDropdownField;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\View\ArrayData;
 
 class SubsitesVirtualPage extends VirtualPage
@@ -139,7 +139,10 @@ class SubsitesVirtualPage extends VirtualPage
 
     public function getCopyContentFromID_SubsiteID()
     {
-        return $this->CopyContentFromID ? (int)$this->CopyContentFrom()->SubsiteID : (int)Session::get('SubsiteID');
+        if ($this->CopyContentFromID) {
+            return (int) $this->CopyContentFrom()->SubsiteID;
+        }
+        return SubsiteState::singleton()->getSubsiteId();
     }
 
     public function getVirtualFields()
@@ -177,22 +180,22 @@ class SubsitesVirtualPage extends VirtualPage
         if ($this->CustomMetaTitle) {
             $this->MetaTitle = $this->CustomMetaTitle;
         } else {
-            $this->MetaTitle = $this->ContentSource()->MetaTitle ? $this->ContentSource()->MetaTitle : $this->MetaTitle;
+            $this->MetaTitle = $this->ContentSource()->MetaTitle ?: $this->MetaTitle;
         }
         if ($this->CustomMetaKeywords) {
             $this->MetaKeywords = $this->CustomMetaKeywords;
         } else {
-            $this->MetaKeywords = $this->ContentSource()->MetaKeywords ? $this->ContentSource()->MetaKeywords : $this->MetaKeywords;
+            $this->MetaKeywords = $this->ContentSource()->MetaKeywords ?: $this->MetaKeywords;
         }
         if ($this->CustomMetaDescription) {
             $this->MetaDescription = $this->CustomMetaDescription;
         } else {
-            $this->MetaDescription = $this->ContentSource()->MetaDescription ? $this->ContentSource()->MetaDescription : $this->MetaDescription;
+            $this->MetaDescription = $this->ContentSource()->MetaDescription ?: $this->MetaDescription;
         }
         if ($this->CustomExtraMeta) {
             $this->ExtraMeta = $this->CustomExtraMeta;
         } else {
-            $this->ExtraMeta = $this->ContentSource()->ExtraMeta ? $this->ContentSource()->ExtraMeta : $this->ExtraMeta;
+            $this->ExtraMeta = $this->ContentSource()->ExtraMeta ?: $this->ExtraMeta;
         }
     }
 
@@ -217,13 +220,13 @@ class SubsitesVirtualPage extends VirtualPage
             $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
             Subsite::$disable_subsite_filter = true;
             $existingPage = DataObject::get_one(
-                'SilverStripe\\CMS\\Model\\SiteTree',
+                SiteTree::class,
                 "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
                 false // disable cache, it doesn't include subsite status in the key
             );
             Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
             $existingPageInSubsite = DataObject::get_one(
-                'SilverStripe\\CMS\\Model\\SiteTree',
+                SiteTree::class,
                 "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
                 false // disable cache, it doesn't include subsite status in the key
             );

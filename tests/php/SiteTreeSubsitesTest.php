@@ -154,8 +154,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $p2->write();
 
         // Check that the URLs weren't modified in our set-up
-        $this->assertEquals($p1->URLSegment, 'test-page');
-        $this->assertEquals($p2->URLSegment, 'test-page');
+        $this->assertEquals('test-page', $p1->URLSegment);
+        $this->assertEquals('test-page', $p2->URLSegment);
 
         // Check that if we switch between the different subsites, we receive the correct pages
         Subsite::changeSubsite($s1);
@@ -215,8 +215,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
         /** @var Subsite $otherSubsite */
         $otherSubsite = $this->objFromFixture(Subsite::class, 'subsite1');
-        $staffPage = $this->objFromFixture('Page', 'staff'); // nested page
-        $contactPage = $this->objFromFixture('Page', 'contact'); // top level page
+        $staffPage = $this->objFromFixture(Page::class, 'staff'); // nested page
+        $contactPage = $this->objFromFixture(Page::class, 'contact'); // top level page
 
         $staffPage2 = $staffPage->duplicateToSubsite($otherSubsite->ID);
         $contactPage2 = $contactPage->duplicateToSubsite($otherSubsite->ID);
@@ -270,7 +270,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     {
         $this->logInWithPermission('ADMIN');
         // Saving existing page in the same subsite doesn't change urls
-        $mainHome = $this->objFromFixture('Page', 'home');
+        $mainHome = $this->objFromFixture(Page::class, 'home');
         $mainSubsiteID = $this->idFromFixture(Subsite::class, 'main');
         Subsite::changeSubsite($mainSubsiteID);
         $mainHome->Content = '<p>Some new content</p>';

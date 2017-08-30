@@ -262,7 +262,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
         Subsite::changeSubsite($subsite1->ID);
 
-        $subsite1Page = $this->objFromFixture('Page', 'subsite1_staff');
+        $subsite1Page = $this->objFromFixture(Page::class, 'subsite1_staff');
         $subsite1Page->URLSegment = 'staff';
         $subsite1Page->write();
 
@@ -271,9 +271,10 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $subsite1Vp->CopyContentFromID = $subsite1Page->ID;
         $subsite1Vp->SubsiteID = $subsite1->ID;
         $subsite1Vp->write();
+
         $this->assertNotEquals(
-            (string) $subsite1Vp->URLSegment,
-            (string) $subsite1Page->URLSegment,
+            $subsite1Vp->URLSegment,
+            $subsite1Page->URLSegment,
             "Doesn't allow explicit URLSegment overrides when already existing in same subsite"
         );
 
