@@ -20,6 +20,6 @@ Feature: Preview navigation
         And I set the CMS mode to "Preview mode"
         And I follow "ahref" in preview
         Then the preview contains "Other page content"
-        # We are already on the second page, submit the form to return to first one.
+        # We are already on the second page, follow a link to return to first one.
         And I follow "Goto my page" in preview
         Then the preview contains "My page content"
