@@ -14,6 +14,7 @@ use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\ToggleCompositeField;
+use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
@@ -341,7 +342,7 @@ class SiteTreeSubsites extends DataExtension
             SSViewer::set_themes(array_merge([$subsite->Theme], SSViewer::get_themes()));
         }
 
-        if ($subsite && i18n::validate_locale($subsite->Language)) {
+        if ($subsite && i18n::getData()->validate($subsite->Language)) {
             i18n::set_locale($subsite->Language);
         }
     }
