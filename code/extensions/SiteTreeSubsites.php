@@ -265,6 +265,10 @@ class SiteTreeSubsites extends DataExtension
         if ($subsite && $subsite->Theme) {
             Config::inst()->update('SSViewer', 'theme', Subsite::currentSubsite()->Theme);
         }
+
+        if ($subsite && i18n::validate_locale($subsite->Language)) {
+            i18n::set_locale($subsite->Language);
+        }
     }
 
     public function alternateAbsoluteLink()
