@@ -1,6 +1,8 @@
 fi:
   ASSETADMIN:
     SUBSITENOTICE: 'Kansiot ja tiedostot, jotka on luotu pääsivustolla, ovat käytettävissä kaikissa alisivustoissa.'
+  DomainNameField:
+    INVALID_DOMAIN: 'Virheellinen domain-nimi'
   FileSubsites:
     AllSitesDropdownOpt: 'Kaikki sivustot'
     SubsiteFieldLabel: Alisivusto
@@ -16,9 +18,14 @@ fi:
     SECURITYTABTITLE: Alisivustot
   LeftAndMainSubsites:
     Saved: 'Tallennettu, ole hyvä ja päivitä liittyvät sivut.'
+  LeftAndMain_Menu:
+    Hello: Hei
+    LOGOUT: 'Kirjaudu ulos'
   SiteTreeSubsites:
     CopyAction: Kopioi
     CopyToSubsite: 'Kopioi sivu alisivustolle'
+    CopyToSubsiteWithChildren: 'Sisällytä alasivut?'
+    SubsiteOperations: Alisivustotoiminnot
   Subsite:
     COPYSTRUCTURE: 'Kopioi rakenne kohteesta:'
     CopyMessage: 'Luotiin kopio lähteestä {title}'
@@ -42,7 +49,14 @@ fi:
     MENUTITLE: Alasivustot
   SubsiteDomain:
     DOMAIN: Domain
+    DOMAIN_DESCRIPTION: 'Tämä alisivuston isäntänimi (ilman protokollaa). Sallii wildcard-merkit (*).'
+    IS_PRIMARY: 'On päädomain?'
     PLURALNAME: 'Alisivuston domain-osoitteet'
+    PROTOCOL_AUTOMATIC: Automaattinen
+    PROTOCOL_DESCRIPTION: 'Merkitse tämä oletusdomainiksi tälle alisivustolle'
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protokolla
     SINGULARNAME: 'Alisivuston domain-osoite'
   SubsiteReportWrapper:
     ReportDropdown: Sivustot
@@ -64,3 +78,5 @@ fi:
     PLURALNAME: Pohjasivut
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
     SubsiteField: Alisivu
+  VirtualPage:
+    EDITCONTENT: 'Napsauta tästä muokataksesi sisältöä'
