@@ -222,11 +222,11 @@ class LeftAndMainSubsites extends LeftAndMainExtension
     {
         // Admin can access everything, no point in checking.
         $member = Security::getCurrentUser();
-        if ($member &&
-        (
-            Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
-            Permission::checkMember($member, 'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections' in SecurityAdmin
-        )) {
+        if ($member
+            && (Permission::checkMember($member, 'ADMIN') // 'Full administrative rights'
+                || Permission::checkMember($member, 'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections'
+            )
+        ) {
             return true;
         }
 
@@ -259,23 +259,22 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         $request = Controller::curr()->getRequest();
         $session = $request->getSession();
 
+        $state = SubsiteState::singleton();
+
         // FIRST, check if we need to change subsites due to the URL.
 
         // Catch forced subsite changes that need to cause CMS reloads.
         if ($request->getVar('SubsiteID') !== null) {
             // Clear current page when subsite changes (or is set for the first time)
-            if (!$session->get('SubsiteID') || $request->getVar('SubsiteID') != $session->get('SubsiteID')) {
-                $session->clear(sprintf('%s.currentPage', get_class($this->owner)));
+            if ($state->getSessionWasChanged()) {
+                $session->clear($this->owner->sessionNamespace() . '.currentPage');
             }
 
-            // Update current subsite in session
-            Subsite::changeSubsite($request->getVar('SubsiteID'));
-
-            // Redirect to clear the current page
-            if ($this->owner->canView(Security::getCurrentUser())) {
+            // Subsite ID has already been set to the state via InitStateMiddleware
+            if ($this->owner->canView()) {
+                // Redirect to clear the current page
                 return $this->owner->redirect($this->owner->Link());
             }
-
             // Redirect to the default CMS section
             return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
         }
@@ -292,15 +291,24 @@ class LeftAndMainSubsites extends LeftAndMainExtension
                 SubsiteState::singleton()->getSubsiteId()
             )
         ) {
-            // Update current subsite in session
-            Subsite::changeSubsite($record->SubsiteID);
+            // Update current subsite
+            $canViewElsewhere = SubsiteState::singleton()->withState(function ($newState) use ($record) {
+                $newState->setSubsiteId($record->SubsiteID);
 
-            if ($this->owner->canView(Security::getCurrentUser())) {
-                //Redirect to clear the current page
-                return $this->owner->redirect($this->owner->Link());
+                if ($this->owner->canView(Security::getCurrentUser())) {
+                    return true;
+                }
+                return false;
+            });
+
+            if ($canViewElsewhere) {
+                // Redirect to clear the current page
+                return $this->owner->redirect(
+                    Controller::join_links($this->owner->Link(), $record->ID, '?SubsiteID=' . $record->SubsiteID)
+                );
             }
-            //Redirect to the default CMS section
-            return $this->owner->redirect('admin/');
+            // Redirect to the default CMS section
+            return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
         }
 
         // SECOND, check if we need to change subsites due to lack of permissions.

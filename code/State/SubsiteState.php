@@ -24,6 +24,11 @@ class SubsiteState
     protected $useSessions;
 
     /**
+     * @var bool
+     */
+    protected $sessionWasChanged = false;
+
+    /**
      * Get the current subsite ID
      *
      * @return int|null
@@ -42,14 +47,6 @@ class SubsiteState
     public function setSubsiteId($id)
     {
         $this->subsiteId = (int) $id;
-
-        // Persist to session, if they are enabled
-        if ($this->getUseSessions() && Injector::inst()->has(HTTPRequest::class)) {
-            Injector::inst()
-                ->get(HTTPRequest::class)
-                ->getSession()
-                ->set('SubsiteID', $id);
-        }
 
         return $this;
     }
@@ -73,6 +70,19 @@ class SubsiteState
     public function setUseSessions($useSessions)
     {
         $this->useSessions = $useSessions;
+
+        return $this;
+    }
+
+    public function getSessionWasChanged()
+    {
+        return $this->sessionWasChanged;
+    }
+
+    public function setSessionWasChanged($changed = true)
+    {
+        $this->sessionWasChanged = (bool) $changed;
+
         return $this;
     }
 

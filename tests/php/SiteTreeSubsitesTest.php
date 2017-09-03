@@ -359,9 +359,6 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertEquals($moved->AllChildren()->count(), 0, 'All pages are copied across');
     }
 
-    /**
-     * @todo: move to a functional test?
-     */
     public function testIfSubsiteThemeIsSetToThemeList()
     {
         $defaultThemes = ['default'];
@@ -383,9 +380,9 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $controller = ModelAsController::controller_for($pageWithTheme);
         SiteTree::singleton()->extend('contentcontrollerInit', $controller);
         $subsiteTheme = $pageWithTheme->Subsite()->Theme;
-        $this->assertEquals(
+        $this->assertContains(
+            $subsiteTheme,
             SSViewer::get_themes(),
-            array_merge([$subsiteTheme], $defaultThemes),
             'Themes should be modified when Subsite has theme defined'
         );
     }

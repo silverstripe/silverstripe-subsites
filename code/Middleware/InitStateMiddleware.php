@@ -27,13 +27,26 @@ class InitStateMiddleware implements HTTPMiddleware
 
     public function process(HTTPRequest $request, callable $delegate)
     {
+        // Initialise and register the State
         $state = SubsiteState::create();
         Injector::inst()->registerService($state);
 
-        // If the request is from the CMS, we should enable session storage
-        $state->setUseSessions($this->getIsAdmin($request));
+        // Detect whether the request was made in the CMS area (or other admin-only areas)
+        $isAdmin = $this->getIsAdmin($request);
+        $state->setUseSessions($isAdmin);
 
-        $state->setSubsiteId($this->detectSubsiteId($request));
+        // Detect the subsite ID
+        $subsiteId = $this->detectSubsiteId($request);
+        $state->setSubsiteId($subsiteId);
+
+        // Persist to the session if using the CMS
+        if ($state->getUseSessions()) {
+            $original = $request->getSession()->get('SubsiteID');
+            $request->getSession()->set('SubsiteID', $subsiteId);
+
+            // Track session changes
+            $state->setSessionWasChanged($subsiteId === $original);
+        }
 
         return $delegate($request);
     }
@@ -65,20 +78,20 @@ class InitStateMiddleware implements HTTPMiddleware
      */
     protected function detectSubsiteId(HTTPRequest $request)
     {
-        $id = null;
-
-        if ($request->getVar('SubsiteID')) {
-            $id = (int) $request->getVar('SubsiteID');
+        if ($request->getVar('SubsiteID') !== null) {
+            return (int) $request->getVar('SubsiteID');
         }
 
-        if (SubsiteState::singleton()->getUseSessions()) {
-            $id = $request->getSession()->get('SubsiteID');
+        if (SubsiteState::singleton()->getUseSessions() && $request->getSession()->get('SubsiteID') !== null) {
+            return (int) $request->getSession()->get('SubsiteID');
         }
 
-        if ($id === null) {
-            $id = Subsite::getSubsiteIDForDomain();
+        $subsiteIdFromDomain = Subsite::getSubsiteIDForDomain();
+        if ($subsiteIdFromDomain !== null) {
+            return (int) $subsiteIdFromDomain;
         }
 
-        return (int) $id;
+        // Default fallback
+        return 0;
     }
 }
