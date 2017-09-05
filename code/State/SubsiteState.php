@@ -17,6 +17,17 @@ class SubsiteState
      */
     protected $subsiteId;
 
+
+    /**
+     * @var int|null
+     */
+    protected $originalSubsiteId;
+
+    /**
+     * @var bool
+     */
+    protected $useSessions;
+
     /**
      * Get the current subsite ID
      *
@@ -28,16 +39,54 @@ class SubsiteState
     }
 
     /**
-     * Set the current subsite ID
+     * Set the current subsite ID, and track the first subsite ID set as the "original". This is used to check
+     * whether the ID has been changed through a request.
      *
      * @param int $id
      * @return $this
      */
     public function setSubsiteId($id)
     {
+        if (is_null($this->originalSubsiteId)) {
+            $this->originalSubsiteId = (int) $id;
+        }
+
         $this->subsiteId = (int) $id;
 
         return $this;
+    }
+
+    /**
+     * Get whether to use sessions for storing the subsite ID
+     *
+     * @return bool
+     */
+    public function getUseSessions()
+    {
+        return $this->useSessions;
+    }
+
+    /**
+     * Set whether to use sessions for storing the subsite ID
+     *
+     * @param bool $useSessions
+     * @return $this
+     */
+    public function setUseSessions($useSessions)
+    {
+        $this->useSessions = $useSessions;
+
+        return $this;
+    }
+
+    /**
+     * Get whether the subsite ID has been changed during a request, based on the original and current IDs
+     *
+     * @return bool
+     */
+    public function getSubsiteIdWasChanged()
+    {
+        return $this->originalSubsiteId !== $this->getSubsiteId();
     }
 
     /**

@@ -315,8 +315,7 @@ class SubsiteTest extends BaseSubsiteTest
         $domain5a = $this->objFromFixture(SubsiteDomain::class, 'dt5');
 
         // Check protocol when current protocol is http://
-        $_SERVER['HTTP_HOST'] = 'www.mysite.com';
-        $_SERVER['HTTPS'] = '';
+        Config::modify()->set(Director::class, 'alternate_base_url', 'http://www.mysite.com');
 
         $this->assertEquals('http://two.mysite.com/', $subsite2->absoluteBaseURL());
         $this->assertEquals('http://two.mysite.com/', $domain2a->absoluteBaseURL());
@@ -328,8 +327,7 @@ class SubsiteTest extends BaseSubsiteTest
         $this->assertEquals('http://www.tertiary.com/', $domain5a->absoluteBaseURL());
 
         // Check protocol when current protocol is https://
-        $_SERVER['HTTP_HOST'] = 'www.mysite.com';
-        $_SERVER['HTTPS'] = 'ON';
+        Config::modify()->set(Director::class, 'alternate_base_url', 'https://www.mysite.com');
 
         $this->assertEquals('https://two.mysite.com/', $subsite2->absoluteBaseURL());
         $this->assertEquals('https://two.mysite.com/', $domain2a->absoluteBaseURL());

@@ -15,8 +15,8 @@ class GroupSubsitesTest extends BaseSubsiteTest
 
     public function testTrivialFeatures()
     {
-        $this->assertTrue(is_array(singleton(GroupSubsites::class)->extraStatics()));
-        $this->assertTrue(is_array(singleton(GroupSubsites::class)->providePermissions()));
+        $this->assertInternalType('array', singleton(GroupSubsites::class)->extraStatics());
+        $this->assertInternalType('array', singleton(GroupSubsites::class)->providePermissions());
         $this->assertInstanceOf(FieldList::class, singleton(Group::class)->getCMSFields());
     }
 
@@ -25,11 +25,13 @@ class GroupSubsitesTest extends BaseSubsiteTest
         $group = new Group();
         $group->Title = 'The A Team';
         $group->AccessAllSubsites = true;
-        $this->assertEquals($group->getTreeTitle(), 'The A Team <i>(global group)</i>');
+        $this->assertEquals('The A Team <i>(global group)</i>', $group->getTreeTitle());
+
         $group->AccessAllSubsites = false;
         $group->write();
+
         $group->Subsites()->add($this->objFromFixture(Subsite::class, 'domaintest1'));
         $group->Subsites()->add($this->objFromFixture(Subsite::class, 'domaintest2'));
-        $this->assertEquals($group->getTreeTitle(), 'The A Team <i>(Test 1, Test 2)</i>');
+        $this->assertEquals('The A Team <i>(Test 1, Test 2)</i>', $group->getTreeTitle());
     }
 }

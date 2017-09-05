@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Tests;
 
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 class BaseSubsiteTest extends SapphireTest
 {
@@ -11,7 +12,7 @@ class BaseSubsiteTest extends SapphireTest
     {
         parent::setUp();
 
-        Subsite::$use_session_subsiteid = true;
+        SubsiteState::singleton()->setUseSessions(true);
         Subsite::$force_subsite = null;
     }
 
