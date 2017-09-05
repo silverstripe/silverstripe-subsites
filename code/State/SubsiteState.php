@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\State;
 
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 
@@ -18,15 +17,16 @@ class SubsiteState
      */
     protected $subsiteId;
 
+
     /**
-     * @var bool
+     * @var int|null
      */
-    protected $useSessions;
+    protected $originalSubsiteId;
 
     /**
      * @var bool
      */
-    protected $sessionWasChanged = false;
+    protected $useSessions;
 
     /**
      * Get the current subsite ID
@@ -39,13 +39,18 @@ class SubsiteState
     }
 
     /**
-     * Set the current subsite ID
+     * Set the current subsite ID, and track the first subsite ID set as the "original". This is used to check
+     * whether the ID has been changed through a request.
      *
      * @param int $id
      * @return $this
      */
     public function setSubsiteId($id)
     {
+        if (is_null($this->originalSubsiteId)) {
+            $this->originalSubsiteId = (int) $id;
+        }
+
         $this->subsiteId = (int) $id;
 
         return $this;
@@ -74,16 +79,14 @@ class SubsiteState
         return $this;
     }
 
-    public function getSessionWasChanged()
+    /**
+     * Get whether the subsite ID has been changed during a request, based on the original and current IDs
+     *
+     * @return bool
+     */
+    public function getSubsiteIdWasChanged()
     {
-        return $this->sessionWasChanged;
-    }
-
-    public function setSessionWasChanged($changed = true)
-    {
-        $this->sessionWasChanged = (bool) $changed;
-
-        return $this;
+        return $this->originalSubsiteId !== $this->getSubsiteId();
     }
 
     /**

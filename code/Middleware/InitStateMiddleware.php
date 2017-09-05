@@ -41,20 +41,13 @@ class InitStateMiddleware implements HTTPMiddleware
             $subsiteId = $this->detectSubsiteId($request);
             $state->setSubsiteId($subsiteId);
 
-            // Persist to the session if using the CMS
-            if ($state->getUseSessions()) {
-                $originalSubsiteId = $request->getSession()->get('SubsiteID');
-            }
-
             return $delegate($request);
         } catch (DatabaseException $ex) {
             // No-op, database is not ready
         } finally {
+            // Persist to the session if using the CMS
             if ($state->getUseSessions()) {
-                // Track session changes
-                $request->getSession()->set('SubsiteID', $subsiteId);
-
-                $state->setSessionWasChanged($subsiteId === $originalSubsiteId);
+                $request->getSession()->set('SubsiteID', $state->getSubsiteId());
             }
         }
     }

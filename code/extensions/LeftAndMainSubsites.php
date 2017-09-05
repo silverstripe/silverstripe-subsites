@@ -6,6 +6,7 @@ use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
@@ -266,22 +267,24 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         // Catch forced subsite changes that need to cause CMS reloads.
         if ($request->getVar('SubsiteID') !== null) {
             // Clear current page when subsite changes (or is set for the first time)
-            if ($state->getSessionWasChanged()) {
+            if ($state->getSubsiteIdWasChanged()) {
                 // sessionNamespace() is protected - see for info
                 $override = $this->owner->config()->get('session_namespace');
                 $sessionNamespace = $override ? $override : get_class($this->owner);
                 $session->clear($sessionNamespace . '.currentPage');
             }
 
-            // Subsite ID has already been set to the state via InitStateMiddleware
-            if ($this->owner->canView()) {
-                // Redirect to clear the current page, retaining the current URL parameters
-                return $this->owner->redirect(
-                    Controller::join_links($this->owner->Link(), ...array_values($this->owner->getURLParams()))
-                );
+            // Subsite ID has already been set to the state via InitStateMiddleware. If the user cannot view
+            // the current page, or we're in the context of editing a specific page, redirect to the admin landing
+            // section to prevent a loop of re-loading the original subsite for the current page.
+            if (!$this->owner->canView() || Controller::curr() instanceof CMSPageEditController) {
+                return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
             }
-            // Redirect to the default CMS section
-            return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
+
+            // Redirect to clear the current page, retaining the current URL parameters
+            return $this->owner->redirect(
+                Controller::join_links($this->owner->Link(), ...array_values($this->owner->getURLParams()))
+            );
         }
 
         // Automatically redirect the session to appropriate subsite when requesting a record.
