@@ -267,13 +267,18 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         if ($request->getVar('SubsiteID') !== null) {
             // Clear current page when subsite changes (or is set for the first time)
             if ($state->getSessionWasChanged()) {
-                $session->clear($this->owner->sessionNamespace() . '.currentPage');
+                // sessionNamespace() is protected - see for info
+                $override = $this->owner->config()->get('session_namespace');
+                $sessionNamespace = $override ? $override : get_class($this->owner);
+                $session->clear($sessionNamespace . '.currentPage');
             }
 
             // Subsite ID has already been set to the state via InitStateMiddleware
             if ($this->owner->canView()) {
-                // Redirect to clear the current page
-                return $this->owner->redirect($this->owner->Link());
+                // Redirect to clear the current page, retaining the current URL parameters
+                return $this->owner->redirect(
+                    Controller::join_links($this->owner->Link(), ...array_values($this->owner->getURLParams()))
+                );
             }
             // Redirect to the default CMS section
             return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
@@ -304,7 +309,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             if ($canViewElsewhere) {
                 // Redirect to clear the current page
                 return $this->owner->redirect(
-                    Controller::join_links($this->owner->Link(), $record->ID, '?SubsiteID=' . $record->SubsiteID)
+                    Controller::join_links($this->owner->Link('show'), $record->ID, '?SubsiteID=' . $record->SubsiteID)
                 );
             }
             // Redirect to the default CMS section

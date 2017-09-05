@@ -7,6 +7,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Middleware\HTTPMiddleware;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\Connect\DatabaseException;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
 
@@ -27,28 +28,35 @@ class InitStateMiddleware implements HTTPMiddleware
 
     public function process(HTTPRequest $request, callable $delegate)
     {
-        // Initialise and register the State
-        $state = SubsiteState::create();
-        Injector::inst()->registerService($state);
+        try {
+            // Initialise and register the State
+            $state = SubsiteState::create();
+            Injector::inst()->registerService($state);
 
-        // Detect whether the request was made in the CMS area (or other admin-only areas)
-        $isAdmin = $this->getIsAdmin($request);
-        $state->setUseSessions($isAdmin);
+            // Detect whether the request was made in the CMS area (or other admin-only areas)
+            $isAdmin = $this->getIsAdmin($request);
+            $state->setUseSessions($isAdmin);
 
-        // Detect the subsite ID
-        $subsiteId = $this->detectSubsiteId($request);
-        $state->setSubsiteId($subsiteId);
+            // Detect the subsite ID
+            $subsiteId = $this->detectSubsiteId($request);
+            $state->setSubsiteId($subsiteId);
 
-        // Persist to the session if using the CMS
-        if ($state->getUseSessions()) {
-            $original = $request->getSession()->get('SubsiteID');
-            $request->getSession()->set('SubsiteID', $subsiteId);
+            // Persist to the session if using the CMS
+            if ($state->getUseSessions()) {
+                $originalSubsiteId = $request->getSession()->get('SubsiteID');
+            }
 
-            // Track session changes
-            $state->setSessionWasChanged($subsiteId === $original);
+            return $delegate($request);
+        } catch (DatabaseException $ex) {
+            // No-op, database is not ready
+        } finally {
+            if ($state->getUseSessions()) {
+                // Track session changes
+                $request->getSession()->set('SubsiteID', $subsiteId);
+
+                $state->setSessionWasChanged($subsiteId === $originalSubsiteId);
+            }
         }
-
-        return $delegate($request);
     }
 
     /**

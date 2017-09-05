@@ -85,7 +85,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertContains(
-            'admin/pages/edit/' . $subsite1Home->ID . '?SubsiteID=' . $subsite1Home->SubsiteID,
+            'admin/pages/edit/show/' . $subsite1Home->ID . '?SubsiteID=' . $subsite1Home->SubsiteID,
             $response->getHeader('Location')
         );
 
@@ -95,7 +95,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $response = $this->get("admin/pages/edit/show/$subsite1Home->ID");
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertContains(
-            'admin/pages/edit/' . $subsite1Home->ID . '?SubsiteID=' . $subsite1Home->SubsiteID,
+            'admin/pages/edit/show/' . $subsite1Home->ID . '?SubsiteID=' . $subsite1Home->SubsiteID,
             $response->getHeader('Location')
         );
 

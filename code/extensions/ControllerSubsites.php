@@ -15,7 +15,7 @@ class ControllerSubsites extends Extension
     {
         if ($subsite = Subsite::currentSubsite()) {
             if ($theme = $subsite->Theme) {
-                SSViewer::add_themes([$theme]);
+                SSViewer::set_themes([$theme, SSViewer::DEFAULT_THEME]);
             }
         }
     }
