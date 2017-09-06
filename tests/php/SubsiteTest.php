@@ -351,7 +351,8 @@ class SubsiteTest extends BaseSubsiteTest
             ['Title' => 'Test 2'],
             ['Title' => 'Test 3'],
             ['Title' => 'Test Non-SSL'],
-            ['Title' => 'Test SSL']
+            ['Title' => 'Test SSL'],
+            ['Title' => 'Test Vagrant VM on port 8080']
         ], $subsites, 'Lists all subsites');
     }
 
@@ -396,7 +397,8 @@ class SubsiteTest extends BaseSubsiteTest
             'Test 2',
             'Test 3',
             'Test Non-SSL',
-            'Test SSL'
+            'Test SSL',
+            'Test Vagrant VM on port 8080'
         ], array_values($adminSiteTitles));
 
         $member2Sites = Subsite::accessible_sites(

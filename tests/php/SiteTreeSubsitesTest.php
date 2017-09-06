@@ -3,13 +3,14 @@
 namespace SilverStripe\Subsites\Tests;
 
 use Page;
+use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Controllers\ModelAsController;
-use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
+use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -80,15 +81,27 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertTrue(is_array(singleton(SiteTreeSubsites::class)->extraStatics()));
     }
 
-    public function testErrorPageLocations()
+    public function errorPageLocationsProvider()
     {
-        $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
+        return [
+            ['domaintest1', '/error-500-one.example.org.html'],
+            ['domaintestVagrant', '/error-500-localhost8080.html']
+        ];
+    }
 
-        Subsite::changeSubsite($subsite1->ID);
+    /**
+     * @dataProvider errorPageLocationsProvider
+     */
+    public function testErrorPageLocations($subsiteFixtureName, $expectedFilename)
+    {
+        $static_path = Config::inst()->get(ErrorPage::class, 'static_filepath');
+
+        $subsite = $this->objFromFixture(Subsite::class, $subsiteFixtureName);
+        $expected_path = $static_path . $expectedFilename;
+
+        Subsite::changeSubsite($subsite->ID);
         $path = TestErrorPage::get_error_filename_spy(500);
 
-        $static_path = Config::inst()->get(ErrorPage::class, 'static_filepath');
-        $expected_path = $static_path . '/error-500-' . $subsite1->domain() . '.html';
         $this->assertEquals($expected_path, $path);
     }
 

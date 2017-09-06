@@ -16,6 +16,8 @@ SilverStripe\Subsites\Model\Subsite:
     Title: 'Test SSL'
   domaintest5:
     Title: 'Test Non-SSL'
+  domaintestVagrant:
+    Title: 'Test Vagrant VM on port 8080'
 SilverStripe\Subsites\Model\SubsiteDomain:
   subsite1:
     SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
@@ -61,6 +63,11 @@ SilverStripe\Subsites\Model\SubsiteDomain:
     Domain: www.tertiary.com
     Protocol: http
     IsPrimary: 1
+  dtVagrant:
+     SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintestVagrant
+     Domain: localhost:8080
+     Protocol: http
+     IsPrimary: 1
 Page:
    mainSubsitePage:
       Title: 'MainSubsitePage'
