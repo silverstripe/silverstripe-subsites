@@ -52,8 +52,7 @@ class SubsitesVirtualPage extends VirtualPage
             'Root.Main',
             DropdownField::create(
                 'CopyContentFromID_SubsiteID',
-                /** @skipUpgrade */
-                _t('SubsitesVirtualPage.SubsiteField', 'Subsite'),
+                _t(__CLASS__ . '.SubsiteField', 'Subsite'),
                 $subsites->map('ID', 'Title')
             )->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
             'CopyContentFromID'
@@ -62,7 +61,7 @@ class SubsitesVirtualPage extends VirtualPage
         // Setup the linking to the original page.
         $pageSelectionField = new SubsitesTreeDropdownField(
             'CopyContentFromID',
-            _t('VirtualPage.CHOOSE', 'Choose a page to link to'),
+            _t('SilverStripe\\CMS\\Model\\VirtualPage.CHOOSE', 'Choose a page to link to'),
             "SilverStripe\\CMS\\Model\\SiteTree",
             'ID',
             'MenuTitle'
@@ -79,7 +78,7 @@ class SubsitesVirtualPage extends VirtualPage
             $editLink = "admin/pages/edit/show/$this->CopyContentFromID/?SubsiteID=" . $this->CopyContentFrom()->SubsiteID;
             $linkToContent = "
 				<a class=\"cmsEditlink\" href=\"$editLink\">" .
-                _t('VirtualPage.EDITCONTENT', 'Click here to edit the content') .
+                _t('SilverStripe\\CMS\\Model\\VirtualPage.EDITCONTENT', 'Click here to edit the content') .
                 '</a>';
             $fields->removeByName('VirtualPageContentLinkLabel');
             $fields->addFieldToTab(
@@ -96,7 +95,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextField::create(
                 'CustomMetaTitle',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
+            )->setDescription(_t(__CLASS__ . '.OverrideNote', 'Overrides inherited value from the source')),
             'MetaTitle'
         );
         $fields->addFieldToTab(
@@ -104,7 +103,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextareaField::create(
                 'CustomMetaKeywords',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
+            )->setDescription(_t(__CLASS__ . '.OverrideNote', 'Overrides inherited value from the source')),
             'MetaKeywords'
         );
         $fields->addFieldToTab(
@@ -112,7 +111,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextareaField::create(
                 'CustomMetaDescription',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
+            )->setDescription(_t(__CLASS__ . '.OverrideNote', 'Overrides inherited value from the source')),
             'MetaDescription'
         );
         $fields->addFieldToTab(
@@ -120,7 +119,7 @@ class SubsitesVirtualPage extends VirtualPage
             TextField::create(
                 'CustomExtraMeta',
                 $this->fieldLabel('CustomMetaTitle')
-            )->setDescription(_t('SubsitesVirtualPage.OverrideNote', 'Overrides inherited value from the source')),
+            )->setDescription(_t(__CLASS__ . '.OverrideNote', 'Overrides inherited value from the source')),
             'ExtraMeta'
         );
 
@@ -130,10 +129,10 @@ class SubsitesVirtualPage extends VirtualPage
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
-        $labels['CustomMetaTitle'] = _t('Subsite.CustomMetaTitle', 'Title');
-        $labels['CustomMetaKeywords'] = _t('Subsite.CustomMetaKeywords', 'Keywords');
-        $labels['CustomMetaDescription'] = _t('Subsite.CustomMetaDescription', 'Description');
-        $labels['CustomExtraMeta'] = _t('Subsite.CustomExtraMeta', 'Custom Meta Tags');
+        $labels['CustomMetaTitle'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomMetaTitle', 'Title');
+        $labels['CustomMetaKeywords'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomMetaKeywords', 'Keywords');
+        $labels['CustomMetaDescription'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomMetaDescription', 'Description');
+        $labels['CustomExtraMeta'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomExtraMeta', 'Custom Meta Tags');
 
         return $labels;
     }

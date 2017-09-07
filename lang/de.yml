@@ -3,12 +3,21 @@ de:
     SUBSITENOTICE: 'Auf Ordner und Dateien der Hauptseite kann von allen Subsites zugegriffen werden.'
   DomainNameField:
     INVALID_DOMAIN: 'Ungültige Domain'
-  FileSubsites:
-    AllSitesDropdownOpt: 'Alle Subseiten'
-    SubsiteFieldLabel: Subseite
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Neu hinzufügen von Template'
-  GroupSubsites:
+  LeftAndMain_Menu:
+    Hello: Hallo
+    LOGOUT: Abmelden
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'Klicken Sie hier, um den Inhalt zu bearbeiten'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsites
+  SilverStripe\Subsites\Controller\SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    AllSitesDropdownOpt: 'Alle Subseiten'
+    SubsiteFieldLabel: Subseite
+  SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'Alle Subsites'
     ACCESSONLY: 'Nur diese Subsites'
     ACCESSRADIOTITLE: 'Dieser Gruppe Zugriff geben auf'
@@ -16,15 +25,12 @@ de:
     MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
     MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
     SECURITYTABTITLE: Subsites
-  LeftAndMainSubsites:
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: Gespeichert.
-  LeftAndMain_Menu:
-    Hello: Hallo
-    LOGOUT: Abmelden
-  SiteTreeSubsites:
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopieren
     CopyToSubsite: 'Seite auf Subseite Kopieren'
-  Subsite:
+  SilverStripe\Subsites\Model\Subsite:
     COPYSTRUCTURE: 'Struktur kopieren von:'
     CopyMessage: 'Kopie von {title} erstellt'
     CustomExtraMeta: 'Benutzerdefinierte Meta-Tags'
@@ -43,9 +49,7 @@ de:
     SiteConfigTitle: 'Name Ihrer Website'
     TabTitleConfig: Einstellungen
     ValidateTitle: 'Bitte geben Sie einen Titel an'
-  SubsiteAdmin:
-    MENUTITLE: Subsites
-  SubsiteDomain:
+  SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domain
     DOMAIN_DESCRIPTION: 'Hostname dieser Subsite (ohne Protokol). Joker (*) ist erlaubt.'
     IS_PRIMARY: 'Ist Hauptdomain?'
@@ -55,10 +59,13 @@ de:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokoll
     SINGULARNAME: 'Subsite Domain'
-  SubsiteReportWrapper:
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subsite an'
+    PLURALNAME: 'Basis Seiten'
+    SINGULARNAME: 'Subsites Virtuelle Seite'
+    SubsiteField: Subsite
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Seiten
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Standard Seite'
     DomainFieldLabel: Domäne
@@ -70,10 +77,3 @@ de:
     RedirectURLFieldLabel: Weierleitungs-URL
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Name der Subsite'
-  SubsitesVirtualPage:
-    DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subsite an'
-    PLURALNAME: 'Basis Seiten'
-    SINGULARNAME: 'Subsites Virtuelle Seite'
-    SubsiteField: Subsite
-  VirtualPage:
-    EDITCONTENT: 'Klicken Sie hier, um den Inhalt zu bearbeiten'

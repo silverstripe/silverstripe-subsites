@@ -78,7 +78,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     {
         if ($this->owner->canEdit()) {
             // i18n tab
-            $fields->findOrMakeTab('Root.Subsites', _t('GroupSubsites.SECURITYTABTITLE', 'Subsites'));
+            $fields->findOrMakeTab('Root.Subsites', _t(__CLASS__ . '.SECURITYTABTITLE', 'Subsites'));
 
             $subsites = Subsite::accessible_sites(['ADMIN', 'SECURITY_SUBSITE_GROUP'], true);
             $subsiteMap = $subsites->map();
@@ -91,10 +91,10 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             if (isset($subsiteMap[0])) {
                 $fields->addFieldToTab('Root.Subsites', new OptionsetField(
                     'AccessAllSubsites',
-                    _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+                    _t(__CLASS__ . '.ACCESSRADIOTITLE', 'Give this group access to'),
                     [
-                        1 => _t('GroupSubsites.ACCESSALL', 'All subsites'),
-                        0 => _t('GroupSubsites.ACCESSONLY', 'Only these subsites'),
+                        1 => _t(__CLASS__ . '.ACCESSALL', 'All subsites'),
+                        0 => _t(__CLASS__ . '.ACCESSONLY', 'Only these subsites'),
                     ]
                 ));
 
@@ -108,13 +108,13 @@ class GroupSubsites extends DataExtension implements PermissionProvider
                 if (sizeof($subsiteMap) <= 1) {
                     $fields->addFieldToTab('Root.Subsites', new ReadonlyField(
                         'SubsitesHuman',
-                        _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+                        _t(__CLASS__ . '.ACCESSRADIOTITLE', 'Give this group access to'),
                         reset($subsiteMap)
                     ));
                 } else {
                     $fields->addFieldToTab('Root.Subsites', new CheckboxSetField(
                         'Subsites',
-                        _t('GroupSubsites.ACCESSRADIOTITLE', 'Give this group access to'),
+                        _t(__CLASS__ . '.ACCESSRADIOTITLE', 'Give this group access to'),
                         $subsiteMap
                     ));
                 }
@@ -131,7 +131,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     public function updateTreeTitle(&$title)
     {
         if ($this->owner->AccessAllSubsites) {
-            $title = _t('GroupSubsites.GlobalGroup', 'global group');
+            $title = _t(__CLASS__ . '.GlobalGroup', 'global group');
             $title = htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(' . $title . ')</i>';
         } else {
             $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
@@ -229,10 +229,10 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     {
         return [
             'SECURITY_SUBSITE_GROUP' => [
-                'name' => _t('GroupSubsites.MANAGE_SUBSITES', 'Manage subsites for groups'),
-                'category' => _t('Permissions.PERMISSIONS_CATEGORY', 'Roles and access permissions'),
+                'name' => _t(__CLASS__ . '.MANAGE_SUBSITES', 'Manage subsites for groups'),
+                'category' => _t('SilverStripe\\Security\\Permission.PERMISSIONS_CATEGORY', 'Roles and access permissions'),
                 'help' => _t(
-                    'GroupSubsites.MANAGE_SUBSITES_HELP',
+                    __CLASS__ . '.MANAGE_SUBSITES_HELP',
                     'Ability to limit the permissions for a group to one or more subsites.'
                 ),
                 'sort' => 200

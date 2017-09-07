@@ -22,9 +22,9 @@ class SubsiteReportWrapper extends ReportWrapper
         $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true);
         $options = $subsites->toDropdownMap('ID', 'Title');
 
-        $subsiteField = new TreeMultiselectField(
+        $subsiteField = TreeMultiselectField::create(
             'Subsites',
-            _t('SubsiteReportWrapper.ReportDropdown', 'Sites'),
+            _t(__CLASS__ . '.ReportDropdown', 'Sites'),
             $options
         );
         $subsiteField->setValue(array_keys($options));
@@ -38,7 +38,7 @@ class SubsiteReportWrapper extends ReportWrapper
         if ($fields) {
             $fields->insertBefore($subsiteField, $fields->First()->Name());
         } else {
-            $fields = new FieldList($subsiteField);
+            $fields = FieldList::create($subsiteField);
         }
         return $fields;
     }

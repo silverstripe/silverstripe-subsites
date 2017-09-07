@@ -653,7 +653,7 @@ class Subsite extends DataObject
         if ($this->ID != 0) {
             $domainTable = new GridField(
                 'Domains',
-                _t('Subsite.DomainsListTitle', 'Domains'),
+                _t(__CLASS__ . '.DomainsListTitle', 'Domains'),
                 $this->Domains(),
                 GridFieldConfig_RecordEditor::create(10)
             );
@@ -661,7 +661,7 @@ class Subsite extends DataObject
             $domainTable = new LiteralField(
                 'Domains',
                 '<p>' . _t(
-                    'Subsite.DOMAINSAVEFIRST',
+                    __CLASS__ . '.DOMAINSAVEFIRST',
                     'You can only add domains after saving for the first time'
                 ) . '</p>'
             );
@@ -685,12 +685,12 @@ class Subsite extends DataObject
                 'Root',
                 new Tab(
                     'Configuration',
-                    _t('Subsite.TabTitleConfig', 'Configuration'),
+                    _t(__CLASS__ . '.TabTitleConfig', 'Configuration'),
                     HeaderField::create('ConfigForSubsiteHeaderField', 'Subsite Configuration'),
                     TextField::create('Title', $this->fieldLabel('Title'), $this->Title),
                     HeaderField::create(
                         'DomainsForSubsiteHeaderField',
-                        _t('Subsite.DomainsHeadline', 'Domains for this subsite')
+                        _t(__CLASS__ . '.DomainsHeadline', 'Domains for this subsite')
                     ),
                     $domainTable,
                     $languageSelector,
@@ -701,7 +701,7 @@ class Subsite extends DataObject
                         'PageTypeBlacklistToggle',
                         sprintf(
                             '<div class="field"><a href="#" id="PageTypeBlacklistToggle">%s</a></div>',
-                            _t('Subsite.PageTypeBlacklistField', 'Disallow page types?')
+                            _t(__CLASS__ . '.PageTypeBlacklistField', 'Disallow page types?')
                         )
                     ),
                     CheckboxSetField::create(
@@ -721,7 +721,7 @@ class Subsite extends DataObject
             $fields->addFieldToTab(
                 'Root.Configuration',
                 DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)
-                ->setEmptyString(_t('Subsite.ThemeFieldEmptyString', '-')),
+                ->setEmptyString(_t(__CLASS__ . '.ThemeFieldEmptyString', '-')),
                 'PageTypeBlacklistToggle'
             );
         }
@@ -798,7 +798,7 @@ class Subsite extends DataObject
     {
         $result = parent::validate();
         if (!$this->Title) {
-            $result->addError(_t('Subsite.ValidateTitle', 'Please add a "Title"'));
+            $result->addError(_t(__CLASS__ . '.ValidateTitle', 'Please add a "Title"'));
         }
         return $result;
     }
@@ -879,7 +879,7 @@ class Subsite extends DataObject
     {
         $newItem = $this->duplicate();
         $message = _t(
-            'Subsite.CopyMessage',
+            __CLASS__ . '.CopyMessage',
             'Created a copy of {title}',
             ['title' => Convert::raw2js($this->Title)]
         );
