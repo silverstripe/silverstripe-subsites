@@ -94,6 +94,7 @@ class FileSubsitesTest extends BaseSubsiteTest
             'Test 3',
             'Test Non-SSL',
             'Test SSL',
+            'Test Vagrant VM on port 8080'
         ], array_values($source));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataExtension;
@@ -52,11 +53,13 @@ class ErrorPageSubsite extends DataExtension
             && $locale
             && $locale != Translatable::default_locale()
         ) {
-            $filepath = $static_filepath . "/error-{$statusCode}-{$locale}{$subdomainPart}.html";
+            $fileName = "error-{$statusCode}-{$locale}{$subdomainPart}.html";
         } else {
-            $filepath = $static_filepath . "/error-{$statusCode}{$subdomainPart}.html";
+            $fileName=  "error-{$statusCode}{$subdomainPart}.html";
         }
 
-        $name = $filepath;
+        $fileName = FileNameFilter::create()->filter($fileName);
+
+        $name = implode('/', [$static_filepath, $fileName]);
     }
 }
