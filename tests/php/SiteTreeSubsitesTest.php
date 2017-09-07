@@ -3,7 +3,6 @@
 namespace SilverStripe\Subsites\Tests;
 
 use Page;
-use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Controllers\ModelAsController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -398,5 +397,34 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
             SSViewer::get_themes(),
             'Themes should be modified when Subsite has theme defined'
         );
+    }
+
+    protected function provideAlternateAbsoluteLink()
+    {
+        return [
+            ['home', null, 'http://localhost/'],
+            ['home', 'myaction', 'http://localhost/home/myaction'],
+            ['contact', null, 'http://localhost/contact-us/'],
+            ['contact', 'myaction', 'http://localhost/contact-us/myaction'],
+            ['subsite1_home', null, 'http://subsite1.localhost/'],
+            ['subsite1_home', 'myaction', 'http://subsite1.localhost/home/myaction'],
+            ['subsite1_contactus', null, 'http://subsite1.localhost/contact-us/'],
+            ['subsite1_contactus', 'myaction', 'http://subsite1.localhost/contact-us/myaction']
+        ];
+    }
+
+    /**
+     * @dataProvider provideAlternateAbsoluteLink
+     * @param $fixture
+     * @param $expected
+     */
+    public function testAlternateAbsoluteLink($pageFixtureName, $action, $expectedAbsoluteLink)
+    {
+        /** @var Page $page */
+        $page = $this->objFromFixture('Page', $pageFixtureName);
+
+        $result = $page->AbsoluteLink($action);
+
+        $this->assertEquals($expectedAbsoluteLink, $result);
     }
 }
