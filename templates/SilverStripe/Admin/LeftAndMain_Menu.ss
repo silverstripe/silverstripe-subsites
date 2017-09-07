@@ -6,7 +6,7 @@
         <% include SilverStripe\\Admin\\LeftAndMain_MenuStatus %>
 
         <% if $ListSubsites %>
-            <% include SubsiteList %>
+            <% include SilverStripe\\Subsites\\Controller\\SubsiteXHRController_subsitelist %>
         <% end_if %>
     </div>
 

@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Controller;
 
 use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Subsites\Model\Subsite;
 
@@ -17,7 +18,7 @@ class SubsiteXHRController extends LeftAndMain
 
     /**
      * Relax the access permissions, so anyone who has access to any CMS subsite can access this controller.
-     * @param null $member
+     * @param Member|null $member
      * @return bool
      */
     public function canView($member = null)
@@ -62,6 +63,6 @@ class SubsiteXHRController extends LeftAndMain
      */
     public function SubsiteList()
     {
-        return $this->renderWith('Includes/SubsiteList');
+        return $this->renderWith(['type' => 'Includes', self::class . '_subsitelist']);
     }
 }
