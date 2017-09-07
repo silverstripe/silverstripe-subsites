@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SilverStripe\\Subsites\\": "code/",
+            "SilverStripe\\Subsites\\": "src/",
             "SilverStripe\\Subsites\\Tests\\": "tests/php/"
         }
     },

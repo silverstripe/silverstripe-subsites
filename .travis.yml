@@ -47,7 +47,7 @@ before_script:
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml; fi
-  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=framework/phpcs.xml.dist code/ tests/ ; fi
+  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=framework/phpcs.xml.dist src/ tests/ ; fi
   - if [[ $BEHAT_TEST ]]; then vendor/bin/behat @subsites; fi
 
 after_success:
