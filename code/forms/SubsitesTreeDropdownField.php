@@ -23,6 +23,12 @@ class SubsitesTreeDropdownField extends TreeDropdownField
 
     protected $subsiteID = 0;
 
+    /**
+     * Extra HTML classes
+     *
+     * @skipUpgrade
+     * @var string[]
+     */
     protected $extraClasses = ['SubsitesTreeDropdownField'];
 
     public function Field($properties = [])
