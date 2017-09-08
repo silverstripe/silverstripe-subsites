@@ -209,11 +209,13 @@ class Subsite extends DataObject
 
             $SQL_host = Convert::raw2sql($host);
 
+            /** @skipUpgrade */
             if (!in_array('SubsiteDomain', DB::table_list())) {
                 // Table hasn't been created yet. Might be a dev/build, skip.
                 return 0;
             }
 
+            /** @skipUpgrade */
             $matchingDomains = DataObject::get(
                 SubsiteDomain::class,
                 "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
@@ -394,6 +396,7 @@ class Subsite extends DataObject
             return self::$_cache_accessible_sites[$cacheKey];
         }
 
+        /** @skipUpgrade */
         $subsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
             ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
@@ -415,6 +418,7 @@ class Subsite extends DataObject
         }
 
         /** @var DataList $rolesSubsites */
+        /** @skipUpgrade */
         $rolesSubsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
             ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')

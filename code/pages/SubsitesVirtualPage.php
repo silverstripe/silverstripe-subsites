@@ -52,6 +52,7 @@ class SubsitesVirtualPage extends VirtualPage
             'Root.Main',
             DropdownField::create(
                 'CopyContentFromID_SubsiteID',
+                /** @skipUpgrade */
                 _t('SubsitesVirtualPage.SubsiteField', 'Subsite'),
                 $subsites->map('ID', 'Title')
             )->addExtraClass('subsitestreedropdownfield-chooser no-change-track'),
