@@ -25,6 +25,8 @@ class SubsiteCopyPagesTask extends BuildTask
     protected $title = 'Copy pages to different subsite';
     protected $description = '';
 
+    private static $segment = 'SubsiteCopyPagesTask';
+
     public function run($request)
     {
         $subsiteFromId = $request->getVar('from');
