@@ -54,7 +54,9 @@ class WildcardDomainFieldTest extends SapphireTest
             ['domain7'],
             ['mysite.co.n-z'],
             ['subdomain.my-site.com'],
-            ['subdomain.mysite']
+            ['subdomain.mysite'],
+            ['subdomain.mysite.com:80'],
+            ['mysite:80']
         ];
     }
 
@@ -70,7 +72,8 @@ class WildcardDomainFieldTest extends SapphireTest
             ['.mysite.*'],
             ['mys..ite.*'],
             ['*.mysite-'],
-            ['*.mysite.']
+            ['*.mysite.'],
+            [':1234']
         ];
     }
 
