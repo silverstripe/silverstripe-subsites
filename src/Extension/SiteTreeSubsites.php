@@ -116,19 +116,19 @@ class SiteTreeSubsites extends DataExtension
                 'Root.Main',
                 ToggleCompositeField::create(
                     'SubsiteOperations',
-                    _t('SiteTreeSubsites.SubsiteOperations', 'Subsite Operations'),
+                    _t(__CLASS__ . '.SubsiteOperations', 'Subsite Operations'),
                     [
                         new DropdownField('CopyToSubsiteID', _t(
-                            'SiteTreeSubsites.CopyToSubsite',
+                            __CLASS__ . '.CopyToSubsite',
                             'Copy page to subsite'
                         ), $subsitesMap),
                         new CheckboxField(
                             'CopyToSubsiteWithChildren',
-                            _t('SiteTreeSubsites.CopyToSubsiteWithChildren', 'Include children pages?')
+                            _t(__CLASS__ . '.CopyToSubsiteWithChildren', 'Include children pages?')
                         ),
                         $copyAction = new FormAction(
                             'copytosubsite',
-                            _t('SiteTreeSubsites.CopyAction', 'Copy')
+                            _t(__CLASS__ . '.CopyAction', 'Copy')
                         )
                     ]
                 )->setHeadingLevel(4)
@@ -250,8 +250,8 @@ class SiteTreeSubsites extends DataExtension
         if (!$sc) {
             $sc = new SiteConfig();
             $sc->SubsiteID = $this->owner->SubsiteID;
-            $sc->Title = _t('Subsite.SiteConfigTitle', 'Your Site Name');
-            $sc->Tagline = _t('Subsite.SiteConfigSubtitle', 'Your tagline here');
+            $sc->Title = _t('SilverStripe\\Subsites\\Model\\Subsite.SiteConfigTitle', 'Your Site Name');
+            $sc->Tagline = _t('SilverStripe\\Subsites\\Model\\Subsite.SiteConfigSubtitle', 'Your tagline here');
             $sc->write();
         }
         return $sc;

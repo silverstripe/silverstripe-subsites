@@ -11,7 +11,7 @@ mappings:
   SiteTreeSubsites: SilverStripe\Subsites\Extensions\SiteTreeSubsites
   SubsiteMenuExtension: SilverStripe\Subsites\Extensions\SubsiteMenuExtension
   GridFieldSubsiteDetailForm: SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm
-  GridFieldSubsiteDetailForm_ItemRequest: SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm_ItemRequest
+  GridFieldSubsiteDetailForm_ItemRequest: SilverStripe\Subsites\Forms\GridFieldSubsiteDetailFormItemRequest
   SubsitesTreeDropdownField: SilverStripe\Subsites\Forms\SubsitesTreeDropdownField
   Subsite: SilverStripe\Subsites\Model\Subsite
   SubsiteDomain: SilverStripe\Subsites\Model\SubsiteDomain

@@ -3,12 +3,21 @@ en:
     SUBSITENOTICE: 'Folders and files created in the main site are accessible by all subsites.'
   DomainNameField:
     INVALID_DOMAIN: 'Invalid domain name'
-  FileSubsites:
-    AllSitesDropdownOpt: 'All sites'
-    SubsiteFieldLabel: Subsite
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Add New from Template'
-  GroupSubsites:
+  LeftAndMain_Menu:
+    Hello: Hi
+    LOGOUT: 'Log out'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'Click here to edit the content'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsites
+  SilverStripe\Subsites\Controller\SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    AllSitesDropdownOpt: 'All sites'
+    SubsiteFieldLabel: Subsite
+  SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'All subsites'
     ACCESSONLY: 'Only these subsites'
     ACCESSRADIOTITLE: 'Give this group access to'
@@ -16,17 +25,14 @@ en:
     MANAGE_SUBSITES: 'Manage subsites for groups'
     MANAGE_SUBSITES_HELP: 'Ability to limit the permissions for a group to one or more subsites.'
     SECURITYTABTITLE: Subsites
-  LeftAndMainSubsites:
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'Saved, please update related pages.'
-  LeftAndMain_Menu:
-    Hello: Hi
-    LOGOUT: 'Log out'
-  SiteTreeSubsites:
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Copy
     CopyToSubsite: 'Copy page to subsite'
     CopyToSubsiteWithChildren: 'Include children pages?'
     SubsiteOperations: 'Subsite Operations'
-  Subsite:
+  SilverStripe\Subsites\Model\Subsite:
     COPYSTRUCTURE: 'Copy structure from:'
     CopyMessage: 'Created a copy of {title}'
     CustomExtraMeta: 'Custom Meta Tags'
@@ -45,9 +51,7 @@ en:
     SiteConfigTitle: 'Your Site Name'
     TabTitleConfig: Configuration
     ValidateTitle: 'Please add a "Title"'
-  SubsiteAdmin:
-    MENUTITLE: Subsites
-  SubsiteDomain:
+  SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domain
     DOMAIN_DESCRIPTION: 'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
     IS_PRIMARY: 'Is Primary Domain?'
@@ -58,10 +62,13 @@ en:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protocol
     SINGULARNAME: 'Subsite Domain'
-  SubsiteReportWrapper:
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    DESCRIPTION: 'Displays the content of a page on another subsite'
+    PLURALNAME: 'Base Pages'
+    SINGULARNAME: 'Subsites Virtual Page'
+    SubsiteField: Subsite
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sites
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Default site'
     DomainFieldLabel: Domain
@@ -71,13 +78,6 @@ en:
     PageTypeBlacklistFieldLabel: 'Page Type Blacklist'
     PrimaryDomainFieldLabel: 'Primary Domain'
     RedirectURLFieldLabel: 'Redirect URL'
-    ThemeFieldLabel: Theme
     ThemeFieldEmptyString: ''
+    ThemeFieldLabel: Theme
     TitleFieldLabel: 'Subsite Name'
-  SubsitesVirtualPage:
-    DESCRIPTION: 'Displays the content of a page on another subsite'
-    PLURALNAME: 'Base Pages'
-    SINGULARNAME: 'Subsites Virtual Page'
-    SubsiteField: Subsite
-  VirtualPage:
-    EDITCONTENT: 'Click here to edit the content'

@@ -1,16 +1,16 @@
 pl_PL:
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Dodaj nową na podstawie szablonu'
-  GroupSubsites:
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Podwitryny
+  SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'Wszystkie podwitryny'
     ACCESSONLY: 'Tylko te podwitryny'
     ACCESSRADIOTITLE: 'Daj tej grupie dostęp do'
     SECURITYTABTITLE: Podwitryny
-  SubsiteAdmin:
-    MENUTITLE: Podwitryny
-  SubsiteDomain:
+  SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domena
     PLURALNAME: 'Domeny podwitryny'
     SINGULARNAME: 'Domena podwitryny'
-  SubsitesVirtualPage:
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SINGULARNAME: 'Wirtualna strona dla podwitryn'

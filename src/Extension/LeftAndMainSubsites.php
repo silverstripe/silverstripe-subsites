@@ -54,7 +54,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
     public function getCMSTreeTitle()
     {
         $subsite = Subsite::currentSubsite();
-        return $subsite ? Convert::raw2xml($subsite->Title) : _t('LeftAndMain.SITECONTENTLEFT');
+        return $subsite ? Convert::raw2xml($subsite->Title) : _t('SilverStripe\\Admin\\LeftAndMain.SITECONTENTLEFT');
     }
 
     public function updatePageOptions(&$fields)
@@ -368,7 +368,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         if ($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
             $this->owner->response->addHeader(
                 'X-Status',
-                rawurlencode(_t('LeftAndMainSubsites.Saved', 'Saved, please update related pages.'))
+                rawurlencode(_t(__CLASS__ . '.Saved', 'Saved, please update related pages.'))
             );
         }
     }

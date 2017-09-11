@@ -1,17 +1,21 @@
 fa_IR:
   DomainNameField:
     INVALID_DOMAIN: 'نام دامنه نامعتبر'
-  FileSubsites:
-    AllSitesDropdownOpt: 'تمامی سایت ها'
-    SubsiteFieldLabel: 'زیر سایت ها'
-  GroupSubsites:
-    ACCESSALL: 'تمامی زیر سایت ها'
-    ACCESSONLY: 'فقط این زیر سایت ها'
-    SECURITYTABTITLE: 'زیر سایت ها'
   LeftAndMain_Menu:
     Hello: 'سلام'
     LOGOUT: خروج
-  Subsite:
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'برای ویرایش محتوا اینجا را کلیک کنید'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: 'زیر سایت ها'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    AllSitesDropdownOpt: 'تمامی سایت ها'
+    SubsiteFieldLabel: 'زیر سایت ها'
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'تمامی زیر سایت ها'
+    ACCESSONLY: 'فقط این زیر سایت ها'
+    SECURITYTABTITLE: 'زیر سایت ها'
+  SilverStripe\Subsites\Model\Subsite:
     CustomMetaKeywords: 'کلید واژه ها'
     CustomMetaTitle: عنوان
     DomainsHeadline: 'دامنه های این زیر سایت'
@@ -22,15 +26,16 @@ fa_IR:
     SINGULARNAME: 'زیر سایت'
     SiteConfigTitle: 'نام سایت شما'
     TabTitleConfig: پیکربندی
-  SubsiteAdmin:
-    MENUTITLE: 'زیر سایت ها'
-  SubsiteDomain:
+  SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: 'دامنه'
     PLURALNAME: 'دامنه های زیر سایت'
     PROTOCOL_AUTOMATIC: 'به صورت خودکار'
     Protocol: پروتکل
     SINGULARNAME: 'دمنه زیرسایت'
-  SubsiteReportWrapper:
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    PLURALNAME: 'صفحه اصلی'
+    SubsiteField: 'زیر سایت'
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: 'سایت ها'
   Subsites:
     DefaultSiteFieldLabel: 'سایت پیش فرض'
@@ -39,8 +44,3 @@ fa_IR:
     PrimaryDomainFieldLabel: 'دامنه اولیه'
     ThemeFieldLabel: پوسته
     TitleFieldLabel: 'نام زیر سایت'
-  SubsitesVirtualPage:
-    PLURALNAME: 'صفحه اصلی'
-    SubsiteField: 'زیر سایت'
-  VirtualPage:
-    EDITCONTENT: 'برای ویرایش محتوا اینجا را کلیک کنید'

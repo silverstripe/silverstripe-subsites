@@ -106,25 +106,25 @@ class SubsiteDomain extends DataObject
     public function getCMSFields()
     {
         $protocols = [
-            self::PROTOCOL_HTTP => _t('SubsiteDomain.PROTOCOL_HTTP', 'http://'),
-            self::PROTOCOL_HTTPS => _t('SubsiteDomain.PROTOCOL_HTTPS', 'https://'),
-            self::PROTOCOL_AUTOMATIC => _t('SubsiteDomain.PROTOCOL_AUTOMATIC', 'Automatic')
+            self::PROTOCOL_HTTP => _t(__CLASS__ . '.PROTOCOL_HTTP', 'http://'),
+            self::PROTOCOL_HTTPS => _t(__CLASS__ . '.PROTOCOL_HTTPS', 'https://'),
+            self::PROTOCOL_AUTOMATIC => _t(__CLASS__ . '.PROTOCOL_AUTOMATIC', 'Automatic')
         ];
         $fields = new FieldList(
             WildcardDomainField::create('Domain', $this->fieldLabel('Domain'), null, 255)
                 ->setDescription(_t(
-                    'SubsiteDomain.DOMAIN_DESCRIPTION',
+                    __CLASS__ . '.DOMAIN_DESCRIPTION',
                     'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
                 )),
             OptionsetField::create('Protocol', $this->fieldLabel('Protocol'), $protocols)
                 ->setDescription(_t(
-                    'SubsiteDomain.PROTOCOL_DESCRIPTION',
+                    __CLASS__ . '.PROTOCOL_DESCRIPTION',
                     'When generating links to this subsite, use the selected protocol. <br />' .
                     'Selecting \'Automatic\' means subsite links will default to the current protocol.'
                 )),
             CheckboxField::create('IsPrimary', $this->fieldLabel('IsPrimary'))
                 ->setDescription(_t(
-                    'SubsiteDomain.PROTOCOL_DESCRIPTION',
+                    __CLASS__ . '.PROTOCOL_DESCRIPTION',
                     'Mark this as the default domain for this subsite'
                 ))
         );
@@ -141,9 +141,9 @@ class SubsiteDomain extends DataObject
     public function fieldLabels($includerelations = true)
     {
         $labels = parent::fieldLabels($includerelations);
-        $labels['Domain'] = _t('SubsiteDomain.DOMAIN', 'Domain');
-        $labels['Protocol'] = _t('SubsiteDomain.Protocol', 'Protocol');
-        $labels['IsPrimary'] = _t('SubsiteDomain.IS_PRIMARY', 'Is Primary Domain?');
+        $labels['Domain'] = _t(__CLASS__ . '.DOMAIN', 'Domain');
+        $labels['Protocol'] = _t(__CLASS__ . '.Protocol', 'Protocol');
+        $labels['IsPrimary'] = _t(__CLASS__ . '.IS_PRIMARY', 'Is Primary Domain?');
 
         return $labels;
     }

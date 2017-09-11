@@ -1,32 +1,32 @@
 nl:
-  FileSubsites:
-    SubsiteFieldLabel: Subsite
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Nieuwe toevegen vanaf template'
-  GroupSubsites:
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsites
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    SubsiteFieldLabel: Subsite
+  SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'Alle subsites'
     ACCESSONLY: 'Alleen deze subsites'
     ACCESSRADIOTITLE: 'Geef deze groep rechten aan'
     SECURITYTABTITLE: Subsites
-  Subsite:
+  SilverStripe\Subsites\Model\Subsite:
     CustomMetaDescription: Omschrijving
     CustomMetaTitle: Titel
     PLURALNAME: Subsites
     SINGULARNAME: Subsite
     SiteConfigTitle: 'Jouw Site Naam'
     TabTitleConfig: Configuratie
-  SubsiteAdmin:
-    MENUTITLE: Subsites
-  SubsiteDomain:
+  SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domein
     PLURALNAME: 'Subsite Domeinen'
     SINGULARNAME: 'Subsite Domein'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SINGULARNAME: 'Subsites Virtuele pagina'
+    SubsiteField: Subsite
   Subsites:
     DefaultSiteFieldLabel: 'Standaard Site'
     LanguageFieldLabel: Taal
     PrimaryDomainFieldLabel: 'Primaire domein'
     ThemeFieldLabel: Thema
     TitleFieldLabel: 'Subsite naam'
-  SubsitesVirtualPage:
-    SINGULARNAME: 'Subsites Virtuele pagina'
-    SubsiteField: Subsite

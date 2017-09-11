@@ -1,16 +1,16 @@
 tr_TR:
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Add New from Template'
-  GroupSubsites:
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: 'Alt Siteler'
+  SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'All subsites'
     ACCESSONLY: 'Only these subsites'
     ACCESSRADIOTITLE: 'Give this group access to'
     SECURITYTABTITLE: 'Alt Siteler'
-  SubsiteAdmin:
-    MENUTITLE: 'Alt Siteler'
-  SubsiteDomain:
+  SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domain
     PLURALNAME: 'Subsite Domains'
     SINGULARNAME: 'Subsite Domain'
-  SubsitesVirtualPage:
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SINGULARNAME: 'Alt Site Sanal Sayfa'
