@@ -1,6 +1,5 @@
 /*jslint browser: true, nomen: true*/
 /*global $, window, jQuery*/
-
 (function($) {
 	'use strict';
 	$.entwine('ss', function($) {
@@ -13,8 +12,8 @@
 			}
 		});
 
-		/* 
-		 * Reload subsites dropdown when links are processed 
+		/*
+		 * Reload subsites dropdown when links are processed
 		 */
 		$('.cms-container .cms-menu-list li a').entwine({
 			onclick: function(e) {
@@ -23,8 +22,8 @@
 			}
 		});
 
-		/* 
-		 * Reload subsites dropdown when the admin area reloads (for deleting sites) 
+		/*
+		 * Reload subsites dropdown when the admin area reloads (for deleting sites)
 		 */
 		$('.cms-container .SubsiteAdmin .cms-edit-form fieldset.ss-gridfield').entwine({
 			onreload: function(e) {
@@ -35,8 +34,8 @@
 
 
 
-		
-		/* 
+
+		/*
 		 * Reload subsites dropdown when subsites are added or names are modified
 		 */
 		$('.cms-container .cms-content-fields .subsite-model').entwine({
@@ -45,7 +44,7 @@
 				this._super(e);
 			}
 		});
-		
+
 		// Subsite tab of Group editor
 		$('#Form_ItemEditForm_AccessAllSubsites').entwine({
 			/**
@@ -53,18 +52,18 @@
 			 */
 			onmatch: function () {
 				this.showHideSubsiteList();
-				
+
 				var ref=this;
 				$('#Form_ItemEditForm_AccessAllSubsites input').change(function() {
 					ref.showHideSubsiteList();
 				});
 			},
-			
+
 			showHideSubsiteList: function () {
 				$('#Form_ItemEditForm_Subsites').parent().parent().css('display', ($('#Form_ItemEditForm_AccessAllSubsites_1').is(':checked') ? 'none':''));
 			}
 		});
-		
+
 		$('.cms-edit-form').entwine({
 			/**
 			 * TODO: Fix with Entwine API extension. See https://github.com/silverstripe/silverstripe-subsites/pull/125
@@ -87,26 +86,6 @@
 				}
 
 				return opts;
-			}
-		});
-		
-		/**
-		 * Binding a visibility toggle anchor to a longer list of checkboxes.
-		 * Hidden by default, unless either the toggle checkbox, or any of the 
-		 * actual value checkboxes are selected.
-		 */
-		$('#PageTypeBlacklist').entwine({
-			onmatch: function() {
-				var hasLimits=Boolean($('#PageTypeBlacklist').find('input:checked').length);
-				jQuery('#PageTypeBlacklist').toggle(hasLimits);
-				
-				
-				//Bind listener
-				$('a#PageTypeBlacklistToggle').click(function(e) {
-					jQuery('#PageTypeBlacklist').toggle();
-					e.stopPropagation();
-					return false;
-				});
 			}
 		});
 

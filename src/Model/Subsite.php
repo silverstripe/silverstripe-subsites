@@ -20,6 +20,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\i18n\Data\Intl\IntlLocales;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\ArrayLib;
@@ -34,6 +35,7 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
+
 use UnexpectedValueException;
 
 /**
@@ -697,18 +699,12 @@ class Subsite extends DataObject
                     // new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
                     CheckboxField::create('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
                     CheckboxField::create('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
-                    LiteralField::create(
+                    ToggleCompositeField::create(
                         'PageTypeBlacklistToggle',
-                        sprintf(
-                            '<div class="field"><a href="#" id="PageTypeBlacklistToggle">%s</a></div>',
-                            _t(__CLASS__ . '.PageTypeBlacklistField', 'Disallow page types?')
-                        )
-                    ),
-                    CheckboxSetField::create(
-                        'PageTypeBlacklist',
-                        false,
-                        $pageTypeMap
-                    )
+                        _t(__CLASS__ . '.PageTypeBlacklistField', 'Disallow page types?'),
+                        [CheckboxSetField::create('PageTypeBlacklist', '', $pageTypeMap)]
+                    )->setHeadingLevel(4)
+
                 )
             ),
             HiddenField::create('ID', '', $this->ID),
@@ -721,8 +717,7 @@ class Subsite extends DataObject
             $fields->addFieldToTab(
                 'Root.Configuration',
                 DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)
-                ->setEmptyString(_t(__CLASS__ . '.ThemeFieldEmptyString', '-')),
-                'PageTypeBlacklistToggle'
+                ->setEmptyString(_t(__CLASS__ . '.ThemeFieldEmptyString', '-'))
             );
         }
 
