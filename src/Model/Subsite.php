@@ -704,7 +704,6 @@ class Subsite extends DataObject
                         _t(__CLASS__ . '.PageTypeBlacklistField', 'Disallow page types?'),
                         [CheckboxSetField::create('PageTypeBlacklist', '', $pageTypeMap)]
                     )->setHeadingLevel(4)
-
                 )
             ),
             HiddenField::create('ID', '', $this->ID),
