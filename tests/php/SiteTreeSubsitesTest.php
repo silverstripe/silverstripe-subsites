@@ -392,10 +392,19 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $controller = ModelAsController::controller_for($pageWithTheme);
         SiteTree::singleton()->extend('contentcontrollerInit', $controller);
         $subsiteTheme = $pageWithTheme->Subsite()->Theme;
+
+        $allThemes = SSViewer::get_themes();
+
         $this->assertContains(
             $subsiteTheme,
-            SSViewer::get_themes(),
+            $allThemes,
             'Themes should be modified when Subsite has theme defined'
+        );
+
+        $this->assertEquals(
+            $subsiteTheme,
+            array_shift($allThemes),
+            'Subsite theme should be prepeded to theme list'
         );
     }
 
