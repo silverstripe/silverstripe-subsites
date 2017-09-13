@@ -399,7 +399,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         );
     }
 
-    protected function provideAlternateAbsoluteLink()
+    public function provideAlternateAbsoluteLink()
     {
         return [
             ['home', null, 'http://localhost/'],
@@ -415,13 +415,14 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     /**
      * @dataProvider provideAlternateAbsoluteLink
-     * @param $fixture
-     * @param $expected
+     * @param name $pageFixtureName
+     * @param string|null $action
+     * @param string $expectedAbsoluteLink
      */
     public function testAlternateAbsoluteLink($pageFixtureName, $action, $expectedAbsoluteLink)
     {
         /** @var Page $page */
-        $page = $this->objFromFixture('Page', $pageFixtureName);
+        $page = $this->objFromFixture(Page::class, $pageFixtureName);
 
         $result = $page->AbsoluteLink($action);
 
