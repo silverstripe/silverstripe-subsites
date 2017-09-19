@@ -17,7 +17,7 @@
 		 */
 		$('.cms-container .cms-menu-list li a').entwine({
 			onclick: function(e) {
-				$('.cms-container').loadFragment('SubsiteXHRController', 'SubsiteList');
+				$('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
 				this._super(e);
 			}
 		});
@@ -27,20 +27,17 @@
 		 */
 		$('.cms-container .SubsiteAdmin .cms-edit-form fieldset.ss-gridfield').entwine({
 			onreload: function(e) {
-				$('.cms-container').loadFragment('SubsiteXHRController', 'SubsiteList');
+				$('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
 				this._super(e);
 			}
 		});
 
-
-
-
 		/*
 		 * Reload subsites dropdown when subsites are added or names are modified
 		 */
-		$('.cms-container .cms-content-fields .subsite-model').entwine({
+		$('.cms-container .tab.subsite-model').entwine({
 			onadd: function(e) {
-				$('.cms-container').loadFragment('SubsiteXHRController', 'SubsiteList');
+				$('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
 				this._super(e);
 			}
 		});
