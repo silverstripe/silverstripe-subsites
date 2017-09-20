@@ -35,7 +35,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
-
 use UnexpectedValueException;
 
 /**
@@ -107,6 +106,59 @@ class Subsite extends DataObject
         'PrimaryDomain',
         'IsPublic'
     ];
+
+    /**
+     * @var array
+     */
+    private static $db = [
+        'Title' => 'Varchar(255)',
+        'RedirectURL' => 'Varchar(255)',
+        'DefaultSite' => 'Boolean',
+        'Theme' => 'Varchar',
+        'Language' => 'Varchar(6)',
+
+        // Used to hide unfinished/private subsites from public view.
+        // If unset, will default to true
+        'IsPublic' => 'Boolean',
+
+        // Comma-separated list of disallowed page types
+        'PageTypeBlacklist' => 'Text',
+    ];
+
+    /**
+     * @var array
+     */
+    private static $has_many = [
+        'Domains' => SubsiteDomain::class,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $belongs_many_many = [
+        'Groups' => Group::class,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $defaults = [
+        'IsPublic' => 1
+    ];
+
+    /**
+     * @var array
+     */
+    private static $searchable_fields = [
+        'Title',
+        'Domains.Domain',
+        'IsPublic',
+    ];
+
+    /**
+     * @var string
+     */
+    private static $default_sort = '"Title" ASC';
 
     /**
      * Set allowed themes
@@ -583,59 +635,6 @@ class Subsite extends DataObject
     }
 
     /**
-     * @var array
-     */
-    private static $db = [
-        'Title' => 'Varchar(255)',
-        'RedirectURL' => 'Varchar(255)',
-        'DefaultSite' => 'Boolean',
-        'Theme' => 'Varchar',
-        'Language' => 'Varchar(6)',
-
-        // Used to hide unfinished/private subsites from public view.
-        // If unset, will default to true
-        'IsPublic' => 'Boolean',
-
-        // Comma-separated list of disallowed page types
-        'PageTypeBlacklist' => 'Text',
-    ];
-
-    /**
-     * @var array
-     */
-    private static $has_many = [
-        'Domains' => SubsiteDomain::class,
-    ];
-
-    /**
-     * @var array
-     */
-    private static $belongs_many_many = [
-        'Groups' => Group::class,
-    ];
-
-    /**
-     * @var array
-     */
-    private static $defaults = [
-        'IsPublic' => 1
-    ];
-
-    /**
-     * @var array
-     */
-    private static $searchable_fields = [
-        'Title',
-        'Domains.Domain',
-        'IsPublic',
-    ];
-
-    /**
-     * @var string
-     */
-    private static $default_sort = '"Title" ASC';
-
-    /**
      * @todo Possible security issue, don't grant edit permissions to everybody.
      * @param bool $member
      * @return bool
@@ -652,78 +651,86 @@ class Subsite extends DataObject
      */
     public function getCMSFields()
     {
-        if ($this->ID != 0) {
-            $domainTable = new GridField(
-                'Domains',
-                _t(__CLASS__ . '.DomainsListTitle', 'Domains'),
-                $this->Domains(),
-                GridFieldConfig_RecordEditor::create(10)
-            );
-        } else {
-            $domainTable = new LiteralField(
-                'Domains',
-                '<p>' . _t(
-                    __CLASS__ . '.DOMAINSAVEFIRST',
-                    'You can only add domains after saving for the first time'
-                ) . '</p>'
-            );
-        }
+        $this->beforeUpdateCMSFields(function (FieldList $fields) {
+            if ($this->exists()) {
+                // Add a GridField for domains to a new tab if the subsite has already been created
+                $fields->addFieldsToTab('Root.Domains', [
+                    GridField::create(
+                        'Domains',
+                        _t(__CLASS__ . '.DomainsListTitle', 'Domains'),
+                        $this->Domains(),
+                        GridFieldConfig_RecordEditor::create(10)
+                    )
+                ]);
+            }
 
-        $languageSelector = new DropdownField(
-            'Language',
-            $this->fieldLabel('Language'),
-            Injector::inst()->get(IntlLocales::class)->getLocales()
-        );
+            // Remove the default scaffolded blacklist field, we replace it with a checkbox set field
+            // in a wrapper further down. The RedirectURL field is currently not in use.
+            $fields->removeByName(['PageTypeBlacklist', 'RedirectURL']);
 
+            // Add the heading to the top of the fields list
+            $fields->fieldByName('Root.Main')
+                ->unshift(HeaderField::create(
+                    'ConfigForSubsiteHeaderField',
+                    _t(__CLASS__ . '.SubsiteConfigurationHeader', 'Subsite Configuration')
+                ));
+
+            $fields->addFieldToTab('Root.Main', DropdownField::create(
+                'Language',
+                $this->fieldLabel('Language'),
+                Injector::inst()->get(IntlLocales::class)->getLocales()
+            ), 'DefaultSite');
+
+            $fields->addFieldsToTab('Root.Main', [
+                ToggleCompositeField::create(
+                    'PageTypeBlacklistToggle',
+                    _t(__CLASS__ . '.PageTypeBlacklistField', 'Disallow page types?'),
+                    [
+                        CheckboxSetField::create('PageTypeBlacklist', '', $this->getPageTypeMap())
+                    ]
+                )->setHeadingLevel(4),
+                HiddenField::create('ID', '', $this->ID),
+                HiddenField::create('IsSubsite', '', 1)
+            ]);
+
+            // If there are any themes available, add the dropdown
+            $themes = $this->allowedThemes();
+            if (!empty($themes)) {
+                $fields->addFieldToTab(
+                    'Root.Main',
+                    DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)
+                        ->setEmptyString(_t(__CLASS__ . '.ThemeFieldEmptyString', '-')),
+                    'PageTypeBlacklistToggle'
+                );
+            }
+
+            // Targetted by the XHR PJAX JavaScript to reload the subsite list in the CMS
+            $fields->fieldByName('Root.Main')->addExtraClass('subsite-model');
+
+            // We don't need the Groups many many tab
+            $fields->removeByName('Groups');
+        });
+
+        return parent::getCMSFields();
+    }
+
+    /**
+     * Return a list of the different page types available to the CMS
+     *
+     * @return array
+     */
+    public function getPageTypeMap()
+    {
         $pageTypeMap = [];
+
         $pageTypes = SiteTree::page_type_classes();
         foreach ($pageTypes as $pageType) {
             $pageTypeMap[$pageType] = singleton($pageType)->i18n_singular_name();
         }
+
         asort($pageTypeMap);
 
-        $fields = new FieldList(
-            $subsiteTabs = new TabSet(
-                'Root',
-                new Tab(
-                    'Configuration',
-                    _t(__CLASS__ . '.TabTitleConfig', 'Configuration'),
-                    HeaderField::create('ConfigForSubsiteHeaderField', 'Subsite Configuration'),
-                    TextField::create('Title', $this->fieldLabel('Title'), $this->Title),
-                    HeaderField::create(
-                        'DomainsForSubsiteHeaderField',
-                        _t(__CLASS__ . '.DomainsHeadline', 'Domains for this subsite')
-                    ),
-                    $domainTable,
-                    $languageSelector,
-                    // new TextField('RedirectURL', 'Redirect to URL', $this->RedirectURL),
-                    CheckboxField::create('DefaultSite', $this->fieldLabel('DefaultSite'), $this->DefaultSite),
-                    CheckboxField::create('IsPublic', $this->fieldLabel('IsPublic'), $this->IsPublic),
-                    ToggleCompositeField::create(
-                        'PageTypeBlacklistToggle',
-                        _t(__CLASS__ . '.PageTypeBlacklistField', 'Disallow page types?'),
-                        [CheckboxSetField::create('PageTypeBlacklist', '', $pageTypeMap)]
-                    )->setHeadingLevel(4)
-                )
-            ),
-            HiddenField::create('ID', '', $this->ID),
-            HiddenField::create('IsSubsite', '', 1)
-        );
-
-        // If there are any themes available, add the dropdown
-        $themes = $this->allowedThemes();
-        if (!empty($themes)) {
-            $fields->addFieldToTab(
-                'Root.Configuration',
-                DropdownField::create('Theme', $this->fieldLabel('Theme'), $this->allowedThemes(), $this->Theme)
-                ->setEmptyString(_t(__CLASS__ . '.ThemeFieldEmptyString', '-'))
-            );
-        }
-
-        $subsiteTabs->addExtraClass('subsite-model');
-
-        $this->extend('updateCMSFields', $fields);
-        return $fields;
+        return $pageTypeMap;
     }
 
     /**
