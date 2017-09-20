@@ -49,6 +49,7 @@ en:
     SINGULARNAME: Subsite
     SiteConfigSubtitle: 'Your tagline here'
     SiteConfigTitle: 'Your Site Name'
+    SubsiteConfigurationHeader: 'Subsite Configuration'
     TabTitleConfig: Configuration
     ValidateTitle: 'Please add a "Title"'
   SilverStripe\Subsites\Model\SubsiteDomain:

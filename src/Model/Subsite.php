@@ -670,7 +670,10 @@ class Subsite extends DataObject
 
             // Add the heading to the top of the fields list
             $fields->fieldByName('Root.Main')
-                ->unshift(HeaderField::create('ConfigForSubsiteHeaderField', 'Subsite Configuration'));
+                ->unshift(HeaderField::create(
+                    'ConfigForSubsiteHeaderField',
+                    _t(__CLASS__ . '.SubsiteConfigurationHeader', 'Subsite Configuration')
+                ));
 
             $fields->addFieldToTab('Root.Main', DropdownField::create(
                 'Language',
