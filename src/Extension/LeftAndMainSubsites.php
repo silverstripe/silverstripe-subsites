@@ -54,7 +54,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
     public function getCMSTreeTitle()
     {
         $subsite = Subsite::currentSubsite();
-        return $subsite ? Convert::raw2xml($subsite->Title) : _t('SilverStripe\\Admin\\LeftAndMain.SITECONTENTLEFT');
+        return $subsite ? Convert::raw2xml($subsite->Title) : _t(__CLASS__.'.SITECONTENTLEFT', 'Site Content');
     }
 
     public function updatePageOptions(&$fields)

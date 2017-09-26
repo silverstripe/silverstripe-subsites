@@ -3,17 +3,12 @@ en:
     SUBSITENOTICE: 'Folders and files created in the main site are accessible by all subsites.'
   DomainNameField:
     INVALID_DOMAIN: 'Invalid domain name'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Add New from Template'
-  LeftAndMain_Menu:
-    Hello: Hi
-    LOGOUT: 'Log out'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Click here to edit the content'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Subsites
   SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
+    MENUTITLE: SilverStripe\Subsites\Controller\SubsiteXHRController
   SilverStripe\Subsites\Extensions\FileSubsites:
     AllSitesDropdownOpt: 'All sites'
     SubsiteFieldLabel: Subsite
@@ -26,6 +21,7 @@ en:
     MANAGE_SUBSITES_HELP: 'Ability to limit the permissions for a group to one or more subsites.'
     SECURITYTABTITLE: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    SITECONTENTLEFT: 'Site Content'
     Saved: 'Saved, please update related pages.'
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Copy
@@ -33,30 +29,31 @@ en:
     CopyToSubsiteWithChildren: 'Include children pages?'
     SubsiteOperations: 'Subsite Operations'
   SilverStripe\Subsites\Model\Subsite:
-    COPYSTRUCTURE: 'Copy structure from:'
     CopyMessage: 'Created a copy of {title}'
     CustomExtraMeta: 'Custom Meta Tags'
     CustomMetaDescription: Description
     CustomMetaKeywords: Keywords
     CustomMetaTitle: Title
-    DOMAINSAVEFIRST: 'You can only add domains after saving for the first time'
-    DomainsHeadline: 'Domains for this subsite'
     DomainsListTitle: Domains
-    IsPublicHeaderField: 'Active subsite'
-    NOTEMPLATE: 'No template'
     PLURALNAME: Subsites
+    PLURALS:
+      one: 'A Subsite'
+      other: '{count} Subsites'
     PageTypeBlacklistField: 'Disallow page types?'
     SINGULARNAME: Subsite
     SiteConfigSubtitle: 'Your tagline here'
     SiteConfigTitle: 'Your Site Name'
     SubsiteConfigurationHeader: 'Subsite Configuration'
-    TabTitleConfig: Configuration
+    ThemeFieldEmptyString: '-'
     ValidateTitle: 'Please add a "Title"'
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domain
     DOMAIN_DESCRIPTION: 'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
     IS_PRIMARY: 'Is Primary Domain?'
     PLURALNAME: 'Subsite Domains'
+    PLURALS:
+      one: 'A Subsite Domain'
+      other: '{count} Subsite Domains'
     PROTOCOL_AUTOMATIC: Automatic
     PROTOCOL_DESCRIPTION: 'Mark this as the default domain for this subsite'
     PROTOCOL_HTTP: 'http://'
@@ -65,11 +62,18 @@ en:
     SINGULARNAME: 'Subsite Domain'
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Displays the content of a page on another subsite'
-    PLURALNAME: 'Base Pages'
+    OverrideNote: 'Overrides inherited value from the source'
+    PLURALNAME: 'Subsites Virtual Pages'
+    PLURALS:
+      one: 'A Subsites Virtual Page'
+      other: '{count} Subsites Virtual Pages'
     SINGULARNAME: 'Subsites Virtual Page'
     SubsiteField: Subsite
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sites
+  Subsite:
+    COPYSTRUCTURE: 'Copy structure from:'
+    NOTEMPLATE: 'No template'
   Subsites:
     DefaultSiteFieldLabel: 'Default site'
     DomainFieldLabel: Domain
@@ -79,6 +83,5 @@ en:
     PageTypeBlacklistFieldLabel: 'Page Type Blacklist'
     PrimaryDomainFieldLabel: 'Primary Domain'
     RedirectURLFieldLabel: 'Redirect URL'
-    ThemeFieldEmptyString: ''
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Subsite Name'
