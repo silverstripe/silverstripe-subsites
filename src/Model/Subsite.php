@@ -657,7 +657,7 @@ class Subsite extends DataObject
                 $fields->addFieldsToTab('Root.Domains', [
                     GridField::create(
                         'Domains',
-                        _t(__CLASS__ . '.DomainsListTitle', 'Domains'),
+                        '',
                         $this->Domains(),
                         GridFieldConfig_RecordEditor::create(10)
                     )
@@ -667,13 +667,6 @@ class Subsite extends DataObject
             // Remove the default scaffolded blacklist field, we replace it with a checkbox set field
             // in a wrapper further down. The RedirectURL field is currently not in use.
             $fields->removeByName(['PageTypeBlacklist', 'RedirectURL']);
-
-            // Add the heading to the top of the fields list
-            $fields->fieldByName('Root.Main')
-                ->unshift(HeaderField::create(
-                    'ConfigForSubsiteHeaderField',
-                    _t(__CLASS__ . '.SubsiteConfigurationHeader', 'Subsite Configuration')
-                ));
 
             $fields->addFieldToTab('Root.Main', DropdownField::create(
                 'Language',
@@ -709,6 +702,9 @@ class Subsite extends DataObject
 
             // We don't need the Groups many many tab
             $fields->removeByName('Groups');
+
+            // Rename the main tab to configuration
+            $fields->fieldByName('Root.Main')->setTitle(_t(__CLASS__ . '.ConfigurationTab', 'Configuration'));
         });
 
         return parent::getCMSFields();
