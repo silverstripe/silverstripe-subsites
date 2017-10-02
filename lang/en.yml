@@ -29,12 +29,12 @@ en:
     CopyToSubsiteWithChildren: 'Include children pages?'
     SubsiteOperations: 'Subsite Operations'
   SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Configuration
     CopyMessage: 'Created a copy of {title}'
     CustomExtraMeta: 'Custom Meta Tags'
     CustomMetaDescription: Description
     CustomMetaKeywords: Keywords
     CustomMetaTitle: Title
-    DomainsListTitle: Domains
     PLURALNAME: Subsites
     PLURALS:
       one: 'A Subsite'
@@ -43,7 +43,6 @@ en:
     SINGULARNAME: Subsite
     SiteConfigSubtitle: 'Your tagline here'
     SiteConfigTitle: 'Your Site Name'
-    SubsiteConfigurationHeader: 'Subsite Configuration'
     ThemeFieldEmptyString: '-'
     ValidateTitle: 'Please add a "Title"'
   SilverStripe\Subsites\Model\SubsiteDomain:
