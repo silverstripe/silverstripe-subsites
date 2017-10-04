@@ -22,6 +22,9 @@ matrix:
       env: DB=MYSQL PHPUNIT_COVERAGE_TEST=1
     - php: 7.0
       env: DB=MYSQL BEHAT_TEST=1
+  allow_failures:
+    - php: 7.0
+      env: DB=MYSQL BEHAT_TEST=1
 
 before_script:
   - phpenv rehash
@@ -34,7 +37,7 @@ before_script:
   - echo "SS_BASE_URL=http://localhost:8080/" >> .env
 
   # Bootstrap cms / mysite folder
-  - php ./cms/tests/bootstrap/mysite.php
+  - php ./vendor/silverstripe/cms/tests/bootstrap/mysite.php
 
   # Behat bootstrapping
   - if [[ $BEHAT_TEST ]]; then echo "" >> .env && echo "SS_BASE_URL=http://localhost:8080/" >> .env; fi
@@ -47,11 +50,11 @@ before_script:
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml; fi
-  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=framework/phpcs.xml.dist src/ tests/ ; fi
+  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=vendor/silverstripe/framework/phpcs.xml.dist src/ tests/ ; fi
   - if [[ $BEHAT_TEST ]]; then vendor/bin/behat @subsites; fi
 
 after_success:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi
 
 after_failure:
-  - if [[ $BEHAT_TEST ]]; then php ./framework/tests/behat/travis-upload-artifacts.php --if-env BEHAT_TEST,ARTIFACTS_BUCKET,ARTIFACTS_KEY,ARTIFACTS_SECRET --target-path $TRAVIS_REPO_SLUG/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID --artifacts-base-url https://s3.amazonaws.com/$ARTIFACTS_BUCKET/ --artifacts-path ./artifacts/; fi
+  - if [[ $BEHAT_TEST ]]; then php ./vendor/silverstripe/framework/tests/behat/travis-upload-artifacts.php --if-env BEHAT_TEST,ARTIFACTS_BUCKET,ARTIFACTS_KEY,ARTIFACTS_SECRET --target-path $TRAVIS_REPO_SLUG/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID --artifacts-base-url https://s3.amazonaws.com/$ARTIFACTS_BUCKET/ --artifacts-path ./artifacts/; fi
