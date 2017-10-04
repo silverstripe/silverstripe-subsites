@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Tests;
 
-use SilverStripe\Control\Session;
 use SilverStripe\Dev\FunctionalTest;
 
 class SubsiteXHRControllerTest extends FunctionalTest

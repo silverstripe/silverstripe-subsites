@@ -4,7 +4,6 @@ namespace SilverStripe\Subsites\Forms;
 
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Control\Session;
 use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\View\Requirements;
