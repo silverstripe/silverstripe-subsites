@@ -4,11 +4,12 @@ namespace SilverStripe\Subsites\State;
 
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Resettable;
 
 /**
  * SubsiteState provides static access to the current state for subsite related data during a request
  */
-class SubsiteState
+class SubsiteState implements Resettable
 {
     use Injectable;
 
@@ -105,5 +106,23 @@ class SubsiteState
         } finally {
             Injector::inst()->registerService($this);
         }
+    }
+
+    /**
+     * Reset the local cache of the singleton
+     */
+    public static function reset()
+    {
+        SubsiteState::singleton()->resetState();
+    }
+
+    /**
+     * Reset the local cache of this object
+     */
+    public function resetState()
+    {
+        $this->originalSubsiteId = null;
+        $this->subsiteId = null;
+        $this->useSessions = null;
     }
 }
