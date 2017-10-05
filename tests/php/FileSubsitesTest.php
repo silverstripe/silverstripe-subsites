@@ -5,7 +5,6 @@ namespace SilverStripe\Subsites\Tests;
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Extensions\FileSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 

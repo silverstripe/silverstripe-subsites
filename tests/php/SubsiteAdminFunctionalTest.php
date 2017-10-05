@@ -7,7 +7,6 @@ use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Subsites\Model\Subsite;
-use SilverStripe\Subsites\State\SubsiteState;
 
 class SubsiteAdminFunctionalTest extends FunctionalTest
 {
