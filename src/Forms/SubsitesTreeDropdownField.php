@@ -7,6 +7,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\View\Requirements;
+use SilverStripe\Subsites\State\SubsiteState;
 
 /**
  * Wraps around a TreedropdownField to add ability for temporary
@@ -52,14 +53,10 @@ class SubsitesTreeDropdownField extends TreeDropdownField
 
     public function tree(HTTPRequest $request)
     {
-        $session = Controller::curr()->getRequest()->getSession();
-
-        $oldSubsiteID = $session->get('SubsiteID');
-        $session->set('SubsiteID', $this->subsiteID);
-
-        $results = parent::tree($request);
-
-        $session->set('SubsiteID', $oldSubsiteID);
+        $results = SubsiteState::singleton()->withState(function () use ($request) {
+            SubsiteState::singleton()->setSubsiteId($this->subsiteID);
+            return parent::tree($request);
+        });
 
         return $results;
     }
