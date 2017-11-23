@@ -637,6 +637,11 @@ class Subsite extends DataObject
      */
     public function canEdit($member = false)
     {
+        $extended = $this->extendedCan(__FUNCTION__, $member);
+        if ($extended !== null) {
+            return $extended;
+        }
+
         return true;
     }
 
