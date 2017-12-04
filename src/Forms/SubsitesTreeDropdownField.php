@@ -4,7 +4,6 @@ namespace SilverStripe\Subsites\Forms;
 
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\View\Requirements;
 use SilverStripe\Subsites\State\SubsiteState;
@@ -35,8 +34,7 @@ class SubsitesTreeDropdownField extends TreeDropdownField
     {
         $html = parent::Field($properties);
 
-        $module = ModuleLoader::getModule('silverstripe/subsites');
-        Requirements::javascript($module->getRelativeResourcePath('javascript/SubsitesTreeDropdownField.js'));
+        Requirements::javascript('silverstripe/subsitesjavascript/SubsitesTreeDropdownField.js');
 
         return $html;
     }
