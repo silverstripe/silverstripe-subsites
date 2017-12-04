@@ -22,7 +22,7 @@
         "phpunit/phpunit": "^5.7",
         "squizlabs/php_codesniffer": "^3.0",
         "silverstripe/behat-extension": "^3",
-        "silverstripe/serve": "dev-master",
+        "silverstripe/serve": "^2.0",
         "se/selenium-server-standalone": "2.41.0"
     },
     "autoload": {
