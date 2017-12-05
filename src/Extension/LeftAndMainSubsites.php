@@ -10,7 +10,6 @@ use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
-use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -41,11 +40,9 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
     public function init()
     {
-        $module = ModuleLoader::getModule('silverstripe/subsites');
-
-        Requirements::css($module->getRelativeResourcePath('css/LeftAndMain_Subsites.css'));
-        Requirements::javascript($module->getRelativeResourcePath('javascript/LeftAndMain_Subsites.js'));
-        Requirements::javascript($module->getRelativeResourcePath('javascript/VirtualPage_Subsites.js'));
+        Requirements::css('silverstripe/subsites:css/LeftAndMain_Subsites.css');
+        Requirements::javascript('silverstripe/subsites:javascript/LeftAndMain_Subsites.js');
+        Requirements::javascript('silverstripe/subsites:javascript/VirtualPage_Subsites.js');
     }
 
     /**
@@ -152,8 +149,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             return false;
         }
 
-        $module = ModuleLoader::getModule('silverstripe/subsites');
-        Requirements::javascript($module->getRelativeResourcePath('javascript/LeftAndMain_Subsites.js'));
+        Requirements::javascript('silverstripe/subsites:javascript/LeftAndMain_Subsites.js');
 
         $output = ArrayList::create();
 
