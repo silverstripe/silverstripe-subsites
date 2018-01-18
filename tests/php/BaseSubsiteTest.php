@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Tests;
 
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
@@ -13,6 +14,7 @@ class BaseSubsiteTest extends SapphireTest
         parent::setUp();
 
         SubsiteState::singleton()->setUseSessions(true);
+        Config::modify()->set(Subsite::class, 'write_hostmap', false);
         Subsite::$force_subsite = null;
     }
 

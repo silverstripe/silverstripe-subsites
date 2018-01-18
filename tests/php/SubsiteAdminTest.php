@@ -13,6 +13,13 @@ class SubsiteAdminTest extends BaseSubsiteTest
 {
     protected static $fixture_file = 'SubsiteTest.yml';
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Config::modify()->set(Subsite::class, 'write_hostmap', false);
+    }
+
     protected function adminLoggedInSession()
     {
         return new Session([
@@ -25,7 +32,6 @@ class SubsiteAdminTest extends BaseSubsiteTest
      */
     public function testBasicView()
     {
-        Config::modify()->set(Subsite::class, 'write_hostmap', false);
         $subsite1ID = $this->objFromFixture(Subsite::class, 'domaintest1')->ID;
 
         // Open the admin area logged in as admin
