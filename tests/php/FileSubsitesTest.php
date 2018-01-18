@@ -12,15 +12,6 @@ class FileSubsitesTest extends BaseSubsiteTest
 {
     protected static $fixture_file = 'SubsiteTest.yml';
 
-    /**
-     * Disable other file extensions
-     *
-     * @var array
-     */
-    protected static $illegal_extensions = [
-        SiteTree::class => ['Translatable'], // @todo implement namespace for Translatable
-    ];
-
     public function testTrivialFeatures()
     {
         $this->assertTrue(is_array(singleton(FileSubsites::class)->extraStatics()));
@@ -72,28 +63,5 @@ class FileSubsitesTest extends BaseSubsiteTest
         $file->ParentID = $folder->ID;
         $file->onAfterUpload();
         $this->assertEquals($folder->SubsiteID, $file->SubsiteID);
-    }
-
-    public function testSubsitesFolderDropdown()
-    {
-        $this->logInAs('admin');
-
-        $file = new Folder();
-
-        $source = array_values($file->getCMSFields()->dataFieldByName('SubsiteID')->getSource());
-        asort($source);
-
-        $this->assertEquals([
-            'Main site',
-            'Subsite1 Template',
-            'Subsite2 Template',
-            'Template',
-            'Test 1',
-            'Test 2',
-            'Test 3',
-            'Test Non-SSL',
-            'Test SSL',
-            'Test Vagrant VM on port 8080'
-        ], array_values($source));
     }
 }

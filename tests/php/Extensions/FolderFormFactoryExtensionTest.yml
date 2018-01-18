@@ -1,0 +1,11 @@
+SilverStripe\Subsites\Model\Subsite:
+  main:
+    Title: Template
+  subsite_a:
+    Title: Subsite A
+  subsite_b:
+    Title: Subsite B
+
+SilverStripe\Assets\Folder:
+  folder_a:
+    Title: Folder A
