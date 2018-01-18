@@ -2,10 +2,6 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
-use SilverStripe\Assets\Folder;
-use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
@@ -42,43 +38,6 @@ class FileSubsites extends DataExtension
     }
 
     /**
-     * Add subsites-specific fields to the folder editor.
-     * @param FieldList $fields
-     */
-    public function updateCMSFields(FieldList $fields)
-    {
-        if ($this->owner instanceof Folder) {
-            $sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
-            $values = [];
-            $values[0] = _t(__CLASS__ . '.AllSitesDropdownOpt', 'All sites');
-            foreach ($sites as $site) {
-                $values[$site->ID] = $site->Title;
-            }
-            ksort($values);
-            if ($sites) {
-                //Dropdown needed to move folders between subsites
-                /** @var @skipUpgrade */
-                $dropdown = new DropdownField(
-                    'SubsiteID',
-                    _t(__CLASS__ . '.SubsiteFieldLabel', 'Subsite'),
-                    $values
-                );
-                $dropdown->addExtraClass('subsites-move-dropdown');
-                $fields->push($dropdown);
-                $fields->push(new LiteralField(
-                    'Message',
-                    '<p class="message notice">' .
-                    _t(
-                        'ASSETADMIN.SUBSITENOTICE',
-                        'Folders and files created in the main site are accessible by all subsites.'
-                    )
-                    . '</p>'
-                ));
-            }
-        }
-    }
-
-    /**
      * Update any requests to limit the results to the current site
      * @param SQLSelect $query
      * @param DataQuery|null $dataQuery
@@ -90,7 +49,8 @@ class FileSubsites extends DataExtension
         }
 
         // If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
-        //@TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
+        // @TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and
+        // ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
 
         $from = $query->getFrom();
         if (isset($from['SiteTree_ImageTracking']) || $query->filtersOnID()) {

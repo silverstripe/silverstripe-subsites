@@ -28,6 +28,10 @@ SilverStripe\Assets\File:
   extensions:
     - SilverStripe\Subsites\Extensions\FileSubsites
 
+SilverStripe\AssetAdmin\Forms\FolderFormFactory:
+  extensions:
+    - SilverStripe\Subsites\Extensions\FolderFormFactoryExtension
+
 SilverStripe\ErrorPage\ErrorPage:
   extensions:
     - SilverStripe\Subsites\Extensions\ErrorPageSubsite
