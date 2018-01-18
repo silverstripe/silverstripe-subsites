@@ -3,8 +3,7 @@ language: php
 addons:
   firefox: "31.0"
 
-# Required for Behat, currently
-dist: precise
+dist: trusty
 
 env:
   global:
