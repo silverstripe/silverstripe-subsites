@@ -54,7 +54,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
     // Attempt to bring main:linky to subsite2:linky
     public function testVirtualPageFromAnotherSubsite()
     {
-        Subsite::$write_hostmap = false;
+        Config::modify()->set(Subsite::class, 'write_hostmap', false);
 
         $subsite = $this->objFromFixture(Subsite::class, 'subsite2');
 
@@ -261,7 +261,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
     {
         $this->markTestIncomplete('@todo fix this test');
 
-        Subsite::$write_hostmap = false;
+        Config::modify()->set(Subsite::class, 'write_hostmap', false);
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
         Subsite::changeSubsite($subsite1->ID);

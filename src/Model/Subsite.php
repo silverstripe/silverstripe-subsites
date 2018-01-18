@@ -8,6 +8,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DropdownField;
@@ -46,21 +47,27 @@ class Subsite extends DataObject
 
     /**
      * @var boolean $disable_subsite_filter If enabled, bypasses the query decoration
-     * to limit DataObject::get*() calls to a specific subsite. Useful for debugging.
+     * to limit DataObject::get*() calls to a specific subsite. Useful for debugging. Note that
+     * for now this is left as a public static property to avoid having to nest and mutate the
+     * configuration manifest.
      */
     public static $disable_subsite_filter = false;
 
     /**
      * Allows you to force a specific subsite ID, or comma separated list of IDs.
      * Only works for reading. An object cannot be written to more than 1 subsite.
+     *
+     * @deprecated 2.0.0..3.0.0 Use SubsiteState::singleton()->withState() instead.
      */
     public static $force_subsite = null;
 
     /**
+     * Whether to write a host-map.php file
      *
+     * @config
      * @var boolean
      */
-    public static $write_hostmap = true;
+    private static $write_hostmap = true;
 
     /**
      * Memory cache of accessible sites
@@ -77,23 +84,31 @@ class Subsite extends DataObject
     private static $_cache_subsite_for_domain = [];
 
     /**
-     * @var array $allowed_themes Numeric array of all themes which are allowed to be selected for all subsites.
+     * Numeric array of all themes which are allowed to be selected for all subsites.
      * Corresponds to subfolder names within the /themes folder. By default, all themes contained in this folder
      * are listed.
+     *
+     * @var array
      */
-    private static $allowed_themes = [];
+    protected static $allowed_themes = [];
 
     /**
-     * @var Boolean If set to TRUE, don't assume 'www.example.com' and 'example.com' are the same.
+     * If set to TRUE, don't assume 'www.example.com' and 'example.com' are the same.
      * Doesn't affect wildcard matching, so '*.example.com' will match 'www.example.com' (but not 'example.com')
      * in both TRUE or FALSE setting.
+     *
+     * @config
+     * @var boolean
      */
-    public static $strict_subdomain_matching = false;
+    private static $strict_subdomain_matching = false;
 
     /**
-     * @var boolean Respects the IsPublic flag when retrieving subsites
+     * Respects the IsPublic flag when retrieving subsites
+     *
+     * @config
+     * @var boolean
      */
-    public static $check_is_public = true;
+    private static $check_is_public = true;
 
     /*** @return array
      */
@@ -247,32 +262,37 @@ class Subsite extends DataObject
         $matchingDomains = null;
         $cacheKey = null;
         if ($host) {
-            if (!self::$strict_subdomain_matching) {
+            if (!static::config()->get('strict_subdomain_matching')) {
                 $host = preg_replace('/^www\./', '', $host);
             }
 
             $currentUserId = Security::getCurrentUser() ? Security::getCurrentUser()->ID : 0;
-            $cacheKey = implode('_', [$host, $currentUserId, self::$check_is_public]);
+            $cacheKey = implode('_', [$host, $currentUserId, static::config()->get('check_is_public')]);
             if (isset(self::$_cache_subsite_for_domain[$cacheKey])) {
                 return self::$_cache_subsite_for_domain[$cacheKey];
             }
 
             $SQL_host = Convert::raw2sql($host);
 
+            $schema = DataObject::getSchema();
+
             /** @skipUpgrade */
-            if (!in_array('SubsiteDomain', DB::table_list())) {
+            $domainTableName = $schema->tableName(SubsiteDomain::class);
+            if (!in_array($domainTableName, DB::table_list())) {
                 // Table hasn't been created yet. Might be a dev/build, skip.
                 return 0;
             }
 
+            $subsiteTableName = $schema->tableName(__CLASS__);
             /** @skipUpgrade */
             $matchingDomains = DataObject::get(
                 SubsiteDomain::class,
-                "'$SQL_host' LIKE replace(\"SubsiteDomain\".\"Domain\",'*','%')",
+                "'$SQL_host' LIKE replace(\"{$domainTableName}\".\"Domain\",'*','%')",
                 '"IsPrimary" DESC'
             )->innerJoin(
-                'Subsite',
-                '"Subsite"."ID" = "SubsiteDomain"."SubsiteID" AND "Subsite"."IsPublic"=1'
+                $subsiteTableName,
+                '"' . $subsiteTableName . '"."ID" = "SubsiteDomain"."SubsiteID" AND "'
+                    . $subsiteTableName . '"."IsPublic"=1'
             );
         }
 
@@ -530,12 +550,13 @@ class Subsite extends DataObject
      */
     public static function writeHostMap($file = null)
     {
-        if (!self::$write_hostmap) {
+        if (!static::config()->get('write_hostmap')) {
             return;
         }
 
         if (!$file) {
-            $file = Director::baseFolder() . '/subsites/host-map.php';
+            $subsitesPath = ModuleLoader::getModule('silverstripe/subsites')->getRelativePath();
+            $file = Director::baseFolder() . $subsitesPath . '/host-map.php';
         }
         $hostmap = [];
 
@@ -547,7 +568,7 @@ class Subsite extends DataObject
                 if ($domains) {
                     foreach ($domains as $domain) {
                         $domainStr = $domain->Domain;
-                        if (!self::$strict_subdomain_matching) {
+                        if (!static::config()->get('strict_subdomain_matching')) {
                             $domainStr = preg_replace('/^www\./', '', $domainStr);
                         }
                         $hostmap[$domainStr] = $subsite->domain();
@@ -758,7 +779,7 @@ class Subsite extends DataObject
      */
     public function allowedThemes()
     {
-        if ($themes = $this->stat('allowed_themes')) {
+        if ($themes = self::$allowed_themes) {
             return ArrayLib::valuekey($themes);
         }
 

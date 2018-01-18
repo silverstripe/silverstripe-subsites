@@ -8,6 +8,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 * Updating to be compatible with SilverStripe 4
 * Subsite specific theme is now added to default theme, as themes are now cascadable
+* Global subsite information moved to injectable `SubsiteState` singleton service
+* `FileExtension:::default_root_folders_global` converted to a configuration property
+* `Subsite::$check_is_public` converted to a configuration property
+* `Subsite::$strict_subdomain_matching` converted to a configuration property
+* `Subsite::$force_subsite` deprecated and will be removed in future -  use `SubsiteState::singleton()->withState()` instead
+* `Subsite::$write_hostmap` converted to a configuration property
+* `Subsite::$allowed_themes` made protected
 
 ## [1.2.3]
 

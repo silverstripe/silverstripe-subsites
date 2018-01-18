@@ -5,6 +5,7 @@ namespace SilverStripe\Subsites\Tests;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Session;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Model\Subsite;
 
@@ -24,7 +25,7 @@ class SubsiteAdminTest extends BaseSubsiteTest
      */
     public function testBasicView()
     {
-        Subsite::$write_hostmap = false;
+        Config::modify()->set(Subsite::class, 'write_hostmap', false);
         $subsite1ID = $this->objFromFixture(Subsite::class, 'domaintest1')->ID;
 
         // Open the admin area logged in as admin
