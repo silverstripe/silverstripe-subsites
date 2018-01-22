@@ -18,13 +18,6 @@ class SubsiteTest extends BaseSubsiteTest
     protected static $fixture_file = 'SubsiteTest.yml';
 
     /**
-     * Original value of {@see SubSite::$strict_subdomain_matching}
-     *
-     * @var bool
-     */
-    protected $origStrictSubdomainMatching = null;
-
-    /**
      * Original value of $_REQUEST
      *
      * @var array
@@ -35,16 +28,17 @@ class SubsiteTest extends BaseSubsiteTest
     {
         parent::setUp();
 
-        Config::modify()->set(Director::class, 'alternate_base_url', '/');
-        $this->origStrictSubdomainMatching = Subsite::$strict_subdomain_matching;
+        Config::modify()
+            ->set(Director::class, 'alternate_base_url', '/')
+            ->set(Subsite::class, 'strict_subdomain_matching', false)
+            ->set(Subsite::class, 'write_hostmap', false);
+
         $this->origServer = $_SERVER;
-        Subsite::$strict_subdomain_matching = false;
     }
 
     protected function tearDown()
     {
         $_SERVER = $this->origServer;
-        Subsite::$strict_subdomain_matching = $this->origStrictSubdomainMatching;
 
         parent::tearDown();
     }
@@ -54,8 +48,6 @@ class SubsiteTest extends BaseSubsiteTest
      */
     public function testSubsiteCreation()
     {
-        Subsite::$write_hostmap = false;
-
         // Create the instance
         $template = $this->objFromFixture(Subsite::class, 'main');
 
@@ -191,7 +183,7 @@ class SubsiteTest extends BaseSubsiteTest
             'www.wildcard.com' => false,
         ]);
 
-        Subsite::$strict_subdomain_matching = false;
+        Config::modify()->set(Subsite::class, 'strict_subdomain_matching', false);
 
         $this->assertEquals(
             $subsite1->ID,
@@ -214,7 +206,7 @@ class SubsiteTest extends BaseSubsiteTest
             'Doesn\'t match www prefix without strict check, even if a wildcard subdomain is in place'
         );
 
-        Subsite::$strict_subdomain_matching = true;
+        Config::modify()->set(Subsite::class, 'strict_subdomain_matching', true);
 
         $this->assertEquals(
             $subsite1->ID,

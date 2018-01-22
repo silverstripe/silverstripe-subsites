@@ -16,9 +16,13 @@ use SilverStripe\Subsites\State\SubsiteState;
  */
 class FileSubsites extends DataExtension
 {
-    // If this is set to true, all folders created will be default be
-    // considered 'global', unless set otherwise
-    public static $default_root_folders_global = false;
+    /**
+     * If this is set to true, all folders created will be default be considered 'global', unless set otherwise
+     *
+     * @config
+     * @var bool
+     */
+    private static $default_root_folders_global = false;
 
     private static $has_one = [
         'Subsite' => Subsite::class,
@@ -81,7 +85,7 @@ class FileSubsites extends DataExtension
     public function onBeforeWrite()
     {
         if (!$this->owner->ID && !$this->owner->SubsiteID) {
-            if (self::$default_root_folders_global) {
+            if ($this->owner->config()->get('default_root_folders_global')) {
                 $this->owner->SubsiteID = 0;
             } else {
                 $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();

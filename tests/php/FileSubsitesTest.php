@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Tests;
 
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Folder;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Subsites\Extensions\FileSubsites;
 use SilverStripe\Subsites\Model\Subsite;
@@ -31,7 +32,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         $this->logInAs('admin');
 
         $subsite = $this->objFromFixture(Subsite::class, 'domaintest1');
-        FileSubsites::$default_root_folders_global = true;
+        Config::modify()->set(FileSubsites::class, 'default_root_folders_global', true);
 
         Subsite::changeSubsite(0);
         $file = new File();
@@ -47,7 +48,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         $this->assertEquals((int)$file->SubsiteID, 0);
         $this->assertTrue($file->canEdit());
 
-        FileSubsites::$default_root_folders_global = false;
+        Config::modify()->set(FileSubsites::class, 'default_root_folders_global', false);
 
         Subsite::changeSubsite($subsite->ID);
         $file = new File();
@@ -58,7 +59,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         $folder = new Folder();
         $folder->write();
         $this->assertEquals($folder->SubsiteID, $subsite->ID);
-        FileSubsites::$default_root_folders_global = true;
+        Config::modify()->set(FileSubsites::class, 'default_root_folders_global', true);
         $file = new File();
         $file->ParentID = $folder->ID;
         $file->onAfterUpload();
