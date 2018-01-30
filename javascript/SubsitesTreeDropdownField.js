@@ -4,14 +4,14 @@
 		 * Choose a subsite from which to select pages.
 		 * Needs to clear tree dropdowns in case selection is changed.
 		 */
-		$('.subsitestreedropdownfield-chooser').entwine({
+        $('select.subsitestreedropdownfield-chooser').entwine({
 			onchange: function() {
 				// TODO Data binding between two fields
-				// TODO create resetField method on API instead
-				var fields = $('.SubsitesTreeDropdownField');
-				fields.setValue(null);
-				fields.setTitle(null);
-				fields.find('.tree-holder').empty();
+                const name = this.attr('name').replace('_SubsiteID', '');
+                let field = $('#Form_EditForm_' + name).first();
+                field.setValue(0);
+                field.refresh();
+                field.trigger('change');
 			}
 		});
 
@@ -20,12 +20,15 @@
 		 * before asking for the tree.
 		 */
 		$('.TreeDropdownField.SubsitesTreeDropdownField').entwine({
-			getRequestParams: function() {
-				var name = this.find(':input[type=hidden]:first').attr('name') + '_SubsiteID',
-					source = $('[name=' + name + ']'), params = {};
-				params[name] = source.length ? source.val() : null;
-				return params;
-			}
+            getAttributes() {
+                const fieldName = this.attr('id').replace('Form_EditForm_', '');
+                const subsiteID = $('#Form_EditForm_' + fieldName + '_SubsiteID option:selected').val();
+
+                let attributes = this._super();
+                attributes.data.urlTree += "?" + fieldName + "_SubsiteID=" + subsiteID;
+                attributes.data.cacheKey = attributes.data.cacheKey.substring(0, 19) + "_" + subsiteID;
+                return attributes;
+            }
 		});
 	});
 })(jQuery);
