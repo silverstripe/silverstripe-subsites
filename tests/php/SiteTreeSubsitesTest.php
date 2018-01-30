@@ -315,7 +315,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1NewPage->URLSegment = 'important-page'; // Also exists in main subsite
         $subsite1NewPage->write();
         $this->assertEquals('important-page', $subsite1NewPage->URLSegment);
-        $subsite1NewPage->doPublish();
+        $subsite1NewPage->publishRecursive();
         $subsite1NewPageLive = Versioned::get_one_by_stage(
             'Page',
             'Live',
@@ -330,7 +330,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1NewPage2->URLSegment = 'important-page'; // Also exists in main subsite
         $subsite1NewPage2->write();
         $this->assertEquals('important-page-2', $subsite1NewPage2->URLSegment);
-        $subsite1NewPage2->doPublish();
+        $subsite1NewPage2->publishRecursive();
         $subsite1NewPage2Live = Versioned::get_one_by_stage(
             'Page',
             'Live',
