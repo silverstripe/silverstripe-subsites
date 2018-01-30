@@ -5,6 +5,7 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\LeftAndMainExtension;
+use SilverStripe\CMS\Controllers\CMSPagesController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
@@ -270,11 +271,29 @@ class LeftAndMainSubsites extends LeftAndMainExtension
                 $session->clear($sessionNamespace . '.currentPage');
             }
 
-            // Subsite ID has already been set to the state via InitStateMiddleware. If the user cannot view
-            // the current page, or we're in the context of editing a specific page, redirect to the admin landing
-            // section to prevent a loop of re-loading the original subsite for the current page.
-            if (!$this->owner->canView() || Controller::curr() instanceof CMSPageEditController) {
+            // Context: Subsite ID has already been set to the state via InitStateMiddleware
+
+            // If the user cannot view the current page, redirect to the admin landing section
+            if (!$this->owner->canView()) {
                 return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
+            }
+
+            $currentController = Controller::curr();
+            if ($currentController instanceof CMSPageEditController) {
+                /** @var SiteTree $page */
+                $page = $currentController->currentPage();
+
+                // If the page exists but doesn't belong to the requested subsite, redirect to admin/pages which
+                // will show a list of the requested subsite's pages
+                $currentSubsiteId = $request->getVar('SubsiteID');
+                if ($page && (int) $page->SubsiteID !== (int) $currentSubsiteId) {
+                    return $this->owner->redirect(CMSPagesController::singleton()->Link());
+                }
+
+                // Page does belong to the current subsite, so remove the query string parameter and refresh the page
+                // Remove the subsiteID parameter and redirect back to the current URL again
+                $request->offsetSet('SubsiteID', null);
+                return $this->owner->redirect($request->getURL(true));
             }
 
             // Redirect to clear the current page, retaining the current URL parameters
@@ -299,10 +318,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             $canViewElsewhere = SubsiteState::singleton()->withState(function ($newState) use ($record) {
                 $newState->setSubsiteId($record->SubsiteID);
 
-                if ($this->owner->canView(Security::getCurrentUser())) {
-                    return true;
-                }
-                return false;
+                return (bool) $this->owner->canView(Security::getCurrentUser());
             });
 
             if ($canViewElsewhere) {

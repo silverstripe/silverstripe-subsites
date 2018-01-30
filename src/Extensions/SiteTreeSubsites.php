@@ -118,21 +118,23 @@ class SiteTreeSubsites extends DataExtension
                     'SubsiteOperations',
                     _t(__CLASS__ . '.SubsiteOperations', 'Subsite Operations'),
                     [
-                        new DropdownField('CopyToSubsiteID', _t(
+                        DropdownField::create('CopyToSubsiteID', _t(
                             __CLASS__ . '.CopyToSubsite',
                             'Copy page to subsite'
                         ), $subsitesMap),
-                        new CheckboxField(
+                        CheckboxField::create(
                             'CopyToSubsiteWithChildren',
                             _t(__CLASS__ . '.CopyToSubsiteWithChildren', 'Include children pages?')
                         ),
-                        $copyAction = new FormAction(
+                        $copyAction = FormAction::create(
                             'copytosubsite',
                             _t(__CLASS__ . '.CopyAction', 'Copy')
                         )
                     ]
                 )->setHeadingLevel(4)
             );
+
+            $copyAction->addExtraClass('btn btn-primary font-icon-save ml-3');
 
             // @todo check if this needs re-implementation
 //            $copyAction->includeDefaultJS(false);

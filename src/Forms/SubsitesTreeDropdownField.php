@@ -5,6 +5,7 @@ namespace SilverStripe\Subsites\Forms;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Forms\TreeDropdownField;
+use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\View\Requirements;
 use SilverStripe\Subsites\State\SubsiteState;
 
@@ -20,7 +21,10 @@ class SubsitesTreeDropdownField extends TreeDropdownField
         'tree'
     ];
 
-    protected $subsiteID = 0;
+    /**
+     * @var int
+     */
+    protected $subsiteId = 0;
 
     /**
      * Extra HTML classes
@@ -39,20 +43,42 @@ class SubsitesTreeDropdownField extends TreeDropdownField
         return $html;
     }
 
-    public function setSubsiteID($id)
+    /**
+     * Sets the subsite ID to use when generating the tree
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setSubsiteId($id)
     {
-        $this->subsiteID = $id;
+        $this->subsiteId = $id;
+        return $this;
     }
 
-    public function getSubsiteID()
+    /**
+     * Get the subsite ID to use when generating the tree
+     *
+     * @return int
+     */
+    public function getSubsiteId()
     {
-        return $this->subsiteID;
+        return $this->subsiteId;
     }
 
+    /**
+     * Get the CMS tree with the provided subsite ID applied to the state
+     *
+     * {@inheritDoc}
+     */
     public function tree(HTTPRequest $request)
     {
-        $results = SubsiteState::singleton()->withState(function () use ($request) {
-            SubsiteState::singleton()->setSubsiteId($this->subsiteID);
+        // Detect subsite ID from the request
+        if ($request->getVar($this->getName() . '_SubsiteID')) {
+            $this->setSubsiteId($request->getVar($this->getName() . '_SubsiteID'));
+        }
+
+        $results = SubsiteState::singleton()->withState(function (SubsiteState $newState) use ($request) {
+            $newState->setSubsiteId($this->getSubsiteId());
             return parent::tree($request);
         });
 
