@@ -105,7 +105,7 @@ class SiteTreeSubsites extends DataExtension
         $subsitesMap = [];
         if ($subsites && $subsites->count()) {
             $subsitesToMap = $subsites->exclude('ID', $this->owner->SubsiteID);
-            $subsitesMap = $subsitesToMap->map('ID', 'Title');
+            $subsitesMap = $subsitesToMap->map('ID', 'Title')->toArray();
         }
 
         // Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
