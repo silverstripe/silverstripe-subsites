@@ -141,9 +141,18 @@ class SubsitesVirtualPage extends VirtualPage
     {
         $labels = parent::fieldLabels($includerelations);
         $labels['CustomMetaTitle'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomMetaTitle', 'Title');
-        $labels['CustomMetaKeywords'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomMetaKeywords', 'Keywords');
-        $labels['CustomMetaDescription'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomMetaDescription', 'Description');
-        $labels['CustomExtraMeta'] = _t('SilverStripe\\Subsites\\Model\\Subsite.CustomExtraMeta', 'Custom Meta Tags');
+        $labels['CustomMetaKeywords'] = _t(
+            'SilverStripe\\Subsites\\Model\\Subsite.CustomMetaKeywords',
+            'Keywords'
+        );
+        $labels['CustomMetaDescription'] = _t(
+            'SilverStripe\\Subsites\\Model\\Subsite.CustomMetaDescription',
+            'Description'
+        );
+        $labels['CustomExtraMeta'] = _t(
+            'SilverStripe\\Subsites\\Model\\Subsite.CustomExtraMeta',
+            'Custom Meta Tags'
+        );
 
         return $labels;
     }

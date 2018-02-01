@@ -480,7 +480,9 @@ class Subsite extends DataObject
             )
             ->innerJoin(
                 'Permission',
-                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
+                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" 
+                AND \"Permission\".\"Code\" 
+                IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
             );
 
         if (!$subsites) {
@@ -504,7 +506,9 @@ class Subsite extends DataObject
             ->innerJoin('PermissionRole', '"Group_Roles"."PermissionRoleID"="PermissionRole"."ID"')
             ->innerJoin(
                 'PermissionRoleCode',
-                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
+                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" 
+                AND \"PermissionRoleCode\".\"Code\" 
+                IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
             );
 
         if (!$subsites && $rolesSubsites) {
@@ -628,10 +632,12 @@ class Subsite extends DataObject
         $groupCount = DB::query("
             SELECT COUNT(\"Permission\".\"ID\")
             FROM \"Permission\"
-            INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
-            INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
-            WHERE \"Permission\".\"Code\" IN ('$SQL_perms')
-            AND \"Group_Members\".\"MemberID\" = {$memberID}
+            INNER JOIN \"Group\"
+            ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
+            INNER JOIN \"Group_Members\"
+            ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
+            WHERE \"Permission\".\"Code\"
+            IN ('$SQL_perms') AND \"Group_Members\".\"MemberID\" = {$memberID}
         ")->value();
 
         // Count this user's groups which have a role that can access the main site

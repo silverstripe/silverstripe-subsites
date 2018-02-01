@@ -39,7 +39,8 @@ class SubsiteAdminTest extends BaseSubsiteTest
 
         // Confirm that this URL gets you the entire page, with the edit form loaded
         $response2 = Director::test(
-            "admin/subsites/SilverStripe-Subsites-Model-Subsite/EditForm/field/SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit",
+            "admin/subsites/SilverStripe-Subsites-Model-Subsite/EditForm/field/"
+            ."SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit",
             null,
             $this->adminLoggedInSession()
         );

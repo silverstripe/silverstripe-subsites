@@ -62,7 +62,10 @@ class SiteTreeSubsites extends DataExtension
         }
 
         // If you're querying by ID, ignore the sub-site - this is a bit ugly...
-        // if(!$query->where || (strpos($query->where[0], ".\"ID\" = ") === false && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false && strpos($query->where[0], "ID = ") !== 0)) {
+        // if(!$query->where
+        // || (strpos($query->where[0], ".\"ID\" = ") === false
+        // && strpos($query->where[0], ".`ID` = ") === false && strpos($query->where[0], ".ID = ") === false
+        // && strpos($query->where[0], "ID = ") !== 0)) {
         if ($query->filtersOnID()) {
             return;
         }
@@ -418,7 +421,10 @@ class SiteTreeSubsites extends DataExtension
                         Subsite::disable_subsite_filter(true);
                         $candidatePage = DataObject::get_one(
                             SiteTree::class,
-                            "\"URLSegment\" = '" . Convert::raw2sql(urldecode($rest)) . "' AND \"SubsiteID\" = " . $subsiteID,
+                            "\"URLSegment\" = '"
+                            . Convert::raw2sql(urldecode($rest))
+                            . "' AND \"SubsiteID\" = "
+                            . $subsiteID,
                             false
                         );
                         Subsite::disable_subsite_filter($origDisableSubsiteFilter);
