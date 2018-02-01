@@ -108,13 +108,13 @@ class SiteTreeSubsites extends DataExtension
         $subsitesMap = [];
         if ($subsites && $subsites->count()) {
             $subsitesToMap = $subsites->exclude('ID', $this->owner->SubsiteID);
-            $subsitesMap = $subsitesToMap->map('ID', 'Title')->toArray();
+            $subsitesMap = $subsitesToMap->map('ID', 'Title');
         }
 
         // Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
         $isDefaultSubsite = $this->owner->SubsiteID == 0 || $this->owner->Subsite()->DefaultSite;
 
-        if ($isDefaultSubsite && $subsitesMap) {
+        if ($isDefaultSubsite && $subsitesMap->count()) {
             $fields->addFieldToTab(
                 'Root.Main',
                 ToggleCompositeField::create(
@@ -124,8 +124,7 @@ class SiteTreeSubsites extends DataExtension
                         DropdownField::create('CopyToSubsiteID', _t(
                             __CLASS__ . '.CopyToSubsite',
                             'Copy page to subsite'
-                        ), $subsitesMap)
-                        ->setEmptyString('Select an Option'),
+                        ), $subsitesMap),
                         CheckboxField::create(
                             'CopyToSubsiteWithChildren',
                             _t(__CLASS__ . '.CopyToSubsiteWithChildren', 'Include children pages?')
