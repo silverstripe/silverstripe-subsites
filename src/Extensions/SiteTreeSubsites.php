@@ -124,7 +124,8 @@ class SiteTreeSubsites extends DataExtension
                         DropdownField::create('CopyToSubsiteID', _t(
                             __CLASS__ . '.CopyToSubsite',
                             'Copy page to subsite'
-                        ), $subsitesMap),
+                        ), $subsitesMap)
+                        ->setEmptyString('Select an Option'),
                         CheckboxField::create(
                             'CopyToSubsiteWithChildren',
                             _t(__CLASS__ . '.CopyToSubsiteWithChildren', 'Include children pages?')
