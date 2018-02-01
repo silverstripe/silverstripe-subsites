@@ -288,7 +288,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $mainHome->Content = '<p>Some new content</p>';
         $mainHome->write();
         $this->assertEquals('home', $mainHome->URLSegment);
-        $mainHome->doPublish();
+        $mainHome->publishRecursive();
         $mainHomeLive = Versioned::get_one_by_stage('Page', 'Live', sprintf('"SiteTree"."ID" = \'%d\'', $mainHome->ID));
         $this->assertEquals('home', $mainHomeLive->URLSegment);
 
@@ -298,7 +298,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1Home->Content = '<p>In subsite 1</p>';
         $subsite1Home->write();
         $this->assertEquals('home', $subsite1Home->URLSegment);
-        $subsite1Home->doPublish();
+        $subsite1Home->publishRecursive();
         $subsite1HomeLive = Versioned::get_one_by_stage(
             'Page',
             'Live',
