@@ -74,14 +74,14 @@ class Subsite extends DataObject
      *
      * @array
      */
-    private static $_cache_accessible_sites = [];
+    protected static $cache_accessible_sites = [];
 
     /**
      * Memory cache of subsite id for domains
      *
      * @var array
      */
-    private static $_cache_subsite_for_domain = [];
+    protected static $cache_subsite_for_domain = [];
 
     /**
      * Numeric array of all themes which are allowed to be selected for all subsites.
@@ -268,8 +268,8 @@ class Subsite extends DataObject
 
             $currentUserId = Security::getCurrentUser() ? Security::getCurrentUser()->ID : 0;
             $cacheKey = implode('_', [$host, $currentUserId, static::config()->get('check_is_public')]);
-            if (isset(self::$_cache_subsite_for_domain[$cacheKey])) {
-                return self::$_cache_subsite_for_domain[$cacheKey];
+            if (isset(self::$cache_subsite_for_domain[$cacheKey])) {
+                return self::$cache_subsite_for_domain[$cacheKey];
             }
 
             $SQL_host = Convert::raw2sql($host);
@@ -319,7 +319,7 @@ class Subsite extends DataObject
         }
 
         if ($cacheKey) {
-            self::$_cache_subsite_for_domain[$cacheKey] = $subsiteID;
+            self::$cache_subsite_for_domain[$cacheKey] = $subsiteID;
         }
 
         return $subsiteID;
@@ -355,8 +355,8 @@ class Subsite extends DataObject
      */
     public static function on_db_reset()
     {
-        self::$_cache_accessible_sites = [];
-        self::$_cache_subsite_for_domain = [];
+        self::$cache_accessible_sites = [];
+        self::$cache_subsite_for_domain = [];
     }
 
     /**
@@ -462,8 +462,8 @@ class Subsite extends DataObject
 
         // Cache handling
         $cacheKey = $SQL_codes . '-' . $member->ID . '-' . $includeMainSite . '-' . $mainSiteTitle;
-        if (isset(self::$_cache_accessible_sites[$cacheKey])) {
-            return self::$_cache_accessible_sites[$cacheKey];
+        if (isset(self::$cache_accessible_sites[$cacheKey])) {
+            return self::$cache_accessible_sites[$cacheKey];
         }
 
         /** @skipUpgrade */
@@ -480,7 +480,9 @@ class Subsite extends DataObject
             )
             ->innerJoin(
                 'Permission',
-                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" AND \"Permission\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
+                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" 
+                AND \"Permission\".\"Code\" 
+                IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
             );
 
         if (!$subsites) {
@@ -504,7 +506,9 @@ class Subsite extends DataObject
             ->innerJoin('PermissionRole', '"Group_Roles"."PermissionRoleID"="PermissionRole"."ID"')
             ->innerJoin(
                 'PermissionRoleCode',
-                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" AND \"PermissionRoleCode\".\"Code\" IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
+                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" 
+                AND \"PermissionRoleCode\".\"Code\" 
+                IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
             );
 
         if (!$subsites && $rolesSubsites) {
@@ -535,7 +539,7 @@ class Subsite extends DataObject
             }
         }
 
-        self::$_cache_accessible_sites[$cacheKey] = $subsites;
+        self::$cache_accessible_sites[$cacheKey] = $subsites;
 
         return $subsites;
     }
@@ -628,10 +632,12 @@ class Subsite extends DataObject
         $groupCount = DB::query("
             SELECT COUNT(\"Permission\".\"ID\")
             FROM \"Permission\"
-            INNER JOIN \"Group\" ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
-            INNER JOIN \"Group_Members\" ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
-            WHERE \"Permission\".\"Code\" IN ('$SQL_perms')
-            AND \"Group_Members\".\"MemberID\" = {$memberID}
+            INNER JOIN \"Group\"
+            ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
+            INNER JOIN \"Group_Members\"
+            ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
+            WHERE \"Permission\".\"Code\"
+            IN ('$SQL_perms') AND \"Group_Members\".\"MemberID\" = {$memberID}
         ")->value();
 
         // Count this user's groups which have a role that can access the main site

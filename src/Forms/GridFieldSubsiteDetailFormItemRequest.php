@@ -7,7 +7,7 @@ use SilverStripe\Forms\Form;
 use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
 use SilverStripe\Subsites\Model\Subsite;
 
-class GridFieldSubsiteDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest
+class GridFieldSubsiteDetailFormItemRequest extends GridFieldDetailForm_ItemRequest
 {
 
     private static $allowed_actions = [

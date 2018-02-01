@@ -57,7 +57,8 @@ class SubsiteTest extends BaseSubsiteTest
         $tmplStaff = $this->objFromFixture('Page', 'staff');
         $tmplHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
 
-        // Publish all the pages in the template, testing that DataObject::get only returns pages from the chosen subsite
+        // Publish all the pages in the template, testing that DataObject::get only returns pages
+        // from the chosen subsite
         $pages = DataObject::get(SiteTree::class);
         $totalPages = $pages->count();
         foreach ($pages as $page) {
@@ -193,7 +194,8 @@ class SubsiteTest extends BaseSubsiteTest
         $this->assertEquals(
             $subsite1->ID,
             Subsite::getSubsiteIDForDomain('www.example.org'),
-            'Matches without strict checking when using www prefix, still matching first domain regardless of www prefix  (falling back to subsite primary key ordering)'
+            'Matches without strict checking when using www prefix, '
+            .'still matching first domain regardless of www prefix  (falling back to subsite primary key ordering)'
         );
         $this->assertEquals(
             $subsite1->ID,

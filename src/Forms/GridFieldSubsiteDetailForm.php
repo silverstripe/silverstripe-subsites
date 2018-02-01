@@ -6,5 +6,5 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 
 class GridFieldSubsiteDetailForm extends GridFieldDetailForm
 {
-    protected $itemRequestClass = GridFieldSubsiteDetailForm_ItemRequest::class;
+    protected $itemRequestClass = GridFieldSubsiteDetailFormItemRequest::class;
 }

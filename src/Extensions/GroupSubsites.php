@@ -187,7 +187,8 @@ class GroupSubsites extends DataExtension implements PermissionProvider
                 }
             }
 
-            // WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected (e.g. SQL Server)
+            // WORKAROUND for databases that complain about an ORDER BY when the column wasn't selected
+            // (e.g. SQL Server)
             $select = $query->getSelect();
             if (isset($select[0]) && !$select[0] == 'COUNT(*)') {
                 $query->addOrderBy('AccessAllSubsites', 'DESC');
@@ -230,7 +231,10 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         return [
             'SECURITY_SUBSITE_GROUP' => [
                 'name' => _t(__CLASS__ . '.MANAGE_SUBSITES', 'Manage subsites for groups'),
-                'category' => _t('SilverStripe\\Security\\Permission.PERMISSIONS_CATEGORY', 'Roles and access permissions'),
+                'category' => _t(
+                    'SilverStripe\\Security\\Permission.PERMISSIONS_CATEGORY',
+                    'Roles and access permissions'
+                ),
                 'help' => _t(
                     __CLASS__ . '.MANAGE_SUBSITES_HELP',
                     'Ability to limit the permissions for a group to one or more subsites.'

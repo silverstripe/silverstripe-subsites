@@ -288,7 +288,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $mainHome->Content = '<p>Some new content</p>';
         $mainHome->write();
         $this->assertEquals('home', $mainHome->URLSegment);
-        $mainHome->doPublish();
+        $mainHome->publishRecursive();
         $mainHomeLive = Versioned::get_one_by_stage('Page', 'Live', sprintf('"SiteTree"."ID" = \'%d\'', $mainHome->ID));
         $this->assertEquals('home', $mainHomeLive->URLSegment);
 
@@ -298,7 +298,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1Home->Content = '<p>In subsite 1</p>';
         $subsite1Home->write();
         $this->assertEquals('home', $subsite1Home->URLSegment);
-        $subsite1Home->doPublish();
+        $subsite1Home->publishRecursive();
         $subsite1HomeLive = Versioned::get_one_by_stage(
             'Page',
             'Live',
@@ -315,7 +315,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1NewPage->URLSegment = 'important-page'; // Also exists in main subsite
         $subsite1NewPage->write();
         $this->assertEquals('important-page', $subsite1NewPage->URLSegment);
-        $subsite1NewPage->doPublish();
+        $subsite1NewPage->publishRecursive();
         $subsite1NewPageLive = Versioned::get_one_by_stage(
             'Page',
             'Live',
@@ -330,7 +330,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $subsite1NewPage2->URLSegment = 'important-page'; // Also exists in main subsite
         $subsite1NewPage2->write();
         $this->assertEquals('important-page-2', $subsite1NewPage2->URLSegment);
-        $subsite1NewPage2->doPublish();
+        $subsite1NewPage2->publishRecursive();
         $subsite1NewPage2Live = Versioned::get_one_by_stage(
             'Page',
             'Live',
@@ -430,6 +430,9 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
      */
     public function testAlternateAbsoluteLink($pageFixtureName, $action, $expectedAbsoluteLink)
     {
+        // Setting a control value, in case base url is set for the installation under test
+        Config::modify()->set(Director::class, 'alternate_base_url', 'http://localhost/');
+
         /** @var Page $page */
         $page = $this->objFromFixture(Page::class, $pageFixtureName);
 

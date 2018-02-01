@@ -166,15 +166,12 @@ class SubsiteDomain extends DataObject
     public function getFullProtocol()
     {
         switch ($this->Protocol) {
-            case self::PROTOCOL_HTTPS: {
+            case self::PROTOCOL_HTTPS:
                 return 'https://';
-            }
-            case self::PROTOCOL_HTTP: {
+            case self::PROTOCOL_HTTP:
                 return 'http://';
-            }
-            default: {
+            default:
                 return Director::protocol();
-            }
         }
     }
 
