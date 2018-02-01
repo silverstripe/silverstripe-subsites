@@ -430,6 +430,9 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
      */
     public function testAlternateAbsoluteLink($pageFixtureName, $action, $expectedAbsoluteLink)
     {
+        // Setting a control value, in case base url is set for the installation under test
+        Config::modify()->set(Director::class, 'alternate_base_url', 'http://localhost/');
+
         /** @var Page $page */
         $page = $this->objFromFixture(Page::class, $pageFixtureName);
 
