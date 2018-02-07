@@ -296,10 +296,8 @@ class LeftAndMainSubsites extends LeftAndMainExtension
                 return $this->owner->redirect($request->getURL(true));
             }
 
-            // Redirect to clear the current page, retaining the current URL parameters
-            return $this->owner->redirect(
-                Controller::join_links($this->owner->Link(), ...array_values($this->owner->getURLParams()))
-            );
+            // Redirect back to the default admin URL
+            return $this->owner->redirect($request->getURL());
         }
 
         // Automatically redirect the session to appropriate subsite when requesting a record.
