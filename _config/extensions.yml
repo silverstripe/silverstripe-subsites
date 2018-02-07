@@ -56,10 +56,10 @@ SilverStripe\CMS\Controllers\CMSPagesController:
   extensions:
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
 
-SilverStripe\Subsites\SubsiteAdmin:
+SilverStripe\Subsites\Admin\SubsiteAdmin:
   extensions:
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
 
-SilverStripe\CMS\Controllers\CMSPageSettingsController:
+SilverStripe\SiteConfig\SiteConfigLeftAndMain:
   extensions:
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
