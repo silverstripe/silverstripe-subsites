@@ -271,11 +271,15 @@ class SiteTreeSubsites extends DataExtension
         }
     }
 
-    public function alternateAbsoluteLink()
+	/**
+	 * @param null $action
+	 * @return string
+	 */
+    public function alternateAbsoluteLink($action = null)
     {
         // Generate the existing absolute URL and replace the domain with the subsite domain.
         // This helps deal with Link() returning an absolute URL.
-        $url = Director::absoluteURL($this->owner->Link());
+        $url = Director::absoluteURL($this->owner->Link($action));
         if ($this->owner->SubsiteID) {
             $url = preg_replace('/\/\/[^\/]+\//', '//' .  $this->owner->Subsite()->domain() . '/', $url);
         }
