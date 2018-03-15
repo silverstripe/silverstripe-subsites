@@ -252,8 +252,6 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     {
         $this->logInAs('editor');
 
-        $cmsmain = CMSMain::create();
-
         $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
@@ -261,6 +259,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $s1->write();
 
         Subsite::changeSubsite($s1);
+        $cmsmain = CMSMain::create();
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
         $classes = $hints['Root']['disallowedChildren'];
         $this->assertContains(ErrorPage::class, $classes);
@@ -268,6 +267,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertNotContains(TestClassB::class, $classes);
 
         Subsite::changeSubsite($s2);
+        $cmsmain->getHintsCache()->clear();
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
         $classes = $hints['Root']['disallowedChildren'];
         $this->assertNotContains(ErrorPage::class, $classes);
