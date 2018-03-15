@@ -487,9 +487,13 @@ class SiteTreeSubsites extends DataExtension
         // Typically called on a singleton, so we're not using the Subsite() relation
         $subsite = Subsite::currentSubsite();
         if ($subsite && $subsite->exists() && $subsite->PageTypeBlacklist) {
-            $blacklist = Convert::json2array($subsite->PageTypeBlacklist) ?: [];
+            // SS 4.1: JSON encoded. SS 4.0, comma delimited
+            $blacklist = Convert::json2array($subsite->PageTypeBlacklist);
+            if ($blacklist === false) {
+                $blacklist = explode(',', $subsite->PageTypeBlacklist);
+            }
 
-            if (in_array(get_class($this->owner), $blacklist)) {
+            if (in_array(get_class($this->owner), (array) $blacklist)) {
                 return false;
             }
         }

@@ -21,10 +21,6 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         'SubsitesVirtualPageTest.yml',
     ];
 
-    protected static $illegal_extensions = [
-        SiteTree::class => ['Translatable'] // @todo implement Translatable namespace
-    ];
-
     protected function setUp()
     {
         parent::setUp();
