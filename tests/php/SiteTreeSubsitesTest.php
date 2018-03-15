@@ -252,7 +252,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     {
         $this->logInAs('editor');
 
-        $cmsmain = new CMSMain();
+        $cmsmain = CMSMain::create();
 
         $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
