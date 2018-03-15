@@ -32,7 +32,7 @@ before_script:
   - composer validate
   - composer require silverstripe/installer $INSTALLER_VERSION --no-update
   - if [[ $DB == PGSQL ]]; then composer require --no-update silverstripe/postgresql:2.0.x-dev; fi
-  - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
+  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
   - echo "SS_BASE_URL=http://localhost:8080/" >> .env
 
   # Behat bootstrapping
