@@ -267,8 +267,12 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertNotContains(TestClassB::class, $classes);
 
         Subsite::changeSubsite($s2);
-        $cmsmain->getHintsCache()->clear();
+        // SS 4.1 and above
+        if ($cmsmain->hasMethod('getHintsCache')) {
+            $cmsmain->getHintsCache()->clear();
+        }
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
+
         $classes = $hints['Root']['disallowedChildren'];
         $this->assertNotContains(ErrorPage::class, $classes);
         $this->assertNotContains(TestClassA::class, $classes);
