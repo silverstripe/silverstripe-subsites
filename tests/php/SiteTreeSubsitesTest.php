@@ -185,7 +185,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
         $page = singleton(SiteTree::class);
 
-        $s1->PageTypeBlacklist = implode(',', [TestClassA::class, ErrorPage::class]);
+        $s1->PageTypeBlacklist = json_encode([TestClassA::class, ErrorPage::class]);
         $s1->write();
 
         Subsite::changeSubsite($s1);
@@ -252,15 +252,14 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     {
         $this->logInAs('editor');
 
-        $cmsmain = new CMSMain();
-
         $s1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $s2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
-        $s1->PageTypeBlacklist = implode(',', [TestClassA::class, ErrorPage::class]);
+        $s1->PageTypeBlacklist = json_encode([TestClassA::class, ErrorPage::class]);
         $s1->write();
 
         Subsite::changeSubsite($s1);
+        $cmsmain = CMSMain::create();
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
         $classes = $hints['Root']['disallowedChildren'];
         $this->assertContains(ErrorPage::class, $classes);
@@ -268,7 +267,12 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertNotContains(TestClassB::class, $classes);
 
         Subsite::changeSubsite($s2);
+        // SS 4.1 and above
+        if ($cmsmain->hasMethod('getHintsCache')) {
+            $cmsmain->getHintsCache()->clear();
+        }
         $hints = Convert::json2array($cmsmain->SiteTreeHints());
+
         $classes = $hints['Root']['disallowedChildren'];
         $this->assertNotContains(ErrorPage::class, $classes);
         $this->assertNotContains(TestClassA::class, $classes);

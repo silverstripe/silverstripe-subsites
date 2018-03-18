@@ -19,6 +19,7 @@ use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Model\Subsite;
@@ -478,20 +479,21 @@ class SiteTreeSubsites extends DataExtension
     }
 
     /**
-     * @param Member
+     * @param Member $member
      * @return boolean|null
      */
     public function canCreate($member = null)
     {
         // Typically called on a singleton, so we're not using the Subsite() relation
         $subsite = Subsite::currentSubsite();
-
         if ($subsite && $subsite->exists() && $subsite->PageTypeBlacklist) {
-            $blacklist = str_replace(['[', '"', ']'], '', $subsite->PageTypeBlacklist);
-            $blacklist = str_replace(['\\\\'], '\\', $blacklist);
-            $blacklisted = explode(',', $blacklist);
+            // SS 4.1: JSON encoded. SS 4.0, comma delimited
+            $blacklist = Convert::json2array($subsite->PageTypeBlacklist);
+            if ($blacklist === false) {
+                $blacklist = explode(',', $subsite->PageTypeBlacklist);
+            }
 
-            if (in_array(get_class($this->owner), $blacklisted)) {
+            if (in_array(get_class($this->owner), (array) $blacklist)) {
                 return false;
             }
         }
