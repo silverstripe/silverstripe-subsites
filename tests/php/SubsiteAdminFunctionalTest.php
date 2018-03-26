@@ -11,9 +11,18 @@ use SilverStripe\Subsites\Model\Subsite;
 class SubsiteAdminFunctionalTest extends FunctionalTest
 {
     protected static $fixture_file = 'SubsiteTest.yml';
-    protected static $use_draft_site = true;
 
     protected $autoFollowRedirection = false;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        // Ensure all pages are published
+        /** @var Page $page */
+        foreach (Page::get() as $page) {
+            $page->publishSingle();
+        }
+    }
 
     /**
      * Helper: FunctionalTest is only able to follow redirection once, we want to go all the way.
