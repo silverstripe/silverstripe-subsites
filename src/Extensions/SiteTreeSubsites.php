@@ -15,9 +15,11 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\i18n\i18n;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
+use SilverStripe\ORM\Map;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
@@ -106,10 +108,11 @@ class SiteTreeSubsites extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
         $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
-        $subsitesMap = [];
         if ($subsites && $subsites->count()) {
             $subsitesToMap = $subsites->exclude('ID', $this->owner->SubsiteID);
             $subsitesMap = $subsitesToMap->map('ID', 'Title');
+        } else {
+            $subsitesMap = new Map(ArrayList::create());
         }
 
         // Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
