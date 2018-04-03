@@ -3,21 +3,12 @@ ru:
     SUBSITENOTICE: 'Папки и файлы созданные на основном сайте так же доступны для под-сайтов.'
   DomainNameField:
     INVALID_DOMAIN: 'Неверный домен'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Добавить из шаблона'
-  LeftAndMain_Menu:
-    Hello: Здравствуйте
-    LOGOUT: 'Выход'
-  SilverStripe\CMS\Model\VirtualPage:
-    EDITCONTENT: 'Нажмите для изменения содержимого'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Подсайты
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  FileSubsites:
     AllSitesDropdownOpt: 'Все сайты'
     SubsiteFieldLabel: Подсайт
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Добавить из шаблона'
+  GroupSubsites:
     ACCESSALL: 'Все подсайты'
     ACCESSONLY: 'Только эти подсайты'
     ACCESSRADIOTITLE: 'Разрешить этой группе доступ к'
@@ -25,14 +16,17 @@ ru:
     MANAGE_SUBSITES: 'Управление подсайтами для групп'
     MANAGE_SUBSITES_HELP: 'Возможность ограничить права доступа для группы к одному и более подсайтам'
     SECURITYTABTITLE: Подсайты
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+  LeftAndMainSubsites:
     Saved: 'Сохранено, пожалуйста обновите связанные группы'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  LeftAndMain_Menu:
+    Hello: Здравствуйте
+    LOGOUT: Выход
+  SiteTreeSubsites:
     CopyAction: Копировать
     CopyToSubsite: 'Копировать страницу на подсайт'
     CopyToSubsiteWithChildren: 'Включая под-страницы?'
     SubsiteOperations: 'Операции над подсайтами'
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     COPYSTRUCTURE: 'Скопировать структуры из:'
     CopyMessage: 'Создана копия {title}'
     CustomExtraMeta: 'Пользовательские мета-тэги'
@@ -51,7 +45,9 @@ ru:
     SiteConfigTitle: 'Название сайта'
     TabTitleConfig: Конфигурация
     ValidateTitle: 'Пожалуйста, добавьте "Заголовок"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: Подсайты
+  SubsiteDomain:
     DOMAIN: Домен
     DOMAIN_DESCRIPTION: 'Домен подсайта (без указания протоколов: http:// и https://). Разрешены (*) для обозначения поддоменов.'
     IS_PRIMARY: 'Это основной домен?'
@@ -62,13 +58,10 @@ ru:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Протокол
     SINGULARNAME: 'Домен подсайта'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    DESCRIPTION: 'Отображает содержимое выбранной страницы на другом подсайте'
-    PLURALNAME: 'Базовые страницы'
-    SINGULARNAME: 'Виртуальная страница подсайта'
-    SubsiteField: Подсайт
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: Сайты
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Основной сайт'
     DomainFieldLabel: Домен
@@ -80,3 +73,10 @@ ru:
     RedirectURLFieldLabel: 'Ссылка для перенаправления'
     ThemeFieldLabel: Оформление
     TitleFieldLabel: 'Название Подсайта'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Отображает содержимое выбранной страницы на другом подсайте'
+    PLURALNAME: 'Базовые страницы'
+    SINGULARNAME: 'Виртуальная страница подсайта'
+    SubsiteField: Подсайт
+  VirtualPage:
+    EDITCONTENT: 'Нажмите для изменения содержимого'

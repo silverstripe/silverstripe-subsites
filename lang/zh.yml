@@ -1,36 +1,32 @@
 zh:
   ASSETADMIN:
     SUBSITENOTICE: 主网站上创建的文件夹和文件可以被所有子网站访问。
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: '从模板中取出新加入'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: 多个子网站
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: '子网站 XHR 控制器'
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  FileSubsites:
     AllSitesDropdownOpt: 所有网站
     SubsiteFieldLabel: 子网站
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 从模板中取出新加入
+  GroupSubsites:
     ACCESSALL: 所有子网站
-    ACCESSONLY: '仅这些子网站'
-    ACCESSRADIOTITLE: '准许该群进入'
-    GlobalGroup: '全局小组'
+    ACCESSONLY: 仅这些子网站
+    ACCESSRADIOTITLE: 准许该群进入
+    GlobalGroup: 全局小组
     MANAGE_SUBSITES: 管理小组的子网站
     MANAGE_SUBSITES_HELP: 能够将权限限制在一个小组、一个或多个子网站。
     SECURITYTABTITLE: 多个子网站
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
-    Saved: '已保存，请更新相关的页面。'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  LeftAndMainSubsites:
+    Saved: 已保存，请更新相关的页面。
+  SiteTreeSubsites:
     CopyAction: 复制
     CopyToSubsite: 将页面复制到子网站
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     COPYSTRUCTURE: 复制结构来自：
     CopyMessage: '已创建一个 {title} 的副本'
     CustomExtraMeta: '自定义 Meta 标签'
     CustomMetaDescription: 说明
-    CustomMetaKeywords: '关键词'
-    CustomMetaTitle: '标题'
-    DOMAINSAVEFIRST: '只有当您第一次保存后，才能添加域名'
+    CustomMetaKeywords: 关键词
+    CustomMetaTitle: 标题
+    DOMAINSAVEFIRST: 只有当您第一次保存后，才能添加域名
     DomainsHeadline: 这个子网站的域名
     DomainsListTitle: 域名
     IsPublicHeaderField: 活跃的子网站
@@ -38,24 +34,24 @@ zh:
     PLURALNAME: 多个子网站
     PageTypeBlacklistField: 禁止页面类型？
     SINGULARNAME: 子网站
-    SiteConfigSubtitle: '您的标语在这里'
+    SiteConfigSubtitle: 您的标语在这里
     SiteConfigTitle: 您的网站名称
-    TabTitleConfig: '配置'
-    ValidateTitle: '请添加一个“标题”'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+    TabTitleConfig: 配置
+    ValidateTitle: 请添加一个“标题”
+  SubsiteAdmin:
+    MENUTITLE: 多个子网站
+  SubsiteDomain:
     DOMAIN: 域名
     PLURALNAME: 多个子网站域名
     SINGULARNAME: 子网站域名
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    DESCRIPTION: '显示另一个子网站上一个页面的内容'
-    SINGULARNAME: 子网站虚拟页面
-    SubsiteField: 子网站
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: 网站
+  SubsiteXHRController:
+    MENUTITLE: '子网站 XHR 控制器'
   Subsites:
     DefaultSiteFieldLabel: 默认网站
     DomainFieldLabel: 域名
-    IsPublicFieldLabel: '启用公共访问权'
+    IsPublicFieldLabel: 启用公共访问权
     LanguageFieldLabel: 语言
     MainSiteTitle: 主网站
     PageTypeBlacklistFieldLabel: 页面类型黑名单
@@ -63,3 +59,7 @@ zh:
     RedirectURLFieldLabel: '重定向 URL'
     ThemeFieldLabel: 主题
     TitleFieldLabel: 子网站名称
+  SubsitesVirtualPage:
+    DESCRIPTION: 显示另一个子网站上一个页面的内容
+    SINGULARNAME: 子网站虚拟页面
+    SubsiteField: 子网站

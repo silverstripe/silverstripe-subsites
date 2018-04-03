@@ -3,21 +3,12 @@ hr:
     SUBSITENOTICE: 'Direktoriji i datoteke kreirane u glavnom sajtu su dostupne svim podsajtovima.'
   DomainNameField:
     INVALID_DOMAIN: 'Netočan naziv domene'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Dodaj novi iz predloška'
-  LeftAndMain_Menu:
-    Hello: Pozdrav
-    LOGOUT: Odjava
-  SilverStripe\CMS\Model\VirtualPage:
-    EDITCONTENT: 'Klikni ovdje za uređivanje sadržaja'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Podsajtovi
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  FileSubsites:
     AllSitesDropdownOpt: 'Svi sajtovi'
     SubsiteFieldLabel: Podsajt
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Dodaj novi iz predloška'
+  GroupSubsites:
     ACCESSALL: 'Svi podsajtovi'
     ACCESSONLY: 'Samo ovi podsajtovi'
     ACCESSRADIOTITLE: 'Dodijeli ovoj grupi pristup za'
@@ -25,12 +16,17 @@ hr:
     MANAGE_SUBSITES: 'Upravljaj podsajtove za grupe'
     MANAGE_SUBSITES_HELP: 'Mogućnost limitiranja prava za grupu za jedan ili više podsajtova.'
     SECURITYTABTITLE: Podsajtovi
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+  LeftAndMainSubsites:
     Saved: 'Spremljeno, molimo osvježite povezane stranice.'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  LeftAndMain_Menu:
+    Hello: Pozdrav
+    LOGOUT: Odjava
+  SiteTreeSubsites:
     CopyAction: Kopiraj
     CopyToSubsite: 'Kopiraj stranicu u podsajt'
-  SilverStripe\Subsites\Model\Subsite:
+    CopyToSubsiteWithChildren: 'Uključi podstranice?'
+    SubsiteOperations: 'Operacije podređenog prostora'
+  Subsite:
     COPYSTRUCTURE: 'Kopiraj strukturu od:'
     CopyMessage: 'Kreirana kopija od {title}'
     CustomExtraMeta: 'Prilagođeni Meta tagovi'
@@ -49,7 +45,9 @@ hr:
     SiteConfigTitle: 'Naziv vašeg weba'
     TabTitleConfig: Konfiguracija
     ValidateTitle: 'Molimo dodajte "Naslov"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: Podsajtovi
+  SubsiteDomain:
     DOMAIN: Domena
     DOMAIN_DESCRIPTION: 'Hostname ovog podsajta (bez protokola). Omogućava wildcard (*).'
     IS_PRIMARY: 'Da li je glavna domena?'
@@ -60,13 +58,10 @@ hr:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokol
     SINGULARNAME: 'Domena podsajta'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    DESCRIPTION: 'Prikazuje sadržaj stranice na drugom podsajtu'
-    PLURALNAME: 'Bazna stranica'
-    SINGULARNAME: 'Virtualna stranica podsajta'
-    SubsiteField: Podsajt
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: Sajtovi
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Zadani sajt'
     DomainFieldLabel: Domena
@@ -78,3 +73,10 @@ hr:
     RedirectURLFieldLabel: 'Link preusmjeravanja'
     ThemeFieldLabel: Tema
     TitleFieldLabel: 'Naziv podsajta'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Prikazuje sadržaj stranice na drugom podsajtu'
+    PLURALNAME: 'Bazna stranica'
+    SINGULARNAME: 'Virtualna stranica podsajta'
+    SubsiteField: Podsajt
+  VirtualPage:
+    EDITCONTENT: 'Klikni ovdje za uređivanje sadržaja'

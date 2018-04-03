@@ -1,16 +1,12 @@
 ar:
   ASSETADMIN:
     SUBSITENOTICE: 'يمكن الوصول إلى المجلدات والملفات التي تم إنشاؤها في الموقع الرئيسي من طرف كل المواقع الفرعية.'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'اضف جديد من القالب'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: 'مواقع فرعية'
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: 'المراقب XHR للموقع الفرعي'
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  FileSubsites:
     AllSitesDropdownOpt: 'كافة المواقع'
     SubsiteFieldLabel: 'الموقع الفرعي'
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'اضف جديد من القالب'
+  GroupSubsites:
     ACCESSALL: 'كل المواقع الفرعية'
     ACCESSONLY: 'فقط هذه المواقع الفرعية'
     ACCESSRADIOTITLE: 'امنح هذه المجموعة تصريح الولوج إلى'
@@ -18,12 +14,12 @@ ar:
     MANAGE_SUBSITES: 'إدارة مواقع فرعية للمجموعات'
     MANAGE_SUBSITES_HELP: 'القدرة على الحد من أذونات مجموعة ما على موقع فرعي واحدة أو أكثر.'
     SECURITYTABTITLE: 'مواقع فرعية'
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+  LeftAndMainSubsites:
     Saved: 'تمّ الحفظ، يرجى تحديث الصفحات ذات الصلة.'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  SiteTreeSubsites:
     CopyAction: نسخ
     CopyToSubsite: 'نسخ الصفحة في موقع فرعي'
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     COPYSTRUCTURE: 'نسخ الهيكل من:'
     CopyMessage: 'إنشاء نسخة من {title}'
     CustomExtraMeta: 'العلامات الوصفية المخصصة'
@@ -40,18 +36,18 @@ ar:
     SINGULARNAME: 'الموقع الفرعي'
     SiteConfigSubtitle: 'هنا سطر الوصف الخاص بك'
     SiteConfigTitle: 'اسم موقعك'
-    TabTitleConfig: 'المواصفات'
+    TabTitleConfig: المواصفات
     ValidateTitle: 'الرجاء إضافة "عنوان"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: 'مواقع فرعية'
+  SubsiteDomain:
     DOMAIN: نطاق
     PLURALNAME: 'نطاقات موقع فرعي'
     SINGULARNAME: 'نطاق موقع فرعي'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
-    SINGULARNAME: 'الصفحة الإفتراضية للمواقع الفرعية'
-    SubsiteField: 'الموقع الفرعي'
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
-    ReportDropdown: 'المواقع'
+  SubsiteReportWrapper:
+    ReportDropdown: المواقع
+  SubsiteXHRController:
+    MENUTITLE: 'المراقب XHR للموقع الفرعي'
   Subsites:
     DefaultSiteFieldLabel: 'الموقع الافتراضي'
     DomainFieldLabel: النطاق
@@ -61,5 +57,9 @@ ar:
     PageTypeBlacklistFieldLabel: 'نوع الصفحة قائمة سوداء'
     PrimaryDomainFieldLabel: 'النطاق الأساسي'
     RedirectURLFieldLabel: 'إعادة توجيه عنوان موقع الويب'
-    ThemeFieldLabel: 'المحور'
+    ThemeFieldLabel: المحور
     TitleFieldLabel: 'اسم الموقع الفرعي'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
+    SINGULARNAME: 'الصفحة الإفتراضية للمواقع الفرعية'
+    SubsiteField: 'الموقع الفرعي'

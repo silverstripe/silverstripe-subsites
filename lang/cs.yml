@@ -2,11 +2,9 @@ cs:
   LeftAndMain_Menu:
     Hello: Ahoj
     LOGOUT: 'Odhlásit se'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Subsites
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  SiteTreeSubsites:
     CopyAction: Kopírovat
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     CustomExtraMeta: 'Vlastní meta tagy'
     CustomMetaDescription: Popis
     CustomMetaKeywords: 'Klíčová slova'
@@ -18,13 +16,13 @@ cs:
     SiteConfigTitle: 'Název Vašeho webu'
     TabTitleConfig: Konfigurace
     ValidateTitle: 'Prosím vložte "Název"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: Subsites
+  SubsiteDomain:
     DOMAIN: Doména
     PLURALNAME: 'Domény webů'
     SINGULARNAME: 'Doména webu'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    PLURALNAME: 'Základní stránky'
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: Weby
   Subsites:
     DefaultSiteFieldLabel: 'Výchozí web'
@@ -32,3 +30,5 @@ cs:
     LanguageFieldLabel: Jazyk
     ThemeFieldLabel: Téma
     TitleFieldLabel: 'Název subsite'
+  SubsitesVirtualPage:
+    PLURALNAME: 'Základní stránky'

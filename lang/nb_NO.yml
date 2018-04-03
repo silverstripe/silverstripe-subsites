@@ -1,16 +1,16 @@
 nb_NO:
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Add New from Template'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Underdomener
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GroupSubsites:
     ACCESSALL: 'All subsites'
     ACCESSONLY: 'Only these subsites'
     ACCESSRADIOTITLE: 'Give this group access to'
     SECURITYTABTITLE: subdomener
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: Underdomener
+  SubsiteDomain:
     DOMAIN: Domain
     PLURALNAME: 'Subsite Domains'
     SINGULARNAME: 'Subsite Domain'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+  SubsitesVirtualPage:
     SINGULARNAME: 'Subdomeners Virtuelle Side'

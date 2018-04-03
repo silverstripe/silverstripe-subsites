@@ -3,21 +3,12 @@ fi:
     SUBSITENOTICE: 'Kansiot ja tiedostot, jotka on luotu pääsivustolla, ovat käytettävissä kaikissa alisivustoissa.'
   DomainNameField:
     INVALID_DOMAIN: 'Virheellinen domain-nimi'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Lisää uusi sivupohjasta'
-  LeftAndMain_Menu:
-    Hello: Hei
-    LOGOUT: 'Kirjaudu ulos'
-  SilverStripe\CMS\Model\VirtualPage:
-    EDITCONTENT: 'Napsauta tästä muokataksesi sisältöä'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Alasivustot
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  FileSubsites:
     AllSitesDropdownOpt: 'Kaikki sivustot'
     SubsiteFieldLabel: Alisivusto
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Lisää uusi sivupohjasta'
+  GroupSubsites:
     ACCESSALL: 'Kaikki alasivustot'
     ACCESSONLY: 'Vain nämä alasivustot'
     ACCESSRADIOTITLE: 'Anna tälle ryhmälle pääsy kohteeseen'
@@ -25,14 +16,17 @@ fi:
     MANAGE_SUBSITES: 'Hallinnoi ryhmien alisivustoja'
     MANAGE_SUBSITES_HELP: 'Mahdollisuus rajoittaa ryhmän oikeuksia yhdelle tai useammalle alisivustolle.'
     SECURITYTABTITLE: Alisivustot
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+  LeftAndMainSubsites:
     Saved: 'Tallennettu, ole hyvä ja päivitä liittyvät sivut.'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  LeftAndMain_Menu:
+    Hello: Hei
+    LOGOUT: 'Kirjaudu ulos'
+  SiteTreeSubsites:
     CopyAction: Kopioi
     CopyToSubsite: 'Kopioi sivu alisivustolle'
     CopyToSubsiteWithChildren: 'Sisällytä alasivut?'
     SubsiteOperations: Alisivustotoiminnot
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     COPYSTRUCTURE: 'Kopioi rakenne kohteesta:'
     CopyMessage: 'Luotiin kopio lähteestä {title}'
     CustomExtraMeta: 'Omat Meta-tagit'
@@ -51,7 +45,9 @@ fi:
     SiteConfigTitle: 'Sivuston nimi'
     TabTitleConfig: Asetukset
     ValidateTitle: 'Lisää "Otsikko"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: Alasivustot
+  SubsiteDomain:
     DOMAIN: Domain
     DOMAIN_DESCRIPTION: 'Tämä alisivuston isäntänimi (ilman protokollaa). Sallii wildcard-merkit (*).'
     IS_PRIMARY: 'On päädomain?'
@@ -62,13 +58,10 @@ fi:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokolla
     SINGULARNAME: 'Alisivuston domain-osoite'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
-    PLURALNAME: Pohjasivut
-    SINGULARNAME: 'Alisivuston Virtuaalisivu'
-    SubsiteField: Alisivu
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: Sivustot
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: Oletussivusto
     DomainFieldLabel: Domain
@@ -80,3 +73,10 @@ fi:
     RedirectURLFieldLabel: 'Edelleenohjaus URL'
     ThemeFieldLabel: Teema
     TitleFieldLabel: 'Alisivuston nimi'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
+    PLURALNAME: Pohjasivut
+    SINGULARNAME: 'Alisivuston Virtuaalisivu'
+    SubsiteField: Alisivu
+  VirtualPage:
+    EDITCONTENT: 'Napsauta tästä muokataksesi sisältöä'

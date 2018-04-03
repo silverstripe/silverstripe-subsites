@@ -3,21 +3,12 @@ eo:
     SUBSITENOTICE: 'Dosierujoj kaj dosieroj kreitaj en la ĉefa retejo estas alireblaj de ĉiuj retejoj'
   DomainNameField:
     INVALID_DOMAIN: 'Nevalida domajna nomo'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Aldoni novan el ŝablono'
-  LeftAndMain_Menu:
-    Hello: Saluton
-    LOGOUT: Elsaluti
-  SilverStripe\CMS\Model\VirtualPage:
-    EDITCONTENT: 'Alklaku ĉi tie por redakti la enhavon'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Subretejoj
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  FileSubsites:
     AllSitesDropdownOpt: 'Ĉiuj retejoj'
     SubsiteFieldLabel: Subretejo
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Aldoni novan el ŝablono'
+  GroupSubsites:
     ACCESSALL: 'Ĉiuj subretejoj'
     ACCESSONLY: 'Nur ĉi tiuj subretejoj'
     ACCESSRADIOTITLE: 'Doni ĉi tiun grupon aliron al'
@@ -25,14 +16,17 @@ eo:
     MANAGE_SUBSITES: 'Administri subretejojn por grupoj'
     MANAGE_SUBSITES_HELP: 'Eblo limigi la permesojn por grupo al unu aŭ pluaj subretejoj.'
     SECURITYTABTITLE: Subsites
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+  LeftAndMainSubsites:
     Saved: 'Konservita, bonvole ĝisdatigi rilatajn paĝojn.'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  LeftAndMain_Menu:
+    Hello: Saluton
+    LOGOUT: Elsaluti
+  SiteTreeSubsites:
     CopyAction: Kopio
     CopyToSubsite: 'Kopii paĝon al subretejo'
     CopyToSubsiteWithChildren: 'Ĉu inkluzivi  paĝidojn?'
     SubsiteOperations: 'Subretejaj operacioj'
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     COPYSTRUCTURE: 'Kopii strukturon de:'
     CopyMessage: 'Kreis kopion de {title}'
     CustomExtraMeta: 'Propraj meta-etikedoj'
@@ -51,7 +45,9 @@ eo:
     SiteConfigTitle: 'Nomo de via retejo'
     TabTitleConfig: Agordaro
     ValidateTitle: 'Bonvole aldonu "Titolon"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: Subretejoj
+  SubsiteDomain:
     DOMAIN: Domajno
     DOMAIN_DESCRIPTION: 'Gastiga nomo de ĉi tiu subretejo (ellasu protokolon). Permesas ĵokerojn (*).'
     IS_PRIMARY: 'Ĉu unuaranga domajno?'
@@ -62,13 +58,10 @@ eo:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokolo
     SINGULARNAME: 'Subreteja domajno'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
-    PLURALNAME: 'Bazaj paĝoj'
-    SINGULARNAME: 'Virtuala paĝo de subretejoj'
-    SubsiteField: Subretejo
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: Retejoj
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Apriora retejo'
     DomainFieldLabel: Domajno
@@ -80,3 +73,10 @@ eo:
     RedirectURLFieldLabel: 'Redirekti je URL'
     ThemeFieldLabel: Etoso
     TitleFieldLabel: 'Nomo de subretejo'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
+    PLURALNAME: 'Bazaj paĝoj'
+    SINGULARNAME: 'Virtuala paĝo de subretejoj'
+    SubsiteField: Subretejo
+  VirtualPage:
+    EDITCONTENT: 'Alklaku ĉi tie por redakti la enhavon'

@@ -1,16 +1,12 @@
 mi:
   ASSETADMIN:
     SUBSITENOTICE: 'Ka taea ngā kōpaki me ngā kōnae kua hangaia i te pae matua te uru mā ngā pae iti katoa.'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Tāpiri Hōu mai i te Tātauira'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: 'Ngā pae iti'
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: ManaXHRPaeiti
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  FileSubsites:
     AllSitesDropdownOpt: 'Ngā pae katoa'
     SubsiteFieldLabel: 'Pae iti'
-  SilverStripe\Subsites\Extensions\GroupSubsites:
+  GridFieldAddFromTemplateButton:
+    AddFromTemplate: 'Tāpiri Hōu mai i te Tātauira'
+  GroupSubsites:
     ACCESSALL: 'Ngā pae iti katoa'
     ACCESSONLY: 'Ko ēnei pae iti anake'
     ACCESSRADIOTITLE: 'Tukuna tēnei rōpū kia uru ki'
@@ -18,12 +14,12 @@ mi:
     MANAGE_SUBSITES: 'Whakahaere pae iti mō ngā rōpū'
     MANAGE_SUBSITES_HELP: 'Te āheinga ki te whakawhāiti whakaaetanga mō tētahi rōpū ki tētahi neke atu rānei o ngā pae iti.'
     SECURITYTABTITLE: 'Ngā pae iti'
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+  LeftAndMainSubsites:
     Saved: 'Kua tiakina, whakahoutia ngā whārangi pāhono.'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  SiteTreeSubsites:
     CopyAction: Tārua
     CopyToSubsite: 'Tāruatia te whārangi ki te pae iti'
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     COPYSTRUCTURE: 'Tāurutia te hanganga mai i:'
     CopyMessage: 'I hangaia he tārua o {title}'
     CustomExtraMeta: 'Ngā Tūtohu Meta Ritenga'
@@ -42,16 +38,16 @@ mi:
     SiteConfigTitle: 'Tō Ingoa Pae'
     TabTitleConfig: Whirihoranga
     ValidateTitle: 'Tāurua he "Taitara"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: 'Ngā pae iti'
+  SubsiteDomain:
     DOMAIN: Rohe
     PLURALNAME: 'Ngā Rohe Pae Iti'
     SINGULARNAME: 'Rohe Pae Iti'
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    DESCRIPTION: 'Ka whakaatu i ngā ihirangi o tētahi whārangi ki tētahi atu pae iti'
-    SINGULARNAME: 'Whārangi Mariko Pae Iti'
-    SubsiteField: 'Pae iti'
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: 'Ngā Pae'
+  SubsiteXHRController:
+    MENUTITLE: ManaXHRPaeiti
   Subsites:
     DefaultSiteFieldLabel: 'Pae taunoa'
     DomainFieldLabel: Rohe
@@ -63,3 +59,7 @@ mi:
     RedirectURLFieldLabel: 'Tukua anō te URL'
     ThemeFieldLabel: Kaupapa
     TitleFieldLabel: 'Ingoa Pae Iti'
+  SubsitesVirtualPage:
+    DESCRIPTION: 'Ka whakaatu i ngā ihirangi o tētahi whārangi ki tētahi atu pae iti'
+    SINGULARNAME: 'Whārangi Mariko Pae Iti'
+    SubsiteField: 'Pae iti'

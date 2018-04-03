@@ -1,6 +1,4 @@
 en:
-  ASSETADMIN:
-    SUBSITENOTICE: 'Folders and files created in the main site are accessible by all subsites.'
   DomainNameField:
     INVALID_DOMAIN: 'Invalid domain name'
   SilverStripe\CMS\Model\VirtualPage:
@@ -9,8 +7,9 @@ en:
     MENUTITLE: Subsites
   SilverStripe\Subsites\Controller\SubsiteXHRController:
     MENUTITLE: SilverStripe\Subsites\Controller\SubsiteXHRController
-  SilverStripe\Subsites\Extensions\FileSubsites:
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'All sites'
+    SUBSITENOTICE: 'Folders and files created in the main site are accessible by all subsites.'
     SubsiteFieldLabel: Subsite
   SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'All subsites'

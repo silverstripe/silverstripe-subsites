@@ -1,16 +1,16 @@
 ja:
   GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'テンプレートから新しく追加'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: サブサイト
-  SilverStripe\Subsites\Extensions\GroupSubsites:
-    ACCESSALL: '全てのサブサイト'
+    AddFromTemplate: テンプレートから新しく追加
+  GroupSubsites:
+    ACCESSALL: 全てのサブサイト
     ACCESSONLY: これらのサブサイトのみ
-    ACCESSRADIOTITLE: 'このグループに選択先へのアクセス権を与える'
+    ACCESSRADIOTITLE: このグループに選択先へのアクセス権を与える
     SECURITYTABTITLE: サブサイト
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteAdmin:
+    MENUTITLE: サブサイト
+  SubsiteDomain:
     DOMAIN: ドメイン
     PLURALNAME: サブサイトのドメイン
     SINGULARNAME: サブサイトのドメイン
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+  SubsitesVirtualPage:
     SINGULARNAME: サブサイトの仮想ページ

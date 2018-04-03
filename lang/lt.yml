@@ -1,19 +1,17 @@
 lt:
+  FileSubsites:
+    AllSitesDropdownOpt: 'Visos svetainės'
   GridFieldAddFromTemplateButton:
     AddFromTemplate: 'Sukurti naują pagal šabloną'
+  LeftAndMainSubsites:
+    Saved: 'Išsaugota, prašome atnaujinti susijusius puslapius'
   LeftAndMain_Menu:
     Hello: Sveiki
     LOGOUT: Atsijungti
-  SilverStripe\Subsites\Controller\SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    AllSitesDropdownOpt: 'Visos svetainės'
-  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
-    Saved: 'Išsaugota, prašome atnaujinti susijusius puslapius'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+  SiteTreeSubsites:
     CopyAction: Kopijuoti
     CopyToSubsite: 'Kopijuoti puslapį į kitą svetainę'
-  SilverStripe\Subsites\Model\Subsite:
+  Subsite:
     COPYSTRUCTURE: 'Kopijuoti struktūrą iš:'
     CopyMessage: 'Sukurta {title} kopija'
     CustomExtraMeta: 'Kitos meta žymės'
@@ -28,12 +26,12 @@ lt:
     SiteConfigTitle: 'Jūsų svetainės pavadinimas'
     TabTitleConfig: Nustatymai
     ValidateTitle: 'Prašome įvesti "Pavadinimą"'
-  SilverStripe\Subsites\Model\SubsiteDomain:
+  SubsiteDomain:
     DOMAIN: Domenas
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    PLURALNAME: 'Baziniai puslapiai'
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+  SubsiteReportWrapper:
     ReportDropdown: Svetainės
+  SubsiteXHRController:
+    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Pagrindinė svetainė'
     DomainFieldLabel: Domenas
@@ -43,3 +41,5 @@ lt:
     PrimaryDomainFieldLabel: 'Pagrindinis domenas'
     RedirectURLFieldLabel: 'Nukreipimo nuoroda'
     ThemeFieldLabel: Tema
+  SubsitesVirtualPage:
+    PLURALNAME: 'Baziniai puslapiai'
