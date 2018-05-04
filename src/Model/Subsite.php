@@ -5,7 +5,6 @@ namespace SilverStripe\Subsites\Model;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
-use SilverStripe\Control\Session;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleLoader;
@@ -16,13 +15,14 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\ToggleCompositeField;
+use SilverStripe\i18n\Data\Intl\IntlLocales;
+use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\ArrayLib;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DB;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\DB;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
@@ -30,8 +30,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\i18n\Data\Intl\IntlLocales;
-use SilverStripe\i18n\i18n;
 use UnexpectedValueException;
 
 /**
@@ -847,15 +845,14 @@ class Subsite extends DataObject
      */
     protected function createDefaultPages()
     {
-        $currentSubsite = Subsite::currentSubsiteID();
-        Subsite::changeSubsite($this->ID);
+        SubsiteState::singleton()->withState(function (SubsiteState $newState) {
+            $newState->setSubsiteId($this->ID);
 
-        // Silence DB schema output
-        DB::quiet();
-        $siteTree = new SiteTree();
-        $siteTree->requireDefaultRecords();
-
-        Subsite::changeSubsite($currentSubsite);
+            // Silence DB schema output
+            DB::quiet();
+            $siteTree = new SiteTree();
+            $siteTree->requireDefaultRecords();
+        });
     }
 
     /**
