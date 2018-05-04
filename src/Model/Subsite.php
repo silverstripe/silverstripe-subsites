@@ -842,7 +842,7 @@ class Subsite extends DataObject
         parent::onAfterWrite();
     }
 
-	/**
+    /**
      * Automatically create default pages for new subsites
      */
     protected function createDefaultPages()

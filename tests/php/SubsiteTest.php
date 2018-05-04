@@ -475,13 +475,13 @@ class SubsiteTest extends BaseSubsiteTest
     }
 
     public function testDefaultPageCreatedWhenCreatingSubsite()
-	{
+    {
         $subsite = new Subsite();
         $subsite->Title = 'New Subsite';
         $subsite->write();
-		$subsite->activate();
+        $subsite->activate();
 
-		$pages = SiteTree::get();
-		$this->assertGreaterThanOrEqual(1, $pages->count());
-	}
+        $pages = SiteTree::get();
+        $this->assertGreaterThanOrEqual(1, $pages->count());
+    }
 }
