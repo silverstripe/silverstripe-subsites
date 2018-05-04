@@ -829,14 +829,33 @@ class Subsite extends DataObject
     }
 
     /**
-     * Whenever a Subsite is written, rewrite the hostmap
+     * Whenever a Subsite is written, rewrite the hostmap and create some default pages
      *
      * @return void
      */
     public function onAfterWrite()
     {
         Subsite::writeHostMap();
+        if ($this->isChanged('ID')) {
+            $this->createDefaultPages();
+        }
         parent::onAfterWrite();
+    }
+
+	/**
+     * Automatically create default pages for new subsites
+     */
+    protected function createDefaultPages()
+    {
+        $currentSubsite = Subsite::currentSubsiteID();
+        Subsite::changeSubsite($this->ID);
+
+        // Silence DB schema output
+        DB::quiet();
+        $siteTree = new SiteTree();
+        $siteTree->requireDefaultRecords();
+
+        Subsite::changeSubsite($currentSubsite);
     }
 
     /**

@@ -36,6 +36,14 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         SiteTree::class => ['Translatable'] // @todo implement Translatable namespace
     ];
 
+    protected function setUp()
+    {
+        // We have our own home page fixtures, prevent the default one being created in this test suite.
+        Config::modify()->set(SiteTree::class, 'create_default_pages', false);
+
+        parent::setUp();
+    }
+
     public function testPagesInDifferentSubsitesCanShareURLSegment()
     {
         $subsiteMain = $this->objFromFixture(Subsite::class, 'main');
