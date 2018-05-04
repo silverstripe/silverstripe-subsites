@@ -442,4 +442,15 @@ class SubsiteTest extends BaseSubsiteTest
         $subsite2->activate();
         $this->assertEquals('MyNewAwesomePage', DataObject::get_by_id('Page', $page2->ID)->Title);
     }
+
+    public function testDefaultPageCreatedWhenCreatingSubsite()
+	{
+		$subsite = new Subsite();
+		$subsite->Title = 'New Subsite';
+		$subsite->write();
+		$subsite->activate();
+
+		$pages = SiteTree::get();
+		$this->assertGreaterThanOrEqual(1, $pages->count());
+	}
 }
