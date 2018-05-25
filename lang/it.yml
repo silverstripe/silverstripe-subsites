@@ -1,67 +1,9 @@
 it:
-  ASSETADMIN:
-    SUBSITENOTICE: 'Le cartelle e i files creati nel sito principale sono accessibili da tutti i sottositi.'
   DomainNameField:
     INVALID_DOMAIN: 'Nome a dominio non valido'
-  FileSubsites:
-    AllSitesDropdownOpt: 'Tutti i siti'
-    SubsiteFieldLabel: Sottosito
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Aggiungi nuovo da schema'
-  GroupSubsites:
-    ACCESSALL: 'Tutti i sottositi'
-    ACCESSONLY: 'Solo questi sottositi'
-    ACCESSRADIOTITLE: 'Dai a questo gruppo accesso a'
-    GlobalGroup: 'Gruppo globale'
-    MANAGE_SUBSITES: 'Gestisci sottositi per gruppi'
-    MANAGE_SUBSITES_HELP: 'Abilità di limitare i permessi per un gruppo di uno o più sottositi.'
-    SECURITYTABTITLE: Sottositi
-  LeftAndMainSubsites:
-    Saved: 'Salvato, si prega di aggiornare le pagine relative.'
-  LeftAndMain_Menu:
-    Hello: Salve
-    LOGOUT: Esci
-  SiteTreeSubsites:
-    CopyAction: Copia
-    CopyToSubsite: 'Copia pagina in sottosito'
-    CopyToSubsiteWithChildren: 'Includi pagine figlie?'
-    SubsiteOperations: 'Operazioni sui sottositi'
   Subsite:
     COPYSTRUCTURE: 'Copia struttura da:'
-    CopyMessage: 'Creata una copia di {title}'
-    CustomExtraMeta: 'Meta Tags personalizzati'
-    CustomMetaDescription: Descrizione
-    CustomMetaKeywords: Keywords
-    CustomMetaTitle: Titolo
-    DOMAINSAVEFIRST: 'Puoi solo aggiungere domini dopo aver salvato per la prima volta'
-    DomainsHeadline: 'Domini per questo sottosito'
-    DomainsListTitle: Domini
-    IsPublicHeaderField: 'Sottosito attivo'
     NOTEMPLATE: 'Nessuno schema'
-    PLURALNAME: Sottositi
-    PageTypeBlacklistField: 'Disabilita tipi di pagina?'
-    SINGULARNAME: Sottosito
-    SiteConfigSubtitle: 'Lo slogan qui'
-    SiteConfigTitle: 'Nome del sito'
-    TabTitleConfig: Configurazione
-    ValidateTitle: 'Prego aggiungere il "Titolo"'
-  SubsiteAdmin:
-    MENUTITLE: Sottositi
-  SubsiteDomain:
-    DOMAIN: Dominio
-    DOMAIN_DESCRIPTION: 'Nome host di questo sottosito (escluso il protocollo). Permette caratteri wildcard (*).'
-    IS_PRIMARY: 'È il dominio primario?'
-    PLURALNAME: 'Domini del sottosito'
-    PROTOCOL_AUTOMATIC: Automatico
-    PROTOCOL_DESCRIPTION: 'Segna questo come il dominio di default per questo sottosito'
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
-    Protocol: Protocollo
-    SINGULARNAME: 'Dominio del sottosito'
-  SubsiteReportWrapper:
-    ReportDropdown: Siti
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Sito di default'
     DomainFieldLabel: Dominio
@@ -73,10 +15,3 @@ it:
     RedirectURLFieldLabel: 'URL di reindirizzamento'
     ThemeFieldLabel: Tema
     TitleFieldLabel: 'Nome sottosito'
-  SubsitesVirtualPage:
-    DESCRIPTION: 'Mostra il contenuto di una pagina appartenente ad un altro sottosito'
-    PLURALNAME: 'Pagine base'
-    SINGULARNAME: 'Pagina virtuale dei sottositi'
-    SubsiteField: Sottosito
-  VirtualPage:
-    EDITCONTENT: 'Clicca qui per editare il contenuto'

@@ -1,79 +1,17 @@
 de:
-  ASSETADMIN:
-    SUBSITENOTICE: 'Auf Ordner und Dateien der Hauptseite kann von allen Subsites zugegriffen werden.'
   DomainNameField:
     INVALID_DOMAIN: 'Ungültige Domain'
-  FileSubsites:
-    AllSitesDropdownOpt: 'Alle Subseiten'
-    SubsiteFieldLabel: Subseite
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Neu hinzufügen von Template'
-  GroupSubsites:
-    ACCESSALL: 'Alle Subsites'
-    ACCESSONLY: 'Nur diese Subsites'
-    ACCESSRADIOTITLE: 'Dieser Gruppe Zugriff geben auf'
-    GlobalGroup: 'globale Gruppe'
-    MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
-    MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
-    SECURITYTABTITLE: Subsites
-  LeftAndMainSubsites:
-    Saved: Gespeichert.
-  LeftAndMain_Menu:
-    Hello: Hallo
-    LOGOUT: Abmelden
-  SiteTreeSubsites:
-    CopyAction: Kopieren
-    CopyToSubsite: 'Seite auf Subseite Kopieren'
   Subsite:
     COPYSTRUCTURE: 'Struktur kopieren von:'
-    CopyMessage: 'Kopie von {title} erstellt'
-    CustomExtraMeta: 'Benutzerdefinierte Meta-Tags'
-    CustomMetaDescription: Beschreibung
-    CustomMetaKeywords: Schlüsselwörter
-    CustomMetaTitle: Titel
-    DOMAINSAVEFIRST: 'Domains können erst nach dem ersten Speichern hinzugefügt werden'
-    DomainsHeadline: 'Domains für diese Subsite'
-    DomainsListTitle: Domains
-    IsPublicHeaderField: 'Aktive Subsite'
     NOTEMPLATE: 'Kein Template'
-    PLURALNAME: Subsites
-    PageTypeBlacklistField: 'Seitentyp verbieten?'
-    SINGULARNAME: Subsite
-    SiteConfigSubtitle: 'Ihr Websiteslogan'
-    SiteConfigTitle: 'Name Ihrer Website'
-    TabTitleConfig: Einstellungen
-    ValidateTitle: 'Bitte geben Sie einen Titel an'
-  SubsiteAdmin:
-    MENUTITLE: Subsites
-  SubsiteDomain:
-    DOMAIN: Domain
-    DOMAIN_DESCRIPTION: 'Hostname dieser Subsite (ohne Protokol). Joker (*) ist erlaubt.'
-    IS_PRIMARY: 'Ist Hauptdomain?'
-    PLURALNAME: 'Subsite Domains'
-    PROTOCOL_AUTOMATIC: Automatisch
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
-    Protocol: Protokoll
-    SINGULARNAME: 'Subsite Domain'
-  SubsiteReportWrapper:
-    ReportDropdown: Seiten
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Standard Seite'
     DomainFieldLabel: Domäne
     IsPublicFieldLabel: 'Öffentlich zugänglich'
     LanguageFieldLabel: Sprache
-    MainSiteTitle: Hauptsite
+    MainSiteTitle: 'Hauptsite'
     PageTypeBlacklistFieldLabel: 'Ausgeschlossene Seitentypen'
     PrimaryDomainFieldLabel: 'Primäre Domain'
-    RedirectURLFieldLabel: Weierleitungs-URL
+    RedirectURLFieldLabel: 'Weierleitungs-URL'
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Name der Subsite'
-  SubsitesVirtualPage:
-    DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subsite an'
-    PLURALNAME: 'Basis Seiten'
-    SINGULARNAME: 'Subsites Virtuelle Seite'
-    SubsiteField: Subsite
-  VirtualPage:
-    EDITCONTENT: 'Klicken Sie hier, um den Inhalt zu bearbeiten'

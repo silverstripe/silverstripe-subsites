@@ -1,37 +1,7 @@
 lt:
-  FileSubsites:
-    AllSitesDropdownOpt: 'Visos svetainės'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Sukurti naują pagal šabloną'
-  LeftAndMainSubsites:
-    Saved: 'Išsaugota, prašome atnaujinti susijusius puslapius'
-  LeftAndMain_Menu:
-    Hello: Sveiki
-    LOGOUT: Atsijungti
-  SiteTreeSubsites:
-    CopyAction: Kopijuoti
-    CopyToSubsite: 'Kopijuoti puslapį į kitą svetainę'
   Subsite:
     COPYSTRUCTURE: 'Kopijuoti struktūrą iš:'
-    CopyMessage: 'Sukurta {title} kopija'
-    CustomExtraMeta: 'Kitos meta žymės'
-    CustomMetaDescription: Aprašymas
-    CustomMetaKeywords: Raktažodžiai
-    CustomMetaTitle: Pavadinimas
-    DomainsHeadline: 'Šio puslapio domenai'
-    DomainsListTitle: Domenai
     NOTEMPLATE: 'Nėra šablono'
-    PageTypeBlacklistField: 'Neleidžiami puslapių tipai'
-    SiteConfigSubtitle: 'Jūsų svetainės šūkis'
-    SiteConfigTitle: 'Jūsų svetainės pavadinimas'
-    TabTitleConfig: Nustatymai
-    ValidateTitle: 'Prašome įvesti "Pavadinimą"'
-  SubsiteDomain:
-    DOMAIN: Domenas
-  SubsiteReportWrapper:
-    ReportDropdown: Svetainės
-  SubsiteXHRController:
-    MENUTITLE: SubsiteXHRController
   Subsites:
     DefaultSiteFieldLabel: 'Pagrindinė svetainė'
     DomainFieldLabel: Domenas
@@ -41,5 +11,3 @@ lt:
     PrimaryDomainFieldLabel: 'Pagrindinis domenas'
     RedirectURLFieldLabel: 'Nukreipimo nuoroda'
     ThemeFieldLabel: Tema
-  SubsitesVirtualPage:
-    PLURALNAME: 'Baziniai puslapiai'

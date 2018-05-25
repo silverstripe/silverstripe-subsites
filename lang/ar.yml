@@ -1,53 +1,7 @@
 ar:
-  ASSETADMIN:
-    SUBSITENOTICE: 'يمكن الوصول إلى المجلدات والملفات التي تم إنشاؤها في الموقع الرئيسي من طرف كل المواقع الفرعية.'
-  FileSubsites:
-    AllSitesDropdownOpt: 'كافة المواقع'
-    SubsiteFieldLabel: 'الموقع الفرعي'
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'اضف جديد من القالب'
-  GroupSubsites:
-    ACCESSALL: 'كل المواقع الفرعية'
-    ACCESSONLY: 'فقط هذه المواقع الفرعية'
-    ACCESSRADIOTITLE: 'امنح هذه المجموعة تصريح الولوج إلى'
-    GlobalGroup: 'المجموعة العامة'
-    MANAGE_SUBSITES: 'إدارة مواقع فرعية للمجموعات'
-    MANAGE_SUBSITES_HELP: 'القدرة على الحد من أذونات مجموعة ما على موقع فرعي واحدة أو أكثر.'
-    SECURITYTABTITLE: 'مواقع فرعية'
-  LeftAndMainSubsites:
-    Saved: 'تمّ الحفظ، يرجى تحديث الصفحات ذات الصلة.'
-  SiteTreeSubsites:
-    CopyAction: نسخ
-    CopyToSubsite: 'نسخ الصفحة في موقع فرعي'
   Subsite:
     COPYSTRUCTURE: 'نسخ الهيكل من:'
-    CopyMessage: 'إنشاء نسخة من {title}'
-    CustomExtraMeta: 'العلامات الوصفية المخصصة'
-    CustomMetaDescription: الوصف
-    CustomMetaKeywords: 'كلمات البحث'
-    CustomMetaTitle: عنوان
-    DOMAINSAVEFIRST: 'لا يمكنك إضافة النطاقات إلا بعد القيام بالحفظ لأول مرة'
-    DomainsHeadline: 'نطاقات هذا الموقع الفرعي'
-    DomainsListTitle: النطاقات
-    IsPublicHeaderField: 'موقع فرعي نشط'
     NOTEMPLATE: 'بدون قالب'
-    PLURALNAME: 'المواقع الفرعية'
-    PageTypeBlacklistField: 'عدم السماح بأصناف الصفحات؟'
-    SINGULARNAME: 'الموقع الفرعي'
-    SiteConfigSubtitle: 'هنا سطر الوصف الخاص بك'
-    SiteConfigTitle: 'اسم موقعك'
-    TabTitleConfig: المواصفات
-    ValidateTitle: 'الرجاء إضافة "عنوان"'
-  SubsiteAdmin:
-    MENUTITLE: 'مواقع فرعية'
-  SubsiteDomain:
-    DOMAIN: نطاق
-    PLURALNAME: 'نطاقات موقع فرعي'
-    SINGULARNAME: 'نطاق موقع فرعي'
-  SubsiteReportWrapper:
-    ReportDropdown: المواقع
-  SubsiteXHRController:
-    MENUTITLE: 'المراقب XHR للموقع الفرعي'
   Subsites:
     DefaultSiteFieldLabel: 'الموقع الافتراضي'
     DomainFieldLabel: النطاق
@@ -59,7 +13,3 @@ ar:
     RedirectURLFieldLabel: 'إعادة توجيه عنوان موقع الويب'
     ThemeFieldLabel: المحور
     TitleFieldLabel: 'اسم الموقع الفرعي'
-  SubsitesVirtualPage:
-    DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
-    SINGULARNAME: 'الصفحة الإفتراضية للمواقع الفرعية'
-    SubsiteField: 'الموقع الفرعي'
