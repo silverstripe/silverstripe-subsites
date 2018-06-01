@@ -276,7 +276,7 @@ class Subsite extends DataObject
 
             /** @skipUpgrade */
             $domainTableName = $schema->tableName(SubsiteDomain::class);
-            if (!in_array($domainTableName, DB::table_list())) {
+            if (!in_array(strtolower($domainTableName), array_map("strtolower", DB::table_list())) ) { // case sensitive table names
                 // Table hasn't been created yet. Might be a dev/build, skip.
                 return 0;
             }
