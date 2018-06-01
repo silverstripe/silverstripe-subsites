@@ -9,6 +9,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLSelect;
@@ -45,31 +46,31 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             return;
         }
         // Migration for Group.SubsiteID data from when Groups only had a single subsite
-        $ownerClass = get_class($this->owner);
-        $schema = $ownerClass::getSchema();
-        $groupFields = DB::field_list($schema->tableName(Group::class));
+        $schema = DataObject::getSchema();
+        $groupTable = $schema->tableName(Group::class);
+        $groupFields = DB::field_list($groupTable);
 
         // Detection of SubsiteID field is the trigger for old-style-subsiteID migration
         if (isset($groupFields['SubsiteID'])) {
             // Migrate subsite-specific data
             DB::query('INSERT INTO "Group_Subsites" ("GroupID", "SubsiteID")
-				SELECT "ID", "SubsiteID" FROM "Group" WHERE "SubsiteID" > 0');
+				SELECT "ID", "SubsiteID" FROM "' . $groupTable . '" WHERE "SubsiteID" > 0');
 
             // Migrate global-access data
-            DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1 WHERE "SubsiteID" = 0');
+            DB::query('UPDATE "' . $groupTable . '" SET "AccessAllSubsites" = 1 WHERE "SubsiteID" = 0');
 
             // Move the field out of the way so that this migration doesn't get executed again
-            DB::get_schema()->renameField(Group::class, 'SubsiteID', '_obsolete_SubsiteID');
+            DB::get_schema()->renameField($groupTable, 'SubsiteID', '_obsolete_SubsiteID');
 
             // No subsite access on anything means that we've just installed the subsites module.
             // Make all previous groups global-access groups
         } else {
-            if (!DB::query('SELECT "Group"."ID" FROM "Group"
+            if (!DB::query('SELECT "Group"."ID" FROM "' . $groupTable . '"
 			LEFT JOIN "Group_Subsites" ON "Group_Subsites"."GroupID" = "Group"."ID" AND "Group_Subsites"."SubsiteID" > 0
 			WHERE "AccessAllSubsites" = 1
 			OR "Group_Subsites"."GroupID" IS NOT NULL ')->value()
             ) {
-                DB::query('UPDATE "Group" SET "AccessAllSubsites" = 1');
+                DB::query('UPDATE "' . $groupTable . '" SET "AccessAllSubsites" = 1');
             }
         }
     }
