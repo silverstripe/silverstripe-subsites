@@ -12,15 +12,17 @@ default:
         - SilverStripe\CMS\Tests\Behaviour\LoginContext
         - SilverStripe\CMS\Tests\Behaviour\ThemeContext
         - SilverStripe\CMS\Tests\Behaviour\FixtureContext:
-        # Note: double indent for args is intentional
+            # Note: double indent for args is intentional
             - %paths.modules.subsites%/tests/behat/features/files/
 
   extensions:
     SilverStripe\BehatExtension\MinkExtension:
-      default_session: selenium2
-      javascript_session: selenium2
-      selenium2:
-        browser: firefox
+      default_session: facebook_web_driver
+      javascript_session: facebook_web_driver
+      facebook_web_driver:
+        browser: chrome
+        wd_host: "http://127.0.0.1:9515" #chromedriver port
+      browser_name: chrome
 
     SilverStripe\BehatExtension\Extension:
       screenshot_path: %paths.base%/artifacts/screenshots

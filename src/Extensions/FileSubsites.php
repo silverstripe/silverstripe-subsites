@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use SilverStripe\Assets\File;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
@@ -106,16 +107,21 @@ class FileSubsites extends DataExtension
 
     public function canEdit($member = null)
     {
+        // Opt out of making opinions if no subsite ID is set yet
+        if (!$this->owner->SubsiteID) {
+            return null;
+        }
+
         // Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
         $subsiteID = SubsiteState::singleton()->getSubsiteId();
         if ($subsiteID && $subsiteID == $this->owner->SubsiteID) {
             return true;
         }
 
-        return SubsiteState::singleton()->withState(function ($newState) {
+        return SubsiteState::singleton()->withState(function (SubsiteState $newState) use ($member) {
             $newState->setSubsiteId($this->owner->SubsiteID);
 
-            return Permission::check(['CMS_ACCESS_AssetAdmin', 'CMS_ACCESS_LeftAndMain']);
+            return $this->owner->getPermissionChecker()->canEdit($this->owner->ID, $member);
         });
     }
 
