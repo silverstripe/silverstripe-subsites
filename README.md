@@ -1,6 +1,7 @@
 # Subsites Module
 
 [![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-subsites.png?branch=master)](http://travis-ci.org/silverstripe/silverstripe-subsites) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-subsites/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-subsites/?branch=master) [![codecov](https://codecov.io/gh/silverstripe/silverstripe-subsites/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-subsites)
+[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 ## Introduction
 
