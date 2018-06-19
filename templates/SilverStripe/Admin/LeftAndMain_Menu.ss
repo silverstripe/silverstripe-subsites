@@ -5,7 +5,7 @@
         <% include SilverStripe\\Admin\\LeftAndMain_MenuLogo %>
         <% include SilverStripe\\Admin\\LeftAndMain_MenuStatus %>
 
-        <% if $ListSubsites %>
+        <% if $ListSubsites.Count > 1 %>
             <% include SilverStripe\\Subsites\\Controller\\SubsiteXHRController_subsitelist %>
         <% end_if %>
     </div>
