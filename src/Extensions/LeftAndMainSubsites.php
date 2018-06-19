@@ -160,7 +160,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             $output->push(ArrayData::create([
                 'CurrentState' => $currentState,
                 'ID' => $subsite->ID,
-                'Title' => Convert::raw2xml($subsite->Title)
+                'Title' => $subsite->Title,
             ]));
         }
 
