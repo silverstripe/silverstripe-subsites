@@ -273,13 +273,20 @@ class SiteTreeSubsites extends DataExtension
      * - Is in a group which has access to the subsite this page belongs to
      * - Is in a group with edit permissions on the "main site"
      *
-     * @param null $member
-     * @return bool
+     * If there are no subsites configured yet, this logic is skipped.
+     *
+     * @param Member|null $member
+     * @return bool|null
      */
     public function canEdit($member = null)
     {
         if (!$member) {
             $member = Security::getCurrentUser();
+        }
+
+        // Do not provide any input if there are no subsites configured
+        if (!Subsite::get()->count()) {
+            return null;
         }
 
         // Find the sites that this user has access to
@@ -329,8 +336,8 @@ class SiteTreeSubsites extends DataExtension
     }
 
     /**
-     * @param null $member
-     * @return bool
+     * @param Member|null $member
+     * @return bool|null
      */
     public function canPublish($member = null)
     {
