@@ -285,7 +285,7 @@ class SiteTreeSubsites extends DataExtension
         }
 
         // Do not provide any input if there are no subsites configured
-        if (!Subsite::get()->count()) {
+        if (!Subsite::get()->exists()) {
             return null;
         }
 
