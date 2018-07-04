@@ -382,17 +382,31 @@ class SiteTreeSubsites extends DataExtension
 
     /**
      * Use the CMS domain for iframed CMS previews to prevent single-origin violations
-     * and SSL cert problems.
-     * @param null $action
+     * and SSL cert problems. Always set SubsiteID to avoid errors because a page doesn't
+     * exist on the CMS domain.
+     *
+     * @param string &$link
+     * @param string|null $action
+     * @return string
+     */
+    public function updatePreviewLink(&$link, $action = null)
+    {
+        $url = Director::absoluteURL($this->owner->Link($action));
+        $link = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
+        return $link;
+    }
+
+    /**
+     * This function is marked as deprecated for removal in 5.0.0 in silverstripe/cms
+     * so now simply passes execution to where the functionality exists for backwards compatiblity.
+     *
+     * @param string|null $action
      * @return string
      */
     public function alternatePreviewLink($action = null)
     {
-        $url = Director::absoluteURL($this->owner->Link());
-        if ($this->owner->SubsiteID) {
-            $url = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
-        }
-        return $url;
+        $link = '';
+        return $this->updatePreviewLink($link, $action);
     }
 
     /**
