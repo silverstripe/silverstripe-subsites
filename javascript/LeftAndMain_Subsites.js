@@ -101,7 +101,7 @@
 
 			/**
 			 * Update links and forms with GET/POST SubsiteID param, so we remaing on the current subsite.
-			 * The initial link for the iframe comes from SiteTreeSubsites::alternatePreviewLink.
+			 * The initial link for the iframe comes from SiteTreeSubsites::updatePreviewLink.
 			 *
 			 * This is done so we can use the CMS domain for displaying previews so we prevent single-origin
 			 * violations and SSL cert problems that come up when iframing content from a different URL.

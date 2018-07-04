@@ -273,13 +273,20 @@ class SiteTreeSubsites extends DataExtension
      * - Is in a group which has access to the subsite this page belongs to
      * - Is in a group with edit permissions on the "main site"
      *
-     * @param null $member
-     * @return bool
+     * If there are no subsites configured yet, this logic is skipped.
+     *
+     * @param Member|null $member
+     * @return bool|null
      */
     public function canEdit($member = null)
     {
         if (!$member) {
             $member = Security::getCurrentUser();
+        }
+
+        // Do not provide any input if there are no subsites configured
+        if (!Subsite::get()->exists()) {
+            return null;
         }
 
         // Find the sites that this user has access to
@@ -329,8 +336,8 @@ class SiteTreeSubsites extends DataExtension
     }
 
     /**
-     * @param null $member
-     * @return bool
+     * @param Member|null $member
+     * @return bool|null
      */
     public function canPublish($member = null)
     {
@@ -375,17 +382,31 @@ class SiteTreeSubsites extends DataExtension
 
     /**
      * Use the CMS domain for iframed CMS previews to prevent single-origin violations
-     * and SSL cert problems.
-     * @param null $action
+     * and SSL cert problems. Always set SubsiteID to avoid errors because a page doesn't
+     * exist on the CMS domain.
+     *
+     * @param string &$link
+     * @param string|null $action
+     * @return string
+     */
+    public function updatePreviewLink(&$link, $action = null)
+    {
+        $url = Director::absoluteURL($this->owner->Link($action));
+        $link = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
+        return $link;
+    }
+
+    /**
+     * This function is marked as deprecated for removal in 5.0.0 in silverstripe/cms
+     * so now simply passes execution to where the functionality exists for backwards compatiblity.
+     *
+     * @param string|null $action
      * @return string
      */
     public function alternatePreviewLink($action = null)
     {
-        $url = Director::absoluteURL($this->owner->Link());
-        if ($this->owner->SubsiteID) {
-            $url = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
-        }
-        return $url;
+        $link = '';
+        return $this->updatePreviewLink($link, $action);
     }
 
     /**
