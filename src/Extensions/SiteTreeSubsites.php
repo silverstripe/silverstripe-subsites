@@ -399,6 +399,8 @@ class SiteTreeSubsites extends DataExtension
     /**
      * This function is marked as deprecated for removal in 5.0.0 in silverstripe/cms
      * so now simply passes execution to where the functionality exists for backwards compatiblity.
+     * CMS 4.0.0 SiteTree already throws a SilverStripe deprecation error before calling this function.
+     * @deprecated 2.2...3.0 use updatePreviewLink instead
      *
      * @param string|null $action
      * @return string
