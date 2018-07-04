@@ -28,5 +28,5 @@ This method is called when a pages are being copied between the main site or ano
 ### alternateAbsoluteLink
 This method modifies the absolute link to contain the valid subsite domain
 
-### alternatePreviewLink
+### updatePreviewLink
 This method modifies the preview link for the CMS.
