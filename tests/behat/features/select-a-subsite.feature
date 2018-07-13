@@ -6,7 +6,6 @@ Feature: Select a subsite
 
   Background:
     Given a "subsite" "Subsite B"
-    And a "subsite" "Subsite B"
     And a "page" "My page" with "URLSegment"="my-page", "Content"="My page content"
     And I am logged in with "ADMIN" permissions
     Then I go to "admin/pages"
