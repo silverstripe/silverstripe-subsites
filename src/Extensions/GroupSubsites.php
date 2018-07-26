@@ -47,7 +47,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         }
         // Migration for Group.SubsiteID data from when Groups only had a single subsite
         $schema = DataObject::getSchema();
-        $groupTable = $schema->tableName(Group::class);
+        $groupTable = Convert::raw2sql($schema->tableName(Group::class));
         $groupFields = DB::field_list($groupTable);
 
         // Detection of SubsiteID field is the trigger for old-style-subsiteID migration
