@@ -231,6 +231,8 @@ class SiteTreeSubsites extends DataExtension
      * It may be that some relations are not diostinct to sub site so can stay
      * whereas others may need to be duplicated
      *
+     * @deprecated 2.2..3.0 Use the "cascade_duplicates" config API instead
+     * @param SiteTree $originalPage
      */
     public function duplicateSubsiteRelations($originalPage)
     {
