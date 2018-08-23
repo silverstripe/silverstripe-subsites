@@ -359,28 +359,41 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertEquals('important-page', $mainSubsiteImportantPage->URLSegment);
     }
 
-    public function testCopySubsiteWithChildren()
+    /**
+     * @param bool $withChildren
+     * @param int $expectedChildren
+     * @dataProvider duplicateToSubsiteProvider
+     */
+    public function testDuplicateToSubsite($withChildren, $expectedChildren)
     {
-        $page = $this->objFromFixture('Page', 'about');
+        /** @var SiteTree $page */
+        $page = $this->objFromFixture(Page::class, 'about');
+        /** @var Subsite $newSubsite */
         $newSubsite = $this->objFromFixture(Subsite::class, 'subsite1');
 
-        $moved = $page->duplicateToSubsite($newSubsite->ID, true);
-        $this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
-        $this->assertEquals(
-            $moved->AllChildren()->count(),
-            $page->AllChildren()->count(),
-            'All pages are copied across'
+        /** @var SiteTree $duplicatedPage */
+        $duplicatedPage = $page->duplicateToSubsite($newSubsite->ID, $withChildren);
+        $this->assertInstanceOf(SiteTree::class, $duplicatedPage, 'A new page is returned');
+
+        $this->assertEquals($newSubsite->ID, $duplicatedPage->SubsiteID, 'Ensure returned records are on new subsite');
+
+        $this->assertCount(1, $page->AllChildren());
+        $this->assertCount(
+            $expectedChildren,
+            $duplicatedPage->AllChildren(),
+            'Duplicated page also duplicates children'
         );
     }
 
-    public function testCopySubsiteWithoutChildren()
+    /**
+     * @return array[]
+     */
+    public function duplicateToSubsiteProvider()
     {
-        $page = $this->objFromFixture('Page', 'about');
-        $newSubsite = $this->objFromFixture(Subsite::class, 'subsite2');
-
-        $moved = $page->duplicateToSubsite($newSubsite->ID, false);
-        $this->assertEquals($moved->SubsiteID, $newSubsite->ID, 'Ensure returned records are on new subsite');
-        $this->assertEquals($moved->AllChildren()->count(), 0, 'All pages are copied across');
+        return [
+            [true, 1],
+            [false, 0],
+        ];
     }
 
     public function testIfSubsiteThemeIsSetToThemeList()

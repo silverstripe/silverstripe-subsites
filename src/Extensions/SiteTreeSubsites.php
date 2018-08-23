@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
-use Page;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -170,57 +169,71 @@ class SiteTreeSubsites extends DataExtension
     }
 
     /**
-     * Does the basic duplication, but doesn't write anything
-     * this means we can subclass this easier and do more complex
-     * relation duplication.
+     * Does the basic duplication, but doesn't write anything this means we can subclass this easier and do more
+     * complex relation duplication.
+     *
+     * Note that when duplicating including children, everything is written.
+     *
+     * @param Subsite|int $subsiteID
+     * @param bool $includeChildren
+     * @return SiteTree
      */
-    public function duplicateToSubsitePrep($subsiteID)
+    public function duplicateToSubsitePrep($subsiteID, $includeChildren)
     {
         if (is_object($subsiteID)) {
             $subsiteID = $subsiteID->ID;
         }
 
-        $oldSubsite = SubsiteState::singleton()->getSubsiteId();
-        if ($subsiteID) {
-            Subsite::changeSubsite($subsiteID);
-        } else {
-            $subsiteID = $oldSubsite;
+        return SubsiteState::singleton()
+            ->withState(function (SubsiteState $newState) use ($subsiteID, $includeChildren) {
+                $newState->setSubsiteId($subsiteID);
+
+                /** @var SiteTree $page */
+                $page = $this->owner;
+
+                try {
+                    $originalFilter = Subsite::$disable_subsite_filter;
+                    Subsite::disable_subsite_filter(true);
+
+                    return $includeChildren ? $page->duplicateWithChildren() : $page->duplicate(false);
+                } finally {
+                    Subsite::disable_subsite_filter($originalFilter);
+                }
+            });
+    }
+
+    /**
+     * When duplicating a page, assign the current subsite ID from the state
+     */
+    public function onBeforeDuplicate()
+    {
+        $subsiteId = SubsiteState::singleton()->getSubsiteId();
+        if ($subsiteId !== null) {
+            $this->owner->SubsiteID = $subsiteId;
         }
-        // doesn't write as we need to reset the SubsiteID, ParentID etc
-        $clone = $this->owner->duplicate(false);
-        $clone->CheckedPublicationDifferences = $clone->AddedToStage = true;
-        $subsiteID = ($subsiteID ? $subsiteID : $oldSubsite);
-        $clone->SubsiteID = $subsiteID;
-        // We have no idea what the parentID should be, so as a workaround use the url-segment and subsite ID
-        if ($this->owner->Parent()) {
-            $parentSeg = $this->owner->Parent()->URLSegment;
-            $newParentPage = Page::get()->filter('URLSegment', $parentSeg)->first();
-            if ($newParentPage) {
-                $clone->ParentID = $newParentPage->ID;
-            } else {
-                // reset it to the top level, so the user can decide where to put it
-                $clone->ParentID = 0;
-            }
-        }
-        // MasterPageID is here for legacy purposes, to satisfy the subsites_relatedpages module
-        $clone->MasterPageID = $this->owner->ID;
-        return $clone;
     }
 
     /**
      * Create a duplicate of this page and save it to another subsite
-     * @param $subsiteID int|Subsite The Subsite to copy to, or its ID
+     *
+     * @param Subsite|int $subsiteID   The Subsite to copy to, or its ID
+     * @param boolean $includeChildren Whether to duplicate child pages too
+     * @return SiteTree                The duplicated page
      */
-    public function duplicateToSubsite($subsiteID = null)
+    public function duplicateToSubsite($subsiteID = null, $includeChildren = false)
     {
-        $clone = $this->owner->duplicateToSubsitePrep($subsiteID);
+        $clone = $this->owner->duplicateToSubsitePrep($subsiteID, $includeChildren);
         $clone->invokeWithExtensions('onBeforeDuplicateToSubsite', $this->owner);
-        $clone->write();
+
+        if (!$includeChildren) {
+            // Write the new page if "include children" is false, because it is written by default when it's true.
+            $clone->write();
+        }
+        // Deprecated: manually duplicate any configured relationships
         $clone->duplicateSubsiteRelations($this->owner);
-        // new extension hooks which happens after write,
-        // onAfterDuplicate isn't reliable due to
-        // https://github.com/silverstripe/silverstripe-cms/issues/1253
+
         $clone->invokeWithExtensions('onAfterDuplicateToSubsite', $this->owner);
+
         return $clone;
     }
 
@@ -231,6 +244,7 @@ class SiteTreeSubsites extends DataExtension
      * It may be that some relations are not diostinct to sub site so can stay
      * whereas others may need to be duplicated
      *
+     * @param SiteTree $originalPage
      */
     public function duplicateSubsiteRelations($originalPage)
     {
