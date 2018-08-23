@@ -52,6 +52,9 @@ class FileSubsites extends DataExtension
         if (Subsite::$disable_subsite_filter) {
             return;
         }
+        if ($dataQuery && $dataQuery->getQueryParam('Subsite.filter') === false) {
+            return;
+        }
 
         // If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
         // @TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and
