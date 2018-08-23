@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use Page;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -192,12 +193,30 @@ class SiteTreeSubsites extends DataExtension
                 $page = $this->owner;
 
                 try {
+                    // We have no idea what the ParentID should be, but it shouldn't be the same as it was since
+                    // we're now in a different subsite. As a workaround use the url-segment and subsite ID.
+                    if ($page->Parent()) {
+                        $parentSeg = $page->Parent()->URLSegment;
+                        $newParentPage = Page::get()->filter('URLSegment', $parentSeg)->first();
+                        $originalParentID = $page->ParentID;
+                        if ($newParentPage) {
+                            $page->ParentID = (int) $newParentPage->ID;
+                        } else {
+                            // reset it to the top level, so the user can decide where to put it
+                            $page->ParentID = 0;
+                        }
+                    }
+
+                    // Disable query filtering by subsite during actual duplication
                     $originalFilter = Subsite::$disable_subsite_filter;
                     Subsite::disable_subsite_filter(true);
 
                     return $includeChildren ? $page->duplicateWithChildren() : $page->duplicate(false);
                 } finally {
                     Subsite::disable_subsite_filter($originalFilter);
+
+                    // Re-set the original parent ID for the current page
+                    $page->ParentID = $originalParentID;
                 }
             });
     }
