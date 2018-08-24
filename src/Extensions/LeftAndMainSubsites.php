@@ -5,9 +5,9 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\LeftAndMainExtension;
+use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Controllers\CMSPagesController;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
@@ -65,14 +65,13 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      *
      * @param bool $includeMainSite
      * @param string $mainSiteTitle
-     * @param null $member
-     * @return ArrayList of <a href='psi_element://Subsite'>Subsite</a> instances.
-     * instances.
+     * @param Member|int|null $member
+     * @return ArrayList List of Subsite instances
      */
     public function sectionSites($includeMainSite = true, $mainSiteTitle = 'Main site', $member = null)
     {
-        if ($mainSiteTitle == 'Main site') {
-            $mainSiteTitle = _t('Subsites.MainSiteTitle', 'Main site');
+        if ($mainSiteTitle === 'Main site') {
+            $mainSiteTitle = _t('SilverStripe\\Subsites\\Model\\Subsite.MainSiteTitle', 'Main site');
         }
 
         // Rationalise member arguments
@@ -86,49 +85,38 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             $member = DataObject::get_by_id(Member::class, $member);
         }
 
-        // Collect permissions - honour the LeftAndMain::required_permission_codes, current model requires
-        // us to check if the user satisfies ALL permissions. Code partly copied from LeftAndMain::canView.
-        $codes = [];
-        $extraCodes = Config::inst()->get(get_class($this->owner), 'required_permission_codes');
-        if ($extraCodes !== false) {
-            if ($extraCodes) {
-                $codes = array_merge($codes, (array)$extraCodes);
-            } else {
-                $codes[] = sprintf('CMS_ACCESS_%s', get_class($this->owner));
-            }
-        } else {
-            // Check overriden - all subsites accessible.
-            return Subsite::all_sites();
+        $accessibleSubsites = ArrayList::create();
+        $subsites = Subsite::all_sites($includeMainSite, $mainSiteTitle);
+
+        // Check whether we have any subsites
+        if (!$subsites->exists()) {
+            return $accessibleSubsites;
         }
 
-        // Find subsites satisfying all permissions for the Member.
-        $codesPerSite = [];
-        $sitesArray = [];
-        foreach ($codes as $code) {
-            $sites = Subsite::accessible_sites($code, $includeMainSite, $mainSiteTitle, $member);
-            foreach ($sites as $site) {
-                // Build the structure for checking how many codes match.
-                $codesPerSite[$site->ID][$code] = true;
+        foreach ($subsites as $subsite) {
+            /** @var Subsite $subsite */
+            $canAccess = SubsiteState::singleton()
+                ->withState(function (SubsiteState $newState) use ($subsite, $member) {
+                    $newState->setSubsiteId($subsite->ID);
 
-                // Retain Subsite objects for later.
-                $sitesArray[$site->ID] = $site;
+                    return $this->canAccess($member);
+                });
+
+            if ($canAccess === false) {
+                // Explicitly denied
+                continue;
             }
+            $accessibleSubsites->push($subsite);
         }
 
-        // Find sites that satisfy all codes conjuncitvely.
-        $accessibleSites = new ArrayList();
-        foreach ($codesPerSite as $siteID => $siteCodes) {
-            if (count($siteCodes) == count($codes)) {
-                $accessibleSites->push($sitesArray[$siteID]);
-            }
-        }
-
-        return $accessibleSites;
+        return $accessibleSubsites;
     }
 
     /*
      * Returns a list of the subsites accessible to the current user.
      * It's enough for any section to be accessible for the section to be included.
+     *
+     * @return ArrayList
      */
     public function Subsites()
     {
@@ -138,6 +126,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
     /*
      * Generates a list of subsites with the data needed to
      * produce a dropdown site switcher
+     *
      * @return ArrayList
      */
 
@@ -215,11 +204,17 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
     /**
      * Check if the current controller is accessible for this user on this subsite.
+     *
+     * @param Member|int|null $member Will be added as a concrete param in 3.x
+     * @return false|null False if a decision was explicitly made to deny access, otherwise null to delegate to core
      */
     public function canAccess()
     {
+        // Allow us to accept a Member object passed in as an argument without breaking semver
+        $passedMember = func_get_args() ? func_get_arg(0) : null;
+
         // Admin can access everything, no point in checking.
-        $member = Security::getCurrentUser();
+        $member = $passedMember ?: Security::getCurrentUser();
         if ($member
             && (Permission::checkMember($member, 'ADMIN') // 'Full administrative rights'
                 || Permission::checkMember($member, 'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections'
@@ -228,18 +223,55 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             return true;
         }
 
-        // Check if we have access to current section on the current subsite.
-        $accessibleSites = $this->owner->sectionSites(true, 'Main site', $member);
-        return $accessibleSites->count() && $accessibleSites->find('ID', SubsiteState::singleton()->getSubsiteId());
+        // Check we have a member
+        if (!$member) {
+            return null;
+        }
+
+        // Check that some subsites exist first
+        if (!Subsite::get()->exists()) {
+            return null;
+        }
+
+        // Get the current subsite ID
+        $currentSubsiteId = SubsiteState::singleton()->getSubsiteId();
+
+        // Check against the current user's associated groups
+        $allowedInSubsite = false;
+        foreach ($member->Groups() as $group) {
+            // If any of the current user's groups have been given explicit access to the subsite, delegate to core
+            if ($group->AccessAllSubsites) {
+                $allowedInSubsite = true;
+                break;
+            }
+
+            // Check if any of the current user's groups have been given explicit access to the current subsite
+            $groupSubsiteIds = $group->Subsites()->column('ID');
+            if (in_array($currentSubsiteId, $groupSubsiteIds)) {
+                $allowedInSubsite = true;
+            }
+        }
+
+        // If we know that the user is not allowed in this subsite, explicitly say this
+        if (!$allowedInSubsite) {
+            return false;
+        }
+
+        // Delegate to core
+        return null;
     }
 
     /**
      * Prevent accessing disallowed resources. This happens after onBeforeInit has executed,
      * so all redirections should've already taken place.
+     *
+     * @return false|null
      */
     public function alternateAccessCheck()
     {
-        return $this->owner->canAccess();
+        if ($this->owner->canAccess() === false) {
+            return false;
+        }
     }
 
     /**
@@ -331,7 +363,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
         // SECOND, check if we need to change subsites due to lack of permissions.
 
-        if (!$this->owner->canAccess()) {
+        if ($this->owner->canAccess() === false) {
             $member = Security::getCurrentUser();
 
             // Current section is not accessible, try at least to stick to the same subsite.

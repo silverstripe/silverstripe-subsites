@@ -7,8 +7,10 @@ use SilverStripe\AssetAdmin\Controller\AssetAdmin;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Member;
+use SilverStripe\Subsites\Extensions\LeftAndMainSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
 
@@ -31,57 +33,91 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         return $obj;
     }
 
-    public function testSectionSites()
+    /**
+     * @dataProvider sectionSitesProvider
+     *
+     * @param string $identifier
+     * @param string $className
+     * @param array $expected
+     * @param string $message
+     * @param string $assertion
+     */
+    public function testSectionSites($identifier, $className, $expected, $message, $assertion = 'assertListEquals')
     {
-        $member = $this->objFromFixture(Member::class, 'subsite1member');
+        $member = $this->objFromFixture(Member::class, $identifier);
 
-        $cmsmain = singleton(CMSMain::class);
-        $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
-        $this->assertDOSEquals([
-            ['Title' => 'Subsite1 Template']
-        ], $subsites, 'Lists member-accessible sites for the accessible controller.');
-
-        $assetadmin = singleton(AssetAdmin::class);
-        $subsites = $assetadmin->sectionSites(true, 'Main site', $member);
-        $this->assertDOSEquals([], $subsites, 'Does not list any sites for forbidden controller.');
-
-        $member = $this->objFromFixture(Member::class, 'editor');
-
-        $cmsmain = singleton(CMSMain::class);
-        $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
-        $this->assertDOSContains([
-            ['Title' => 'Main site']
-        ], $subsites, 'Includes the main site for members who can access all sites.');
+        /** @var CMSMain|LeftAndMainSubsites $cmsmain */
+        $cmsMain = Injector::inst()->create($className);
+        $subsites = $cmsMain->sectionSites(true, 'Main site', $member);
+        $this->$assertion($expected, $subsites, $message);
     }
 
-    public function testAccessChecksDontChangeCurrentSubsite()
+    /**
+     * @return array[]
+     */
+    public function sectionSitesProvider()
+    {
+        return [
+            [
+                'subsite1member',
+                CMSMain::class,
+                [['Title' => 'Subsite1 Template']],
+                'Lists member-accessible sites for the accessible controller.',
+            ],
+            [
+                'subsite1member',
+                AssetAdmin::class,
+                [[]],
+                'Does not list any sites for forbidden controller.',
+            ],
+            [
+                'editor',
+                CMSMain::class,
+                [['Title' => 'Main site']],
+                'Includes the main site for members who can access all sites.',
+                'assertListContains',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider accessChecksProvider
+     *
+     * @param string $identifier
+     */
+    public function testAccessChecksDontChangeCurrentSubsite($identifier)
     {
         $this->logInAs('admin');
-        $ids = [];
 
-        $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
-        $subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
-        $subsite3 = $this->objFromFixture(Subsite::class, 'domaintest3');
-        $ids[] = $subsite1->ID;
-        $ids[] = $subsite2->ID;
-        $ids[] = $subsite3->ID;
-        $ids[] = 0;
+        /** @var Subsite $subsite */
+        $subsite = $this->objFromFixture(Subsite::class, $identifier);
+        $id = $subsite->ID;
 
         // Enable session-based subsite tracking.
         SubsiteState::singleton()->setUseSessions(true);
 
-        foreach ($ids as $id) {
-            Subsite::changeSubsite($id);
-            $this->assertEquals($id, SubsiteState::singleton()->getSubsiteId());
+        Subsite::changeSubsite($id);
+        $this->assertEquals($id, SubsiteState::singleton()->getSubsiteId(), 'Subsite ID is in the state');
 
-            $left = new LeftAndMain();
-            $this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
-            $this->assertEquals(
-                $id,
-                SubsiteState::singleton()->getSubsiteId(),
-                'The current subsite has not been changed in the process of checking permissions for admin user.'
-            );
-        }
+        $left = new LeftAndMain();
+        $this->assertTrue($left->canView(), "Admin user can view subsites LeftAndMain with id = '$id'");
+        $this->assertEquals(
+            $id,
+            SubsiteState::singleton()->getSubsiteId(),
+            'The current subsite has not been changed in the process of checking permissions for admin user.'
+        );
+    }
+
+    /**
+     * @return array[]
+     */
+    public function accessChecksProvider()
+    {
+        return [
+            ['domaintest1'],
+            ['domaintest3'],
+            ['domaintest3'],
+        ];
     }
 
     public function testShouldChangeSubsite()

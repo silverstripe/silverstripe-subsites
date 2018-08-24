@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Extensions;
 
 use Page;
+use SilverStripe\CMS\Controllers\CMSPagesController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -320,6 +321,11 @@ class SiteTreeSubsites extends DataExtension
         // Do not provide any input if there are no subsites configured
         if (!Subsite::get()->exists()) {
             return null;
+        }
+
+        // Check general subsite section access for CMS
+        if (CMSPagesController::singleton()->canAccess($member) === false) {
+            return false;
         }
 
         // Find the sites that this user has access to
