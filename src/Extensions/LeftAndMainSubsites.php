@@ -88,11 +88,6 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         $accessibleSubsites = ArrayList::create();
         $subsites = Subsite::all_sites($includeMainSite, $mainSiteTitle);
 
-        // Check whether we have any subsites
-        if (!$subsites->exists()) {
-            return $accessibleSubsites;
-        }
-
         foreach ($subsites as $subsite) {
             /** @var Subsite $subsite */
             $canAccess = SubsiteState::singleton()
@@ -211,7 +206,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
     public function canAccess()
     {
         // Allow us to accept a Member object passed in as an argument without breaking semver
-        $passedMember = func_get_args() ? func_get_arg(0) : null;
+        $passedMember = func_num_args() ? func_get_arg(0) : null;
 
         // Admin can access everything, no point in checking.
         $member = $passedMember ?: Security::getCurrentUser();
@@ -249,6 +244,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             $groupSubsiteIds = $group->Subsites()->column('ID');
             if (in_array($currentSubsiteId, $groupSubsiteIds)) {
                 $allowedInSubsite = true;
+                break;
             }
         }
 
