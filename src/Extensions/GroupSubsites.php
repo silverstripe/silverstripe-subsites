@@ -90,7 +90,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             // Interface is different if you have the rights to modify subsite group values on
             // all subsites
             if (isset($subsiteMap[0])) {
-                $fields->addFieldToTab('Root.Subsites', new OptionsetField(
+                $fields->addFieldToTab('Root.Subsites', OptionsetField::create(
                     'AccessAllSubsites',
                     _t(__CLASS__ . '.ACCESSRADIOTITLE', 'Give this group access to'),
                     [
@@ -100,20 +100,20 @@ class GroupSubsites extends DataExtension implements PermissionProvider
                 ));
 
                 unset($subsiteMap[0]);
-                $fields->addFieldToTab('Root.Subsites', new CheckboxSetField(
+                $fields->addFieldToTab('Root.Subsites', CheckboxSetField::create(
                     'Subsites',
                     '',
                     $subsiteMap
                 ));
             } else {
                 if (sizeof($subsiteMap) <= 1) {
-                    $fields->addFieldToTab('Root.Subsites', new ReadonlyField(
+                    $fields->addFieldToTab('Root.Subsites', ReadonlyField::create(
                         'SubsitesHuman',
                         _t(__CLASS__ . '.ACCESSRADIOTITLE', 'Give this group access to'),
                         reset($subsiteMap)
                     ));
                 } else {
-                    $fields->addFieldToTab('Root.Subsites', new CheckboxSetField(
+                    $fields->addFieldToTab('Root.Subsites', CheckboxSetField::create(
                         'Subsites',
                         _t(__CLASS__ . '.ACCESSRADIOTITLE', 'Give this group access to'),
                         $subsiteMap

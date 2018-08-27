@@ -27,23 +27,11 @@ class SubsiteXHRController extends LeftAndMain
             return true;
         }
 
-        if (Subsite::all_accessible_sites()->count() > 0) {
+        if (Subsite::all_accessible_sites(true, 'Main site', $member)->count() > 0) {
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Allow access if user allowed into the CMS at all.
-     */
-    public function canAccess()
-    {
-        // Allow if any cms access is available
-        return Permission::check([
-            'CMS_ACCESS', // Supported by 3.1.14 and up
-            'CMS_ACCESS_LeftAndMain'
-        ]);
     }
 
     public function getResponseNegotiator()

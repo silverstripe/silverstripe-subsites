@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Model;
 
 use SilverStripe\Admin\CMSMenu;
+use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Convert;
@@ -28,6 +29,7 @@ use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
+use SilverStripe\Subsites\Extensions\LeftAndMainSubsites;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
@@ -372,7 +374,7 @@ class Subsite extends DataObject
         if ($includeMainSite) {
             $subsites = $subsites->toArray();
 
-            $mainSite = new Subsite();
+            $mainSite = Subsite::create();
             $mainSite->Title = $mainSiteTitle;
             array_unshift($subsites, $mainSite);
 
@@ -382,7 +384,7 @@ class Subsite extends DataObject
         return $subsites;
     }
 
-    /*
+    /**
      * Returns an ArrayList of the subsites accessible to the current user.
      * It's enough for any section to be accessible for the site to be included.
      *
@@ -390,32 +392,26 @@ class Subsite extends DataObject
      */
     public static function all_accessible_sites($includeMainSite = true, $mainSiteTitle = 'Main site', $member = null)
     {
-        // Rationalise member arguments
-        if (!$member) {
-            $member = Security::getCurrentUser();
-        }
-        if (!$member) {
-            return ArrayList::create();
-        }
-        if (!is_object($member)) {
-            $member = DataObject::get_by_id(Member::class, $member);
-        }
-
         $subsites = ArrayList::create();
 
         // Collect subsites for all sections.
         $menu = CMSMenu::get_viewable_menu_items();
         foreach ($menu as $candidate) {
-            if ($candidate->controller) {
-                $accessibleSites = singleton($candidate->controller)->sectionSites(
-                    $includeMainSite,
-                    $mainSiteTitle,
-                    $member
-                );
-
-                // Replace existing keys so no one site appears twice.
-                $subsites->merge($accessibleSites);
+            if (!$candidate->controller) {
+                continue;
             }
+
+            // Determine which subsites can access the current admin section
+            /** @var LeftAndMain|LeftAndMainSubsites $controller */
+            $controller = singleton($candidate->controller);
+            $accessibleSites = $controller->sectionSites(
+                $includeMainSite,
+                $mainSiteTitle,
+                $member
+            );
+
+            // Replace existing keys so no one site appears twice.
+            $subsites->merge($accessibleSites);
         }
 
         $subsites->removeDuplicates();
@@ -427,11 +423,11 @@ class Subsite extends DataObject
      * Return the subsites that the current user can access by given permission.
      * Sites will only be included if they have a Title.
      *
-     * @param $permCode array|string Either a single permission code or an array of permission codes.
-     * @param $includeMainSite bool If true, the main site will be included if appropriate.
-     * @param $mainSiteTitle string The label to give to the main site
-     * @param $member int|Member The member attempting to access the sites
-     * @return DataList|ArrayList of {@link Subsite} instances
+     * @param array|string $permCode Either a single permission code or an array of permission codes.
+     * @param bool $includeMainSite  If true, the main site will be included if appropriate.
+     * @param string $mainSiteTitle  The label to give to the main site
+     * @param Member|int $member     The member attempting to access the sites
+     * @return ArrayList    List of {@link Subsite} instances
      */
     public static function accessible_sites(
         $permCode,
@@ -439,107 +435,42 @@ class Subsite extends DataObject
         $mainSiteTitle = 'Main site',
         $member = null
     ) {
-
-        // Rationalise member arguments
-        if (!$member) {
-            $member = Member::currentUser();
-        }
-        if (!$member) {
-            return new ArrayList();
-        }
-        if (!is_object($member)) {
-            $member = DataObject::get_by_id(Member::class, $member);
-        }
-
-        // Rationalise permCode argument
-        if (is_array($permCode)) {
-            $SQL_codes = "'" . implode("', '", Convert::raw2sql($permCode)) . "'";
-        } else {
-            $SQL_codes = "'" . Convert::raw2sql($permCode) . "'";
-        }
+        $memberCacheKey = is_object($member) ? $member->ID : 0;
 
         // Cache handling
-        $cacheKey = $SQL_codes . '-' . $member->ID . '-' . $includeMainSite . '-' . $mainSiteTitle;
+        $cacheKey = json_encode($permCode) . '-' . $memberCacheKey . '-' . $includeMainSite . '-' . $mainSiteTitle;
         if (isset(self::$cache_accessible_sites[$cacheKey])) {
             return self::$cache_accessible_sites[$cacheKey];
         }
 
-        /** @skipUpgrade */
-        $subsites = DataList::create(Subsite::class)
-            ->where("\"Subsite\".\"Title\" != ''")
-            ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
-            ->innerJoin(
-                'Group',
-                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1'
-            )
-            ->innerJoin(
-                'Group_Members',
-                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID"
-            )
-            ->innerJoin(
-                'Permission',
-                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" 
-                AND \"Permission\".\"Code\" 
-                IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
-            );
-
-        if (!$subsites) {
-            $subsites = new ArrayList();
-        }
-
-        /** @var DataList $rolesSubsites */
-        /** @skipUpgrade */
-        $rolesSubsites = DataList::create(Subsite::class)
-            ->where("\"Subsite\".\"Title\" != ''")
-            ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
-            ->innerJoin(
-                'Group',
-                '"Group"."ID" = "Group_Subsites"."GroupID" OR "Group"."AccessAllSubsites" = 1'
-            )
-            ->innerJoin(
-                'Group_Members',
-                "\"Group_Members\".\"GroupID\"=\"Group\".\"ID\" AND \"Group_Members\".\"MemberID\" = $member->ID"
-            )
-            ->innerJoin('Group_Roles', '"Group_Roles"."GroupID"="Group"."ID"')
-            ->innerJoin('PermissionRole', '"Group_Roles"."PermissionRoleID"="PermissionRole"."ID"')
-            ->innerJoin(
-                'PermissionRoleCode',
-                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" 
-                AND \"PermissionRoleCode\".\"Code\" 
-                IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
-            );
-
-        if (!$subsites && $rolesSubsites) {
-            return $rolesSubsites;
-        }
-
-        $subsites = new ArrayList($subsites->toArray());
-
-        if ($rolesSubsites) {
-            foreach ($rolesSubsites as $subsite) {
-                if (!$subsites->find('ID', $subsite->ID)) {
-                    $subsites->push($subsite);
-                }
+        $accessibleSubsites = ArrayList::create();
+        $subsites = self::all_sites($includeMainSite, $mainSiteTitle);
+        foreach ($subsites as $subsite) {
+            // Exclude subsites with no title
+            if (empty($subsite->Title)) {
+                continue;
             }
+
+            /** @var Subsite $subsite */
+            $canAccess = SubsiteState::singleton()
+                ->withState(function (SubsiteState $newState) use ($member, $subsite, $permCode) {
+                    // Mock each individual subsite and run permission checks in it
+                    $newState->setSubsiteId($subsite->ID);
+
+                    return Permission::checkMember($member, $permCode);
+                });
+
+            if ($canAccess === false) {
+                // Explicitly denied access
+                continue;
+            }
+
+            $accessibleSubsites->push($subsite);
         }
 
-        if ($includeMainSite) {
-            if (!is_array($permCode)) {
-                $permCode = [$permCode];
-            }
-            if (self::hasMainSitePermission($member, $permCode)) {
-                $subsites = $subsites->toArray();
+        self::$cache_accessible_sites[$cacheKey] = $accessibleSubsites;
 
-                $mainSite = new Subsite();
-                $mainSite->Title = $mainSiteTitle;
-                array_unshift($subsites, $mainSite);
-                $subsites = ArrayList::create($subsites);
-            }
-        }
-
-        self::$cache_accessible_sites[$cacheKey] = $subsites;
-
-        return $subsites;
+        return $accessibleSubsites;
     }
 
     /**
