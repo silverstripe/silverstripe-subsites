@@ -43,8 +43,12 @@ class InitStateMiddleware implements HTTPMiddleware
 
             return $delegate($request);
         } catch (DatabaseException $ex) {
-            // Database is not ready
-            return $delegate($request);
+            $message = $ex->getMessage();
+            if (strpos($message, 'No database selected') !== false) {
+                // Database is not ready, ignore and continue
+                return $delegate($request);
+            }
+            throw $ex;
         } finally {
             // Persist to the session if using the CMS
             if ($state->getUseSessions()) {
