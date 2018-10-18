@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Tasks;
 
-
 use SilverStripe\Dev\Tasks\MigrateFileTask;
 use SilverStripe\Subsites\Model\Subsite;
 
