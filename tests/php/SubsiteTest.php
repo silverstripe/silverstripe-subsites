@@ -307,46 +307,42 @@ class SubsiteTest extends BaseSubsiteTest
 
     /**
      * Tests that Subsite and SubsiteDomain both respect http protocol correctly
+     *
+     * @param string $class Fixture class name
+     * @param string $identifier Fixture identifier
+     * @param bool $currentIsSecure Whether the current base URL should be secure
+     * @param string $expected The expected base URL for the subsite or subsite domain
+     * @dataProvider domainProtocolProvider
      */
-    public function testDomainProtocol()
+    public function testDomainProtocol($class, $identifier, $currentIsSecure, $expected)
     {
-        // domaintest2 has 'protocol'
-        $subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
-        $domain2a = $this->objFromFixture(SubsiteDomain::class, 'dt2a');
-        $domain2b = $this->objFromFixture(SubsiteDomain::class, 'dt2b');
+        /** @var Subsite|SubsiteDomain $model */
+        $model = $this->objFromFixture($class, $identifier);
+        $protocol = $currentIsSecure ? 'https' : 'http';
+        Config::modify()->set(Director::class, 'alternate_base_url', $protocol . '://www.mysite.com');
+        $this->assertSame($expected, $model->absoluteBaseURL());
+    }
 
-        // domaintest4 is 'https' (primary only)
-        $subsite4 = $this->objFromFixture(Subsite::class, 'domaintest4');
-        $domain4a = $this->objFromFixture(SubsiteDomain::class, 'dt4a');
-        $domain4b = $this->objFromFixture(SubsiteDomain::class, 'dt4b'); // secondary domain is http only though
-
-        // domaintest5 is 'http'
-        $subsite5 = $this->objFromFixture(Subsite::class, 'domaintest5');
-        $domain5a = $this->objFromFixture(SubsiteDomain::class, 'dt5');
-
-        // Check protocol when current protocol is http://
-        Config::modify()->set(Director::class, 'alternate_base_url', 'http://www.mysite.com');
-
-        $this->assertEquals('http://two.mysite.com/', $subsite2->absoluteBaseURL());
-        $this->assertEquals('http://two.mysite.com/', $domain2a->absoluteBaseURL());
-        $this->assertEquals('http://subsite.mysite.com/', $domain2b->absoluteBaseURL());
-        $this->assertEquals('https://www.primary.com/', $subsite4->absoluteBaseURL());
-        $this->assertEquals('https://www.primary.com/', $domain4a->absoluteBaseURL());
-        $this->assertEquals('http://www.secondary.com/', $domain4b->absoluteBaseURL());
-        $this->assertEquals('http://www.tertiary.com/', $subsite5->absoluteBaseURL());
-        $this->assertEquals('http://www.tertiary.com/', $domain5a->absoluteBaseURL());
-
-        // Check protocol when current protocol is https://
-        Config::modify()->set(Director::class, 'alternate_base_url', 'https://www.mysite.com');
-
-        $this->assertEquals('https://two.mysite.com/', $subsite2->absoluteBaseURL());
-        $this->assertEquals('https://two.mysite.com/', $domain2a->absoluteBaseURL());
-        $this->assertEquals('https://subsite.mysite.com/', $domain2b->absoluteBaseURL());
-        $this->assertEquals('https://www.primary.com/', $subsite4->absoluteBaseURL());
-        $this->assertEquals('https://www.primary.com/', $domain4a->absoluteBaseURL());
-        $this->assertEquals('http://www.secondary.com/', $domain4b->absoluteBaseURL());
-        $this->assertEquals('http://www.tertiary.com/', $subsite5->absoluteBaseURL());
-        $this->assertEquals('http://www.tertiary.com/', $domain5a->absoluteBaseURL());
+    public function domainProtocolProvider()
+    {
+        return [
+            [Subsite::class, 'domaintest2', false, 'http://two.mysite.com/'],
+            [SubsiteDomain::class, 'dt2a', false, 'http://two.mysite.com/'],
+            [SubsiteDomain::class, 'dt2b', false, 'http://subsite.mysite.com/'],
+            [Subsite::class, 'domaintest4', false, 'https://www.primary.com/'],
+            [SubsiteDomain::class, 'dt4a', false, 'https://www.primary.com/'],
+            [SubsiteDomain::class, 'dt4b', false, 'http://www.secondary.com/'],
+            [Subsite::class, 'domaintest5', false, 'http://www.tertiary.com/'],
+            [SubsiteDomain::class, 'dt5', false,  'http://www.tertiary.com/'],
+            [Subsite::class, 'domaintest2', true, 'https://two.mysite.com/'],
+            [SubsiteDomain::class, 'dt2a', true, 'https://two.mysite.com/'],
+            [SubsiteDomain::class, 'dt2b', true, 'https://subsite.mysite.com/'],
+            [Subsite::class, 'domaintest4', true, 'https://www.primary.com/'],
+            [SubsiteDomain::class, 'dt4a', true, 'https://www.primary.com/'],
+            [SubsiteDomain::class, 'dt4b', true, 'http://www.secondary.com/'],
+            [Subsite::class, 'domaintest5', true, 'http://www.tertiary.com/'],
+            [SubsiteDomain::class, 'dt5', true, 'http://www.tertiary.com/'],
+        ];
     }
 
     public function testAllSites()
