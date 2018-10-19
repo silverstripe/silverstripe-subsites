@@ -42,7 +42,7 @@ class GridFieldSubsiteDetailFormItemRequest extends GridFieldDetailForm_ItemRequ
                 $templateArray
             );
             $templateDropdown->setEmptyString('(' . _t('Subsite.NOTEMPLATE', 'No template') . ')');
-            $form->Fields()->addFieldToTab('Root.Configuration', $templateDropdown);
+            $form->Fields()->addFieldToTab('Root.Main', $templateDropdown);
         }
 
         return $form;

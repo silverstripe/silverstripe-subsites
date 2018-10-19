@@ -43,8 +43,12 @@ class InitStateMiddleware implements HTTPMiddleware
 
             return $delegate($request);
         } catch (DatabaseException $ex) {
-            // Database is not ready
-            return $delegate($request);
+            $message = $ex->getMessage();
+            if (strpos($message, 'No database selected') !== false) {
+                // Database is not ready, ignore and continue
+                return $delegate($request);
+            }
+            throw $ex;
         } finally {
             // Persist to the session if using the CMS
             if ($state->getUseSessions()) {
@@ -62,7 +66,7 @@ class InitStateMiddleware implements HTTPMiddleware
     public function getIsAdmin(HTTPRequest $request)
     {
         $adminPaths = static::config()->get('admin_url_paths');
-        $adminPaths[] = AdminRootController::config()->get('url_base') . '/';
+        $adminPaths[] = AdminRootController::admin_url();
         $currentPath = rtrim($request->getURL(), '/') . '/';
         foreach ($adminPaths as $adminPath) {
             if (substr($currentPath, 0, strlen($adminPath)) === $adminPath) {
