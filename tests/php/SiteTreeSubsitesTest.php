@@ -112,41 +112,46 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertEquals($expected_path, $path);
     }
 
-    /**
-     * @dataProvider canEditProvider
-     *
-     * @param string $memberIdentifier
-     * @param string $subsiteIdentifier
-     * @param string $pageIdentifier
-     * @param bool $expected
-     * @param string $message
-     */
-    public function testCanEditSiteTree($memberIdentifier, $subsiteIdentifier, $pageIdentifier, $expected, $message)
+    public function testCanEditSiteTree()
     {
-        $this->logInAs($memberIdentifier);
+        $admin = $this->objFromFixture(Member::class, 'admin');
+        $subsite1member = $this->objFromFixture(Member::class, 'subsite1member');
+        $subsite2member = $this->objFromFixture(Member::class, 'subsite2member');
+        $mainpage = $this->objFromFixture('Page', 'home');
+        $subsite1page = $this->objFromFixture('Page', 'subsite1_home');
+        $subsite2page = $this->objFromFixture('Page', 'subsite2_home');
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
+        $subsite2 = $this->objFromFixture(Subsite::class, 'subsite2');
 
-        /** @var Page $page */
-        $page = $this->objFromFixture(Page::class, $pageIdentifier);
+        // Cant pass member as arguments to canEdit() because of GroupSubsites
+        $this->logInAs($admin);
 
-        if (is_string($subsiteIdentifier)) {
-            $subsiteIdentifier = $this->idFromFixture(Subsite::class, $subsiteIdentifier);
-        }
-        Subsite::changeSubsite($subsiteIdentifier);
+        $this->assertTrue(
+            (bool)$subsite1page->canEdit(),
+            'Administrators can edit all subsites'
+        );
 
-        $this->assertSame($expected, (bool) $page->canEdit(), $message);
-    }
+        // @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
+        Subsite::changeSubsite($subsite1);
 
-    /**
-     * @return array[]
-     */
-    public function canEditProvider()
-    {
-        return [
-            ['admin', 0, 'subsite1_home', true, 'Administrators can edit all subsites'],
-            ['subsite1member', 'subsite1', 'subsite1_home', true, 'Can edit on subsite if group belongs to subsite'],
-            ['subsite2member', 'subsite1', 'subsite1_home', false, 'Cannot edit on subsite if group doesn\'t belong'],
-            ['subsite2member', 0, 'home', false, 'Cannot edit pages on main site if not in correct group'],
-        ];
+        $this->logInAs($subsite1member->ID);
+        $this->assertTrue(
+            (bool)$subsite1page->canEdit(),
+            'Members can edit pages on a subsite if they are in a group belonging to this subsite'
+        );
+
+        $this->logInAs($subsite2member->ID);
+        $this->assertFalse(
+            (bool)$subsite1page->canEdit(),
+            'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
+        );
+
+        // @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
+        Subsite::changeSubsite(0);
+        $this->assertFalse(
+            $mainpage->canEdit(),
+            'Members cant edit pages on the main site if they are not in a group allowing this'
+        );
     }
 
     /**
