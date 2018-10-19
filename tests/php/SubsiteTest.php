@@ -193,9 +193,20 @@ class SubsiteTest extends BaseSubsiteTest
         );
         $this->assertEquals(
             $subsite1->ID,
+            Subsite::getSubsiteIDForDomain('example.org:1123'),
+            'Exact matches without strict checking when not using www prefix and ignores port'
+        );
+        $this->assertEquals(
+            $subsite1->ID,
             Subsite::getSubsiteIDForDomain('www.example.org'),
             'Matches without strict checking when using www prefix, '
             .'still matching first domain regardless of www prefix  (falling back to subsite primary key ordering)'
+        );
+        $this->assertEquals(
+            $subsite1->ID,
+            Subsite::getSubsiteIDForDomain('www.example.org:9923'),
+            'Matches without strict checking when using www prefix, '
+            .'still matching first domain without prefix  (falling back to primary key ordering and ignoring port)'
         );
         $this->assertEquals(
             $subsite1->ID,
@@ -214,6 +225,11 @@ class SubsiteTest extends BaseSubsiteTest
             $subsite1->ID,
             Subsite::getSubsiteIDForDomain('example.org'),
             'Matches with strict checking when not using www prefix'
+        );
+        $this->assertEquals(
+            $subsite1->ID,
+            Subsite::getSubsiteIDForDomain('example.org:123'),
+            'Matches with strict checking when not using www prefix and ignores port'
         );
         $this->assertEquals(
             $subsite2->ID, // not 1
