@@ -258,7 +258,7 @@ class Subsite extends DataObject
         }
 
         // Remove ports, we aren't concerned with them in terms of detecting subsites via domains
-        $hostParts = explode(':', $host);
+        $hostParts = explode(':', $host, 2);
         $host = reset($hostParts);
 
         $matchingDomains = null;
