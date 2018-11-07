@@ -548,7 +548,7 @@ class SiteTreeSubsites extends DataExtension
         $subsite = Subsite::currentSubsite();
         if ($subsite && $subsite->exists() && $subsite->PageTypeBlacklist) {
             // SS 4.1: JSON encoded. SS 4.0, comma delimited
-            $blacklist = Convert::json2array($subsite->PageTypeBlacklist);
+            $blacklist = json_decode($subsite->PageTypeBlacklist, true);
             if ($blacklist === false) {
                 $blacklist = explode(',', $subsite->PageTypeBlacklist);
             }
