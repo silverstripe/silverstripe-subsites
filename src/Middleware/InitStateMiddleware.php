@@ -44,8 +44,10 @@ class InitStateMiddleware implements HTTPMiddleware
             return $delegate($request);
         } catch (DatabaseException $ex) {
             $message = $ex->getMessage();
-            if (strpos($message, 'No database selected') !== false) {
-                // Database is not ready, ignore and continue
+            if (strpos($message, 'No database selected') !== false
+                || preg_match('/\s*(table|relation) .* does(n\'t| not) exist/i', $message)
+            ) {
+                // Database is not ready, ignore and continue. Either it doesn't exist or it has no tables
                 return $delegate($request);
             }
             throw $ex;
