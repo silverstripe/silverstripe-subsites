@@ -35,7 +35,7 @@ class FolderFormFactoryExtension extends Extension
             $fields->push($dropdown);
             $fields->push(LiteralField::create(
                 'Message',
-                '<p class="message notice">' .
+                '<p class="alert alert-info">' .
                 _t(
                     __CLASS__ . '.SUBSITENOTICE',
                     'Folders and files created in the main site are accessible by all subsites.'
