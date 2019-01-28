@@ -17,6 +17,8 @@ class SubsiteTest extends BaseSubsiteTest
 {
     protected static $fixture_file = 'SubsiteTest.yml';
 
+    protected $usesTransactions = false;
+
     /**
      * Original value of $_REQUEST
      *
