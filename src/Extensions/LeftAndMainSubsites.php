@@ -221,9 +221,11 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         // Admin can access everything, no point in checking.
         $member = Security::getCurrentUser();
         if ($member
-            && (Permission::checkMember($member, 'ADMIN') // 'Full administrative rights'
-                || Permission::checkMember($member, 'CMS_ACCESS_LeftAndMain') // 'Access to all CMS sections'
-            )
+            && (Permission::checkMember($member, [
+                'ADMIN', // Full administrative rights
+                'CMS_ACCESS_LeftAndMain', // Access to all CMS sections
+                'CMS_ACCESS_CMSMain', // Access to CMS controllers
+            ]))
         ) {
             return true;
         }
