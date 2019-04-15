@@ -15,12 +15,12 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^4",
-        "silverstripe/cms": "^4",
-        "silverstripe/admin": "^1",
-        "silverstripe/asset-admin": "^1",
-        "silverstripe/errorpage": "^1",
-        "silverstripe/versioned": "^1"
+        "silverstripe/framework": "^4.4@dev",
+        "silverstripe/cms": "^4.4@dev",
+        "silverstripe/admin": "^1.4@dev",
+        "silverstripe/asset-admin": "^1.4@dev",
+        "silverstripe/errorpage": "^1.4@dev",
+        "silverstripe/versioned": "^1.4@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
@@ -33,9 +33,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "2.x-dev"
-        },
         "expose": [
             "javascript",
             "css"
