@@ -1,6 +1,72 @@
 de:
   DomainNameField:
     INVALID_DOMAIN: 'Ungültige Domain'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'Klicken Sie hier, um den Inhalt zu bearbeiten'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsites
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'Alle Seiten'
+    SUBSITENOTICE: 'Auf Ordner und Dateien der Hauptseite kann von allen Subsites zugegriffen werden.'
+    SubsiteFieldLabel: Subseite
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'Alle Subsites'
+    ACCESSONLY: 'Nur diese Subsites'
+    ACCESSRADIOTITLE: 'Dieser Gruppe Zugriff geben auf'
+    GlobalGroup: 'globale Gruppe'
+    MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
+    MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
+    SECURITYTABTITLE: Subsites
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    SITECONTENTLEFT: 'Seiten Inhalt'
+    Saved: 'Gespeichert, bitte aktualisieren Sie verknüpfte Seiten'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: Kopieren
+    CopyToSubsite: 'Seite auf Subseite Kopieren'
+    CopyToSubsiteWithChildren: 'Samt Unterseiten?'
+    SubsiteOperations: 'Subseiten Operationen'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Einstellungen
+    CopyMessage: 'Kopie von {title} erstellt'
+    CustomExtraMeta: 'Benutzerdefinierte Meta-Tags'
+    CustomMetaDescription: Beschreibung
+    CustomMetaKeywords: Schlüsselwörter
+    CustomMetaTitle: Titel
+    PLURALNAME: Subsites
+    PLURALS:
+      one: 'Eine Subseite'
+      other: '{count} Subsites'
+    PageTypeBlacklistField: 'Seitentypen verbieten?'
+    SINGULARNAME: Subseite
+    SiteConfigSubtitle: 'Ihr Websiteslogan'
+    SiteConfigTitle: 'Name Ihrer Website'
+    ThemeFieldEmptyString: '-'
+    ValidateTitle: 'Bitte geben Sie einen Titel an'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Domäne
+    DOMAIN_DESCRIPTION: 'Hostname dieser Subsite (ohne Protokol). Joker (*) ist erlaubt.'
+    IS_PRIMARY: 'Ist Hauptdomäne?'
+    PLURALNAME: 'Domänen der Subseite'
+    PLURALS:
+      one: 'Eine Domäne der Subseite'
+      other: '{count} Domainen der Subseite'
+    PROTOCOL_AUTOMATIC: Automatisch
+    PROTOCOL_DESCRIPTION: 'DIes ist die Standarddomäne für diese Subseite'
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protokoll
+    SINGULARNAME: 'Domäne der Subseite'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subseite an'
+    OverrideNote: 'Überschreibt den geerbten Wert der Quelle'
+    PLURALNAME: 'Subsites Virtuelle Seiten'
+    PLURALS:
+      one: 'Eine Subsites Virtuelle Seite'
+      other: '{count} Subsites Virtuelle Seiten'
+    SINGULARNAME: 'Subsites Virtuelle Seite'
+    SubsiteField: Subseite
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Seiten
   Subsite:
     COPYSTRUCTURE: 'Struktur kopieren von:'
     NOTEMPLATE: 'Kein Template'
@@ -9,9 +75,9 @@ de:
     DomainFieldLabel: Domäne
     IsPublicFieldLabel: 'Öffentlich zugänglich'
     LanguageFieldLabel: Sprache
-    MainSiteTitle: 'Hauptsite'
+    MainSiteTitle: Hauptsite
     PageTypeBlacklistFieldLabel: 'Ausgeschlossene Seitentypen'
     PrimaryDomainFieldLabel: 'Primäre Domain'
-    RedirectURLFieldLabel: 'Weierleitungs-URL'
+    RedirectURLFieldLabel: Weierleitungs-URL
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Name der Subsite'
