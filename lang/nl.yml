@@ -1,32 +1,85 @@
 nl:
-  FileSubsites:
+  DomainNameField:
+    INVALID_DOMAIN: 'Ongeldige domein naam'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'Klik hier om inhoud aan te passen'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsites
+  SilverStripe\Subsites\Controller\SubsiteXHRController:
+    MENUTITLE: Subsites
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'Alle sites'
+    SUBSITENOTICE: 'Mappen en bestanden van de Hoofdsite zijn toegankelijk voor alle subsites.'
     SubsiteFieldLabel: Subsite
-  GridFieldAddFromTemplateButton:
-    AddFromTemplate: 'Nieuwe toevegen vanaf template'
-  GroupSubsites:
+  SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'Alle subsites'
     ACCESSONLY: 'Alleen deze subsites'
     ACCESSRADIOTITLE: 'Geef deze groep rechten aan'
+    GlobalGroup: 'globale groep'
+    MANAGE_SUBSITES: 'Beheer subsites voor groepen'
+    MANAGE_SUBSITES_HELP: 'Bepaal de toegangsrechten voor groepen per subsite'
     SECURITYTABTITLE: Subsites
-  Subsite:
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    SITECONTENTLEFT: 'Site inhoud'
+    Saved: 'Opgeslagen, pas onderliggende pagina''s aan.'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: Kopieer
+    CopyToSubsite: 'Kopieer pagina''s naar subsite'
+    CopyToSubsiteWithChildren: 'Inclusief onderliggende pagina''s?'
+    SubsiteOperations: 'Subsite Acties'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Configuratie
+    CopyMessage: 'Kopie gemaakt van {title}'
+    CustomExtraMeta: 'Andere meta tags'
     CustomMetaDescription: Omschrijving
+    CustomMetaKeywords: Sleutelwoorden
     CustomMetaTitle: Titel
     PLURALNAME: Subsites
+    PLURALS:
+      one: 'Een Subsite'
+      other: '{count} Subsites'
+    PageTypeBlacklistField: 'Niet toegestane paginatypes?'
     SINGULARNAME: Subsite
+    SiteConfigSubtitle: 'Jouw slagzin hier'
     SiteConfigTitle: 'Jouw Site Naam'
-    TabTitleConfig: Configuratie
-  SubsiteAdmin:
-    MENUTITLE: Subsites
-  SubsiteDomain:
+    ThemeFieldEmptyString: '-'
+    ValidateTitle: 'Voeg een "Titel" toe'
+  SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domein
+    DOMAIN_DESCRIPTION: 'Domeinnaam van deze subsite (zonder http), wildcards zijn toegestaan (*).'
+    IS_PRIMARY: 'Is Primaire domein'
     PLURALNAME: 'Subsite Domeinen'
+    PLURALS:
+      one: 'Een subsite domein'
+      other: '{count} subsite domeinen'
+    PROTOCOL_AUTOMATIC: Automatisch
+    PROTOCOL_DESCRIPTION: 'Markeer als standaard domein voor deze subsite'
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protocol
     SINGULARNAME: 'Subsite Domein'
-  Subsites:
-    DefaultSiteFieldLabel: 'Standaard Site'
-    LanguageFieldLabel: Taal
-    PrimaryDomainFieldLabel: 'Primaire domein'
-    ThemeFieldLabel: Thema
-    TitleFieldLabel: 'Subsite naam'
-  SubsitesVirtualPage:
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    DESCRIPTION: 'Toon de inhoud van een pagina op een andere subsite'
+    OverrideNote: 'Overschrijft de overgenomen tekst van de gelinkte pagina'
+    PLURALNAME: 'Subsites Virtuele paginas'
+    PLURALS:
+      one: 'Subsites Virtuele pagina'
+      other: '{count} Subsites Virtuele paginas'
     SINGULARNAME: 'Subsites Virtuele pagina'
     SubsiteField: Subsite
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Sites
+  Subsite:
+    COPYSTRUCTURE: 'Kopieer structuur vanaf:'
+    NOTEMPLATE: 'Geen template'
+  Subsites:
+    DefaultSiteFieldLabel: 'Standaard Site'
+    DomainFieldLabel: Domein
+    IsPublicFieldLabel: 'Publiek toegankelijk'
+    LanguageFieldLabel: Taal
+    MainSiteTitle: 'Hoofd site'
+    PageTypeBlacklistFieldLabel: 'Paginatypes blacklist'
+    PrimaryDomainFieldLabel: 'Primaire domein'
+    RedirectURLFieldLabel: 'Redirect URL'
+    ThemeFieldLabel: Thema
+    TitleFieldLabel: 'Subsite naam'

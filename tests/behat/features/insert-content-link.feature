@@ -19,7 +19,7 @@ Feature: Insert an internal link into content
     And I press the "Insert link" HTML field button
     And I click "Page on this site" in the ".mce-menu" element
     Then I should see an "form#Form_editorInternalLink" element
-    When I click "(Choose Page)" in the ".Select-multi-value-wrapper" element
+    When I click "(Search or choose Page)" in the ".Select-multi-value-wrapper" element
     And I click "Another page" in the ".treedropdownfield__menu" element
     And I fill in "my desc" for "Link description"
     And I press the "Insert" button

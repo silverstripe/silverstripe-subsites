@@ -1,17 +1,57 @@
 fi:
   DomainNameField:
     INVALID_DOMAIN: 'Virheellinen domain-nimi'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'Napsauta tässä muokataksesi sisältöä'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Alasivustot
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'Kaikki sivustot'
+    SubsiteFieldLabel: Alasivusto
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'Kaikki alasivustot'
+    ACCESSONLY: 'Vain nämä alasivustot'
+    ACCESSRADIOTITLE: 'Anna ryhmän oikeudet »'
+    GlobalGroup: Globaaliryhmä
+    MANAGE_SUBSITES: 'Hallinnoi ryhmien alasivustoja'
+    SECURITYTABTITLE: Alasivustot
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    SITECONTENTLEFT: 'Sivuston sisältö'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: Kopioi
+    CopyToSubsite: 'Kopioi sivu alasivustolle'
+    SubsiteOperations: 'Alasivuston toiminnot'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Asetukset
+    CustomMetaDescription: Kuvaus
+    CustomMetaKeywords: Avainsanat
+    CustomMetaTitle: Otsikko
+    PLURALNAME: Alasivut
+    PLURALS:
+      one: Alasivu
+      other: '{count} alasivua'
+    SiteConfigSubtitle: 'Tähän sloganisi'
+    SiteConfigTitle: 'Sivuston nimi'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Verkkotunnus
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protokolla
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SubsiteField: Alasivusto
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Sivustot
   Subsite:
     COPYSTRUCTURE: 'Kopioi rakenne kohteesta:'
     NOTEMPLATE: 'Ei sivupohjaa'
   Subsites:
-    DefaultSiteFieldLabel: 'Oletussivusto'
+    DefaultSiteFieldLabel: Oletussivusto
     DomainFieldLabel: Domain
     IsPublicFieldLabel: 'Aktivoi julkinen pääsy'
     LanguageFieldLabel: Kieli
-    MainSiteTitle: 'Pääsivusto'
+    MainSiteTitle: Pääsivusto
     PageTypeBlacklistFieldLabel: 'Sivutyyppien mustalista'
-    PrimaryDomainFieldLabel: 'Oletusdomain'
+    PrimaryDomainFieldLabel: Oletusdomain
     RedirectURLFieldLabel: 'Edelleenohjaus URL'
     ThemeFieldLabel: Teema
     TitleFieldLabel: 'Alisivuston nimi'

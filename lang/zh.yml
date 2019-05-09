@@ -1,15 +1,15 @@
 zh:
   Subsite:
-    COPYSTRUCTURE: '复制结构来自：'
-    NOTEMPLATE: '没有模板'
+    COPYSTRUCTURE: 复制结构来自：
+    NOTEMPLATE: 没有模板
   Subsites:
-    DefaultSiteFieldLabel: '默认网站'
+    DefaultSiteFieldLabel: 默认网站
     DomainFieldLabel: 域名
-    IsPublicFieldLabel: '启用公共访问权'
+    IsPublicFieldLabel: 启用公共访问权
     LanguageFieldLabel: 语言
-    MainSiteTitle: '主网站'
-    PageTypeBlacklistFieldLabel: '页面类型黑名单'
-    PrimaryDomainFieldLabel: '主域名'
+    MainSiteTitle: 主网站
+    PageTypeBlacklistFieldLabel: 页面类型黑名单
+    PrimaryDomainFieldLabel: 主域名
     RedirectURLFieldLabel: '重定向 URL'
     ThemeFieldLabel: 主题
-    TitleFieldLabel: '子网站名称'
+    TitleFieldLabel: 子网站名称
