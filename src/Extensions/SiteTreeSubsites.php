@@ -545,14 +545,9 @@ class SiteTreeSubsites extends DataExtension
     public function canCreate($member = null)
     {
         // Typically called on a singleton, so we're not using the Subsite() relation
+        /** @var Subsite $subsite */
         $subsite = Subsite::currentSubsite();
-        if ($subsite && $subsite->exists() && $subsite->PageTypeBlacklist) {
-            // SS 4.1: JSON encoded. SS 4.0, comma delimited
-            $blacklist = json_decode($subsite->PageTypeBlacklist, true);
-            if ($blacklist === false) {
-                $blacklist = explode(',', $subsite->PageTypeBlacklist);
-            }
-
+        if ($subsite && $subsite->exists() && ($blacklist = $subsite->parsePageTypeBlacklist())) {
             if (in_array(get_class($this->owner), (array) $blacklist)) {
                 return false;
             }

@@ -36,7 +36,7 @@ use UnexpectedValueException;
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
  * You can simulate subsite access without setting up virtual hosts by appending ?SubsiteID=<ID> to the request.
  *
- * @package subsites
+ * @property string PageTypeBlacklist
  */
 class Subsite extends DataObject
 {
@@ -965,6 +965,29 @@ JS;
             LEFT JOIN "Group" ON "Group"."ID" = "Group_Members"."GroupID"
             LEFT JOIN "Permission" ON "Permission"."GroupID" = "Group"."ID"'
         );
+    }
+
+    /**
+     * Parses and returns an array of page types that have been blacklisted for this subsite. Returns null if the
+     * blacklist is not defined
+     *
+     * @return array|null
+     */
+    public function parsePageTypeBlacklist()
+    {
+        $raw = $this->getField('PageTypeBlacklist');
+
+        // SS 4.1: JSON encoded. SS 4.0, comma delimited
+        $blacklist = json_decode($raw, true);
+        if ($blacklist === false) {
+            $blacklist = explode(',', $raw);
+        }
+
+        if (empty($blacklist)) {
+            return null;
+        }
+
+        return $blacklist;
     }
 
     /**

@@ -14,6 +14,7 @@ SilverStripe\CMS\Controllers\ContentController:
 SilverStripe\CMS\Controllers\CMSPageAddController:
   extensions:
     - SilverStripe\Subsites\Extensions\CMSPageAddControllerExtension
+    - SilverStripe\Subsites\Extensions\PageAddBlacklistExtension
 
 SilverStripe\Admin\LeftAndMain:
   extensions:
