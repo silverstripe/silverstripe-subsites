@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Extensions;
 
 use Page;
+use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -150,6 +151,7 @@ class SiteTreeSubsites extends DataExtension
         // replace readonly link prefix
         $subsite = $this->owner->Subsite();
         $nested_urls_enabled = Config::inst()->get(SiteTree::class, 'nested_urls');
+        /** @var Subsite $subsite */
         if ($subsite && $subsite->exists()) {
             // Use baseurl from domain
             $baseLink = $subsite->absoluteBaseURL();
@@ -163,7 +165,7 @@ class SiteTreeSubsites extends DataExtension
             }
 
             $urlsegment = $fields->dataFieldByName('URLSegment');
-            if ($urlsegment) {
+            if ($urlsegment && $urlsegment instanceof SiteTreeURLSegmentField) {
                 $urlsegment->setURLPrefix($baseLink);
             }
         }
