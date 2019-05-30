@@ -111,13 +111,14 @@ class SubsiteDomain extends DataObject
             self::PROTOCOL_HTTPS => _t(__CLASS__ . '.PROTOCOL_HTTPS', 'https://'),
             self::PROTOCOL_AUTOMATIC => _t(__CLASS__ . '.PROTOCOL_AUTOMATIC', 'Automatic')
         ];
-        $fields = new FieldList(
+        $fields = FieldList::create(
             WildcardDomainField::create('Domain', $this->fieldLabel('Domain'), null, 255)
                 ->setDescription(_t(
                     __CLASS__ . '.DOMAIN_DESCRIPTION',
                     'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
                 )),
             OptionsetField::create('Protocol', $this->fieldLabel('Protocol'), $protocols)
+                ->setValue($this->Protocol ?: self::PROTOCOL_AUTOMATIC)
                 ->setDescription(_t(
                     __CLASS__ . '.PROTOCOL_DESCRIPTION',
                     'When generating links to this subsite, use the selected protocol. <br />' .
@@ -125,7 +126,7 @@ class SubsiteDomain extends DataObject
                 )),
             CheckboxField::create('IsPrimary', $this->fieldLabel('IsPrimary'))
                 ->setDescription(_t(
-                    __CLASS__ . '.PROTOCOL_DESCRIPTION',
+                    __CLASS__ . '.ISPRIMARY_DESCRIPTION',
                     'Mark this as the default domain for this subsite'
                 ))
         );
