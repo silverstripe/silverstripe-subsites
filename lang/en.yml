@@ -47,13 +47,14 @@ en:
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domain
     DOMAIN_DESCRIPTION: 'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
+    ISPRIMARY_DESCRIPTION: 'Mark this as the default domain for this subsite'
     IS_PRIMARY: 'Is Primary Domain?'
     PLURALNAME: 'Subsite Domains'
     PLURALS:
       one: 'A Subsite Domain'
       other: '{count} Subsite Domains'
     PROTOCOL_AUTOMATIC: Automatic
-    PROTOCOL_DESCRIPTION: 'Mark this as the default domain for this subsite'
+    PROTOCOL_DESCRIPTION: 'When generating links to this subsite, use the selected protocol. <br />Selecting ''Automatic'' means subsite links will default to the current protocol.'
     PROTOCOL_HTTP: 'http://'
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protocol
