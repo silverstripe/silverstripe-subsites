@@ -108,7 +108,8 @@ class Subsite extends DataObject
      */
     private static $check_is_public = true;
 
-    /*** @return array
+    /**
+     * @var array
      */
     private static $summary_fields = [
         'Title',
