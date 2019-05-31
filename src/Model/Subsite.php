@@ -113,7 +113,7 @@ class Subsite extends DataObject
     private static $summary_fields = [
         'Title',
         'PrimaryDomain',
-        'IsPublic'
+        'IsPublic.Nice'
     ];
 
     /**
@@ -772,7 +772,7 @@ class Subsite extends DataObject
         $labels['DefaultSite'] = _t('Subsites.DefaultSiteFieldLabel', 'Default site');
         $labels['Theme'] = _t('Subsites.ThemeFieldLabel', 'Theme');
         $labels['Language'] = _t('Subsites.LanguageFieldLabel', 'Language');
-        $labels['IsPublic'] = _t('Subsites.IsPublicFieldLabel', 'Enable public access');
+        $labels['IsPublic.Nice'] = _t('Subsites.IsPublicFieldLabel', 'Enable public access');
         $labels['PageTypeBlacklist'] = _t('Subsites.PageTypeBlacklistFieldLabel', 'Page Type Blacklist');
         $labels['Domains.Domain'] = _t('Subsites.DomainFieldLabel', 'Domain');
         $labels['PrimaryDomain'] = _t('Subsites.PrimaryDomainFieldLabel', 'Primary Domain');
