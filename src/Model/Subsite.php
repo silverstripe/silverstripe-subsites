@@ -28,6 +28,7 @@ use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
+use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
@@ -182,7 +183,6 @@ class Subsite extends DataObject
     /**
      * Gets the subsite currently set in the session.
      *
-     * @uses ControllerSubsites->controllerAugmentInit()
      * @return DataObject The current Subsite
      */
     public static function currentSubsite()
@@ -787,7 +787,7 @@ class Subsite extends DataObject
      */
     public function allowedThemes()
     {
-        if ($themes = self::$allowed_themes) {
+        if (($themes = self::$allowed_themes) || ($themes = ThemeResolver::singleton()->getCustomThemeOptions())) {
             return ArrayLib::valuekey($themes);
         }
 
