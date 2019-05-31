@@ -59,8 +59,11 @@ class ThemeResolver
         $index = array_search($siteTheme, $themes);
 
         if ($index > 0) {
+            // 4.0 didn't have support for themes in the public webroot
+            $publicConstantDefined = defined('SSViewer::PUBLIC_THEME');
+
             // Check if the default is public themes
-            $publicDefault = $themes[0] === SSViewer::PUBLIC_THEME;
+            $publicDefault = $publicConstantDefined && $themes[0] === SSViewer::PUBLIC_THEME;
 
             // Take only those that appear after theme chosen (non-inclusive)
             $themes = array_slice($themes, $index + 1);

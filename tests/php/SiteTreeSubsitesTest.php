@@ -417,7 +417,6 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         Subsite::changeSubsite($subsitePage->SubsiteID);
         $controller = ModelAsController::controller_for($subsitePage);
         SiteTree::singleton()->extend('contentcontrollerInit', $controller);
-
     }
 
     public function provideAlternateAbsoluteLink()

@@ -11,7 +11,7 @@ use SilverStripe\View\SSViewer;
 class ThemeResolverTest extends SapphireTest
 {
     protected $themeList = [
-        SSViewer::PUBLIC_THEME,
+        '$public',
         'custom',
         'main',
         'backup',
@@ -55,7 +55,7 @@ class ThemeResolverTest extends SapphireTest
 
         $expected = [
             'main', // 'main' is moved to the top
-            SSViewer::PUBLIC_THEME, // $public is preserved
+            '$public', // $public is preserved
             // Anything above 'main' is removed
             'backup',
             SSViewer::DEFAULT_THEME,
@@ -87,7 +87,7 @@ class ThemeResolverTest extends SapphireTest
                 ['test' => $expected = [
                     'subsite',
                     'backup',
-                    SSViewer::PUBLIC_THEME,
+                    '$public',
                     SSViewer::DEFAULT_THEME,
                 ]],
                 'test',
@@ -104,7 +104,7 @@ class ThemeResolverTest extends SapphireTest
                     'bee' => $expected = [
                         'subsite',
                         'backup',
-                        SSViewer::PUBLIC_THEME,
+                        '$public',
                         SSViewer::DEFAULT_THEME,
                     ],
                     'sea' => [
@@ -121,7 +121,7 @@ class ThemeResolverTest extends SapphireTest
                 ['main' => $expected = [
                     'subsite',
                     'backup',
-                    SSViewer::PUBLIC_THEME,
+                    '$public',
                     SSViewer::DEFAULT_THEME,
                 ]],
                 'main',
@@ -132,7 +132,7 @@ class ThemeResolverTest extends SapphireTest
                 ['test' => [
                     'subsite',
                     'backup',
-                    SSViewer::PUBLIC_THEME,
+                    '$public',
                     SSViewer::DEFAULT_THEME,
                 ]],
                 'other',
