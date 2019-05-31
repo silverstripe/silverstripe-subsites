@@ -222,15 +222,13 @@ class SubsitesVirtualPage extends VirtualPage
     {
         $isValid = parent::validURLSegment();
 
-        $filters = [
-            'URLSegment' => $this->URLSegment,
-        ];
-
         // Veto the validation rules if its false. In this case, some logic
         // needs to be duplicated from parent to find out the exact reason the validation failed.
         if (!$isValid) {
-            // Exclude the current page from the filter
-            $filters['ID:not'] = $this->ID;
+            $filters = [
+                'URLSegment' => $this->URLSegment,
+                'ID:not' => $this->ID,
+            ];
 
             if (Config::inst()->get(SiteTree::class, 'nested_urls')) {
                 $filters['ParentID'] = $this->ParentID ?: 0;
