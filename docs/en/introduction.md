@@ -54,8 +54,8 @@ You can simulate subsite access without setting up virtual hosts by appending ?S
 The Subsites module and Fluent translation module both provide the concept of defining "domains" and let you
 configure the host name for it. This functionality is essentially performing the same duty in both modules.
 
-In the "URL segment" field for CMS pages both Subsites and Fluent will add their context to the value. If you
+In the "URL segment" field for CMS pages, both Subsites and Fluent will add their context to the value. If you
 have a Subsite domain configured but no Fluent domain, Fluent will respect the existing domain and add its
-locale context to the value. If you have a Subsite domain configured and a Fluent domain configure, Fluent will
+locale context to the value. If you have a Subsite domain configured and a Fluent domain configured, Fluent will
 use its own domain host name value, and the Subsite domain value will be lost. For this reason, you will need
 to ensure that you use the same host name in both Subsite and Fluent domain entries.
