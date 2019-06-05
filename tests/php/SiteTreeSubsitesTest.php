@@ -5,10 +5,10 @@ namespace SilverStripe\Subsites\Tests;
 use Page;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Controllers\ModelAsController;
+use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Convert;
 use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
@@ -21,6 +21,7 @@ use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestClassB;
 use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestErrorPage;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\SSViewer;
+use TractorCow\Fluent\Extension\FluentSiteTreeExtension;
 
 class SiteTreeSubsitesTest extends BaseSubsiteTest
 {
@@ -33,7 +34,9 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     ];
 
     protected static $illegal_extensions = [
-        SiteTree::class => ['Translatable'] // @todo implement Translatable namespace
+        SiteTree::class => [
+            FluentSiteTreeExtension::class,
+        ],
     ];
 
     protected function setUp()
@@ -449,7 +452,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
     /**
      * @dataProvider provideAlternateAbsoluteLink
-     * @param name $pageFixtureName
+     * @param string $pageFixtureName
      * @param string|null $action
      * @param string $expectedAbsoluteLink
      */
@@ -464,5 +467,24 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $result = $page->AbsoluteLink($action);
 
         $this->assertEquals($expectedAbsoluteLink, $result);
+    }
+
+    public function testURLSegmentBaseIsSetToSubsiteBaseURL()
+    {
+        // This subsite has a domain with 'one.example.org' as the primary domain
+        /** @var Subsite $subsite */
+        $subsite = $this->objFromFixture(Subsite::class, 'domaintest1');
+        Subsite::changeSubsite($subsite);
+
+        $page = new SiteTree();
+        $page->SubsiteID = $subsite->ID;
+        $page->write();
+        $fields = $page->getCMSFields();
+
+        /** @var SiteTreeURLSegmentField $urlSegmentField */
+        $urlSegmentField = $fields->dataFieldByName('URLSegment');
+        $this->assertInstanceOf(SiteTreeURLSegmentField::class, $urlSegmentField);
+
+        $this->assertSame('http://one.example.org/', $urlSegmentField->getURLPrefix());
     }
 }
