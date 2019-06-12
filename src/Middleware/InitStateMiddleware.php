@@ -94,7 +94,7 @@ class InitStateMiddleware implements HTTPMiddleware
             return (int) $request->getSession()->get('SubsiteID');
         }
 
-        $subsiteIdFromDomain = Subsite::getSubsiteIDForDomain();
+        $subsiteIdFromDomain = Subsite::getSubsiteIDForDomain($request->getHost());
         if ($subsiteIdFromDomain !== null) {
             return (int) $subsiteIdFromDomain;
         }
