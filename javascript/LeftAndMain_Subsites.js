@@ -6,7 +6,14 @@
 
 		$('#SubsitesSelect').entwine({
 			onadd:function(){
+				let subsiteSelect = $(this);
+				window.addEventListener('storage', function(storageEvent) {
+					if (storageEvent.key === "subsiteID"
+						&& storageEvent.newValue !== subsiteSelect.val()) {
+					}
+				}, false);
 				this.on('change', function(){
+					localStorage.setItem('subsiteID', $(this).val());
 					window.location.search=$.query.set('SubsiteID', $(this).val());
 				});
 			}
