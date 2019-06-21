@@ -19,7 +19,6 @@ const PATHS = {
 };
 
 const externals = externalJS(ENV, PATHS);
-delete externals.reactstrap;
 
 const config = [
   {

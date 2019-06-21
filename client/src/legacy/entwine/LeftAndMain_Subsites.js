@@ -1,22 +1,49 @@
 /*jslint browser: true, nomen: true*/
 /*global $, window, jQuery*/
+import ReactDom from 'react-dom';
+import { loadComponent } from 'lib/Injector';
+
 (function($) {
 	'use strict';
 	$.entwine('ss', function($) {
 
 		$('#SubsitesSelect').entwine({
+      ModalNode: null,
 			onadd:function(){
-				let subsiteSelect = $(this);
+        let subsiteSelect = $(this);
+
+        // Storage has updated trigger
 				window.addEventListener('storage', function(storageEvent) {
-					if (storageEvent.key === "subsiteID"
-						&& storageEvent.newValue !== subsiteSelect.val()) {
+					if (storageEvent.key === "subsiteID") {
+						if(storageEvent.newValue !== subsiteSelect.val()) {
+              this.alert('subsite changed!');
+              showReactiveNotice()
+            } else {
+              ReactDom.unmountComponentAtNode(subsiteSelect.getModalNode())
+            }
 					}
-				}, false);
+        }, false);
+
+        // Dropdown change trigger
 				this.on('change', function(){
 					localStorage.setItem('subsiteID', $(this).val());
 					window.location.search=$.query.set('SubsiteID', $(this).val());
-				});
-			}
+        });
+
+        function showReactiveNotice() {
+          // React business
+          const modalContainer = window.document.createElement('div');
+          window.document.body.appendChild(modalContainer);
+          const ChangeAlert = loadComponent('SubsiteChangeAlert');
+          ReactDom.render(
+            <ChangeAlert
+              newSubsiteID={parseInt(subsiteSelect.val(), 10)}
+            />,
+            modalContainer
+          );
+          subsiteSelect.setModalNode(modalContainer);
+        }
+      }
 		});
 
 		/*
