@@ -183,11 +183,16 @@ class LeftAndMainSubsites extends Extension
 
     /**
      * Check if the current controller is accessible for this user on this subsite.
+     *
+     * @param Member $member
      */
-    public function canAccess()
+    public function canAccess(Member $member = null)
     {
+        if (!$member) {
+            $member = Member::currentUser();
+        }
+
         // Admin can access everything, no point in checking.
-        $member = Member::currentUser();
         if ($member &&
         (
             Permission::checkMember($member, 'ADMIN') || // 'Full administrative rights' in SecurityAdmin
@@ -209,10 +214,12 @@ class LeftAndMainSubsites extends Extension
     /**
      * Prevent accessing disallowed resources. This happens after onBeforeInit has executed,
      * so all redirections should've already taken place.
+     *
+     * @param Member $member
      */
-    public function alternateAccessCheck()
+    public function alternateAccessCheck(Member $member = null)
     {
-        return $this->owner->canAccess();
+        return $this->owner->canAccess($member);
     }
 
     /**
