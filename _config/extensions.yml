@@ -50,6 +50,7 @@ SilverStripe\Admin\SecurityAdmin:
 
 SilverStripe\CMS\Controllers\CMSMain:
   extensions:
+    - SilverStripe\Subsites\Extensions\HintsCacheKeyExtension
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
 
 SilverStripe\CMS\Controllers\CMSPagesController:

@@ -311,4 +311,41 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
             Versioned::prepopulate_versionnumber_cache(SiteTree::class, 'Live', [$p->ID]);
         }
     }
+
+    public function testValidURLSegmentWithUniquePageAndNestedURLs()
+    {
+        SiteTree::config()->set('nested_urls', true);
+
+        $newPage = new SubsitesVirtualPage();
+        $newPage->Title = 'My new page';
+        $newPage->URLSegment = 'my-new-page';
+
+        $this->assertTrue($newPage->validURLSegment());
+    }
+
+    public function testValidURLSegmentWithExistingPageInSubsite()
+    {
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
+        Subsite::changeSubsite($subsite1->ID);
+
+        SiteTree::config()->set('nested_urls', false);
+
+        $similarContactUsPage = new SubsitesVirtualPage();
+        $similarContactUsPage->Title = 'Similar to Contact Us in Subsite 1';
+        $similarContactUsPage->URLSegment = 'contact-us';
+
+        $this->assertFalse($similarContactUsPage->validURLSegment());
+    }
+
+    public function testValidURLSegmentWithExistingPageInAnotherSubsite()
+    {
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
+        Subsite::changeSubsite($subsite1->ID);
+
+        $similarStaffPage = new SubsitesVirtualPage();
+        $similarStaffPage->Title = 'Similar to Staff page in main site';
+        $similarStaffPage->URLSegment = 'staff';
+
+        $this->assertFalse($similarStaffPage->validURLSegment());
+    }
 }

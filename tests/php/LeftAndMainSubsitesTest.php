@@ -9,6 +9,7 @@ use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Member;
+use SilverStripe\Subsites\Extensions\LeftAndMainSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
 
@@ -99,5 +100,15 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 0, 0));
         $this->assertTrue($l->shouldChangeSubsite(CMSPageEditController::class, 1, 5));
         $this->assertFalse($l->shouldChangeSubsite(CMSPageEditController::class, 1, 1));
+    }
+
+    public function testCanAccessWithPassedMember()
+    {
+        $memberID = $this->logInWithPermission('ADMIN');
+        $member = Member::get()->byID($memberID);
+
+        /** @var LeftAndMain&LeftAndMainSubsites $leftAndMain */
+        $leftAndMain = new LeftAndMain();
+        $this->assertTrue($leftAndMain->canAccess($member));
     }
 }

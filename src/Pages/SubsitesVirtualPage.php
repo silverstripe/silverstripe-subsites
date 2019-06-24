@@ -8,7 +8,6 @@ use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\LabelField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TextField;
@@ -113,7 +112,7 @@ class SubsitesVirtualPage extends VirtualPage
             'Root.Main',
             TextareaField::create(
                 'CustomMetaKeywords',
-                $this->fieldLabel('CustomMetaTitle')
+                $this->fieldLabel('CustomMetaKeywords')
             )->setDescription(_t(__CLASS__ . '.OverrideNote', 'Overrides inherited value from the source')),
             'MetaKeywords'
         );
@@ -121,7 +120,7 @@ class SubsitesVirtualPage extends VirtualPage
             'Root.Main',
             TextareaField::create(
                 'CustomMetaDescription',
-                $this->fieldLabel('CustomMetaTitle')
+                $this->fieldLabel('CustomMetaDescription')
             )->setDescription(_t(__CLASS__ . '.OverrideNote', 'Overrides inherited value from the source')),
             'MetaDescription'
         );
@@ -129,7 +128,7 @@ class SubsitesVirtualPage extends VirtualPage
             'Root.Main',
             TextField::create(
                 'CustomExtraMeta',
-                $this->fieldLabel('CustomMetaTitle')
+                $this->fieldLabel('CustomExtraMeta')
             )->setDescription(_t(__CLASS__ . '.OverrideNote', 'Overrides inherited value from the source')),
             'ExtraMeta'
         );
@@ -226,30 +225,20 @@ class SubsitesVirtualPage extends VirtualPage
         // Veto the validation rules if its false. In this case, some logic
         // needs to be duplicated from parent to find out the exact reason the validation failed.
         if (!$isValid) {
-            $IDFilter = $this->ID ? "AND \"SiteTree\".\"ID\" <> $this->ID" : null;
-            $parentFilter = null;
+            $filters = [
+                'URLSegment' => $this->URLSegment,
+                'ID:not' => $this->ID,
+            ];
 
             if (Config::inst()->get(SiteTree::class, 'nested_urls')) {
-                if ($this->ParentID) {
-                    $parentFilter = " AND \"SiteTree\".\"ParentID\" = $this->ParentID";
-                } else {
-                    $parentFilter = ' AND "SiteTree"."ParentID" = 0';
-                }
+                $filters['ParentID'] = $this->ParentID ?: 0;
             }
 
             $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
-            Subsite::$disable_subsite_filter = true;
-            $existingPage = DataObject::get_one(
-                SiteTree::class,
-                "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
-                false // disable cache, it doesn't include subsite status in the key
-            );
-            Subsite::$disable_subsite_filter = $origDisableSubsiteFilter;
-            $existingPageInSubsite = DataObject::get_one(
-                SiteTree::class,
-                "\"URLSegment\" = '$this->URLSegment' $IDFilter $parentFilter",
-                false // disable cache, it doesn't include subsite status in the key
-            );
+            Subsite::disable_subsite_filter();
+            $existingPage = SiteTree::get()->filter($filters)->first();
+            Subsite::disable_subsite_filter($origDisableSubsiteFilter);
+            $existingPageInSubsite = SiteTree::get()->filter($filters)->first();
 
             // If URL has been vetoed because of an existing page,
             // be more specific and allow same URLSegments in different subsites
