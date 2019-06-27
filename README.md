@@ -124,8 +124,8 @@ Include the current SubsiteID as a hidden field on getCMSFields, or updateCMSFie
 	:::php
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
-		if(class_exists('Subsite')){
-			$fields->push(new HiddenField('SubsiteID','SubsiteID', Subsite::currentSubsiteID()));
+		if(class_exists(Subsite::class)){
+			$fields->push(new HiddenField('SubsiteID','SubsiteID', SubsiteState::singleton()->getSubsiteId()));
 		}
 		return $fields;
 	}
