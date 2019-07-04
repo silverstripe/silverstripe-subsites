@@ -140,7 +140,7 @@ To limit your admin gridfields to the current Subsite records, you can do someth
 
 		$gridField = $form->Fields()->fieldByName($this->sanitiseClassName($this->modelClass));
 		if(class_exists(Subsite::class)){
-			$list = $gridField->getList()->filter(['SubsiteID'=>Subsite::currentSubsiteID()]);
+			$list = $gridField->getList()->filter(['SubsiteID'=>SubsiteState::singleton()->getSubsiteId()]);
 			$gridField->setList($list);
 		}
 
