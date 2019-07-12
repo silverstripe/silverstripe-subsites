@@ -10,34 +10,54 @@ class SubsiteChangeAlert extends Component {
       modalOpen: true
     };
 
-    this.toggle = this.toggle.bind(this);
+    this.revertActiveSubsite = this.revertActiveSubsite.bind(this);
   }
 
-  toggle() {
-    this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen
-    }));
+  revertActiveSubsite() {
+    const { localStorage } = window;
+    const request = new XMLHttpRequest();
+    const subsiteForThisTab = window.document.getElementById('SubsitesSelect').value;
+    request.open('GET', '?SubsiteID=' + subsiteForThisTab);
+    request.addEventListener('load', () => {
+      localStorage.setItem('subsiteID', subsiteForThisTab);
+      window.dispatchEvent(new Event('subsitechange'));
+    });
+    request.send();
+
+    // this.setState(prevState => ({
+    //   modalOpen: !prevState.modalOpen
+    // }));
   }
 
   render() {
-    const { newSubsiteID } = this.props;
+    const { newSubsiteID, newSubsiteName } = this.props;
     const { modalOpen } = this.state;
 
     return (
       <Modal isOpen={true} backdrop="static">
-       <ModalHeader>Modal title</ModalHeader>
+        <ModalHeader>
+          {i18n._t('SubsiteChangeAlert.SUBSITE_CHANGED_TITLE', 'Subsite changed')}
+        </ModalHeader>
         <ModalBody>
           {
             i18n.inject(
               i18n._t(
                 'SubsiteChangeAlert.SUBSITE_CHANGED',
-                `The subsite has changed, continuing to edit will cause problems.
-                To continue editing please set the subsite ID back to the original one in the tab you chaned it in.`
+                `Your current subsite has changed to {newSubsiteName}, continuing to edit this content will cause problems.
+                To continue editing {thisSubsite}, please change the active subsite back.`
               ),
-              { id: newSubsiteID }
+              {
+                id: newSubsiteID,
+                newSubsiteName
+              }
             )
           }
         </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={this.revertActiveSubsite}>
+            {i18n._t(SubsiteChangeAlert.REVERT, 'Change back')}
+          </Button>
+        </ModalFooter>
       </Modal>
     );
   }

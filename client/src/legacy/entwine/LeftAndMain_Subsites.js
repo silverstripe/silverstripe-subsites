@@ -15,19 +15,23 @@ import { loadComponent } from 'lib/Injector';
         // Storage has updated trigger
 				window.addEventListener('storage', function(storageEvent) {
 					if (storageEvent.key === "subsiteID") {
-						if(storageEvent.newValue !== subsiteSelect.val()) {
-              this.alert('subsite changed!');
-              showReactiveNotice()
-            } else {
-              ReactDom.unmountComponentAtNode(subsiteSelect.getModalNode())
-            }
+            window.dispatchEvent(new Event('subsitechange'));
 					}
+        }, false);
+
+        window.addEventListener('subsitechange', () => {
+          if(localStorage.getItem('subsiteID') !== subsiteSelect.val()) {
+            showReactiveNotice()
+          } else {
+            ReactDom.unmountComponentAtNode(subsiteSelect.getModalNode())
+          }
         }, false);
 
         // Dropdown change trigger
 				this.on('change', function(){
+          const { localStorage, location } = window;
 					localStorage.setItem('subsiteID', $(this).val());
-					window.location.search=$.query.set('SubsiteID', $(this).val());
+					location.search=$.query.set('SubsiteID', $(this).val());
         });
 
         function showReactiveNotice() {
