@@ -60,7 +60,8 @@ class ThemeResolver
 
         if ($index > 0) {
             // 4.0 didn't have support for themes in the public webroot
-            $publicConstantDefined = defined('SSViewer::PUBLIC_THEME');
+            $constant = SSViewer::class . '::PUBLIC_THEME';
+            $publicConstantDefined = defined($constant);
 
             // Check if the default is public themes
             $publicDefault = $publicConstantDefined && $themes[0] === SSViewer::PUBLIC_THEME;
