@@ -25,6 +25,7 @@ use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\View\SSViewer;
 
@@ -387,10 +388,11 @@ class SiteTreeSubsites extends DataExtension
      */
     public static function contentcontrollerInit($controller)
     {
+        /** @var Subsite $subsite */
         $subsite = Subsite::currentSubsite();
 
         if ($subsite && $subsite->Theme) {
-            SSViewer::add_themes([$subsite->Theme]);
+            SSViewer::set_themes(ThemeResolver::singleton()->getThemeList($subsite));
         }
 
         if ($subsite && i18n::getData()->validate($subsite->Language)) {
