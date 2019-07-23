@@ -2,26 +2,18 @@
 
 language: php
 
-sudo: false
-
-dist: precise
-
-php:
- - 5.4
-
-env:
- - DB=MYSQL CORE_RELEASE=3.5
+dist: trusty
 
 matrix:
   include:
-    - php: 5.3
-      env: DB=PGSQL CORE_RELEASE=3.4
-    - php: 5.6
-      env: DB=MYSQL CORE_RELEASE=3.6
-    - php: 5.4
-      env: DB=MYSQL CORE_RELEASE=3.6
-    - php: 7.1
-      env: DB=MYSQL CORE_RELEASE=3.6
+    - php: '7.1'
+      env: DB=PGSQL CORE_RELEASE=3.7
+    - php: '7.1'
+      env: DB=MYSQL CORE_RELEASE=3.7
+    - php: '7.2'
+      env: DB=MYSQL CORE_RELEASE=3.7
+    - php: '7.3'
+      env: DB=MYSQL CORE_RELEASE=3.7
 
 before_script:
   - composer self-update || true

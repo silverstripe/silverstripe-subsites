@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: dmooyman
- * Date: 27/05/16
- * Time: 3:10 PM
+ * @mixin PHPUnit_Framework_TestCase
  */
 class SubsiteXHRControllerTest extends FunctionalTest
 {
@@ -34,7 +31,7 @@ class SubsiteXHRControllerTest extends FunctionalTest
 			'X-Requested-With' => 'XMLHttpRequest'
 		));
 		$this->assertEquals(200, $result->getStatusCode());
-		$this->assertEquals('text/json', $result->getHeader('Content-Type'));
+		$this->assertEquals('application/json', $result->getHeader('Content-Type'));
 		$body = $result->getBody();
 		$this->assertContains('Main site', $body);
 		$this->assertContains('Test 1', $body);
