@@ -870,7 +870,7 @@ class Subsite extends DataObject
         }
 
         // If there are no objects, default to the current hostname
-        return $_SERVER['HTTP_HOST'];
+        return isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
     }
 
     /**
