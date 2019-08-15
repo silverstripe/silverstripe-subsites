@@ -20,10 +20,12 @@ import { loadComponent } from 'lib/Injector';
         }, false);
 
         window.addEventListener('subsitechange', () => {
+          const subsiteNotice = subsiteSelect.getModalNode();
+          if(subsiteNotice){
+            ReactDom.unmountComponentAtNode(subsiteNotice)
+          }
           if(JSON.parse(localStorage.getItem('subsiteInfo')).subsiteID !== subsiteSelect.val()) {
             showReactiveNotice()
-          } else {
-            ReactDom.unmountComponentAtNode(subsiteSelect.getModalNode())
           }
         }, false);
 
