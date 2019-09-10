@@ -29,15 +29,23 @@ import { loadComponent } from 'lib/Injector';
           }
         }, false);
 
-        // Dropdown change trigger
-        this.on('change', function(){
-          const { localStorage, location } = window;
+        function storeSubsiteInfo() {
+          const subsiteID = subsiteSelect.val();
           const subsiteInfo = {
-            subsiteID: $(this).val(),
-            subsiteName: $(`[value="${subsiteSelect.val()}"]`, subsiteSelect).text() //TODO tidy this up
+            subsiteID,
+            subsiteName: $(`[value="${subsiteID}"]`, subsiteSelect).text()
           }
-          localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
-          location.search=$.query.set('SubsiteID', subsiteInfo.subsiteID);
+          window.localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
+          return subsiteInfo;
+        }
+
+        // We need to set when a page loads, as it may be e.g. the refresh of a currently blocked tab.
+        storeSubsiteInfo();
+
+        // Dropdown change trigger
+        this.on('change', () => {
+          const subsiteInfo = storeSubsiteInfo();
+          window.location.search=$.query.set('SubsiteID', subsiteInfo.subsiteID);
         });
 
         function showReactiveNotice() {
