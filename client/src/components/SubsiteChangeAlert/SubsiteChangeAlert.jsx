@@ -14,24 +14,25 @@ class SubsiteChangeAlert extends Component {
   }
 
   revertActiveSubsite() {
-    const { localStorage } = window;
+    const { localStorage, document } = window;
     const request = new XMLHttpRequest();
-    const subsiteForThisTab = window.document.getElementById('SubsitesSelect').value;
-    request.open('GET', '?SubsiteID=' + subsiteForThisTab);
+    const subsiteSelector = document.getElementById('SubsitesSelect');
+    const subsiteIdForThisTab = subsiteSelector.value;
+    const subsiteNameForThisTab = subsiteSelector.options[subsiteSelector.selectedIndex].text;
+    const subsiteInfo = {
+      subsiteID: subsiteIdForThisTab,
+      subsiteName: subsiteNameForThisTab
+    }
+    request.open('GET', '?SubsiteID=' + subsiteIdForThisTab);
     request.addEventListener('load', () => {
-      localStorage.setItem('subsiteID', subsiteForThisTab);
+      localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
       window.dispatchEvent(new Event('subsitechange'));
     });
     request.send();
-
-    // this.setState(prevState => ({
-    //   modalOpen: !prevState.modalOpen
-    // }));
   }
 
   render() {
-    const { newSubsiteID, newSubsiteName } = this.props;
-    const { modalOpen } = this.state;
+    const { newSubsiteID, newSubsiteName, thisSubsite } = this.props;
 
     return (
       <Modal isOpen={true} backdrop="static">
@@ -48,7 +49,8 @@ class SubsiteChangeAlert extends Component {
               ),
               {
                 id: newSubsiteID,
-                newSubsiteName
+                newSubsiteName,
+                thisSubsite
               }
             )
           }
@@ -65,6 +67,8 @@ class SubsiteChangeAlert extends Component {
 
 SubsiteChangeAlert.propTypes = {
   newSubsiteID: PropTypes.number,
+  newSubsiteName: PropTypes.string,
+  thisSubsite: PropTypes.string
 }
 
 export default SubsiteChangeAlert;

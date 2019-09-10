@@ -4,34 +4,40 @@ import ReactDom from 'react-dom';
 import { loadComponent } from 'lib/Injector';
 
 (function($) {
-	'use strict';
-	$.entwine('ss', function($) {
+  'use strict';
+  $.entwine('ss', function($) {
 
-		$('#SubsitesSelect').entwine({
+    $('#SubsitesSelect').entwine({
       ModalNode: null,
-			onadd:function(){
+      onadd:function(){
         let subsiteSelect = $(this);
 
         // Storage has updated trigger
-				window.addEventListener('storage', function(storageEvent) {
-					if (storageEvent.key === "subsiteID") {
+        window.addEventListener('storage', function(storageEvent) {
+          if (storageEvent.key === "subsiteInfo") {
             window.dispatchEvent(new Event('subsitechange'));
-					}
+          }
         }, false);
 
         window.addEventListener('subsitechange', () => {
-          if(localStorage.getItem('subsiteID') !== subsiteSelect.val()) {
+          const subsiteNotice = subsiteSelect.getModalNode();
+          if(subsiteNotice){
+            ReactDom.unmountComponentAtNode(subsiteNotice)
+          }
+          if(JSON.parse(localStorage.getItem('subsiteInfo')).subsiteID !== subsiteSelect.val()) {
             showReactiveNotice()
-          } else {
-            ReactDom.unmountComponentAtNode(subsiteSelect.getModalNode())
           }
         }, false);
 
         // Dropdown change trigger
-				this.on('change', function(){
+        this.on('change', function(){
           const { localStorage, location } = window;
-					localStorage.setItem('subsiteID', $(this).val());
-					location.search=$.query.set('SubsiteID', $(this).val());
+          const subsiteInfo = {
+            subsiteID: $(this).val(),
+            subsiteName: $(`[value="${subsiteSelect.val()}"]`, subsiteSelect).text() //TODO tidy this up
+          }
+          localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
+          location.search=$.query.set('SubsiteID', subsiteInfo.subsiteID);
         });
 
         function showReactiveNotice() {
@@ -39,9 +45,13 @@ import { loadComponent } from 'lib/Injector';
           const modalContainer = window.document.createElement('div');
           window.document.body.appendChild(modalContainer);
           const ChangeAlert = loadComponent('SubsiteChangeAlert');
+          const subsiteInfo = JSON.parse(localStorage.getItem('subsiteInfo'));
+          const selectedIndex = subsiteSelect.get(0).selectedIndex;
           ReactDom.render(
             <ChangeAlert
               newSubsiteID={parseInt(subsiteSelect.val(), 10)}
+              newSubsiteName={subsiteInfo.subsiteName}
+              thisSubsite={subsiteSelect.get(0).options[selectedIndex].text}
             />,
             modalContainer
           );
