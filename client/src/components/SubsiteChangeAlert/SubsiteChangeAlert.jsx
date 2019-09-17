@@ -3,6 +3,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import i18n from 'i18n';
+import createEvent from 'legacy/createEvent';
 
 class SubsiteChangeAlert extends Component {
   constructor(props) {
@@ -27,10 +28,11 @@ class SubsiteChangeAlert extends Component {
     request.open('GET', '?SubsiteID=' + subsiteIdForThisTab);
     // load event is not called for error states (e.g. 500 codes, etc.)
     request.addEventListener('load', () => {
+      const storageValue = JSON.stringify(subsiteInfo);
       // notify all other tabs about the change
-      localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
+      localStorage.setItem('subsiteInfo', storageValue);
       // update this tab about the change
-      window.dispatchEvent(new Event('subsitechange'));
+      window.dispatchEvent(createEvent('subsitechange', { subsiteInfo: storageValue }));
     });
     request.send();
   }

@@ -2,6 +2,7 @@
 /*global $, window, jQuery*/
 import ReactDom from 'react-dom';
 import { loadComponent } from 'lib/Injector';
+import createEvent from 'legacy/createEvent';
 
 (function($) {
   'use strict';
@@ -13,18 +14,19 @@ import { loadComponent } from 'lib/Injector';
         // Storage has updated - another tab has changed the subsite info
         window.addEventListener('storage', function(storageEvent) {
           if (storageEvent.key === "subsiteInfo") {
-            window.dispatchEvent(new Event('subsitechange'));
+            const subsiteChangeEvent = createEvent('subsitechange', { subsiteInfo: storageEvent.newValue });
+            window.dispatchEvent(subsiteChangeEvent);
           }
         }, false);
 
-        window.addEventListener('subsitechange', () => {
+        window.addEventListener('subsitechange', (subsiteChangeEvent) => {
           const subsiteNotice = this.getModalNode();
-          const subsiteInfo = JSON.parse(localStorage.getItem('subsiteInfo'));
+          const subsiteInfo = JSON.parse(subsiteChangeEvent.subsiteInfo);
           if(subsiteNotice){
             ReactDom.unmountComponentAtNode(subsiteNotice);
           }
           if(subsiteInfo.subsiteID !== this.val()) {
-            this.showReactiveNotice();
+            this.showReactiveNotice(subsiteInfo);
           }
         }, false);
 
@@ -45,12 +47,11 @@ import { loadComponent } from 'lib/Injector';
         }
         window.localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
       },
-      showReactiveNotice() {
+      showReactiveNotice(subsiteInfo) {
         // React business
         const modalContainer = window.document.createElement('div');
         window.document.body.appendChild(modalContainer);
         const ChangeAlert = loadComponent('SubsiteChangeAlert');
-        const subsiteInfo = JSON.parse(localStorage.getItem('subsiteInfo'));
         const selectedIndex = this.get(0).selectedIndex;
         ReactDom.render(
           <ChangeAlert
