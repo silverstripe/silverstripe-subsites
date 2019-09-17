@@ -1,3 +1,4 @@
+/* global window */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -24,8 +25,11 @@ class SubsiteChangeAlert extends Component {
       subsiteName: subsiteNameForThisTab
     }
     request.open('GET', '?SubsiteID=' + subsiteIdForThisTab);
+    // load event is not called for error states (e.g. 500 codes, etc.)
     request.addEventListener('load', () => {
+      // notify all other tabs about the change
       localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
+      // update this tab about the change
       window.dispatchEvent(new Event('subsitechange'));
     });
     request.send();

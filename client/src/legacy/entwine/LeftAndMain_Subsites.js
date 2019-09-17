@@ -10,9 +10,7 @@ import { loadComponent } from 'lib/Injector';
     $('#SubsitesSelect').entwine({
       ModalNode: null,
       onadd:function(){
-        let subsiteSelect = $(this);
-
-        // Storage has updated trigger
+        // Storage has updated - another tab has changed the subsite info
         window.addEventListener('storage', function(storageEvent) {
           if (storageEvent.key === "subsiteInfo") {
             window.dispatchEvent(new Event('subsitechange'));
@@ -20,51 +18,49 @@ import { loadComponent } from 'lib/Injector';
         }, false);
 
         window.addEventListener('subsitechange', () => {
-          const subsiteNotice = subsiteSelect.getModalNode();
+          const subsiteNotice = this.getModalNode();
+          const subsiteInfo = JSON.parse(localStorage.getItem('subsiteInfo'));
           if(subsiteNotice){
-            ReactDom.unmountComponentAtNode(subsiteNotice)
+            ReactDom.unmountComponentAtNode(subsiteNotice);
           }
-          if(JSON.parse(localStorage.getItem('subsiteInfo')).subsiteID !== subsiteSelect.val()) {
-            showReactiveNotice()
+          if(subsiteInfo.subsiteID !== this.val()) {
+            this.showReactiveNotice();
           }
         }, false);
 
-        function storeSubsiteInfo() {
-          const subsiteID = subsiteSelect.val();
-          const subsiteInfo = {
-            subsiteID,
-            subsiteName: $(`[value="${subsiteID}"]`, subsiteSelect).text()
-          }
-          window.localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
-          return subsiteInfo;
-        }
-
-        // We need to set when a page loads, as it may be e.g. the refresh of a currently blocked tab.
-        storeSubsiteInfo();
-
         // Dropdown change trigger
         this.on('change', () => {
-          const subsiteInfo = storeSubsiteInfo();
-          window.location.search=$.query.set('SubsiteID', subsiteInfo.subsiteID);
+          const subsiteID = this.val();
+          window.location.search=$.query.set('SubsiteID', subsiteID);
         });
 
-        function showReactiveNotice() {
-          // React business
-          const modalContainer = window.document.createElement('div');
-          window.document.body.appendChild(modalContainer);
-          const ChangeAlert = loadComponent('SubsiteChangeAlert');
-          const subsiteInfo = JSON.parse(localStorage.getItem('subsiteInfo'));
-          const selectedIndex = subsiteSelect.get(0).selectedIndex;
-          ReactDom.render(
-            <ChangeAlert
-              newSubsiteID={parseInt(subsiteSelect.val(), 10)}
-              newSubsiteName={subsiteInfo.subsiteName}
-              thisSubsite={subsiteSelect.get(0).options[selectedIndex].text}
-            />,
-            modalContainer
-          );
-          subsiteSelect.setModalNode(modalContainer);
+        // We need to set when a page loads, as it may be e.g. the refresh of a currently blocked tab.
+        this.storeSubsiteInfo();
+      },
+      storeSubsiteInfo() {
+        const subsiteID = this.val();
+        const subsiteInfo = {
+          subsiteID,
+          subsiteName: $(`[value="${subsiteID}"]`, this).text()
         }
+        window.localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
+      },
+      showReactiveNotice() {
+        // React business
+        const modalContainer = window.document.createElement('div');
+        window.document.body.appendChild(modalContainer);
+        const ChangeAlert = loadComponent('SubsiteChangeAlert');
+        const subsiteInfo = JSON.parse(localStorage.getItem('subsiteInfo'));
+        const selectedIndex = this.get(0).selectedIndex;
+        ReactDom.render(
+          <ChangeAlert
+            newSubsiteID={parseInt(this.val(), 10)}
+            newSubsiteName={subsiteInfo.subsiteName}
+            thisSubsite={this.get(0).options[selectedIndex].text}
+          />,
+          modalContainer
+        );
+        this.setModalNode(modalContainer);
       }
 		});
 
