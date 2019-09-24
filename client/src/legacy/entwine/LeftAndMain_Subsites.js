@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { loadComponent } from 'lib/Injector';
 import createEvent from 'legacy/createEvent';
+import changeActiveSubsite from 'lib/changeActiveSubsite';
 
 jQuery.entwine('ss', ($) => {
   $('#SubsitesSelect').entwine({
@@ -24,7 +25,7 @@ jQuery.entwine('ss', ($) => {
           ReactDom.unmountComponentAtNode(subsiteNotice);
         }
         if (subsiteInfo.subsiteID !== this.val()) {
-          this.showReactiveNotice(subsiteInfo);
+          this.showReactiveNotice(subsiteInfo.subsiteName);
         }
       }, false);
 
@@ -45,17 +46,20 @@ jQuery.entwine('ss', ($) => {
       };
       window.localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
     },
-    showReactiveNotice(subsiteInfo) {
+    showReactiveNotice(newSubsiteName) {
+      const { document } = window;
       // React business
-      const modalContainer = window.document.createElement('div');
-      window.document.body.appendChild(modalContainer);
+      const modalContainer = this.getModalNode() || document.createElement('div');
+      document.body.appendChild(modalContainer);
       const ChangeAlert = loadComponent('SubsiteChangeAlert');
-      const selectedIndex = this.get(0).selectedIndex;
+      const selectedNode = this.get(0);
+      const selectedIndex = selectedNode.selectedIndex;
       ReactDom.render(
         <ChangeAlert
-          newSubsiteID={parseInt(this.val(), 10)}
-          newSubsiteName={subsiteInfo.subsiteName}
-          thisSubsite={this.get(0).options[selectedIndex].text}
+          otherTabSubsiteName={newSubsiteName}
+          myTabSubsiteName={selectedNode.options[selectedIndex].text}
+          myTabSubsiteID={this.val()}
+          revertCallback={changeActiveSubsite}
         />,
         modalContainer
       );
