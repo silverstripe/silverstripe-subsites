@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "babel-polyfill": "6.7.4",
-    "react": "^16.8.3"
+    "react": "^16.8.3",
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "@silverstripe/eslint-config": "^0.0.5",
