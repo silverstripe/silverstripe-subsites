@@ -9,6 +9,8 @@ use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Security\Member;
@@ -16,6 +18,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Extensions\SiteTreeSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
+use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestClassA;
 use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestClassB;
 use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestErrorPage;
@@ -399,41 +402,25 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         ];
     }
 
-    public function testIfSubsiteThemeIsSetToThemeList()
+    public function testThemeResolverIsUsedForSettingThemeList()
     {
-        $defaultThemes = ['default'];
-        SSViewer::set_themes($defaultThemes);
+        $firstResolver = $this->createMock(ThemeResolver::class);
+        $firstResolver->expects($this->never())->method('getThemeList');
+        Injector::inst()->registerService($firstResolver, ThemeResolver::class);
 
         $subsitePage = $this->objFromFixture(Page::class, 'home');
         Subsite::changeSubsite($subsitePage->SubsiteID);
         $controller = ModelAsController::controller_for($subsitePage);
         SiteTree::singleton()->extend('contentcontrollerInit', $controller);
 
-        $this->assertEquals(
-            SSViewer::get_themes(),
-            $defaultThemes,
-            'Themes should not be modified when Subsite has no theme defined'
-        );
+        $secondResolver = $this->createMock(ThemeResolver::class);
+        $secondResolver->expects($this->once())->method('getThemeList');
+        Injector::inst()->registerService($secondResolver, ThemeResolver::class);
 
-        $pageWithTheme = $this->objFromFixture(Page::class, 'subsite1_home');
-        Subsite::changeSubsite($pageWithTheme->SubsiteID);
-        $controller = ModelAsController::controller_for($pageWithTheme);
+        $subsitePage = $this->objFromFixture(Page::class, 'subsite1_home');
+        Subsite::changeSubsite($subsitePage->SubsiteID);
+        $controller = ModelAsController::controller_for($subsitePage);
         SiteTree::singleton()->extend('contentcontrollerInit', $controller);
-        $subsiteTheme = $pageWithTheme->Subsite()->Theme;
-
-        $allThemes = SSViewer::get_themes();
-
-        $this->assertContains(
-            $subsiteTheme,
-            $allThemes,
-            'Themes should be modified when Subsite has theme defined'
-        );
-
-        $this->assertEquals(
-            $subsiteTheme,
-            array_shift($allThemes),
-            'Subsite theme should be prepeded to theme list'
-        );
     }
 
     public function provideAlternateAbsoluteLink()

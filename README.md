@@ -96,7 +96,55 @@ In some Browsers the SubsiteID is visible if you hover over the "Edit" link in t
 
 ### Subsite-specific themes
 
-Download a second theme from http://www.silverstripe.com/themes/ and put it in your themes folder.  Open admin/subsites?flush=1 and select one of your subsites from the menu on the bottom-left.  You should see a Theme dropdown in the subsite details, and it should list both your original theme and the new theme.  Select the new theme in the dropdown.  Now, this subsite will use a different theme from the main site.
+Download a second theme from http://www.silverstripe.com/themes/ and put it in your themes folder.  Open 
+admin/subsites?flush=1 and select one of your subsites from the menu on the bottom-left.  You should see a 
+Theme dropdown in the subsite details, and it should list both your original theme and the new theme.  Select the new 
+theme in the dropdown.  Now, this subsite will use a different theme from the main site.
+
+#### Cascading themes
+
+In SilverStripe 4 themes will resolve theme files by looking through a list of themes (see the documentation on 
+[creating your own theme](https://docs.silverstripe.org/en/4/developer_guides/templates/themes/#developing-your-own-theme)).
+Subsites will inherit this configuration for the order of themes. Choosing a theme for a Subsite will set the list of 
+themes to that chosen theme, and all themes that are defined below the chosen theme in priority. For example, with a
+theme configuration as follows:
+
+```yaml
+SilverStripe\View\SSViewer:
+  themes:
+    - '$public'
+    - 'my-theme'
+    - 'watea'
+    - 'starter'
+    - '$default'
+```
+
+Choosing `watea` in your Subsite will create a cascading config as follows:
+
+```yaml
+themes:
+  - 'watea'
+  - '$public'
+  - 'starter'
+  - '$default'
+```
+
+You may also completely define your own cascading theme lists for CMS users to choose as theme options for their 
+subsite:
+
+```yaml
+SilverStripe\Subsites\Service\ThemeResolver:
+  theme_options:
+    normal:
+      - '$public'
+      - 'watea'
+      - 'starter'
+      - '$default'
+    special:
+      - 'my-theme'
+      - 'starter'
+      - '$default'
+```
 
 ### Limit available themes for a subsite
 

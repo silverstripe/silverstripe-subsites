@@ -186,7 +186,7 @@ class SubsiteDomain extends DataObject
      */
     public function getSubstitutedDomain()
     {
-        $currentHost = $_SERVER['HTTP_HOST'];
+        $currentHost = Director::host();
 
         // If there are wildcards in the primary domain (not recommended), make some
         // educated guesses about what to replace them with:
