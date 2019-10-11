@@ -2,6 +2,7 @@
 Name: subsiteconfig
 After:
   - 'framework/*'
+  - 'fluentcms'
 ---
 SilverStripe\AssetAdmin\Controller\AssetAdmin:
   treats_subsite_0_as_global: true
