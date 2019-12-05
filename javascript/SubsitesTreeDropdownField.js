@@ -8,7 +8,8 @@
 			onchange: function() {
 				// TODO Data binding between two fields
                 const name = this.attr('name').replace('_SubsiteID', '');
-                let field = $('#Form_EditForm_' + name).first();
+                const formId = this.closest('form').attr('id');
+                let field = $('#' + formId + '_' + name).first();
                 field.setValue(0);
                 field.refresh();
                 field.trigger('change');
@@ -21,8 +22,9 @@
 		 */
 		$('.TreeDropdownField.SubsitesTreeDropdownField').entwine({
             getAttributes() {
-                const fieldName = this.attr('id').replace('Form_EditForm_', '');
-                const subsiteID = $('#Form_EditForm_' + fieldName + '_SubsiteID option:selected').val();
+                const formId = this.closest('form').attr('id');
+                const fieldName = this.attr('id').replace(formId + '_', '');
+                const subsiteID = $('#' + formId + '_' + fieldName + '_SubsiteID option:selected').val();
 
                 let attributes = this._super();
                 attributes.data.urlTree += "?" + fieldName + "_SubsiteID=" + subsiteID;
