@@ -1,3 +1,7 @@
+---
+title: Setting up
+---
+
 # Setting up
 
 ## Creating subsites
