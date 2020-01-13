@@ -40,6 +40,11 @@ For user documentation please see:
 
 ### Limitations:
 
+ * Subsites are usually accessed via their own separate domains.
+   In order to allow efficient cross-subsite CMS editing,
+   they can also be accessed via URL parameters rather than domain maps.
+   This can weaken domain-specific security controls in your environment
+   such as domain-specific IP whitelists, firewall rules or business logic.
  * Each subsite domain name has to be set up on the server first, and DNS records need to be updated as appropriate.
  * A subsite cannot use a different codebase as the main site, they are intrinsically tied
  	* However, you can remove page types from a subsite when creating the subsite - [see the setup documentation for further details](docs/en/userguide/set_up.md)
