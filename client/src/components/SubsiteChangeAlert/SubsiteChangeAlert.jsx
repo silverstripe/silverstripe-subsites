@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import i18n from 'i18n';
-import createEvent from 'legacy/createEvent';
 
 class SubsiteChangeAlert extends Component {
   constructor(props) {
@@ -11,11 +10,9 @@ class SubsiteChangeAlert extends Component {
     this.handleRevert = this.handleRevert.bind(this);
   }
 
-  handleRevert() {
-    const { myTabSubsiteID, myTabSubsiteName, revertCallback } = this.props;
-    revertCallback(myTabSubsiteID, myTabSubsiteName);
-  }
-
+  /**
+   * Gets a translated string to display to the user
+   */
   getMessage() {
     const { otherTabSubsiteName, myTabSubsiteName } = this.props;
 
@@ -32,9 +29,17 @@ class SubsiteChangeAlert extends Component {
     );
   }
 
+  /**
+   * Changes active subsite back what the page was using before the server side session was altered
+   */
+  handleRevert() {
+    const { myTabSubsiteID, myTabSubsiteName, revertCallback } = this.props;
+    revertCallback(myTabSubsiteID, myTabSubsiteName);
+  }
+
   render() {
     return (
-      <Modal isOpen={true} backdrop="static">
+      <Modal isOpen backdrop="static">
         <ModalHeader>
           {i18n._t('SubsiteChangeAlert.SUBSITE_CHANGED_TITLE', 'Subsite changed')}
         </ModalHeader>
@@ -54,6 +59,6 @@ SubsiteChangeAlert.propTypes = {
   myTabSubsiteID: PropTypes.string,
   myTabSubsiteName: PropTypes.string,
   revertCallback: PropTypes.func,
-}
+};
 
 export default SubsiteChangeAlert;

@@ -1,7 +1,12 @@
-/* global window */
-// Polyfill IE11
+/* global document, Event */
+
+/**
+ * Helper function for IE11 - create custom Events in a consistent way
+ *
+ * @param {String} type
+ * @param {Object} extraData
+ */
 function createEvent(type, extraData) {
-  const { document, Event } = window;
   let event;
   if (typeof Event === 'object') {
     event = document.createEvent('Event', true, true);

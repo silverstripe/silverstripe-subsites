@@ -1,5 +1,5 @@
 /* jslint browser: true, nomen: true */
-/* global window, jQuery */
+/* global window, document, jQuery */
 import React from 'react';
 import ReactDom from 'react-dom';
 import { loadComponent } from 'lib/Injector';
@@ -47,15 +47,14 @@ jQuery.entwine('ss', ($) => {
       window.localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
     },
     showReactiveNotice(newSubsiteName) {
-      const { document } = window;
       // React business
       const modalContainer = this.getModalNode() || document.createElement('div');
       document.body.appendChild(modalContainer);
-      const ChangeAlert = loadComponent('SubsiteChangeAlert');
+      const SubsiteChangeAlert = loadComponent('SubsiteChangeAlert');
       const selectedNode = this.get(0);
       const selectedIndex = selectedNode.selectedIndex;
       ReactDom.render(
-        <ChangeAlert
+        <SubsiteChangeAlert
           otherTabSubsiteName={newSubsiteName}
           myTabSubsiteName={selectedNode.options[selectedIndex].text}
           myTabSubsiteID={this.val()}
@@ -170,7 +169,7 @@ jQuery.entwine('ss.preview', ($) => {
       $(doc).find('a').each(() => {
         const href = $(this).attr('href');
 
-        if (typeof href !== 'undefined' && !href.match(/^http:\/\//)) {
+        if (typeof href !== 'undefined' && !href.match(/^https?:\/\//)) {
           $(this).attr('href', $.path.addSearchParams(href, {
             SubsiteID: subsiteId
           }));
@@ -181,8 +180,8 @@ jQuery.entwine('ss.preview', ($) => {
       $(doc).find('form').each(() => {
         const action = $(this).attr('action');
 
-        if (typeof action !== 'undefined' && !action.match(/^http:\/\//)) {
-          $(this).append(`<input type=hidden name="SubsiteID" value="${subsiteId}" >`);
+        if (typeof action !== 'undefined' && !action.match(/^https?:\/\//)) {
+          $(this).append(`<input type="hidden" name="SubsiteID" value="${subsiteId}" >`);
         }
       });
     }
