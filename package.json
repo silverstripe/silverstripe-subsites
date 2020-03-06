@@ -1,8 +1,17 @@
 {
   "name": "silverstripe-subsites",
-  "description": "Builds the javascript for silverstripe subsites extension",
+  "description": "Builds the client assets for the Silverstripe Subsites module",
   "main": "./client/src/boot/index.js",
-  "author": "You",
+  "contributors": [
+    {
+      "name": "Silverstripe Ltd.",
+      "url": "https://silverstripe.com"
+    },
+    {
+      "name": "Silverstripe CMS community",
+      "url": "https://silverstripe.org"
+    }
+  ],
   "engines": {
     "node": "^10"
   },
@@ -20,12 +29,14 @@
   },
   "dependencies": {
     "babel-polyfill": "6.7.4",
+    "prop-types": "^15.7.2",
     "react": "^16.8.3",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@silverstripe/eslint-config": "^0.0.5",
-    "@silverstripe/webpack-config": "^1.0.0",
+    "@silverstripe/webpack-config": "^1.4.0",
     "babel-jest": "^23.6.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.10.0",

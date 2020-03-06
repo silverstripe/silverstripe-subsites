@@ -7,16 +7,21 @@ import createEvent from 'legacy/createEvent';
  * localstorage in sync with the active Subsite ID. The localstorage event may in turn trigger
  * other UI widgets to update however.
  *
- * @param {String} toSubsiteID
- * @param {String} toSubsiteName
+ * @param {String} subsiteID
+ * @param {String} subsiteName
  */
-export default function changeActiveSubsite(toSubsiteID, toSubsiteName) {
+export default function changeActiveSubsite(subsiteID, subsiteName) {
+  if (!window.localStorage) {
+    return;
+  }
+
   const request = new XMLHttpRequest();
   const subsiteInfo = {
-    subsiteID: toSubsiteID,
-    subsiteName: toSubsiteName
+    subsiteID,
+    subsiteName,
   };
-  request.open('GET', `?SubsiteID=${toSubsiteID}`);
+
+  request.open('GET', `?SubsiteID=${subsiteID}`);
   // load event is not called for error states (e.g. 500 codes, etc.)
   request.addEventListener('load', () => {
     const storageValue = JSON.stringify(subsiteInfo);

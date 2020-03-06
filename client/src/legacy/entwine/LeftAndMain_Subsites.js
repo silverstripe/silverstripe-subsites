@@ -1,22 +1,23 @@
-/* jslint browser: true, nomen: true */
-/* global window, document, jQuery */
+/* global window, jQuery */
 import React from 'react';
 import ReactDom from 'react-dom';
 import { loadComponent } from 'lib/Injector';
 import createEvent from 'legacy/createEvent';
 import changeActiveSubsite from 'lib/changeActiveSubsite';
+import url from 'url';
 
-jQuery.entwine('ss', ($) => {
+jQuery.entwine('ss', $ => {
   $('#SubsitesSelect').entwine({
     ModalNode: null,
+
     onadd() {
-      // Storage has updated - another tab has changed the subsite info
-      window.addEventListener('storage', (storageEvent) => {
-        if (storageEvent.key === 'subsiteInfo') {
-          const subsiteChangeEvent = createEvent('subsitechange', { subsiteInfo: storageEvent.newValue });
+      // Storage has been updated - another tab may have changed subsite
+      window.addEventListener('storage', ({ key, newValue }) => {
+        if (key === 'subsiteInfo') {
+          const subsiteChangeEvent = createEvent('subsitechange', { subsiteInfo: newValue });
           window.dispatchEvent(subsiteChangeEvent);
         }
-      }, false);
+      });
 
       window.addEventListener('subsitechange', (subsiteChangeEvent) => {
         const subsiteNotice = this.getModalNode();
@@ -25,40 +26,49 @@ jQuery.entwine('ss', ($) => {
           ReactDom.unmountComponentAtNode(subsiteNotice);
         }
         if (subsiteInfo.subsiteID !== this.val()) {
-          this.showReactiveNotice(subsiteInfo.subsiteName);
+          this.showReactiveNotice(subsiteInfo);
         }
-      }, false);
+      });
 
       // Dropdown change trigger
       this.on('change', () => {
         const subsiteID = this.val();
-        window.location.search = $.query.set('SubsiteID', subsiteID);
+        const currentURL = url.parse(window.location.toString(), true);
+
+        currentURL.query.SubsiteID = subsiteID;
+        window.location = url.format(currentURL);
       });
 
       // We need to set when a page loads, as it may be e.g. the refresh of a currently blocked tab.
       this.storeSubsiteInfo();
     },
+
     storeSubsiteInfo() {
       const subsiteID = this.val();
-      const subsiteInfo = {
-        subsiteID,
-        subsiteName: $(`[value="${subsiteID}"]`, this).text()
-      };
-      window.localStorage.setItem('subsiteInfo', JSON.stringify(subsiteInfo));
+      const subsiteName = $(`[value="${subsiteID}"]`, this).text();
+
+      changeActiveSubsite(subsiteID, subsiteName);
     },
-    showReactiveNotice(newSubsiteName) {
-      // React business
+
+    showReactiveNotice(newSubsite) {
       const modalContainer = this.getModalNode() || document.createElement('div');
       document.body.appendChild(modalContainer);
       const SubsiteChangeAlert = loadComponent('SubsiteChangeAlert');
       const selectedNode = this.get(0);
       const selectedIndex = selectedNode.selectedIndex;
+
+      const currentSubsite = {
+        subsiteName: selectedNode.options[selectedIndex].text,
+        subsiteID: this.val(),
+      };
+
       ReactDom.render(
         <SubsiteChangeAlert
-          otherTabSubsiteName={newSubsiteName}
-          myTabSubsiteName={selectedNode.options[selectedIndex].text}
-          myTabSubsiteID={this.val()}
-          revertCallback={changeActiveSubsite}
+          newSubsiteID={newSubsite.subsiteID}
+          newSubsiteName={newSubsite.subsiteName}
+          currentSubsiteID={currentSubsite.subsiteID}
+          currentSubsiteName={currentSubsite.subsiteName}
+          onRevert={() => changeActiveSubsite(currentSubsite.subsiteID, currentSubsite.subsiteName)}
         />,
         modalContainer
       );
@@ -148,7 +158,7 @@ jQuery.entwine('ss', ($) => {
   });
 });
 
-jQuery.entwine('ss.preview', ($) => {
+jQuery.entwine('ss.preview', $ => {
   $('.cms-preview').entwine({
 
     /**

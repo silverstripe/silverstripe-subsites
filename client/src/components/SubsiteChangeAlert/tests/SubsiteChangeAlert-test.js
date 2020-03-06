@@ -8,13 +8,13 @@ configure({ adapter: new Adapter() });
 
 describe('SubsiteChangeAlert', () => {
   describe('handleRevert', () => {
-    it('delegates to the callback with relveant properties', () => {
+    it('delegates to the callback with relevant properties', () => {
       const callbackFn = jest.fn();
       const subsiteChangeAlertComponentInstance = shallow(
         <SubsiteChangeAlert
-          myTabSubsiteID="1"
-          myTabSubsiteName="one"
-          revertCallback={callbackFn}
+          currentSubsiteID="1"
+          currentSubsiteName="one"
+          onRevert={callbackFn}
         />
       );
       subsiteChangeAlertComponentInstance.instance().handleRevert();
@@ -25,20 +25,20 @@ describe('SubsiteChangeAlert', () => {
     it('should show the old subsite name correctly', () => {
       const subsiteChangeAlertComponentInstance = shallow(
         <SubsiteChangeAlert
-          myTabSubsiteName="oldSite"
-          otherTabSubsiteName="newSite"
+          currentSubsiteName="oldSite"
+          newSubsiteName="newSite"
         />
       );
-      expect(subsiteChangeAlertComponentInstance.instance().getMessage()).toContain('continue editing oldSite');
+      expect(subsiteChangeAlertComponentInstance.instance().getMessage()[0]).toContain('back to "oldSite"');
     });
     it('should show the new active subsite name', () => {
       const subsiteChangeAlertComponentInstance = shallow(
         <SubsiteChangeAlert
-          myTabSubsiteName="oldSite"
-          otherTabSubsiteName="newSite"
+          currentSubsiteName="oldSite"
+          newSubsiteName="newSite"
         />
       );
-      expect(subsiteChangeAlertComponentInstance.instance().getMessage()).toContain('changed to newSite');
+      expect(subsiteChangeAlertComponentInstance.instance().getMessage()[0]).toContain('selected subsite "newSite"');
     });
   });
 });

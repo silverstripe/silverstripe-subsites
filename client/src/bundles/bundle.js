@@ -1,6 +1,6 @@
-// Include any legacy Entwine wrappers
-
-// Include boot entrypoint
+// Legacy Entwine wrappers
 require('legacy/entwine/LeftAndMain_Subsites.js');
 require('legacy/entwine/SubsitesTreeDropdownField.js');
+
+// Component registration, etc.
 require('boot');
