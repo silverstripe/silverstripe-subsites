@@ -7,6 +7,6 @@ SilverStripe\Core\Injector\Injector:
   SilverStripe\Control\Director:
     properties:
       Middlewares:
-        SubsitesStateMiddleware: %$SilverStripe\Subsites\Middleware\InitStateMiddleware
+        SubsitesStateMiddleware: '%$SilverStripe\Subsites\Middleware\InitStateMiddleware'
   SilverStripe\Dev\Tasks\MigrateFileTask:
     class: SilverStripe\Subsites\Tasks\SubsiteMigrateFileTask
