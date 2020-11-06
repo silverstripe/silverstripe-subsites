@@ -1,8 +1,7 @@
-# https://docs.travis-ci.com/user/build-config-imports/
 version: ~> 1.0
 
 import:
-  - silverstripe/silverstripe-travis-shared:config/provision/standard-jobs-behat.yml
+  - silverstripe/silverstripe-travis-shared:config/provision/standard-jobs-range-behat.yml
 
 env:
   global:
