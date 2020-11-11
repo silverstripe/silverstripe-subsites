@@ -2,7 +2,7 @@ default:
   suites:
     subsites:
       paths:
-        - %paths.modules.subsites%/tests/behat/features
+        - '%paths.modules.subsites%/tests/behat/features'
       contexts:
         - SilverStripe\Framework\Tests\Behaviour\FeatureContext
         - SilverStripe\Framework\Tests\Behaviour\CmsFormsContext
@@ -13,7 +13,7 @@ default:
         - SilverStripe\CMS\Tests\Behaviour\ThemeContext
         - SilverStripe\CMS\Tests\Behaviour\FixtureContext:
             # Note: double indent for args is intentional
-            - %paths.modules.subsites%/tests/behat/features/files/
+            - '%paths.modules.subsites%/tests/behat/features/files/'
 
   extensions:
     SilverStripe\BehatExtension\MinkExtension:
@@ -25,5 +25,5 @@ default:
       browser_name: chrome
 
     SilverStripe\BehatExtension\Extension:
-      screenshot_path: %paths.base%/artifacts/screenshots
+      screenshot_path: '%paths.base%/artifacts/screenshots'
       bootstrap_file: "vendor/silverstripe/cms/tests/behat/serve-bootstrap.php"
