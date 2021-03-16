@@ -275,7 +275,7 @@ class Subsite extends DataObject
                 return self::$cache_subsite_for_domain[$cacheKey];
             }
 
-            $SQL_host = Convert::raw2sql($host);
+            $SQL_host = str_replace('*', '%', Convert::raw2sql($host));
 
             $schema = DataObject::getSchema();
 
@@ -290,7 +290,7 @@ class Subsite extends DataObject
             /** @skipUpgrade */
             $matchingDomains = DataObject::get(
                 SubsiteDomain::class,
-                "'$SQL_host' LIKE replace(\"{$domainTableName}\".\"Domain\",'*','%')",
+                "\"{$domainTableName}\".\"Domain\" LIKE '$SQL_host'",
                 '"IsPrimary" DESC'
             )->innerJoin(
                 $subsiteTableName,
