@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Control\Cookie;
 use SilverStripe\Core\Convert;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\OptionsetField;
@@ -26,6 +27,7 @@ use SilverStripe\Subsites\State\SubsiteState;
 class GroupSubsites extends DataExtension implements PermissionProvider
 {
     private static $db = [
+        'AccessMainSite' => 'Boolean',
         'AccessAllSubsites' => 'Boolean'
     ];
 
@@ -120,6 +122,15 @@ class GroupSubsites extends DataExtension implements PermissionProvider
                     ));
                 }
             }
+
+            // Only add the AccessMainSite field if the current user can edit the group and has permissions
+            // to add Main Site access.
+            if (Subsite::hasMainSitePermission(null, ['ADMIN', 'SECURITY_SUBSITE_GROUP'])) {
+                $fields->insertAfter(
+                    'AccessAllSubsites',
+                    CheckboxField::create('AccessMainSite', _t('Subsites.MainSiteTitle', 'Main site'))
+                );
+            }
         }
     }
 
@@ -187,7 +198,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
                     $query->addWhere('("Group_Subsites"."SubsiteID" IS NOT NULL OR
                         "Group"."AccessAllSubsites" = 1)');
                 } else {
-                    $query->addWhere('"Group"."AccessAllSubsites" = 1');
+                    $query->addWhere('"Group"."AccessMainSite" = 1 OR "Group"."AccessAllSubsites" = 1');
                 }
             }
 
