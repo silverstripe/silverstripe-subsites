@@ -636,7 +636,8 @@ class Subsite extends DataObject
             SELECT COUNT(\"Permission\".\"ID\")
             FROM \"Permission\"
             INNER JOIN \"Group\"
-            ON \"Group\".\"ID\" = \"Permission\".\"GroupID\" AND \"Group\".\"AccessAllSubsites\" = 1
+            ON \"Group\".\"ID\" = \"Permission\".\"GroupID\"
+            AND (\"Group\".\"AccessMainSite\" = 1 OR \"Group\".\"AccessAllSubsites\" = 1)
             INNER JOIN \"Group_Members\"
             ON \"Group_Members\".\"GroupID\" = \"Permission\".\"GroupID\"
             WHERE \"Permission\".\"Code\"
@@ -652,7 +653,7 @@ class Subsite extends DataObject
             INNER JOIN \"PermissionRole\" ON \"Group_Roles\".\"PermissionRoleID\"=\"PermissionRole\".\"ID\"
             INNER JOIN \"PermissionRoleCode\" ON \"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
             WHERE \"PermissionRoleCode\".\"Code\" IN ('$SQL_perms')
-            AND \"Group\".\"AccessAllSubsites\" = 1
+            AND (\"Group\".\"AccessMainSite\" = 1 OR \"Group\".\"AccessAllSubsites\" = 1)
             AND \"Group_Members\".\"MemberID\" = {$memberID}
         ")->value();
 
