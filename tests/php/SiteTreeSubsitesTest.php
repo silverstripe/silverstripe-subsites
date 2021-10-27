@@ -42,7 +42,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         ],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // We have our own home page fixtures, prevent the default one being created in this test suite.
         Config::modify()->set(SiteTree::class, 'create_default_pages', false);

@@ -19,14 +19,14 @@ class InitStateMiddlewareTest extends BaseSubsiteTest
      */
     protected $origServer = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->origServer = $_SERVER;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_SERVER = $this->origServer;
 

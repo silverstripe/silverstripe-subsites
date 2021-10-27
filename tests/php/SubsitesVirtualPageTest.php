@@ -21,7 +21,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         'SubsitesVirtualPageTest.yml',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $page->write();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         TestAssetStore::reset();
         parent::tearDown();

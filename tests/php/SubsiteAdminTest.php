@@ -11,7 +11,7 @@ class SubsiteAdminTest extends FunctionalTest
 {
     protected static $fixture_file = 'SubsiteTest.yml';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

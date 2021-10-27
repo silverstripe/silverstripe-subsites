@@ -14,7 +14,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
     protected $autoFollowRedirection = false;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         // Ensure all pages are published
@@ -48,14 +48,18 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $this->logOut();
 
         $response = $this->getAndFollowAll('admin/pages/?SubsiteID=0');
-        $this->assertContains('Security/login', $this->mainSession->lastUrl(), 'Admin is disallowed');
+        $this->assertStringContainsString('Security/login', $this->mainSession->lastUrl(), 'Admin is disallowed');
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $response = $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
-        $this->assertContains('Security/login', $this->mainSession->lastUrl(), 'Admin is disallowed');
+        $this->assertStringContainsString('Security/login', $this->mainSession->lastUrl(), 'Admin is disallowed');
 
         $response = $this->getAndFollowAll('admin/subsite_xhr');
-        $this->assertContains('Security/login', $this->mainSession->lastUrl(), 'SubsiteXHRController is disallowed');
+        $this->assertStringContainsString(
+            'Security/login',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is disallowed'
+        );
     }
 
     /**
@@ -67,17 +71,21 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
         $this->getAndFollowAll('admin/pages/?SubsiteID=0');
         $this->assertEquals(0, $this->session()->get('SubsiteID'), 'Can access main site.');
-        $this->assertContains('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
+        $this->assertStringContainsString('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
 
         // Check the session manually, since the state is unique to the request, not this test
         $this->assertEquals($subsite1->ID, $this->session()->get('SubsiteID'), 'Can access other subsite.');
-        $this->assertContains('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
+        $this->assertStringContainsString('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $response = $this->getAndFollowAll('admin/subsite_xhr');
-        $this->assertNotContains('Security/login', $this->mainSession->lastUrl(), 'SubsiteXHRController is reachable');
+        $this->assertStringNotContainsString(
+            'Security/login',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is reachable'
+        );
     }
 
     public function testAdminIsRedirectedToObjectsSubsite()
@@ -92,7 +100,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         $response = $this->get("admin/pages/edit/show/$subsite1Home->ID");
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'admin/pages/edit/show/' . $subsite1Home->ID . '?SubsiteID=' . $subsite1Home->SubsiteID,
             $response->getHeader('Location')
         );
@@ -102,7 +110,7 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
         $response = $this->get("admin/pages/edit/show/$subsite1Home->ID");
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'admin/pages/edit/show/' . $subsite1Home->ID . '?SubsiteID=' . $subsite1Home->SubsiteID,
             $response->getHeader('Location')
         );
@@ -122,15 +130,19 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
 
         $this->get('admin/pages/?SubsiteID=0');
         $this->assertEquals(0, $this->session()->get('SubsiteID'), 'Can access main site.');
-        $this->assertContains('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
+        $this->assertStringContainsString('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
         $this->get("admin/pages/?SubsiteID={$subsite1->ID}");
         $this->assertEquals($subsite1->ID, $this->session()->get('SubsiteID'), 'Can access other subsite.');
-        $this->assertContains('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
+        $this->assertStringContainsString('admin/pages', $this->mainSession->lastUrl(), 'Lands on the correct section');
 
         $response = $this->get('admin/subsite_xhr');
-        $this->assertNotContains('Security/login', $this->mainSession->lastUrl(), 'SubsiteXHRController is reachable');
+        $this->assertStringNotContainsString(
+            'Security/login',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is reachable'
+        );
     }
 
     /**
@@ -146,7 +158,11 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
         // Check allowed URL.
         $this->getAndFollowAll("admin/pages/?SubsiteID={$subsite1->ID}");
         $this->assertEquals($subsite1->ID, $this->session()->get('SubsiteID'), 'Can access own subsite.');
-        $this->assertContains('admin/pages', $this->mainSession->lastUrl(), 'Can access permitted section.');
+        $this->assertStringContainsString(
+            'admin/pages',
+            $this->mainSession->lastUrl(),
+            'Can access permitted section.'
+        );
 
         // Check forbidden section in allowed subsite.
         $this->getAndFollowAll("admin/assets/?SubsiteID={$subsite1->ID}");
@@ -172,10 +188,14 @@ class SubsiteAdminFunctionalTest extends FunctionalTest
             $subsite1->ID,
             'Is redirected to first permitted subsite.'
         );
-        $this->assertNotContains('Security/login', $this->mainSession->lastUrl(), 'Is not denied access');
+        $this->assertStringNotContainsString('Security/login', $this->mainSession->lastUrl(), 'Is not denied access');
 
         // Check the standalone XHR controller.
         $response = $this->getAndFollowAll('admin/subsite_xhr');
-        $this->assertNotContains('Security/login', $this->mainSession->lastUrl(), 'SubsiteXHRController is reachable');
+        $this->assertStringNotContainsString(
+            'Security/login',
+            $this->mainSession->lastUrl(),
+            'SubsiteXHRController is reachable'
+        );
     }
 }

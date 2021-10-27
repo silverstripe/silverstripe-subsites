@@ -36,12 +36,12 @@ class SubsiteXHRControllerTest extends FunctionalTest
 
         $this->assertEquals(200, $result->getStatusCode());
         // SilverStripe 4.0-4.2: text/json. >=4.3: application/json
-        $this->assertContains('json', $result->getHeader('Content-Type'));
+        $this->assertStringContainsString('json', $result->getHeader('Content-Type'));
 
         $body = $result->getBody();
-        $this->assertContains('Main site', $body);
-        $this->assertContains('Test 1', $body);
-        $this->assertContains('Test 2', $body);
-        $this->assertContains('Test 3', $body);
+        $this->assertStringContainsString('Main site', $body);
+        $this->assertStringContainsString('Test 1', $body);
+        $this->assertStringContainsString('Test 2', $body);
+        $this->assertStringContainsString('Test 3', $body);
     }
 }
