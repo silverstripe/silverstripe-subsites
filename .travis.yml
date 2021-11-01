@@ -5,5 +5,4 @@ import:
 
 env:
   global:
-    - COMPOSER_ROOT_VERSION="2.x-dev"
     - BEHAT_SUITE="@subsites"

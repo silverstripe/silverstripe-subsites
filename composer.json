@@ -15,7 +15,8 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "^4.4@dev",
+        "php": "^7.3 || ^8.0",
+        "silverstripe/framework": "^4.10",
         "silverstripe/cms": "^4.4@dev",
         "silverstripe/admin": "^1.4@dev",
         "silverstripe/asset-admin": "^1.4@dev",
@@ -23,7 +24,7 @@
         "silverstripe/versioned": "^1.4@dev"
     },
     "require-dev": {
-        "sminnee/phpunit": "^5.7",
+        "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.0"
     },
     "autoload": {

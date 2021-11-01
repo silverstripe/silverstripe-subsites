@@ -18,7 +18,7 @@ class ThemeResolverTest extends SapphireTest
         SSViewer::DEFAULT_THEME,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
