@@ -11,9 +11,10 @@ default:
         - SilverStripe\BehatExtension\Context\EmailContext
         - SilverStripe\CMS\Tests\Behaviour\LoginContext
         - SilverStripe\CMS\Tests\Behaviour\ThemeContext
-        - SilverStripe\CMS\Tests\Behaviour\FixtureContext:
+        # Using asset-admin for fixture context to get iAttachTheFileToDropzone()
+        - SilverStripe\AssetAdmin\Tests\Behat\Context\FixtureContext:
             # Note: double indent for args is intentional
-            - '%paths.modules.subsites%/tests/behat/features/files/'
+            - '%paths.modules.subsites%/tests/behat/files/'
 
   extensions:
     SilverStripe\BehatExtension\MinkExtension:
