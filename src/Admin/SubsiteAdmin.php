@@ -7,6 +7,7 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Subsites\Forms\GridFieldSubsiteDetailForm;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\Model\SubsiteDomain;
 
 /**
  * Admin interface to manage and create {@link Subsite} instances.
@@ -15,7 +16,14 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SubsiteAdmin extends ModelAdmin
 {
-    private static $managed_models = [Subsite::class];
+    private static $managed_models = [
+        Subsite::class => [
+            'title' => 'Subsites'
+        ],
+        SubsiteDomain::class => [
+            'title' => 'Main site domains'
+        ],
+    ];
 
     private static $url_segment = 'subsites';
 
@@ -31,11 +39,18 @@ class SubsiteAdmin extends ModelAdmin
     {
         $form = parent::getEditForm($id, $fields);
 
-        $grid = $form->Fields()->dataFieldByName(str_replace('\\', '-', Subsite::class));
-        if ($grid) {
-            $grid->getConfig()->getComponentByType(GridFieldPaginator::class)->setItemsPerPage(100);
-            $grid->getConfig()->removeComponentsByType(GridFieldDetailForm::class);
-            $grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());
+        if ($this->modelClass === Subsite::class) {
+            $grid = $form->Fields()->dataFieldByName(str_replace('\\', '-', Subsite::class));
+            if ($grid) {
+                $grid->getConfig()->getComponentByType(GridFieldPaginator::class)->setItemsPerPage(100);
+                $grid->getConfig()->removeComponentsByType(GridFieldDetailForm::class);
+                $grid->getConfig()->addComponent(new GridFieldSubsiteDetailForm());
+            }
+        }
+
+        if ($this->modelClass === SubsiteDomain::class) {
+            $grid = $form->Fields()->dataFieldByName($this->sanitiseClassName(SubsiteDomain::class));
+            $grid->setList($grid->getList()->filter('SubsiteID', 0));
         }
 
         return $form;

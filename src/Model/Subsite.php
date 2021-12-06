@@ -885,6 +885,16 @@ class Subsite extends DataObject
      */
     public function getPrimarySubsiteDomain()
     {
+        // Main site
+        if (!$this->isInDB()) {
+            Subsite::disable_subsite_filter(true);
+            $domain = SubsiteDomain::get()->filter('SubsiteID', 0)
+                ->sort('"IsPrimary" DESC')
+                ->first();
+            Subsite::disable_subsite_filter(false);
+            return $domain;
+        }
+        // Subsites
         return $this
             ->Domains()
             ->sort('"IsPrimary" DESC')
