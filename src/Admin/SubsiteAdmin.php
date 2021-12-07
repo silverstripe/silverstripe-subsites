@@ -40,7 +40,7 @@ class SubsiteAdmin extends ModelAdmin
         $form = parent::getEditForm($id, $fields);
 
         if ($this->modelClass === Subsite::class) {
-            $grid = $form->Fields()->dataFieldByName(str_replace('\\', '-', Subsite::class));
+            $grid = $form->Fields()->dataFieldByName($this->sanitiseClassName(Subsite::class));
             if ($grid) {
                 $grid->getConfig()->getComponentByType(GridFieldPaginator::class)->setItemsPerPage(100);
                 $grid->getConfig()->removeComponentsByType(GridFieldDetailForm::class);
