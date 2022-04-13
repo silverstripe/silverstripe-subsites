@@ -190,14 +190,14 @@ class SubsiteDomain extends DataObject
 
         // If there are wildcards in the primary domain (not recommended), make some
         // educated guesses about what to replace them with:
-        $domain = preg_replace('/\.\*$/', ".{$currentHost}", $this->Domain);
+        $domain = preg_replace('/\.\*$/', ".{$currentHost}", $this->Domain ?? '');
 
         // Default to "subsite." prefix for first wildcard
         // TODO Whats the significance of "subsite" in this context?!
-        $domain = preg_replace('/^\*\./', "subsite.", $domain);
+        $domain = preg_replace('/^\*\./', "subsite.", $domain ?? '');
 
         // *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'
-        $domain = str_replace('.www.', '.', $domain);
+        $domain = str_replace('.www.', '.', $domain ?? '');
 
         return $domain;
     }

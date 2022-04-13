@@ -35,8 +35,8 @@ class SubsitesVirtualPageTest extends BaseSubsiteTest
         $page = $this->objFromFixture(SiteTree::class, 'page1');
         $fromPath = __DIR__ . '/testscript-test-file.pdf';
         $destPath = TestAssetStore::getLocalPath($file);
-        Filesystem::makeFolder(dirname($destPath));
-        copy($fromPath, $destPath);
+        Filesystem::makeFolder(dirname($destPath ?? ''));
+        copy($fromPath ?? '', $destPath ?? '');
 
         // Hack in site link tracking after the fact
         $page->Content = '<p><img src="' . $file->getURL() . '" data-fileid="' . $file->ID . '" /></p>';

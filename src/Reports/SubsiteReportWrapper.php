@@ -27,10 +27,10 @@ class SubsiteReportWrapper extends ReportWrapper
             _t(__CLASS__ . '.ReportDropdown', 'Sites'),
             $options
         );
-        $subsiteField->setValue(array_keys($options));
+        $subsiteField->setValue(array_keys($options ?? []));
 
         // We don't need to make the field editable if only one subsite is available
-        if (sizeof($options) <= 1) {
+        if (sizeof($options ?? []) <= 1) {
             $subsiteField = $subsiteField->performReadonlyTransformation();
         }
 
@@ -70,7 +70,7 @@ class SubsiteReportWrapper extends ReportWrapper
         } else {
             $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
             $options = $subsites->toDropdownMap('ID', 'Title');
-            Subsite::$force_subsite = join(',', array_keys($options));
+            Subsite::$force_subsite = join(',', array_keys($options ?? []));
         }
     }
 

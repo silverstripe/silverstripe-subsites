@@ -69,9 +69,9 @@ class InitStateMiddleware implements HTTPMiddleware
     {
         $adminPaths = static::config()->get('admin_url_paths');
         $adminPaths[] = AdminRootController::admin_url();
-        $currentPath = rtrim($request->getURL(), '/') . '/';
+        $currentPath = rtrim($request->getURL() ?? '', '/') . '/';
         foreach ($adminPaths as $adminPath) {
-            if (substr($currentPath, 0, strlen($adminPath)) === $adminPath) {
+            if (substr($currentPath ?? '', 0, strlen($adminPath ?? '')) === $adminPath) {
                 return true;
             }
         }

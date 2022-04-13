@@ -56,7 +56,7 @@ class SubsiteCopyPagesTask extends BuildTask
         // issues with having to check whether or not the new parents have been added to the site tree
         // when a page, etc, is duplicated
         $stack = [[0, 0]];
-        while (count($stack) > 0) {
+        while (count($stack ?? []) > 0) {
             list($sourceParentID, $destParentID) = array_pop($stack);
 
             $children = Versioned::get_by_stage(SiteTree::class, 'Live', "\"ParentID\" = $sourceParentID", '');

@@ -118,7 +118,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         // Find sites that satisfy all codes conjuncitvely.
         $accessibleSites = new ArrayList();
         foreach ($codesPerSite as $siteID => $siteCodes) {
-            if (count($siteCodes) == count($codes)) {
+            if (count($siteCodes ?? []) == count($codes ?? [])) {
                 $accessibleSites->push($sitesArray[$siteID]);
             }
         }
@@ -169,7 +169,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
     public function alternateMenuDisplayCheck($controllerName)
     {
-        if (!class_exists($controllerName)) {
+        if (!class_exists($controllerName ?? '')) {
             return false;
         }
 
@@ -387,7 +387,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         if ($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
             $this->owner->response->addHeader(
                 'X-Status',
-                rawurlencode(_t(__CLASS__ . '.Saved', 'Saved, please update related pages.'))
+                rawurlencode(_t(__CLASS__ . '.Saved', 'Saved, please update related pages.') ?? '')
             );
         }
     }

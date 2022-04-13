@@ -90,7 +90,7 @@ class SiteTreeSubsites extends DataExtension
         foreach ($query->getFrom() as $tableName => $info) {
             // The tableName should be SiteTree or SiteTree_Live...
             $siteTreeTableName = SiteTree::getSchema()->tableName(SiteTree::class);
-            if (strpos($tableName, $siteTreeTableName) === false) {
+            if (strpos($tableName ?? '', $siteTreeTableName ?? '') === false) {
                 break;
             }
             $query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
@@ -341,7 +341,7 @@ class SiteTreeSubsites extends DataExtension
         }
 
         // Return true if they have access to this object's site
-        if (!(in_array(0, $goodSites) || in_array($subsiteID, $goodSites))) {
+        if (!(in_array(0, $goodSites ?? []) || in_array($subsiteID, $goodSites ?? []))) {
             return false;
         }
     }
@@ -413,7 +413,7 @@ class SiteTreeSubsites extends DataExtension
         // This helps deal with Link() returning an absolute URL.
         $url = Director::absoluteURL($this->owner->Link($action));
         if ($this->owner->SubsiteID) {
-            $url = preg_replace('/\/\/[^\/]+\//', '//' . $this->owner->Subsite()->domain() . '/', $url);
+            $url = preg_replace('/\/\/[^\/]+\//', '//' . $this->owner->Subsite()->domain() . '/', $url ?? '');
         }
         return $url;
     }
@@ -471,11 +471,13 @@ class SiteTreeSubsites extends DataExtension
 
         if ($links) {
             foreach ($links as $link) {
-                if (substr($link, 0, strlen('http://')) == 'http://') {
-                    $withoutHttp = substr($link, strlen('http://'));
-                    if (strpos($withoutHttp, '/') && strpos($withoutHttp, '/') < strlen($withoutHttp)) {
-                        $domain = substr($withoutHttp, 0, strpos($withoutHttp, '/'));
-                        $rest = substr($withoutHttp, strpos($withoutHttp, '/') + 1);
+                if (substr($link ?? '', 0, strlen('http://')) == 'http://') {
+                    $withoutHttp = substr($link ?? '', strlen('http://'));
+                    if (strpos($withoutHttp ?? '', '/') &&
+                        strpos($withoutHttp ?? '', '/') < strlen($withoutHttp ?? '')
+                    ) {
+                        $domain = substr($withoutHttp ?? '', 0, strpos($withoutHttp ?? '', '/'));
+                        $rest = substr($withoutHttp ?? '', strpos($withoutHttp ?? '', '/') + 1);
 
                         $subsiteID = Subsite::getSubsiteIDForDomain($domain);
                         if ($subsiteID == 0) {
@@ -548,9 +550,9 @@ class SiteTreeSubsites extends DataExtension
         $subsite = Subsite::currentSubsite();
         if ($subsite && $subsite->exists() && $subsite->PageTypeBlacklist) {
             // SS 4.1: JSON encoded. SS 4.0, comma delimited
-            $blacklist = json_decode($subsite->PageTypeBlacklist, true);
+            $blacklist = json_decode($subsite->PageTypeBlacklist ?? '', true);
             if ($blacklist === false) {
-                $blacklist = explode(',', $subsite->PageTypeBlacklist);
+                $blacklist = explode(',', $subsite->PageTypeBlacklist ?? '');
             }
 
             if (in_array(get_class($this->owner), (array) $blacklist)) {
