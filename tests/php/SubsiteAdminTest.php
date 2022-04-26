@@ -33,10 +33,10 @@ class SubsiteAdminTest extends FunctionalTest
             ."SilverStripe-Subsites-Model-Subsite/item/$subsite1ID/edit"
         );
         $this->assertTrue(
-            strpos($response->getBody(), 'id="Form_ItemEditForm_ID"') !== false,
+            strpos($response->getBody() ?? '', 'id="Form_ItemEditForm_ID"') !== false,
             'Testing Form_ItemEditForm_ID exists'
         );
-        $this->assertTrue(strpos($response->getBody(), '<head') !== false, 'Testing <head> exists');
+        $this->assertTrue(strpos($response->getBody() ?? '', '<head') !== false, 'Testing <head> exists');
     }
 
     /**

@@ -77,8 +77,8 @@ class FileSubsites extends DataExtension
             break;
         }
 
-        $sect = array_values($query->getSelect());
-        $isCounting = strpos($sect[0], 'COUNT') !== false;
+        $sect = array_values($query->getSelect() ?? []);
+        $isCounting = strpos($sect[0] ?? '', 'COUNT') !== false;
 
         // Ordering when deleting or counting doesn't apply
         if (!$isCounting) {

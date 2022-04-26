@@ -407,7 +407,7 @@ class SubsiteTest extends BaseSubsiteTest
             'Test Non-SSL',
             'Test SSL',
             'Test Vagrant VM on port 8080'
-        ], array_values($adminSiteTitles));
+        ], array_values($adminSiteTitles ?? []));
 
         $member2Sites = Subsite::accessible_sites(
             'CMS_ACCESS_CMSMain',

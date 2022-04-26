@@ -24,8 +24,8 @@ class FolderFormFactoryExtensionTest extends SapphireTest
             'Record' => $folder
         ]);
 
-        $source = array_values($folderForm->Fields()->fieldByName('SubsiteID')->getSource());
-        $result = array_values($source);
+        $source = array_values($folderForm->Fields()->fieldByName('SubsiteID')->getSource() ?? []);
+        $result = array_values($source ?? []);
 
         $this->assertContains('Main site', $result);
         $this->assertContains('Subsite A', $result);

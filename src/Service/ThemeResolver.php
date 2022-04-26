@@ -43,7 +43,7 @@ class ThemeResolver
      */
     public function getThemeList(Subsite $site)
     {
-        $themes = array_values(SSViewer::get_themes());
+        $themes = array_values(SSViewer::get_themes() ?? []);
         $siteTheme = $site->Theme;
 
         if (!$siteTheme) {
@@ -56,18 +56,18 @@ class ThemeResolver
         }
 
         // Ensure themes don't cascade "up" the list
-        $index = array_search($siteTheme, $themes);
+        $index = array_search($siteTheme, $themes ?? []);
 
         if ($index > 0) {
             // 4.0 didn't have support for themes in the public webroot
             $constant = SSViewer::class . '::PUBLIC_THEME';
-            $publicConstantDefined = defined($constant);
+            $publicConstantDefined = defined($constant ?? '');
 
             // Check if the default is public themes
             $publicDefault = $publicConstantDefined && $themes[0] === SSViewer::PUBLIC_THEME;
 
             // Take only those that appear after theme chosen (non-inclusive)
-            $themes = array_slice($themes, $index + 1);
+            $themes = array_slice($themes ?? [], $index + 1);
 
             // Add back in public
             if ($publicDefault) {
@@ -94,6 +94,6 @@ class ThemeResolver
             return null;
         }
 
-        return array_keys($config);
+        return array_keys($config ?? []);
     }
 }

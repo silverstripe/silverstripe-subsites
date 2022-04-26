@@ -106,7 +106,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
                     $subsiteMap
                 ));
             } else {
-                if (sizeof($subsiteMap) <= 1) {
+                if (sizeof($subsiteMap ?? []) <= 1) {
                     $fields->addFieldToTab('Root.Subsites', new ReadonlyField(
                         'SubsitesHuman',
                         _t(__CLASS__ . '.ACCESSRADIOTITLE', 'Give this group access to'),
@@ -133,10 +133,10 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     {
         if ($this->owner->AccessAllSubsites) {
             $title = _t(__CLASS__ . '.GlobalGroup', 'global group');
-            $title = htmlspecialchars($this->owner->Title, ENT_QUOTES) . ' <i>(' . $title . ')</i>';
+            $title = htmlspecialchars($this->owner->Title ?? '', ENT_QUOTES) . ' <i>(' . $title . ')</i>';
         } else {
             $subsites = Convert::raw2xml(implode(', ', $this->owner->Subsites()->column('Title')));
-            $title = htmlspecialchars($this->owner->Title) . " <i>($subsites)</i>";
+            $title = htmlspecialchars($this->owner->Title ?? '') . " <i>($subsites)</i>";
         }
     }
 
@@ -168,10 +168,10 @@ class GroupSubsites extends DataExtension implements PermissionProvider
             $hasGroupSubsites = false;
             foreach ($query->getFrom() as $item) {
                 if ((is_array($item) && strpos(
-                    $item['table'],
+                    $item['table'] ?? '',
                     'Group_Subsites'
                 ) !== false) || (!is_array($item) && strpos(
-                    $item,
+                    $item ?? '',
                     'Group_Subsites'
                 ) !== false)
                 ) {
@@ -227,7 +227,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
 
         // We are allowed to access this site if at we have CMS_ACCESS_SecurityAdmin permission on
         // at least one of the sites
-        return (bool)array_intersect($accessibleSites, $linkedSites);
+        return (bool)array_intersect($accessibleSites ?? [], $linkedSites);
     }
 
     public function providePermissions()

@@ -37,7 +37,7 @@ class SiteConfigSubsites extends DataExtension
         }
         $regexp = '/^(.*\.)?("|`)?SubsiteID("|`)?\s?=/';
         foreach ($query->getWhereParameterised($parameters) as $predicate) {
-            if (preg_match($regexp, $predicate)) {
+            if (preg_match($regexp ?? '', $predicate ?? '')) {
                 return;
             }
         }
@@ -48,7 +48,7 @@ class SiteConfigSubsites extends DataExtension
         }
 
         $froms = $query->getFrom();
-        $froms = array_keys($froms);
+        $froms = array_keys($froms ?? []);
         $tableName = array_shift($froms);
         if ($tableName !== SiteConfig::getSchema()->tableName(SiteConfig::class)) {
             return;
