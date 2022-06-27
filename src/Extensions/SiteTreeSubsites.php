@@ -398,7 +398,10 @@ class SiteTreeSubsites extends DataExtension
             SSViewer::set_themes(ThemeResolver::singleton()->getThemeList($subsite));
         }
 
-        if ($subsite && i18n::getData()->validate($subsite->Language) && !singleton(SiteTree::class)->hasExtension('TractorCow\Fluent\Extension\FluentSiteTreeExtension')) {
+        if (
+            $subsite && i18n::getData()->validate($subsite->Language) 
+            && !singleton(SiteTree::class)->hasExtension('TractorCow\Fluent\Extension\FluentSiteTreeExtension')
+        ) {
             i18n::set_locale($subsite->Language);
         }
     }
