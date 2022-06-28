@@ -222,11 +222,11 @@ or by defining the subsiteCMSShowInMenu function in your admin:
 
 ### Using Subsites in combination with Fluent
 
-When using Subsites in combination with Fluent module, the Subsites module sets the i18n language to the language defined in the current Subsite. When this behaviour is not desired and you need to use the language in FluentState use the following setting in your yml config file:
+When using Subsites in combination with Fluent module, the Subsites module sets the i18n locale to the language defined in the current Subsite. When this behaviour is not desired and you need to use the locale in FluentState use the following setting in your yml config file:
 
 ```yaml
     SilverStripe\Subsites\Extensions\SiteTreeSubsites:
-      ignore_subsite_language: true
+      ignore_subsite_locale: true
 ```
 
 ### Public display of a subsite

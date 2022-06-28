@@ -398,9 +398,9 @@ class SiteTreeSubsites extends DataExtension
             SSViewer::set_themes(ThemeResolver::singleton()->getThemeList($subsite));
         }
 
-        $ignore_subsite_language = Config::inst()->get(self::class, 'ignore_subsite_language');
+        $ignore_subsite_locale = Config::inst()->get(self::class, 'ignore_subsite_locale');
 
-        if ($subsite && i18n::getData()->validate($subsite->Language) && !$ignore_subsite_language) {
+        if (!$ignore_subsite_locale && $subsite && i18n::getData()->validate($subsite->Language)) {
             i18n::set_locale($subsite->Language);
         }
     }
