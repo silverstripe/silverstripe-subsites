@@ -18,6 +18,10 @@ SilverStripe\Subsites\Model\Subsite:
     Title: 'Test Non-SSL'
   domaintestVagrant:
     Title: 'Test Vagrant VM on port 8080'
+  subsitelocale:
+    Title: 'Locale subsite'
+    Language: 'nl_NL'
+
 SilverStripe\Subsites\Model\SubsiteDomain:
   subsite1:
     SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
@@ -27,6 +31,11 @@ SilverStripe\Subsites\Model\SubsiteDomain:
     SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
     Domain: subsite2.*
     Protocol: automatic
+  subsitelocale:
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsitelocale
+    Domain: subsitelocale.*
+    Protocol: automatic
+    IsPrimary: 1
   dt1a:
     SubsiteID: =>SilverStripe\Subsites\Model\Subsite.domaintest1
     Domain: one.example.org
@@ -118,6 +127,10 @@ Page:
       Title: 'Contact Us (Subsite 2)'
       SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite2
       URLSegment: contact-us
+   subsite_locale_about:
+     Title: 'About Locale'
+     SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsitelocale
+     URLSegment: about
 
 SilverStripe\Security\PermissionRoleCode:
   roleCode1:
