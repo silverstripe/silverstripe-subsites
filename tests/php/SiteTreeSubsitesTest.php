@@ -192,7 +192,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertEquals($p2->ID, SiteTree::get_by_link('test-page')->ID);
     }
 
-    public function testIgnoreSubsiteLocale() {
+    public function testIgnoreSubsiteLocale()
+    {
 
         $ignore_subsite_locale = Config::inst()->set(SiteTreeSubsites::class, 'ignore_subsite_locale', true);
 
@@ -206,7 +207,6 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
         $this->assertEquals($i18n_locale_before, $i18n_locale_after);
     }
-
 
     public function testPageTypesBlacklistInClassDropdown()
     {
