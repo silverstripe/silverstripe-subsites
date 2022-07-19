@@ -41,9 +41,9 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
     public function init()
     {
-        Requirements::css('silverstripe/subsites:css/LeftAndMain_Subsites.css');
-        Requirements::javascript('silverstripe/subsites:javascript/LeftAndMain_Subsites.js');
-        Requirements::javascript('silverstripe/subsites:javascript/VirtualPage_Subsites.js');
+        Requirements::css('silverstripe/subsites:client/css/LeftAndMain_Subsites.css');
+        Requirements::javascript('silverstripe/subsites:client/javascript/LeftAndMain_Subsites.js');
+        Requirements::javascript('silverstripe/subsites:client/javascript/VirtualPage_Subsites.js');
     }
 
     /**
@@ -150,7 +150,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             return false;
         }
 
-        Requirements::javascript('silverstripe/subsites:javascript/LeftAndMain_Subsites.js');
+        Requirements::javascript('silverstripe/subsites:client/javascript/LeftAndMain_Subsites.js');
 
         $output = ArrayList::create();
 
