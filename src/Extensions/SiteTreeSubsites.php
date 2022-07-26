@@ -403,7 +403,6 @@ class SiteTreeSubsites extends DataExtension
         if (!$ignore_subsite_locale && $subsite && i18n::getData()->validate($subsite->Language) && $subsite->Language) {
             i18n::set_locale($subsite->Language);
         }
-
     }
 
     /**
