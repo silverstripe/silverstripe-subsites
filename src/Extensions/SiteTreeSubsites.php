@@ -400,7 +400,7 @@ class SiteTreeSubsites extends DataExtension
 
         $ignore_subsite_locale = Config::inst()->get(self::class, 'ignore_subsite_locale');
 
-        if (!$ignore_subsite_locale && $subsite && i18n::getData()->validate($subsite->Language) && $subsite->Language) {
+        if (!$ignore_subsite_locale && $subsite && $subsite->Language && i18n::getData()->validate($subsite->Language)) {
             i18n::set_locale($subsite->Language);
         }
     }
