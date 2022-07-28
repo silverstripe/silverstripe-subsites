@@ -360,7 +360,8 @@ class SubsiteTest extends BaseSubsiteTest
             ['Title' => 'Test 3'],
             ['Title' => 'Test Non-SSL'],
             ['Title' => 'Test SSL'],
-            ['Title' => 'Test Vagrant VM on port 8080']
+            ['Title' => 'Test Vagrant VM on port 8080'],
+            ['Title' => 'Locale subsite'],
         ], $subsites, 'Lists all subsites');
     }
 
@@ -398,6 +399,7 @@ class SubsiteTest extends BaseSubsiteTest
         $adminSiteTitles = $adminSites->column('Title');
         sort($adminSiteTitles);
         $this->assertEquals([
+            'Locale subsite',
             'Subsite1 Template',
             'Subsite2 Template',
             'Template',
@@ -417,7 +419,7 @@ class SubsiteTest extends BaseSubsiteTest
         );
         $member2SiteTitles = $member2Sites->column('Title');
         sort($member2SiteTitles);
-        $this->assertEquals('Subsite1 Template', $member2SiteTitles[0], 'Member can get to subsite via a group role');
+        $this->assertEquals('Subsite1 Template', $member2SiteTitles[1], 'Member can get to subsite via a group role');
     }
 
     public function testhasMainSitePermission()

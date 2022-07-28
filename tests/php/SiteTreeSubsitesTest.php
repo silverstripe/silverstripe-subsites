@@ -13,6 +13,7 @@ use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\i18n\i18n;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Subsites\Extensions\SiteTreeSubsites;
@@ -189,6 +190,22 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
         Subsite::changeSubsite($s2);
         $this->assertEquals($p2->ID, SiteTree::get_by_link('test-page')->ID);
+    }
+
+    public function testIgnoreSubsiteLocale()
+    {
+
+        $ignore_subsite_locale = Config::inst()->set(SiteTreeSubsites::class, 'ignore_subsite_locale', true);
+
+        $subsitePage = $this->objFromFixture(Page::class, 'subsite_locale_about');
+        Subsite::changeSubsite($subsitePage->SubsiteID);
+        $controller = ModelAsController::controller_for($subsitePage);
+
+        $i18n_locale_before = i18n::get_locale();
+        SiteTree::singleton()->extend('contentcontrollerInit', $controller);
+        $i18n_locale_after = i18n::get_locale();
+
+        $this->assertEquals($i18n_locale_before, $i18n_locale_after);
     }
 
     public function testPageTypesBlacklistInClassDropdown()
