@@ -1,3 +1,6 @@
+---
+title: Working with subsites
+---
 # Working with subsites
 
 ## Managing content across subsites

@@ -1,5 +1,7 @@
+---
 title: Working with multiple websites
 summary: Setting up and editing multiple websites using SilverStripe
+---
 
 # Working with multiple sites
 
