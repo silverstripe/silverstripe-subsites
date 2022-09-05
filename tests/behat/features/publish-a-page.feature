@@ -6,7 +6,8 @@ Feature: Publish a page
   Background:
     Given a "subsite" "Subsite B"
     And a "page" "My page" with "URLSegment"="my-page", "Content"="My page content"
-    And I am logged in with "ADMIN" permissions
+    And the "group" "EDITOR" has permissions "Access to 'Pages' section" and "Access to 'Subsites' section"
+    And I am logged in as a member of "EDITOR" group
     Then I go to "admin/pages"
 
   @javascript

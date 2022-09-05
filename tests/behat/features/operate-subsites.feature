@@ -7,8 +7,7 @@ Feature: Create and select a subsite
   Background:
     # There's a bug where you need CMS_ACCESS_CMSMain rather than CMS_ACCESS_LeftAndMain permissions to
     # use subsites as expected
-    # Given the "group" "EDITOR group" has permissions "CMS_ACCESS_LeftAndMain" and "FILE_EDIT_ALL"
-    Given the "group" "EDITOR group" has permissions "CMS_ACCESS_CMSMain" and "CMS_ACCESS_AssetAdmin" and "FILE_EDIT_ALL"
+    Given the "group" "EDITOR" has permissions "CMS_ACCESS_CMSMain" and "CMS_ACCESS_AssetAdmin" and "FILE_EDIT_ALL"
     And a "page" "My page" with "URLSegment"="my-page", "Content"="My page content"
     And an "image" "file1.jpg"
     And an "image" "file2.jpg"
@@ -39,7 +38,7 @@ Feature: Create and select a subsite
     # Change to Editor user
     When I go to "/Security/login"
     And I press the "Log in as someone else" button
-    When I am logged in with "EDITOR" permissions
+    When I am logged in as a member of "EDITOR" group
     And I go to "admin/pages"
 
     # Can see main site page on main site

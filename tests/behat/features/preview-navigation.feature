@@ -7,10 +7,11 @@ Feature: Preview navigation
     Given a "subsite" "MySubsite"
     And a "page" "My page" with "URLSegment"="my-page", "Content"="My page content <a name='aname'>aname</a> <a href='[sitetree_link,id=5]'>ahref</a>" and "SubsiteID"="1"
     And a "page" "Other page" with "URLSegment"="other-page", "Content"="Other page content <a href='[sitetree_link,id=4]'>Goto my page</a>" and "SubsiteID"="1"
+    And the "group" "EDITOR" has permissions "Access to 'Pages' section" and "Access to 'Subsites' section"
+    And I am logged in as a member of "EDITOR" group
 
   @javascript
   Scenario: I can navigate the subsite preview
-    Given I am logged in with "ADMIN" permissions
     When I go to "/admin/pages"
     And I select "MySubsite" from "SubsitesSelect"
     And I click on "My page" in the tree
