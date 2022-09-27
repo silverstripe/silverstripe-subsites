@@ -7,7 +7,13 @@
 		$('#SubsitesSelect').entwine({
 			onadd:function(){
 				this.on('change', function(){
-					window.location.search=$.query.set('SubsiteID', $(this).val());
+                    // Switch to listing views of subsite-filtered sections (eg: pages/ & assets/)
+                    let newLocHref = window.location.href
+                        .split('edit/show/').shift() // remove [pages/]edit/etc
+                        .split('settings/show/').shift() // remove [pages/]settings/etc
+                        .split('history/show/').shift() // remove [pages/]history/etc
+                        .split('show/').shift(); // remove [assets/]show/102/edit/etc (last as 'show' is broad)
+                    window.location.href = newLocHref + $.query.set('SubsiteID', $(this).val()).toString();
 				});
 			}
 		});
