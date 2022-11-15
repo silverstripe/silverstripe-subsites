@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use SilverStripe\Dev\Deprecation;
 use Page;
 use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\CMS\Model\SiteTree;
@@ -266,11 +267,12 @@ class SiteTreeSubsites extends DataExtension
      * It may be that some relations are not diostinct to sub site so can stay
      * whereas others may need to be duplicated
      *
-     * @deprecated 2.2..3.0 Use the "cascade_duplicates" config API instead
+     * @deprecated 2.2.0 Use the "cascade_duplicates" config API instead
      * @param SiteTree $originalPage
      */
     public function duplicateSubsiteRelations($originalPage)
     {
+        Deprecation::notice('2.2.0', 'Use the "cascade_duplicates" config API instead');
         $thisClass = $originalPage->ClassName;
         $relations = Config::inst()->get($thisClass, 'duplicate_to_subsite_relations');
 
@@ -444,13 +446,14 @@ class SiteTreeSubsites extends DataExtension
      * This function is marked as deprecated for removal in 5.0.0 in silverstripe/cms
      * so now simply passes execution to where the functionality exists for backwards compatiblity.
      * CMS 4.0.0 SiteTree already throws a SilverStripe deprecation error before calling this function.
-     * @deprecated 2.2...3.0 use updatePreviewLink instead
+     * @deprecated 2.2.0 Use updatePreviewLink() instead
      *
      * @param string|null $action
      * @return string
      */
     public function alternatePreviewLink($action = null)
     {
+        Deprecation::notice('2.2.0', 'Use updatePreviewLink() instead');
         $link = '';
         return $this->updatePreviewLink($link, $action);
     }
