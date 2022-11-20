@@ -56,7 +56,7 @@ class Subsite extends DataObject
      * Allows you to force a specific subsite ID, or comma separated list of IDs.
      * Only works for reading. An object cannot be written to more than 1 subsite.
      *
-     * @deprecated 2.0.0..3.0.0 Use SubsiteState::singleton()->withState() instead.
+     * @deprecated 2.0.0 Use SubsiteState::singleton()->withState() instead.
      */
     public static $force_subsite = null;
 
@@ -201,11 +201,11 @@ class Subsite extends DataObject
      *
      * @return int ID of the current subsite instance
      *
-     * @deprecated 2.0..3.0 Use SubsiteState::singleton()->getSubsiteId() instead
+     * @deprecated 2.0.0 Use SubsiteState::singleton()->getSubsiteId() instead
      */
     public static function currentSubsiteID()
     {
-        Deprecation::notice('3.0', 'Use SubsiteState::singleton()->getSubsiteId() instead');
+        Deprecation::notice('2.0.0', 'Use SubsiteState::singleton()->getSubsiteId() instead');
         return SubsiteState::singleton()->getSubsiteId();
     }
 
