@@ -245,6 +245,7 @@ class SiteTreeSubsites extends DataExtension
      */
     public function duplicateToSubsite($subsiteID = null, $includeChildren = false)
     {
+        /** @var SiteTree|SiteTreeSubsites */
         $clone = $this->owner->duplicateToSubsitePrep($subsiteID, $includeChildren);
         $clone->invokeWithExtensions('onBeforeDuplicateToSubsite', $this->owner);
 
@@ -267,12 +268,13 @@ class SiteTreeSubsites extends DataExtension
      * It may be that some relations are not diostinct to sub site so can stay
      * whereas others may need to be duplicated
      *
-     * @deprecated 2.2.0 Use the "cascade_duplicates" config API instead
+     * This was originally deprecated - Use the "cascade_duplicates" config API instead
+     * Ideally this would be re-deprecated
+     *
      * @param SiteTree $originalPage
      */
     public function duplicateSubsiteRelations($originalPage)
     {
-        Deprecation::notice('2.2.0', 'Use the "cascade_duplicates" config API instead');
         $thisClass = $originalPage->ClassName;
         $relations = Config::inst()->get($thisClass, 'duplicate_to_subsite_relations');
 

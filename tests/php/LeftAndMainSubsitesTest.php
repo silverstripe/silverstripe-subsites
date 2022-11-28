@@ -38,19 +38,19 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
         $cmsmain = singleton(CMSMain::class);
         $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
-        $this->assertDOSEquals([
+        $this->assertListEquals([
             ['Title' => 'Subsite1 Template']
         ], $subsites, 'Lists member-accessible sites for the accessible controller.');
 
         $assetadmin = singleton(AssetAdmin::class);
         $subsites = $assetadmin->sectionSites(true, 'Main site', $member);
-        $this->assertDOSEquals([], $subsites, 'Does not list any sites for forbidden controller.');
+        $this->assertListEquals([], $subsites, 'Does not list any sites for forbidden controller.');
 
         $member = $this->objFromFixture(Member::class, 'editor');
 
         $cmsmain = singleton(CMSMain::class);
         $subsites = $cmsmain->sectionSites(true, 'Main site', $member);
-        $this->assertDOSContains([
+        $this->assertListContains([
             ['Title' => 'Main site']
         ], $subsites, 'Includes the main site for members who can access all sites.');
     }
