@@ -350,7 +350,7 @@ class SubsiteTest extends BaseSubsiteTest
     public function testAllSites()
     {
         $subsites = Subsite::all_sites();
-        $this->assertDOSEquals([
+        $this->assertListEquals([
             ['Title' => 'Main site'],
             ['Title' => 'Template'],
             ['Title' => 'Subsite1 Template'],
@@ -370,7 +370,7 @@ class SubsiteTest extends BaseSubsiteTest
         $member = $this->objFromFixture(Member::class, 'subsite1member');
 
         $subsites = Subsite::all_accessible_sites(true, 'Main site', $member);
-        $this->assertDOSEquals([
+        $this->assertListEquals([
             ['Title' => 'Subsite1 Template']
         ], $subsites, 'Lists member-accessible sites.');
     }
@@ -471,7 +471,7 @@ class SubsiteTest extends BaseSubsiteTest
         $page1 = new Page();
         $page1->Title = 'MyAwesomePage';
         $page1->write();
-        $page1->doPublish();
+        $page1->publishRecursive();
         $this->assertEquals($page1->SubsiteID, $subsite1->ID);
 
         // duplicate
@@ -481,7 +481,7 @@ class SubsiteTest extends BaseSubsiteTest
         $page2 = DataObject::get_one('Page', "\"Title\" = 'MyAwesomePage'");
         $page2->Title = 'MyNewAwesomePage';
         $page2->write();
-        $page2->doPublish();
+        $page2->publishRecursive();
 
         // check change & check change has not affected subiste1
         $subsite1->activate();

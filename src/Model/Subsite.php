@@ -448,7 +448,7 @@ class Subsite extends DataObject
 
         // Rationalise member arguments
         if (!$member) {
-            $member = Member::currentUser();
+            $member = Security::getCurrentUser();
         }
         if (!$member) {
             return new ArrayList();
