@@ -3,6 +3,7 @@
 namespace SilverStripe\Subsites\Controller;
 
 use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\Control\PjaxResponseNegotiator;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Subsites\Model\Subsite;
@@ -46,7 +47,7 @@ class SubsiteXHRController extends LeftAndMain
         ]);
     }
 
-    public function getResponseNegotiator()
+    public function getResponseNegotiator(): PjaxResponseNegotiator
     {
         $negotiator = parent::getResponseNegotiator();
 

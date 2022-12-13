@@ -5,7 +5,7 @@ namespace SilverStripe\Subsites\Tests;
 use Page;
 use SilverStripe\Assets\File;
 use SilverStripe\Assets\Filesystem;
-use SilverStripe\Assets\Tests\Storage\AssetStoreTest\TestAssetStore;
+use SilverStripe\Assets\Dev\TestAssetStore;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;

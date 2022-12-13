@@ -971,11 +971,8 @@ JS;
 
     /**
      * Duplicate this subsite
-     * @param bool $doWrite
-     * @param string $manyMany
-     * @return DataObject
      */
-    public function duplicate($doWrite = true, $manyMany = 'many_many')
+    public function duplicate(bool $doWrite = true, ?array $manyMany = null): static
     {
         $duplicate = parent::duplicate($doWrite);
 
