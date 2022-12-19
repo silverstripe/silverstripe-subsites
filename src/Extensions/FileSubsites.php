@@ -116,9 +116,9 @@ class FileSubsites extends DataExtension
         }
 
         // Check the CMS_ACCESS_SecurityAdmin privileges on the subsite that owns this group
-        $subsiteID = SubsiteState::singleton()->getSubsiteId();
-        if ($subsiteID && $subsiteID == $this->owner->SubsiteID) {
-            return true;
+        $currentSubsiteID = SubsiteState::singleton()->getSubsiteId();
+        if ($currentSubsiteID && $currentSubsiteID !== $this->owner->SubsiteID) {
+            return false;
         }
 
         return SubsiteState::singleton()->withState(function (SubsiteState $newState) use ($member) {
