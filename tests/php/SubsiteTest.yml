@@ -172,6 +172,10 @@ SilverStripe\Security\Group:
     Code: subsite1_group_via_role
     AccessAllSubsites: 1
     Roles: =>SilverStripe\Security\PermissionRole.role1
+  filetest:
+    Title: filetest
+    Code: filetest
+    AccessAllSubsites: 1
 SilverStripe\Security\Permission:
   admin:
     Code: ADMIN
@@ -206,6 +210,9 @@ SilverStripe\Security\Permission:
   adminsubsite1:
     Code: ADMIN
     GroupID: =>SilverStripe\Security\Group.subsite1admins
+  filetest:
+    Code: CMS_ACCESS_CMSMain
+    GroupID: =>SilverStripe\Security\Group.filetest
 
 SilverStripe\Security\Member:
   admin:
@@ -235,7 +242,26 @@ SilverStripe\Security\Member:
   subsite1member2:
     Email: subsite1member2@test.com
     Groups: =>SilverStripe\Security\Group.subsite1_group_via_role
+  filetestyes:
+    Email: filetestyes@test.com
+    Groups: =>SilverStripe\Security\Group.filetest
+  filetestno:
+    Email: filetestno@test.com
 
 SilverStripe\SiteConfig\SiteConfig:
   config:
     CanCreateTopLevelType: LoggedInUsers
+
+SilverStripe\Assets\File:
+  subsite1file:
+    Name: subsitefile.pdf
+    Title: subsitefile
+    SubsiteID: =>SilverStripe\Subsites\Model\Subsite.subsite1
+    CanEditType: OnlyTheseUsers
+    EditorGroups: =>SilverStripe\Security\Group.filetest
+  mainsitefile:
+    Name: mainsitefile.pdf
+    Title: mainsitefile
+    SubsiteID: 0
+    CanEditType: OnlyTheseUsers
+    EditorGroups: =>SilverStripe\Security\Group.filetest

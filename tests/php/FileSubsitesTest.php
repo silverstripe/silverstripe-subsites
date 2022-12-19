@@ -8,6 +8,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Subsites\Extensions\FileSubsites;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Security\Member;
 
 class FileSubsitesTest extends BaseSubsiteTest
 {
@@ -64,5 +65,65 @@ class FileSubsitesTest extends BaseSubsiteTest
         $file->ParentID = $folder->ID;
         $file->onAfterUpload();
         $this->assertEquals($folder->SubsiteID, $file->SubsiteID);
+    }
+
+    /**
+     * @dataProvider provideTestCanEdit
+     */
+    public function testCanEdit(
+        string $fileKey,
+        string $memberKey,
+        string $currentSubsiteKey,
+        bool $expected
+    ): void {
+        $file = $this->objFromFixture(File::class, $fileKey);
+        $subsiteID = ($currentSubsiteKey === 'mainsite')
+            ? 0 : $this->objFromFixture(Subsite::class, $currentSubsiteKey)->ID;
+        $member = $this->objFromFixture(Member::class, $memberKey);
+        Subsite::changeSubsite($subsiteID);
+        $this->assertSame($expected, $file->canEdit($member));
+    }
+
+    public function provideTestCanEdit(): array
+    {
+        $ret = [];
+        $data = [
+            // file
+            'subsite1file' => [
+                // member - has permissions to edit the file
+                'filetestyes' => [
+                    // current subite => expected canEdit()
+                    'subsite1' => true,
+                    'subsite2' => false,
+                    'mainsite' => true
+                ],
+                // member - does not have permissions to edit the file
+                'filetestno' => [
+                    'subsite1' => false,
+                    'subsite2' => false,
+                    'mainsite' => false
+                ],
+            ],
+            'mainsitefile' => [
+                'filetestyes' => [
+                    'subsite1' => true,
+                    'subsite2' => true,
+                    'mainsite' => true
+                ],
+                'filetestno' => [
+                    'subsite1' => false,
+                    'subsite2' => false,
+                    'mainsite' => false
+                ],
+            ]
+        ];
+        foreach (array_keys($data) as $fileKey) {
+            foreach (array_keys($data[$fileKey]) as $memberKey) {
+                foreach ($data[$fileKey][$memberKey] as $currentSubsiteKey => $expected) {
+                    $ret[] = [$fileKey, $memberKey, $currentSubsiteKey, $expected];
+                }
+            }
+        }
+        return $ret;
     }
 }
