@@ -53,11 +53,12 @@ eo:
       one: 'Unu subreteja domajno'
       other: '{count} subretejaj domajnoj'
     PROTOCOL_AUTOMATIC: Aŭtomata
-    PROTOCOL_DESCRIPTION: 'Marki ĉi tion kiel la aprioran domajnon por ĉi tiu subretejo'
+    PROTOCOL_DESCRIPTION: 'Kiam generante ligilojn al ĉi tiu subretejo, uzu la elektitan protokolon.'
     PROTOCOL_HTTP: 'http://'
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokolo
     SINGULARNAME: 'Subreteja domajno'
+    ISPRIMARY_DESCRIPTION: 'Marki ĉi tion kiel la aprioran domajnon por ĉi tiu subretejo'
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
     OverrideNote: 'Anstataŭigas hereditan valoron el la fonto'
