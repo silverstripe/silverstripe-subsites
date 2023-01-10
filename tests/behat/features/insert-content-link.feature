@@ -17,12 +17,12 @@ Feature: Insert an internal link into content
     # See "insert-a-link.feature" from silverstripe/cms
     When I select "My page" in the "Content" HTML field
     And I press the "Insert link" HTML field button
-    And I click "Page on this site" in the ".mce-menu" element
+    And I click "Page on this site" in the ".tox-collection__group" element
     Then I should see an "form#Form_editorInternalLink" element
-    When I click "(Search or choose Page)" in the ".Select-multi-value-wrapper" element
+    When I click on the ".treedropdownfield" element
     And I click "Another page" in the ".treedropdownfield__menu" element
     And I fill in "my desc" for "Link description"
-    And I press the "Insert" button
+    And I click on the "#Form_editorInternalLink_action_insert" element
     Then the "Content" HTML field should contain "<a title="my desc" href="[sitetree_link"
     And the "Content" HTML field should contain "My page</a>"
     # Required to avoid "unsaved changes" browser dialog
