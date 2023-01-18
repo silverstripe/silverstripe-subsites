@@ -6,6 +6,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\Reports\ReportWrapper;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 /**
  * Creates a subsite-aware version of another report.
@@ -64,13 +65,17 @@ class SubsiteReportWrapper extends ReportWrapper
     {
         // The user has select a few specific sites
         if (!empty($params['Subsites'])) {
-            Subsite::$force_subsite = $params['Subsites'];
+            SubsiteState::singleton()->withState(function (SubsiteState $newState) use ($params) {
+                $newState->setSubsiteId($params['Subsites']);
+            });
 
             // Default: restrict to all accessible sites
         } else {
             $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
             $options = $subsites->toDropdownMap('ID', 'Title');
-            Subsite::$force_subsite = join(',', array_keys($options ?? []));
+            SubsiteState::singleton()->withState(function (SubsiteState $newState) use ($options) {
+                $newState->setSubsiteId(join(',', array_keys($options ?? [])));
+            });
         }
     }
 
@@ -80,6 +85,8 @@ class SubsiteReportWrapper extends ReportWrapper
     public function afterQuery()
     {
         // Manually manage the subsite filtering
-        Subsite::$force_subsite = null;
+        SubsiteState::singleton()->withState(function (SubsiteState $newState) {
+            $newState->setSubsiteId(null);
+        });
     }
 }

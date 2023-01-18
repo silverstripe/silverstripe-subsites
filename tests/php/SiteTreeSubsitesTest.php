@@ -275,8 +275,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
         // Staff is shifted to top level and given a unique url segment
         $domain = $otherSubsite->domain();
-        $this->assertEquals('http://' . $domain . '/staff-2/', $staffPage2->AbsoluteLink());
-        $this->assertEquals('http://' . $domain . '/contact-us-2/', $contactPage2->AbsoluteLink());
+        $this->assertEquals('http://' . $domain . '/staff-2', $staffPage2->AbsoluteLink());
+        $this->assertEquals('http://' . $domain . '/contact-us-2', $contactPage2->AbsoluteLink());
     }
 
     public function testPageTypesBlacklistInCMSMain()
@@ -443,13 +443,13 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     public function provideAlternateAbsoluteLink()
     {
         return [
-            ['home', null, 'http://localhost/'],
+            ['home', null, 'http://localhost'],
             ['home', 'myaction', 'http://localhost/home/myaction'],
-            ['contact', null, 'http://localhost/contact-us/'],
+            ['contact', null, 'http://localhost/contact-us'],
             ['contact', 'myaction', 'http://localhost/contact-us/myaction'],
-            ['subsite1_home', null, 'http://subsite1.localhost/'],
+            ['subsite1_home', null, 'http://subsite1.localhost'],
             ['subsite1_home', 'myaction', 'http://subsite1.localhost/home/myaction'],
-            ['subsite1_contactus', null, 'http://subsite1.localhost/contact-us/'],
+            ['subsite1_contactus', null, 'http://subsite1.localhost/contact-us'],
             ['subsite1_contactus', 'myaction', 'http://subsite1.localhost/contact-us/myaction']
         ];
     }
@@ -463,7 +463,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     public function testAlternateAbsoluteLink($pageFixtureName, $action, $expectedAbsoluteLink)
     {
         // Setting a control value, in case base url is set for the installation under test
-        Config::modify()->set(Director::class, 'alternate_base_url', 'http://localhost/');
+        Config::modify()->set(Director::class, 'alternate_base_url', 'http://localhost');
 
         /** @var Page $page */
         $page = $this->objFromFixture(Page::class, $pageFixtureName);

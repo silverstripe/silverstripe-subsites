@@ -8,7 +8,6 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleLoader;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
@@ -51,14 +50,6 @@ class Subsite extends DataObject
      * configuration manifest.
      */
     public static $disable_subsite_filter = false;
-
-    /**
-     * Allows you to force a specific subsite ID, or comma separated list of IDs.
-     * Only works for reading. An object cannot be written to more than 1 subsite.
-     *
-     * @deprecated 2.0.0 Use SubsiteState::singleton()->withState() instead.
-     */
-    public static $force_subsite = null;
 
     /**
      * Whether to write a host-map.php file
@@ -189,24 +180,6 @@ class Subsite extends DataObject
     public static function currentSubsite()
     {
         return Subsite::get()->byID(SubsiteState::singleton()->getSubsiteId());
-    }
-
-    /**
-     * This function gets the current subsite ID from the session. It used in the backend so Ajax requests
-     * use the correct subsite. The frontend handles subsites differently. It calls getSubsiteIDForDomain
-     * directly from ModelAsController::getNestedController. Only gets Subsite instances which have their
-     * {@link IsPublic} flag set to TRUE.
-     *
-     * You can simulate subsite access without creating virtual hosts by appending ?SubsiteID=<ID> to the request.
-     *
-     * @return int ID of the current subsite instance
-     *
-     * @deprecated 2.0.0 Use SubsiteState::singleton()->getSubsiteId() instead
-     */
-    public static function currentSubsiteID()
-    {
-        Deprecation::notice('2.0.0', 'Use SubsiteState::singleton()->getSubsiteId() instead');
-        return SubsiteState::singleton()->getSubsiteId();
     }
 
     /**
