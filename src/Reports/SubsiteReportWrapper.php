@@ -36,7 +36,7 @@ class SubsiteReportWrapper extends ReportWrapper
 
         $fields = parent::parameterFields();
         if ($fields) {
-            $fields->insertBefore($subsiteField, $fields->First()->Name());
+            $fields->insertBefore($fields->First()->Name(), $subsiteField);
         } else {
             $fields = FieldList::create($subsiteField);
         }
