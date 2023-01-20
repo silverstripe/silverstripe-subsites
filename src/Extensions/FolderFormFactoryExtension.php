@@ -25,7 +25,6 @@ class FolderFormFactoryExtension extends Extension
         ksort($values);
         if ($sites) {
             // Dropdown needed to move folders between subsites
-            /** @var @skipUpgrade */
             $dropdown = DropdownField::create(
                 'SubsiteID',
                 _t(__CLASS__ . '.SubsiteFieldLabel', 'Subsite'),
