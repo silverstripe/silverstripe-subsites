@@ -29,7 +29,6 @@ class SubsitesTreeDropdownField extends TreeDropdownField
     /**
      * Extra HTML classes
      *
-     * @skipUpgrade
      * @var string[]
      */
     protected $extraClasses = ['SubsitesTreeDropdownField'];

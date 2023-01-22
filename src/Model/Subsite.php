@@ -279,7 +279,6 @@ class Subsite extends DataObject
 
             $schema = DataObject::getSchema();
 
-            /** @skipUpgrade */
             $domainTableName = $schema->tableName(SubsiteDomain::class);
             
             if (!DB::get_schema()->hasTable($domainTableName)) {
@@ -288,7 +287,6 @@ class Subsite extends DataObject
             }
 
             $subsiteTableName = $schema->tableName(__CLASS__);
-            /** @skipUpgrade */
             $matchingDomains = DataObject::get(
                 SubsiteDomain::class,
                 "'$SQL_host' LIKE replace(\"{$domainTableName}\".\"Domain\",'*','%')",
@@ -470,7 +468,6 @@ class Subsite extends DataObject
             return self::$cache_accessible_sites[$cacheKey];
         }
 
-        /** @skipUpgrade */
         $subsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
             ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
@@ -494,7 +491,6 @@ class Subsite extends DataObject
         }
 
         /** @var DataList $rolesSubsites */
-        /** @skipUpgrade */
         $rolesSubsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
             ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
