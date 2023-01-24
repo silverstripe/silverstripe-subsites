@@ -13,8 +13,9 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{yml,feature}]
+[*.{yml,js,json,css,scss,,feature}]
 indent_size = 2
+indent_style = space
 
 [{.travis.yml,package.json,composer.json}]
 # The indent size used in the `package.json` file cannot be changed
