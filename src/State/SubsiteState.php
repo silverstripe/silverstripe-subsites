@@ -13,28 +13,16 @@ class SubsiteState implements Resettable
 {
     use Injectable;
 
-    /**
-     * @var int|null
-     */
-    protected $subsiteId;
+    protected ?int $subsiteId = null;
 
+    protected ?int $originalSubsiteId = null;
 
-    /**
-     * @var int|null
-     */
-    protected $originalSubsiteId;
-
-    /**
-     * @var bool
-     */
-    protected $useSessions;
+    protected ?bool $useSessions = null;
 
     /**
      * Get the current subsite ID
-     *
-     * @return int|null
      */
-    public function getSubsiteId()
+    public function getSubsiteId(): ?int
     {
         return $this->subsiteId;
     }
@@ -42,11 +30,8 @@ class SubsiteState implements Resettable
     /**
      * Set the current subsite ID, and track the first subsite ID set as the "original". This is used to check
      * whether the ID has been changed through a request.
-     *
-     * @param int $id
-     * @return $this
      */
-    public function setSubsiteId($id)
+    public function setSubsiteId(?int $id): static
     {
         if (is_null($this->originalSubsiteId)) {
             $this->originalSubsiteId = (int) $id;
@@ -59,21 +44,16 @@ class SubsiteState implements Resettable
 
     /**
      * Get whether to use sessions for storing the subsite ID
-     *
-     * @return bool
      */
-    public function getUseSessions()
+    public function getUseSessions(): ?bool
     {
         return $this->useSessions;
     }
 
     /**
      * Set whether to use sessions for storing the subsite ID
-     *
-     * @param bool $useSessions
-     * @return $this
      */
-    public function setUseSessions($useSessions)
+    public function setUseSessions(?bool $useSessions): static
     {
         $this->useSessions = $useSessions;
 
@@ -82,10 +62,8 @@ class SubsiteState implements Resettable
 
     /**
      * Get whether the subsite ID has been changed during a request, based on the original and current IDs
-     *
-     * @return bool
      */
-    public function getSubsiteIdWasChanged()
+    public function getSubsiteIdWasChanged(): bool
     {
         return $this->originalSubsiteId !== $this->getSubsiteId();
     }
@@ -97,7 +75,7 @@ class SubsiteState implements Resettable
      * @param callable $callback Callback to run. Will be passed the nested state as a parameter
      * @return mixed Result of callback
      */
-    public function withState(callable $callback)
+    public function withState(callable $callback): mixed
     {
         $newState = clone $this;
         try {
@@ -111,7 +89,7 @@ class SubsiteState implements Resettable
     /**
      * Reset the local cache of the singleton
      */
-    public static function reset()
+    public static function reset(): void
     {
         SubsiteState::singleton()->resetState();
     }
@@ -119,7 +97,7 @@ class SubsiteState implements Resettable
     /**
      * Reset the local cache of this object
      */
-    public function resetState()
+    public function resetState(): void
     {
         $this->originalSubsiteId = null;
         $this->subsiteId = null;

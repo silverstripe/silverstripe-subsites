@@ -15,7 +15,6 @@ class BaseSubsiteTest extends SapphireTest
 
         SubsiteState::singleton()->setUseSessions(true);
         Config::modify()->set(Subsite::class, 'write_hostmap', false);
-        Subsite::$force_subsite = null;
     }
 
     /**

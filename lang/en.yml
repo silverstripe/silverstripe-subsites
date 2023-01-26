@@ -70,6 +70,8 @@ en:
     SubsiteField: Subsite
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sites
+    ReportDropdownSubsite: Subsite
+    ReportDropdownAll: All
   Subsite:
     COPYSTRUCTURE: 'Copy structure from:'
     NOTEMPLATE: 'No template'

@@ -2,10 +2,11 @@
 
 namespace SilverStripe\Subsites\Reports;
 
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\Reports\ReportWrapper;
 use SilverStripe\Subsites\Model\Subsite;
+use SilverStripe\Subsites\State\SubsiteState;
 
 /**
  * Creates a subsite-aware version of another report.
@@ -13,6 +14,7 @@ use SilverStripe\Subsites\Model\Subsite;
  */
 class SubsiteReportWrapper extends ReportWrapper
 {
+    private const SUBSITE_ID_ALL = -1;
 
     /**
      * @return FieldList
@@ -20,23 +22,22 @@ class SubsiteReportWrapper extends ReportWrapper
     public function parameterFields()
     {
         $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true);
-        $options = $subsites->toDropdownMap('ID', 'Title');
+        $options = [self::SUBSITE_ID_ALL => _t(__CLASS__ . '.ReportDropdownAll', 'All')] + $subsites->map()->toArray();
 
-        $subsiteField = TreeMultiselectField::create(
-            'Subsites',
-            _t(__CLASS__ . '.ReportDropdown', 'Sites'),
+        $subsiteField = DropdownField::create(
+            'Subsite',
+            _t(__CLASS__ . '.ReportDropdownSubsite', 'Subsite'),
             $options
         );
-        $subsiteField->setValue(array_keys($options ?? []));
 
         // We don't need to make the field editable if only one subsite is available
-        if (sizeof($options ?? []) <= 1) {
+        if (sizeof($options ?? []) <= 2) {
             $subsiteField = $subsiteField->performReadonlyTransformation();
         }
 
         $fields = parent::parameterFields();
         if ($fields) {
-            $fields->insertBefore($fields->First()->Name(), $subsiteField);
+            $fields->insertBefore($fields->First()->getName(), $subsiteField);
         } else {
             $fields = FieldList::create($subsiteField);
         }
@@ -49,37 +50,40 @@ class SubsiteReportWrapper extends ReportWrapper
     public function columns()
     {
         $columns = parent::columns();
-        $columns['Subsite.Title'] = Subsite::class;
+        $columns['Subsite.Title'] = _t(__CLASS__ . '.ReportDropdownSubsite', 'Subsite');
         return $columns;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // Querying
-
-    /**
-     * @param arary $params
-     * @return void
-     */
-    public function beforeQuery($params)
+    public function sourceQuery($params)
     {
-        // The user has select a few specific sites
-        if (!empty($params['Subsites'])) {
-            Subsite::$force_subsite = $params['Subsites'];
-
-            // Default: restrict to all accessible sites
-        } else {
-            $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
-            $options = $subsites->toDropdownMap('ID', 'Title');
-            Subsite::$force_subsite = join(',', array_keys($options ?? []));
+        $subsiteID = (int) ($params['Subsite'] ?? self::SUBSITE_ID_ALL);
+        if ($subsiteID === self::SUBSITE_ID_ALL) {
+            return Subsite::withDisabledSubsiteFilter(function () use ($params) {
+                return parent::sourceQuery($params);
+            });
         }
+        return SubsiteState::singleton()->withState(function (SubsiteState $newState) use ($subsiteID, $params) {
+            $newState->setSubsiteId($subsiteID);
+            return parent::sourceQuery($params);
+        });
     }
 
-    /**
-     * @return void
-     */
-    public function afterQuery()
+    public function sourceRecords($params = [], $sort = null, $limit = null)
     {
-        // Manually manage the subsite filtering
-        Subsite::$force_subsite = null;
+        $subsiteID = (int) ($params['Subsite'] ?? self::SUBSITE_ID_ALL);
+        if ($subsiteID === self::SUBSITE_ID_ALL) {
+            return Subsite::withDisabledSubsiteFilter(function () use ($params, $sort, $limit) {
+                return parent::sourceRecords($params, $sort, $limit);
+            });
+        }
+        return SubsiteState::singleton()->withState(function (SubsiteState $newState) use (
+            $subsiteID,
+            $params,
+            $sort,
+            $limit
+        ) {
+            $newState->setSubsiteId($subsiteID);
+            return parent::sourceRecords($params, $sort, $limit);
+        });
     }
 }

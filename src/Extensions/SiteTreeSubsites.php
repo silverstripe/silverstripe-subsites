@@ -2,7 +2,6 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
-use SilverStripe\Dev\Deprecation;
 use Page;
 use SilverStripe\CMS\Forms\SiteTreeURLSegmentField;
 use SilverStripe\CMS\Model\SiteTree;
@@ -10,7 +9,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Convert;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
@@ -76,13 +74,7 @@ class SiteTreeSubsites extends DataExtension
             return;
         }
 
-        $subsiteID = null;
-        if (Subsite::$force_subsite) {
-            $subsiteID = Subsite::$force_subsite;
-        } else {
-            $subsiteID = SubsiteState::singleton()->getSubsiteId();
-        }
-
+        $subsiteID = SubsiteState::singleton()->getSubsiteId();
         if ($subsiteID === null) {
             return;
         }
@@ -423,7 +415,7 @@ class SiteTreeSubsites extends DataExtension
         // This helps deal with Link() returning an absolute URL.
         $url = Director::absoluteURL($this->owner->Link($action));
         if ($this->owner->SubsiteID) {
-            $url = preg_replace('/\/\/[^\/]+\//', '//' . $this->owner->Subsite()->domain() . '/', $url ?? '');
+            $url = preg_replace('#//[^/]+#', '//' . $this->owner->Subsite()->domain(), $url);
         }
         return $url;
     }
@@ -442,22 +434,6 @@ class SiteTreeSubsites extends DataExtension
         $url = Director::absoluteURL($this->owner->Link($action));
         $link = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
         return $link;
-    }
-
-    /**
-     * This function is marked as deprecated for removal in 5.0.0 in silverstripe/cms
-     * so now simply passes execution to where the functionality exists for backwards compatiblity.
-     * CMS 4.0.0 SiteTree already throws a SilverStripe deprecation error before calling this function.
-     * @deprecated 2.2.0 Use updatePreviewLink() instead
-     *
-     * @param string|null $action
-     * @return string
-     */
-    public function alternatePreviewLink($action = null)
-    {
-        Deprecation::notice('2.2.0', 'Use updatePreviewLink() instead');
-        $link = '';
-        return $this->updatePreviewLink($link, $action);
     }
 
     /**
@@ -525,22 +501,14 @@ class SiteTreeSubsites extends DataExtension
     public function augmentValidURLSegment()
     {
         // If this page is being filtered in the current subsite, then no custom validation query is required.
-        $subsite = Subsite::$force_subsite ?: SubsiteState::singleton()->getSubsiteId();
-        if (empty($this->owner->SubsiteID) || $subsite == $this->owner->SubsiteID) {
+        $subsiteID = SubsiteState::singleton()->getSubsiteId();
+        if (empty($this->owner->SubsiteID) || $subsiteID == $this->owner->SubsiteID) {
             return null;
         }
-
-        // Backup forced subsite
-        $prevForceSubsite = Subsite::$force_subsite;
-        Subsite::$force_subsite = $this->owner->SubsiteID;
-
-        // Repeat validation in the correct subsite
-        $isValid = $this->owner->validURLSegment();
-
-        // Restore
-        Subsite::$force_subsite = $prevForceSubsite;
-
-        return (bool)$isValid;
+        return SubsiteState::singleton()->withState(function (SubsiteState $newState) {
+            $newState->setSubsiteId($this->owner->SubsiteID);
+            return (bool) $this->owner->validURLSegment();
+        });
     }
 
     /**

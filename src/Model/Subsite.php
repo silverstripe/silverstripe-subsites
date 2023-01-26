@@ -53,14 +53,6 @@ class Subsite extends DataObject
     public static $disable_subsite_filter = false;
 
     /**
-     * Allows you to force a specific subsite ID, or comma separated list of IDs.
-     * Only works for reading. An object cannot be written to more than 1 subsite.
-     *
-     * @deprecated 2.0.0 Use SubsiteState::singleton()->withState() instead.
-     */
-    public static $force_subsite = null;
-
-    /**
      * Whether to write a host-map.php file
      *
      * @config
@@ -192,24 +184,6 @@ class Subsite extends DataObject
     }
 
     /**
-     * This function gets the current subsite ID from the session. It used in the backend so Ajax requests
-     * use the correct subsite. The frontend handles subsites differently. It calls getSubsiteIDForDomain
-     * directly from ModelAsController::getNestedController. Only gets Subsite instances which have their
-     * {@link IsPublic} flag set to TRUE.
-     *
-     * You can simulate subsite access without creating virtual hosts by appending ?SubsiteID=<ID> to the request.
-     *
-     * @return int ID of the current subsite instance
-     *
-     * @deprecated 2.0.0 Use SubsiteState::singleton()->getSubsiteId() instead
-     */
-    public static function currentSubsiteID()
-    {
-        Deprecation::notice('2.0.0', 'Use SubsiteState::singleton()->getSubsiteId() instead');
-        return SubsiteState::singleton()->getSubsiteId();
-    }
-
-    /**
      * Switch to another subsite through storing the subsite identifier in the current PHP session.
      * Only takes effect when {@link SubsiteState::singleton()->getUseSessions()} is set to TRUE.
      *
@@ -218,7 +192,7 @@ class Subsite extends DataObject
     public static function changeSubsite($subsite)
     {
         // Session subsite change only meaningful if the session is active.
-        // Otherwise we risk setting it to wrong value, e.g. if we rely on currentSubsiteID.
+        // Otherwise we risk setting it to wrong value
         if (!SubsiteState::singleton()->getUseSessions()) {
             return;
         }
@@ -350,6 +324,15 @@ class Subsite extends DataObject
     public static function disable_subsite_filter($disabled = true)
     {
         self::$disable_subsite_filter = $disabled;
+    }
+
+    public static function withDisabledSubsiteFilter(callable $callable, bool $disabled = true): mixed
+    {
+        $orig = self::$disable_subsite_filter;
+        self::disable_subsite_filter($disabled);
+        $ret = $callable();
+        self::disable_subsite_filter($orig);
+        return $ret;
     }
 
     /**

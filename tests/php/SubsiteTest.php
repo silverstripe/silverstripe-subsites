@@ -301,8 +301,10 @@ class SubsiteTest extends BaseSubsiteTest
         );
 
         $this->assertEquals($_SERVER['HTTP_HOST'], singleton(Subsite::class)->PrimaryDomain);
+
+        // If there is a Director::baseURL() value this will also be included
         $this->assertEquals(
-            'http://' . $_SERVER['HTTP_HOST'] . Director::baseURL(),
+            'http://' . $_SERVER['HTTP_HOST'],
             singleton(Subsite::class)->absoluteBaseURL()
         );
     }
@@ -328,22 +330,22 @@ class SubsiteTest extends BaseSubsiteTest
     public function domainProtocolProvider()
     {
         return [
-            [Subsite::class, 'domaintest2', false, 'http://two.mysite.com/'],
-            [SubsiteDomain::class, 'dt2a', false, 'http://two.mysite.com/'],
-            [SubsiteDomain::class, 'dt2b', false, 'http://subsite.mysite.com/'],
-            [Subsite::class, 'domaintest4', false, 'https://www.primary.com/'],
-            [SubsiteDomain::class, 'dt4a', false, 'https://www.primary.com/'],
-            [SubsiteDomain::class, 'dt4b', false, 'http://www.secondary.com/'],
-            [Subsite::class, 'domaintest5', false, 'http://www.tertiary.com/'],
-            [SubsiteDomain::class, 'dt5', false,  'http://www.tertiary.com/'],
-            [Subsite::class, 'domaintest2', true, 'https://two.mysite.com/'],
-            [SubsiteDomain::class, 'dt2a', true, 'https://two.mysite.com/'],
-            [SubsiteDomain::class, 'dt2b', true, 'https://subsite.mysite.com/'],
-            [Subsite::class, 'domaintest4', true, 'https://www.primary.com/'],
-            [SubsiteDomain::class, 'dt4a', true, 'https://www.primary.com/'],
-            [SubsiteDomain::class, 'dt4b', true, 'http://www.secondary.com/'],
-            [Subsite::class, 'domaintest5', true, 'http://www.tertiary.com/'],
-            [SubsiteDomain::class, 'dt5', true, 'http://www.tertiary.com/'],
+            [Subsite::class, 'domaintest2', false, 'http://two.mysite.com'],
+            [SubsiteDomain::class, 'dt2a', false, 'http://two.mysite.com'],
+            [SubsiteDomain::class, 'dt2b', false, 'http://subsite.mysite.com'],
+            [Subsite::class, 'domaintest4', false, 'https://www.primary.com'],
+            [SubsiteDomain::class, 'dt4a', false, 'https://www.primary.com'],
+            [SubsiteDomain::class, 'dt4b', false, 'http://www.secondary.com'],
+            [Subsite::class, 'domaintest5', false, 'http://www.tertiary.com'],
+            [SubsiteDomain::class, 'dt5', false,  'http://www.tertiary.com'],
+            [Subsite::class, 'domaintest2', true, 'https://two.mysite.com'],
+            [SubsiteDomain::class, 'dt2a', true, 'https://two.mysite.com'],
+            [SubsiteDomain::class, 'dt2b', true, 'https://subsite.mysite.com'],
+            [Subsite::class, 'domaintest4', true, 'https://www.primary.com'],
+            [SubsiteDomain::class, 'dt4a', true, 'https://www.primary.com'],
+            [SubsiteDomain::class, 'dt4b', true, 'http://www.secondary.com'],
+            [Subsite::class, 'domaintest5', true, 'http://www.tertiary.com'],
+            [SubsiteDomain::class, 'dt5', true, 'http://www.tertiary.com'],
         ];
     }
 
