@@ -1,7 +1,6 @@
 ---
 Name: subsiteconfig
-After:
-  - 'framework/*'
+After: 'assetadmin'
 ---
 SilverStripe\AssetAdmin\Controller\AssetAdmin:
   treats_subsite_0_as_global: true
