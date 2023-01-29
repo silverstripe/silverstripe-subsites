@@ -1,7 +1,5 @@
 ---
 Name: subsiteextensions
-After:
-  - 'framework/*'
 ---
 SilverStripe\CMS\Model\SiteTree:
   extensions:
