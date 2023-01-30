@@ -38,8 +38,7 @@
             "dev-master": "2.x-dev"
         },
         "expose": [
-            "client/javascript",
-            "client/css"
+            "client/dist"
         ]
     },
     "minimum-stability": "dev",
