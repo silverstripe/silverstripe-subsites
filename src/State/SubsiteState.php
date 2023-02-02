@@ -5,6 +5,7 @@ namespace SilverStripe\Subsites\State;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Resettable;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * SubsiteState provides static access to the current state for subsite related data during a request
@@ -33,6 +34,9 @@ class SubsiteState implements Resettable
      */
     public function setSubsiteId(?int $id): static
     {
+        if (!ctype_digit((string) $id) && !is_null($id)) {
+            Deprecation::notice('2.8.0', 'Passing multiple IDs is deprecated, only pass a single ID instead.');
+        }
         if (is_null($this->originalSubsiteId)) {
             $this->originalSubsiteId = (int) $id;
         }

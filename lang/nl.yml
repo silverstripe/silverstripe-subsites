@@ -53,11 +53,12 @@ nl:
       one: 'Een subsite domein'
       other: '{count} subsite domeinen'
     PROTOCOL_AUTOMATIC: Automatisch
-    PROTOCOL_DESCRIPTION: 'Markeer als standaard domein voor deze subsite'
+    PROTOCOL_DESCRIPTION: 'Wordt gebruikt bij het genereren van links naar deze subsite. <br />''Automatisch'' houdt in dat het huidige protocol gebruikt zal worden.'
     PROTOCOL_HTTP: 'http://'
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protocol
     SINGULARNAME: 'Subsite Domein'
+    ISPRIMARY_DESCRIPTION: 'Dit is de standaard domeinnaam voor deze subsite'
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Toon de inhoud van een pagina op een andere subsite'
     OverrideNote: 'Overschrijft de overgenomen tekst van de gelinkte pagina'
