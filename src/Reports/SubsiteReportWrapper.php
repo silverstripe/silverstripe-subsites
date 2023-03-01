@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Reports;
 
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\Reports\ReportWrapper;
@@ -75,10 +76,14 @@ class SubsiteReportWrapper extends ReportWrapper
     }
 
     /**
+     * @deprecated 2.7.0 Will be removed without equivalent functionality to replace it
      * @return void
      */
     public function afterQuery()
     {
+        Deprecation::withNoReplacement(function () {
+            Deprecation::notice('2.7.0', 'Will be removed without equivalent functionality to replace it.');
+        });
         // Manually manage the subsite filtering
         Subsite::$force_subsite = null;
     }
