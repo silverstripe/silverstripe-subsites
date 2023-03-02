@@ -17,7 +17,7 @@ class WildcardDomainField extends TextField
     public function validate($validator)
     {
         if ($this->checkHostname($this->Value())) {
-            return true;
+            return $this->extendValidationResult(true, $validator);
         }
 
         $validator->validationError(
@@ -25,7 +25,7 @@ class WildcardDomainField extends TextField
             _t('DomainNameField.INVALID_DOMAIN', 'Invalid domain name'),
             'validation'
         );
-        return false;
+        return $this->extendValidationResult(false, $validator);
     }
 
     /**
