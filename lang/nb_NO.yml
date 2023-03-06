@@ -14,3 +14,27 @@ nb_NO:
     SINGULARNAME: 'Subsite Domain'
   SubsitesVirtualPage:
     SINGULARNAME: 'Subdomeners Virtuelle Side'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'klikk her for å endre dette innholdet'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: subdomener
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    SubsiteFieldLabel: Subdomene
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'All subsites'
+    ACCESSONLY: 'Only these subsites'
+    ACCESSRADIOTITLE: 'Give this group access to'
+    SECURITYTABTITLE: subdomener
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Konfigurasjon
+    PLURALNAME: subdomener
+    SINGULARNAME: Subdomene
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Domain
+    PLURALNAME: 'Subsite Domains'
+    SINGULARNAME: 'Subsite Domain'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SINGULARNAME: 'Subdomeners Virtuelle Side'
+    SubsiteField: Subdomene
+  Subsites:
+    DomainFieldLabel: Domain

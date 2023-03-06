@@ -15,3 +15,56 @@ hr:
     RedirectURLFieldLabel: 'Link preusmjeravanja'
     ThemeFieldLabel: Tema
     TitleFieldLabel: 'Naziv podsajta'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'Klikni ovdje za uređivanje sadržaja'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Podsajtovi
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'Svi sajtovi'
+    SUBSITENOTICE: 'Direktoriji i datoteke kreirane u glavnom sajtu su dostupne svim podsajtovima.'
+    SubsiteFieldLabel: Podsajt
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'Svi podsajtovi'
+    ACCESSONLY: 'Samo ovi podsajtovi'
+    ACCESSRADIOTITLE: 'Dodijeli ovoj grupi pristup za'
+    GlobalGroup: 'globalna grupa'
+    MANAGE_SUBSITES: 'Upravljaj podsajtove za grupe'
+    MANAGE_SUBSITES_HELP: 'Mogućnost limitiranja prava za grupu za jedan ili više podsajtova.'
+    SECURITYTABTITLE: Podsajtovi
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    Saved: 'Spremljeno, molimo osvježite povezane stranice.'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: Kopiraj
+    CopyToSubsite: 'Kopiraj stranicu u podsajt'
+    CopyToSubsiteWithChildren: 'Uključi podstranice?'
+    SubsiteOperations: 'Operacije podređenog prostora'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Konfiguracija
+    CopyMessage: 'Kreirana kopija od {title}'
+    CustomExtraMeta: 'Prilagođeni Meta tagovi'
+    CustomMetaDescription: Opis
+    CustomMetaKeywords: 'Ključne riječi'
+    CustomMetaTitle: Naslov
+    PLURALNAME: Podsajtovi
+    PageTypeBlacklistField: 'Ne dopuštaj tipove stranica?'
+    SINGULARNAME: Podsajt
+    SiteConfigSubtitle: 'vaš slogan ovdje'
+    SiteConfigTitle: 'Naziv vašeg weba'
+    ValidateTitle: 'Molimo dodajte "Naslov"'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Domena
+    DOMAIN_DESCRIPTION: 'Hostname ovog podsajta (bez protokola). Omogućava wildcard (*).'
+    ISPRIMARY_DESCRIPTION: 'Označi kao zadanu domenu za ovu podstranicu'
+    IS_PRIMARY: 'Da li je glavna domena?'
+    PLURALNAME: 'Domene podsajtova'
+    PROTOCOL_AUTOMATIC: Automatsko
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protokol
+    SINGULARNAME: 'Domena podsajta'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    DESCRIPTION: 'Prikazuje sadržaj stranice na drugom podsajtu'
+    SINGULARNAME: 'Virtualna stranica podsajta'
+    SubsiteField: Podsajt
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Sajtovi

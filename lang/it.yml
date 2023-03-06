@@ -15,3 +15,56 @@ it:
     RedirectURLFieldLabel: 'URL di reindirizzamento'
     ThemeFieldLabel: Tema
     TitleFieldLabel: 'Nome sottosito'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'Clicca qui per editare il contenuto'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Sottositi
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'Tutti i siti'
+    SUBSITENOTICE: 'Le cartelle e i files creati nel sito principale sono accessibili da tutti i sottositi.'
+    SubsiteFieldLabel: Sottosito
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'Tutti i sottositi'
+    ACCESSONLY: 'Solo questi sottositi'
+    ACCESSRADIOTITLE: 'Dai a questo gruppo accesso a'
+    GlobalGroup: 'Gruppo globale'
+    MANAGE_SUBSITES: 'Gestisci sottositi per gruppi'
+    MANAGE_SUBSITES_HELP: 'Abilità di limitare i permessi per un gruppo di uno o più sottositi.'
+    SECURITYTABTITLE: Sottositi
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    Saved: 'Salvato, si prega di aggiornare le pagine relative.'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: Copia
+    CopyToSubsite: 'Copia pagina in sottosito'
+    CopyToSubsiteWithChildren: 'Includi pagine figlie?'
+    SubsiteOperations: 'Operazioni sui sottositi'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Configurazione
+    CopyMessage: 'Creata una copia di {title}'
+    CustomExtraMeta: 'Meta Tags personalizzati'
+    CustomMetaDescription: Descrizione
+    CustomMetaKeywords: Keywords
+    CustomMetaTitle: Titolo
+    PLURALNAME: Sottositi
+    PageTypeBlacklistField: 'Disabilita tipi di pagina?'
+    SINGULARNAME: Sottosito
+    SiteConfigSubtitle: 'Lo slogan qui'
+    SiteConfigTitle: 'Nome del sito'
+    ValidateTitle: 'Prego aggiungere il "Titolo"'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Dominio
+    DOMAIN_DESCRIPTION: 'Nome host di questo sottosito (escluso il protocollo). Permette caratteri wildcard (*).'
+    ISPRIMARY_DESCRIPTION: 'Segna questo come il dominio di default per questo sottosito'
+    IS_PRIMARY: 'È il dominio primario?'
+    PLURALNAME: 'Domini del sottosito'
+    PROTOCOL_AUTOMATIC: Automatico
+    PROTOCOL_HTTP: 'http://'
+    PROTOCOL_HTTPS: 'https://'
+    Protocol: Protocollo
+    SINGULARNAME: 'Dominio del sottosito'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    DESCRIPTION: 'Mostra il contenuto di una pagina appartenente ad un altro sottosito'
+    SINGULARNAME: 'Pagina virtuale dei sottositi'
+    SubsiteField: Sottosito
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Siti

@@ -14,3 +14,32 @@ ja:
     SINGULARNAME: サブサイトのドメイン
   SubsitesVirtualPage:
     SINGULARNAME: サブサイトの仮想ページ
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: ここをクリックしてコンテンツを編集
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: サブサイト
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    SubsiteFieldLabel: サブサイト
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 全てのサブサイト
+    ACCESSONLY: これらのサブサイトのみ
+    ACCESSRADIOTITLE: このグループに選択先へのアクセス権を与える
+    SECURITYTABTITLE: サブサイト
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: メタタグをカスタム
+    CustomMetaDescription: 説明文
+    CustomMetaTitle: タイトル
+    PLURALNAME: サブサイト
+    SINGULARNAME: サブサイト
+    SiteConfigTitle: サイト名
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: ドメイン
+    PLURALNAME: サブサイトのドメイン
+    SINGULARNAME: サブサイトのドメイン
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SINGULARNAME: サブサイトの仮想ページ
+    SubsiteField: サブサイト
+  Subsites:
+    DomainFieldLabel: ドメイン
+    LanguageFieldLabel: 言語
+    ThemeFieldLabel: テーマ

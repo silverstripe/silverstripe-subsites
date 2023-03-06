@@ -10,3 +10,33 @@ fa_IR:
     PrimaryDomainFieldLabel: 'دامنه اولیه'
     ThemeFieldLabel: پوسته
     TitleFieldLabel: 'نام زیر سایت'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'برای ویرایش محتوا اینجا را کلیک کنید'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: 'زیر سایت ها'
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'تمامی سایت ها'
+    SubsiteFieldLabel: 'زیر سایت'
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'تمامی زیر سایت ها'
+    ACCESSONLY: 'فقط این زیر سایت ها'
+    SECURITYTABTITLE: 'زیر سایت ها'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: پیکربندی
+    CustomExtraMeta: 'متا تگ‌های اختصاصی'
+    CustomMetaDescription: توضحیات
+    CustomMetaKeywords: 'کلید واژه ها'
+    CustomMetaTitle: عنوان
+    PLURALNAME: 'زیر سایت ها'
+    SINGULARNAME: 'زیر سایت'
+    SiteConfigTitle: 'نام سایت شما'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: دامنه
+    PLURALNAME: 'دامنه های زیر سایت'
+    PROTOCOL_AUTOMATIC: 'به صورت خودکار'
+    Protocol: پروتکل
+    SINGULARNAME: 'دمنه زیرسایت'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SubsiteField: 'زیر سایت'
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: 'سایت ها'

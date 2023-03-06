@@ -8,6 +8,7 @@ fi:
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Kaikki sivustot'
     SubsiteFieldLabel: Alasivusto
+    SUBSITENOTICE: 'Kansiot ja tiedostot, jotka on luotu pääsivustolla, ovat käytettävissä kaikissa alisivustoissa.'
   SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'Kaikki alasivustot'
     ACCESSONLY: 'Vain nämä alasivustot'
@@ -15,12 +16,15 @@ fi:
     GlobalGroup: Globaaliryhmä
     MANAGE_SUBSITES: 'Hallinnoi ryhmien alasivustoja'
     SECURITYTABTITLE: Alasivustot
+    MANAGE_SUBSITES_HELP: 'Mahdollisuus rajoittaa ryhmän oikeuksia yhdelle tai useammalle alisivustolle.'
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Sivuston sisältö'
+    Saved: 'Tallennettu, ole hyvä ja päivitä liittyvät sivut.'
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopioi
     CopyToSubsite: 'Kopioi sivu alasivustolle'
     SubsiteOperations: 'Alasivuston toiminnot'
+    CopyToSubsiteWithChildren: 'Sisällytä alasivut?'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Asetukset
     CustomMetaDescription: Kuvaus
@@ -32,13 +36,27 @@ fi:
       other: '{count} alasivua'
     SiteConfigSubtitle: 'Tähän sloganisi'
     SiteConfigTitle: 'Sivuston nimi'
+    CopyMessage: 'Luotiin kopio lähteestä {title}'
+    CustomExtraMeta: 'Omat meta-tagit'
+    PageTypeBlacklistField: 'Kiellä sivutyyppien käyttö?'
+    SINGULARNAME: Alasivusto
+    ValidateTitle: 'Lisää "Otsikko"'
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Verkkotunnus
     PROTOCOL_HTTP: 'http://'
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokolla
+    DOMAIN_DESCRIPTION: 'Tämä alisivuston isäntänimi (ilman protokollaa). Sallii wildcard-merkit (*).'
+    ISPRIMARY_DESCRIPTION: 'Merkitse tämä oletusdomainiksi tälle alisivustolle'
+    IS_PRIMARY: 'On päädomain?'
+    PLURALNAME: 'Alisivuston domain-osoitteet'
+    PROTOCOL_AUTOMATIC: Automaattinen
+    SINGULARNAME: 'Alisivuston domain-osoite'
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SubsiteField: Alasivusto
+    DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
+    PLURALNAME: 'Alisivustojen virtuaaliset sivut'
+    SINGULARNAME: 'Alisivuston Virtuaalisivu'
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sivustot
   Subsite:

@@ -1,0 +1,10 @@
+sk:
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Konfigurácia
+    CustomExtraMeta: 'Vlastné Meta Tagy'
+    CustomMetaDescription: Popis
+    CustomMetaTitle: Názov
+    SiteConfigTitle: 'Názov vášho webu'
+  Subsites:
+    LanguageFieldLabel: Jazyk
+    ThemeFieldLabel: Téma
