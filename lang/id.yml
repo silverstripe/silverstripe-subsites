@@ -15,5 +15,24 @@ id:
     ReportDropdown: Situs
   Subsites:
     LanguageFieldLabel: Bahasa
+    ThemeFieldLabel: Tema
   SubsitesVirtualPage:
     SubsiteField: Subsitus
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsitus
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    SubsiteFieldLabel: Subsitus
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    SECURITYTABTITLE: Subsitus
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Penanda Meta'
+    CustomMetaDescription: Deskripsi
+    CustomMetaKeywords: 'Kata kunci'
+    CustomMetaTitle: Judul
+    PLURALNAME: Subsitus
+    SINGULARNAME: Subsitus
+    SiteConfigTitle: 'Nama Situs'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SubsiteField: Subsitus
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Situs

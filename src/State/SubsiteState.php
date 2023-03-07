@@ -34,9 +34,6 @@ class SubsiteState implements Resettable
      */
     public function setSubsiteId(?int $id): static
     {
-        if (!ctype_digit((string) $id) && !is_null($id)) {
-            Deprecation::notice('2.8.0', 'Passing multiple IDs is deprecated, only pass a single ID instead.');
-        }
         if (is_null($this->originalSubsiteId)) {
             $this->originalSubsiteId = (int) $id;
         }

@@ -32,3 +32,25 @@ cs:
     TitleFieldLabel: 'Název subsite'
   SubsitesVirtualPage:
     PLURALNAME: 'Základní stránky'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsites
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    SECURITYTABTITLE: Subsites
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: Kopírovat
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Konfigurace
+    CustomExtraMeta: 'Vlastní meta tagy'
+    CustomMetaDescription: Popis
+    CustomMetaKeywords: 'Klíčová slova'
+    CustomMetaTitle: Název
+    PLURALNAME: Subsites
+    SiteConfigSubtitle: 'Slogan Vašeho webu'
+    SiteConfigTitle: 'Název Vašeho webu'
+    ValidateTitle: 'Prosím vložte "Název"'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Doména
+    PLURALNAME: 'Domény webů'
+    SINGULARNAME: 'Doména webu'
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Weby
