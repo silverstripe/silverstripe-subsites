@@ -222,6 +222,7 @@ or by defining the subsiteCMSShowInMenu function in your admin:
 
 When using Subsites in combination with Fluent module, the Subsites module sets the i18n locale to the language defined in the current Subsite. When this behaviour is not desired and you need to use the locale in FluentState you can set the current Fluent locale in your PageController like this:
 
+*PageController.php*
 ```
 :::php
      protected function init(){
