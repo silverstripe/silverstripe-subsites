@@ -1,0 +1,10 @@
+sv:
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Konfiguration
+    CustomExtraMeta: 'Egna metataggar'
+    CustomMetaDescription: Beskrivning
+    CustomMetaTitle: Titel
+    SiteConfigTitle: 'Din Sajts Namn'
+  Subsites:
+    LanguageFieldLabel: Språk
+    ThemeFieldLabel: Tema

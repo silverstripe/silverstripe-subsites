@@ -14,3 +14,26 @@ tr_TR:
     SINGULARNAME: 'Subsite Domain'
   SubsitesVirtualPage:
     SINGULARNAME: 'Alt Site Sanal Sayfa'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'İçeriği düzenlemek için tıklayınız'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: 'Alt Siteler'
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    SubsiteFieldLabel: 'Alt Site'
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'All subsites'
+    ACCESSONLY: 'Only these subsites'
+    ACCESSRADIOTITLE: 'Give this group access to'
+    SECURITYTABTITLE: 'Alt Siteler'
+  SilverStripe\Subsites\Model\Subsite:
+    PLURALNAME: 'Alt Siteler'
+    SINGULARNAME: 'Alt Site'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Domain
+    PLURALNAME: 'Subsite Domains'
+    SINGULARNAME: 'Subsite Domain'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SINGULARNAME: 'Alt Site Sanal Sayfa'
+    SubsiteField: 'Alt Site'
+  Subsites:
+    DomainFieldLabel: Domain

@@ -13,3 +13,48 @@ ar:
     RedirectURLFieldLabel: 'إعادة توجيه عنوان موقع الويب'
     ThemeFieldLabel: المحور
     TitleFieldLabel: 'اسم الموقع الفرعي'
+  SilverStripe\CMS\Model\VirtualPage:
+    EDITCONTENT: 'انقر هنا لتحرير المحتوى'
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: 'المواقع الفرعية'
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'كافة المواقع'
+    SUBSITENOTICE: 'يمكن الوصول إلى المجلدات والملفات التي تم إنشاؤها في الموقع الرئيسي من طرف كل المواقع الفرعية.'
+    SubsiteFieldLabel: 'الموقع الفرعي'
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    ACCESSALL: 'كل المواقع الفرعية'
+    ACCESSONLY: 'فقط هذه المواقع الفرعية'
+    ACCESSRADIOTITLE: 'امنح هذه المجموعة تصريح الولوج إلى'
+    GlobalGroup: 'المجموعة العامة'
+    MANAGE_SUBSITES: 'إدارة مواقع فرعية للمجموعات'
+    MANAGE_SUBSITES_HELP: 'القدرة على الحد من أذونات مجموعة ما على موقع فرعي واحدة أو أكثر.'
+    SECURITYTABTITLE: 'المواقع الفرعية'
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    Saved: 'تمّ الحفظ، يرجى تحديث الصفحات ذات الصلة.'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: نسخ
+    CopyToSubsite: 'نسخ الصفحة في موقع فرعي'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: المواصفات
+    CopyMessage: 'إنشاء نسخة من {title}'
+    CustomExtraMeta: 'تخصيص Meta Tags'
+    CustomMetaDescription: الوصف
+    CustomMetaKeywords: 'كلمات البحث'
+    CustomMetaTitle: عنوان
+    PLURALNAME: 'المواقع الفرعية'
+    PageTypeBlacklistField: 'عدم السماح بأصناف الصفحات؟'
+    SINGULARNAME: 'الموقع الفرعي'
+    SiteConfigSubtitle: 'هنا سطر الوصف الخاص بك'
+    SiteConfigTitle: 'اسم موقعك'
+    ValidateTitle: 'الرجاء إضافة "عنوان"'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: النطاق
+    PLURALNAME: 'نطاقات موقع فرعي'
+    SINGULARNAME: 'نطاق موقع فرعي'
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
+    PLURALNAME: 'قاعدة الصفحات'
+    SINGULARNAME: 'الصفحة الإفتراضية للمواقع الفرعية'
+    SubsiteField: 'الموقع الفرعي'
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: المواقع
