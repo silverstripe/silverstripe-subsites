@@ -11,3 +11,25 @@ lt:
     PrimaryDomainFieldLabel: 'Pagrindinis domenas'
     RedirectURLFieldLabel: 'Nukreipimo nuoroda'
     ThemeFieldLabel: Tema
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    AllSitesDropdownOpt: 'Visos svetainės'
+  SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    Saved: 'Išsaugota, prašome atnaujinti susijusius puslapius'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    CopyAction: Kopijuoti
+    CopyToSubsite: 'Kopijuoti puslapį į kitą svetainę'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Nustatymai
+    CopyMessage: 'Sukurta {title} kopija'
+    CustomExtraMeta: 'Kitos meta žymės'
+    CustomMetaDescription: Aprašymas
+    CustomMetaKeywords: Raktažodžiai
+    CustomMetaTitle: Pavadinimas
+    PageTypeBlacklistField: 'Neleidžiami puslapių tipai'
+    SiteConfigSubtitle: 'Jūsų svetainės šūkis'
+    SiteConfigTitle: 'Jūsų svetainės pavadinimas'
+    ValidateTitle: 'Prašome įvesti "Pavadinimą"'
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    DOMAIN: Domenas
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Svetainės
