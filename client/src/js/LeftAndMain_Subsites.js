@@ -1,9 +1,42 @@
 /* jslint browser: true, nomen: true */
-/* global $, window, jQuery */
+/* global $, ss, window, jQuery */
 (function ($) {
   // eslint-disable-next-line no-shadow
   $.entwine('ss', ($) => {
     $('#SubsitesSelect').entwine({
+      /**
+       * Store current subsite id and ask to reload the page if it detects any change
+       */
+      detectSubsiteChange(selectedId) {
+        const sessionKey = 'admin_subsite_id';
+        let reloadPending = false;
+        try {
+          localStorage.setItem(sessionKey, selectedId);
+
+          window.addEventListener('storage', () => {
+            if (reloadPending) {
+              return;
+            }
+            const tabId = localStorage.getItem(sessionKey);
+            // eslint-disable-next-line eqeqeq
+            if (tabId && selectedId != tabId) {
+              const msg = ss.i18n._t('Admin.SUBSITECHANGED', 'You\'ve changed subsite in another tab, do you want to reload the page?');
+              reloadPending = true; // Don't trigger multiple confirm dialog
+              // eslint-disable-next-line no-alert
+              if (confirm(msg)) {
+                window.location.reload();
+              }
+              // Don't ask again if cancelled
+            }
+          });
+        } catch (e) {
+          // Maybe storage is full or not available, disable this feature and ignore error
+        }
+      },
+
+      onmatch() {
+        this.detectSubsiteChange(this.find('option[selected]').attr('value'));
+      },
       onadd() {
         this.on('change', function () {
           window.location.search = $.query.set('SubsiteID', $(this).val());
