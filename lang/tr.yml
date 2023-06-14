@@ -1,0 +1,13 @@
+tr:
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Kişisel Meta Etiketleri'
+    CustomMetaDescription: Açıklama
+    CustomMetaTitle: Başlık
+    SiteConfigTitle: 'Site Adınız'
+    belongs_many_many_Groups: Gruplar
+    db_Language: Dil
+    db_Theme: Tema
+    db_Title: Başlık
+  Subsites:
+    LanguageFieldLabel: Dil
+    ThemeFieldLabel: Tema

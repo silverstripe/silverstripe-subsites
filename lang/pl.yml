@@ -1,0 +1,13 @@
+pl:
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Własne meta tagi'
+    CustomMetaDescription: Opis
+    CustomMetaTitle: Tytuł
+    SiteConfigTitle: 'Nazwa twojego serwisu'
+    belongs_many_many_Groups: Grupy
+    db_Language: Język
+    db_Theme: Szablon
+    db_Title: Tytuł
+  Subsites:
+    LanguageFieldLabel: Język
+    ThemeFieldLabel: Szablon

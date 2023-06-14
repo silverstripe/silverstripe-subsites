@@ -5,6 +5,10 @@ sk:
     CustomMetaDescription: Popis
     CustomMetaTitle: Názov
     SiteConfigTitle: 'Názov vášho webu'
+    belongs_many_many_Groups: Skupiny
+    db_Language: Jazyk
+    db_Theme: Téma
+    db_Title: Názov
   Subsites:
     LanguageFieldLabel: Jazyk
     ThemeFieldLabel: Téma

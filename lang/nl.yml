@@ -19,6 +19,7 @@ nl:
     MANAGE_SUBSITES: 'Beheer subsites voor groepen'
     MANAGE_SUBSITES_HELP: 'Bepaal de toegangsrechten voor groepen per subsite'
     SECURITYTABTITLE: Subsites
+    many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Site inhoud'
     Saved: 'Opgeslagen, pas onderliggende pagina''s aan.'
@@ -27,6 +28,7 @@ nl:
     CopyToSubsite: 'Kopieer pagina''s naar subsite'
     CopyToSubsiteWithChildren: 'Inclusief onderliggende pagina''s?'
     SubsiteOperations: 'Subsite Acties'
+    has_one_Subsite: Subsite
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Configuratie
     CopyMessage: 'Kopie gemaakt van {title}'
@@ -44,6 +46,12 @@ nl:
     SiteConfigTitle: 'Jouw Site Naam'
     ThemeFieldEmptyString: '-'
     ValidateTitle: 'Voeg een "Titel" toe'
+    belongs_many_many_Groups: Groepen
+    db_DefaultSite: 'Standaard Site'
+    db_Language: Taal
+    db_RedirectURL: 'Redirect URL'
+    db_Theme: Thema
+    db_Title: Titel
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domein
     DOMAIN_DESCRIPTION: 'Domeinnaam van deze subsite (zonder http), wildcards zijn toegestaan (*).'
@@ -59,6 +67,9 @@ nl:
     Protocol: Protocol
     SINGULARNAME: 'Subsite Domein'
     ISPRIMARY_DESCRIPTION: 'Dit is de standaard domeinnaam voor deze subsite'
+    db_Domain: Domein
+    db_Protocol: Protocol
+    has_one_Subsite: Subsite
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Toon de inhoud van een pagina op een andere subsite'
     OverrideNote: 'Overschrijft de overgenomen tekst van de gelinkte pagina'
@@ -70,6 +81,7 @@ nl:
     SubsiteField: Subsite
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sites
+    ReportDropdownSubsite: Subsite
   Subsite:
     COPYSTRUCTURE: 'Kopieer structuur vanaf:'
     NOTEMPLATE: 'Geen template'
@@ -84,3 +96,7 @@ nl:
     RedirectURLFieldLabel: 'Redirect URL'
     ThemeFieldLabel: Thema
     TitleFieldLabel: 'Subsite naam'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subsite
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subsite

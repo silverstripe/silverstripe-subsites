@@ -31,6 +31,7 @@ ru:
     MANAGE_SUBSITES: 'Управление подсайтами для групп'
     MANAGE_SUBSITES_HELP: 'Возможность ограничить права доступа для группы к одному и более подсайтам'
     SECURITYTABTITLE: Подсайты
+    many_many_Subsites: Подсайты
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'Сохранено, пожалуйста обновите связанные группы'
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
@@ -38,6 +39,7 @@ ru:
     CopyToSubsite: 'Копировать страницу на подсайт'
     CopyToSubsiteWithChildren: 'Включая под-страницы?'
     SubsiteOperations: 'Операции над подсайтами'
+    has_one_Subsite: Подсайт
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Конфигурация
     CopyMessage: 'Создана копия {title}'
@@ -51,6 +53,13 @@ ru:
     SiteConfigSubtitle: 'ваш слоган здесь'
     SiteConfigTitle: 'Название сайта'
     ValidateTitle: 'Пожалуйста, добавьте "Заголовок"'
+    belongs_many_many_Groups: Группы
+    db_DefaultSite: 'Основной сайт'
+    db_Language: Язык
+    db_RedirectURL: 'Ссылка для перенаправления'
+    db_Theme: Оформление
+    db_Title: Заголовок
+    has_many_Domains: Домены
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Домен
     DOMAIN_DESCRIPTION: 'Домен подсайта (без указания протоколов: http:// и https://). Разрешены (*) для обозначения поддоменов.'
@@ -62,9 +71,17 @@ ru:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Протокол
     SINGULARNAME: 'Домен подсайта'
+    db_Domain: Домен
+    db_Protocol: Протокол
+    has_one_Subsite: Подсайт
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Отображает содержимое выбранной страницы на другом подсайте'
     SINGULARNAME: 'Виртуальная страница подсайта'
     SubsiteField: Подсайт
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Сайты
+    ReportDropdownSubsite: Подсайт
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Подсайт
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Подсайт

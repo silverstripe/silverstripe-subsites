@@ -1,0 +1,13 @@
+fr:
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Balises Méta personnalisées'
+    CustomMetaDescription: Description
+    CustomMetaTitle: Titre
+    SiteConfigTitle: 'Nom du site'
+    belongs_many_many_Groups: Groupes
+    db_Language: Langue
+    db_Theme: Thème
+    db_Title: Titre
+  Subsites:
+    LanguageFieldLabel: Langue
+    ThemeFieldLabel: Thème
