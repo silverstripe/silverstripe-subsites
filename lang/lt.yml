@@ -29,7 +29,15 @@ lt:
     SiteConfigSubtitle: 'Jūsų svetainės šūkis'
     SiteConfigTitle: 'Jūsų svetainės pavadinimas'
     ValidateTitle: 'Prašome įvesti "Pavadinimą"'
+    belongs_many_many_Groups: Grupės
+    db_DefaultSite: 'Pagrindinė svetainė'
+    db_Language: Kalba
+    db_RedirectURL: 'Nukreipimo nuoroda'
+    db_Theme: Tema
+    db_Title: Pavadinimas
+    has_many_Domains: Domenai
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domenas
+    db_Domain: Domenas
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Svetainės
