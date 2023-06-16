@@ -31,6 +31,7 @@ hr:
     MANAGE_SUBSITES: 'Upravljaj podsajtove za grupe'
     MANAGE_SUBSITES_HELP: 'Mogućnost limitiranja prava za grupu za jedan ili više podsajtova.'
     SECURITYTABTITLE: Podsajtovi
+    many_many_Subsites: Podsajtovi
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'Spremljeno, molimo osvježite povezane stranice.'
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
@@ -38,6 +39,7 @@ hr:
     CopyToSubsite: 'Kopiraj stranicu u podsajt'
     CopyToSubsiteWithChildren: 'Uključi podstranice?'
     SubsiteOperations: 'Operacije podređenog prostora'
+    has_one_Subsite: Podsajt
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Konfiguracija
     CopyMessage: 'Kreirana kopija od {title}'
@@ -51,6 +53,13 @@ hr:
     SiteConfigSubtitle: 'vaš slogan ovdje'
     SiteConfigTitle: 'Naziv vašeg weba'
     ValidateTitle: 'Molimo dodajte "Naslov"'
+    belongs_many_many_Groups: Grupe
+    db_DefaultSite: 'Zadani sajt'
+    db_Language: Jezik
+    db_RedirectURL: 'Link preusmjeravanja'
+    db_Theme: Tema
+    db_Title: Naslov
+    has_many_Domains: Domene
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domena
     DOMAIN_DESCRIPTION: 'Hostname ovog podsajta (bez protokola). Omogućava wildcard (*).'
@@ -62,9 +71,17 @@ hr:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokol
     SINGULARNAME: 'Domena podsajta'
+    db_Domain: Domena
+    db_Protocol: Protokol
+    has_one_Subsite: Podsajt
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Prikazuje sadržaj stranice na drugom podsajtu'
     SINGULARNAME: 'Virtualna stranica podsajta'
     SubsiteField: Podsajt
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sajtovi
+    ReportDropdownSubsite: Podsajt
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Podsajt
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Podsajt

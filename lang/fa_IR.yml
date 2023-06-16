@@ -21,6 +21,7 @@ fa_IR:
     ACCESSALL: 'تمامی زیر سایت ها'
     ACCESSONLY: 'فقط این زیر سایت ها'
     SECURITYTABTITLE: 'زیر سایت ها'
+    many_many_Subsites: 'زیر سایت ها'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: پیکربندی
     CustomExtraMeta: 'متا تگ‌های اختصاصی'
@@ -30,13 +31,29 @@ fa_IR:
     PLURALNAME: 'زیر سایت ها'
     SINGULARNAME: 'زیر سایت'
     SiteConfigTitle: 'نام سایت شما'
+    belongs_many_many_Groups: گروه‌ها
+    db_DefaultSite: 'سایت پیش فرض'
+    db_Language: زبان
+    db_Theme: پوسته
+    db_Title: عنوان
+    has_many_Domains: 'دامنه ها'
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: دامنه
     PLURALNAME: 'دامنه های زیر سایت'
     PROTOCOL_AUTOMATIC: 'به صورت خودکار'
     Protocol: پروتکل
     SINGULARNAME: 'دمنه زیرسایت'
+    db_Domain: دامنه
+    db_Protocol: پروتکل
+    has_one_Subsite: 'زیر سایت'
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SubsiteField: 'زیر سایت'
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: 'سایت ها'
+    ReportDropdownSubsite: 'زیر سایت'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: 'زیر سایت'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: 'زیر سایت'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: 'زیر سایت'

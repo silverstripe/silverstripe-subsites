@@ -17,6 +17,7 @@ fi:
     MANAGE_SUBSITES: 'Hallinnoi ryhmien alasivustoja'
     SECURITYTABTITLE: Alasivustot
     MANAGE_SUBSITES_HELP: 'Mahdollisuus rajoittaa ryhmän oikeuksia yhdelle tai useammalle alisivustolle.'
+    many_many_Subsites: Alasivut
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Sivuston sisältö'
     Saved: 'Tallennettu, ole hyvä ja päivitä liittyvät sivut.'
@@ -25,6 +26,7 @@ fi:
     CopyToSubsite: 'Kopioi sivu alasivustolle'
     SubsiteOperations: 'Alasivuston toiminnot'
     CopyToSubsiteWithChildren: 'Sisällytä alasivut?'
+    has_one_Subsite: Alasivusto
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Asetukset
     CustomMetaDescription: Kuvaus
@@ -41,6 +43,13 @@ fi:
     PageTypeBlacklistField: 'Kiellä sivutyyppien käyttö?'
     SINGULARNAME: Alasivusto
     ValidateTitle: 'Lisää "Otsikko"'
+    belongs_many_many_Groups: Ryhmät
+    db_DefaultSite: Oletussivusto
+    db_Language: Kieli
+    db_RedirectURL: 'Edelleenohjaus URL'
+    db_Theme: Teema
+    db_Title: Otsikko
+    has_many_Domains: Domainit
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Verkkotunnus
     PROTOCOL_HTTP: 'http://'
@@ -52,6 +61,9 @@ fi:
     PLURALNAME: 'Alisivuston domain-osoitteet'
     PROTOCOL_AUTOMATIC: Automaattinen
     SINGULARNAME: 'Alisivuston domain-osoite'
+    db_Domain: Verkkotunnus
+    db_Protocol: Protokolla
+    has_one_Subsite: Alasivusto
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SubsiteField: Alasivusto
     DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
@@ -59,6 +71,7 @@ fi:
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sivustot
+    ReportDropdownSubsite: Alasivusto
   Subsite:
     COPYSTRUCTURE: 'Kopioi rakenne kohteesta:'
     NOTEMPLATE: 'Ei sivupohjaa'
@@ -73,3 +86,7 @@ fi:
     RedirectURLFieldLabel: 'Edelleenohjaus URL'
     ThemeFieldLabel: Teema
     TitleFieldLabel: 'Alisivuston nimi'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Alasivusto
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Alasivusto

@@ -29,11 +29,13 @@ zh:
     MANAGE_SUBSITES: 管理小组的子网站
     MANAGE_SUBSITES_HELP: 能够将权限限制在一个小组、一个或多个子网站。
     SECURITYTABTITLE: 多个子网站
+    many_many_Subsites: 多个子网站
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 已保存，请更新相关的页面。
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: 复制
     CopyToSubsite: 将页面复制到子网站
+    has_one_Subsite: 子网站
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: 配置
     CopyMessage: '已创建一个 {title} 的副本'
@@ -47,10 +49,19 @@ zh:
     SiteConfigSubtitle: 您的标语在这里
     SiteConfigTitle: 您的网站名称
     ValidateTitle: 请添加一个“标题”
+    belongs_many_many_Groups: 群组
+    db_DefaultSite: 默认网站
+    db_Language: 语言
+    db_RedirectURL: '重定向 URL'
+    db_Theme: 主题
+    db_Title: 题目
+    has_many_Domains: 域名
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: 域名
     PLURALNAME: 多个子网站域名
     SINGULARNAME: 子网站域名
+    db_Domain: 域名
+    has_one_Subsite: 子网站
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 显示另一个子网站上一个页面的内容
     PLURALNAME: 基本页面
@@ -58,3 +69,8 @@ zh:
     SubsiteField: 子网站
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: 网站
+    ReportDropdownSubsite: 子网站
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: 子网站
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: 子网站

@@ -31,6 +31,7 @@ it:
     MANAGE_SUBSITES: 'Gestisci sottositi per gruppi'
     MANAGE_SUBSITES_HELP: 'Abilità di limitare i permessi per un gruppo di uno o più sottositi.'
     SECURITYTABTITLE: Sottositi
+    many_many_Subsites: Sottositi
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'Salvato, si prega di aggiornare le pagine relative.'
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
@@ -38,6 +39,7 @@ it:
     CopyToSubsite: 'Copia pagina in sottosito'
     CopyToSubsiteWithChildren: 'Includi pagine figlie?'
     SubsiteOperations: 'Operazioni sui sottositi'
+    has_one_Subsite: Sottosito
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Configurazione
     CopyMessage: 'Creata una copia di {title}'
@@ -51,6 +53,13 @@ it:
     SiteConfigSubtitle: 'Lo slogan qui'
     SiteConfigTitle: 'Nome del sito'
     ValidateTitle: 'Prego aggiungere il "Titolo"'
+    belongs_many_many_Groups: Gruppi
+    db_DefaultSite: 'Sito di default'
+    db_Language: Lingua
+    db_RedirectURL: 'URL di reindirizzamento'
+    db_Theme: Tema
+    db_Title: Titolo
+    has_many_Domains: Domini
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Dominio
     DOMAIN_DESCRIPTION: 'Nome host di questo sottosito (escluso il protocollo). Permette caratteri wildcard (*).'
@@ -62,9 +71,17 @@ it:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protocollo
     SINGULARNAME: 'Dominio del sottosito'
+    db_Domain: Dominio
+    db_Protocol: Protocollo
+    has_one_Subsite: Sottosito
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Mostra il contenuto di una pagina appartenente ad un altro sottosito'
     SINGULARNAME: 'Pagina virtuale dei sottositi'
     SubsiteField: Sottosito
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Siti
+    ReportDropdownSubsite: Sottosito
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Sottosito
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Sottosito

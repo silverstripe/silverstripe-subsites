@@ -25,6 +25,7 @@ nb_NO:
     ACCESSONLY: 'Only these subsites'
     ACCESSRADIOTITLE: 'Give this group access to'
     SECURITYTABTITLE: subdomener
+    many_many_Subsites: subdomener
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Konfigurasjon
     PLURALNAME: subdomener
@@ -33,8 +34,18 @@ nb_NO:
     DOMAIN: Domain
     PLURALNAME: 'Subsite Domains'
     SINGULARNAME: 'Subsite Domain'
+    db_Domain: Domain
+    has_one_Subsite: Subdomene
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SINGULARNAME: 'Subdomeners Virtuelle Side'
     SubsiteField: Subdomene
   Subsites:
     DomainFieldLabel: Domain
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subdomene
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subdomene
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: Subdomene
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdownSubsite: Subdomene

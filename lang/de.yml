@@ -17,6 +17,7 @@ de:
     MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
     MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
     SECURITYTABTITLE: Subsites
+    many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Seiten Inhalt'
     Saved: 'Gespeichert, bitte aktualisieren Sie verknüpfte Seiten'
@@ -25,6 +26,7 @@ de:
     CopyToSubsite: 'Seite auf Subseite Kopieren'
     CopyToSubsiteWithChildren: 'Samt Unterseiten?'
     SubsiteOperations: 'Subseiten Operationen'
+    has_one_Subsite: Subseite
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Einstellungen
     CopyMessage: 'Kopie von {title} erstellt'
@@ -42,6 +44,13 @@ de:
     SiteConfigTitle: 'Name Ihrer Website'
     ThemeFieldEmptyString: '-'
     ValidateTitle: 'Bitte geben Sie einen Titel an'
+    belongs_many_many_Groups: Gruppe
+    db_DefaultSite: 'Standard Seite'
+    db_Language: Sprache
+    db_RedirectURL: Weierleitungs-URL
+    db_Theme: Theme
+    db_Title: Titel
+    has_many_Domains: Domains
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domäne
     DOMAIN_DESCRIPTION: 'Hostname dieser Subsite (ohne Protokol). Joker (*) ist erlaubt.'
@@ -56,6 +65,9 @@ de:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protokoll
     SINGULARNAME: 'Domäne der Subseite'
+    db_Domain: Domäne
+    db_Protocol: Protokoll
+    has_one_Subsite: Subseite
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subseite an'
     OverrideNote: 'Überschreibt den geerbten Wert der Quelle'
@@ -67,6 +79,7 @@ de:
     SubsiteField: Subseite
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Seiten
+    ReportDropdownSubsite: Subseite
   Subsite:
     COPYSTRUCTURE: 'Struktur kopieren von:'
     NOTEMPLATE: 'Kein Template'
@@ -81,3 +94,7 @@ de:
     RedirectURLFieldLabel: Weierleitungs-URL
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Name der Subsite'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subseite
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subseite
