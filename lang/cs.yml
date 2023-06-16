@@ -36,6 +36,7 @@ cs:
     MENUTITLE: Subsites
   SilverStripe\Subsites\Extensions\GroupSubsites:
     SECURITYTABTITLE: Subsites
+    many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopírovat
   SilverStripe\Subsites\Model\Subsite:
@@ -48,9 +49,16 @@ cs:
     SiteConfigSubtitle: 'Slogan Vašeho webu'
     SiteConfigTitle: 'Název Vašeho webu'
     ValidateTitle: 'Prosím vložte "Název"'
+    belongs_many_many_Groups: Skupiny
+    db_DefaultSite: 'Výchozí web'
+    db_Language: Jazyk
+    db_Theme: Téma
+    db_Title: Název
+    has_many_Domains: Domény
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Doména
     PLURALNAME: 'Domény webů'
     SINGULARNAME: 'Doména webu'
+    db_Domain: Doména
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Weby
