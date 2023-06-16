@@ -5,6 +5,10 @@ sv:
     CustomMetaDescription: Beskrivning
     CustomMetaTitle: Titel
     SiteConfigTitle: 'Din Sajts Namn'
+    belongs_many_many_Groups: Grupper
+    db_Language: Språk
+    db_Theme: Tema
+    db_Title: Titel
   Subsites:
     LanguageFieldLabel: Språk
     ThemeFieldLabel: Tema

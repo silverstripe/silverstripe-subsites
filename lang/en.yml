@@ -19,6 +19,8 @@ en:
     MANAGE_SUBSITES: 'Manage subsites for groups'
     MANAGE_SUBSITES_HELP: 'Ability to limit the permissions for a group to one or more subsites.'
     SECURITYTABTITLE: Subsites
+    db_AccessAllSubsites: 'Access all subsites'
+    many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Site Content'
     Saved: 'Saved, please update related pages.'
@@ -27,6 +29,8 @@ en:
     CopyToSubsite: 'Copy page to subsite'
     CopyToSubsiteWithChildren: 'Include children pages?'
     SubsiteOperations: 'Subsite Operations'
+    has_one_Subsite: Subsite
+    many_many_CrossSubsiteLinkTracking: 'Cross subsite link tracking'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Configuration
     CopyMessage: 'Created a copy of {title}'
@@ -44,6 +48,15 @@ en:
     SiteConfigTitle: 'Your Site Name'
     ThemeFieldEmptyString: '-'
     ValidateTitle: 'Please add a "Title"'
+    belongs_many_many_Groups: Groups
+    db_DefaultSite: 'Default site'
+    db_IsPublic: 'Is public'
+    db_Language: Language
+    db_PageTypeBlacklist: 'Page type blacklist'
+    db_RedirectURL: 'Redirect URL'
+    db_Theme: Theme
+    db_Title: Title
+    has_many_Domains: Domains
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domain
     DOMAIN_DESCRIPTION: 'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
@@ -59,6 +72,10 @@ en:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protocol
     SINGULARNAME: 'Subsite Domain'
+    db_Domain: Domain
+    db_IsPrimary: 'Is primary'
+    db_Protocol: Protocol
+    has_one_Subsite: Subsite
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Displays the content of a page on another subsite'
     OverrideNote: 'Overrides inherited value from the source'
@@ -68,6 +85,10 @@ en:
       other: '{count} Subsites Virtual Pages'
     SINGULARNAME: 'Subsites Virtual Page'
     SubsiteField: Subsite
+    db_CustomExtraMeta: 'Custom extra meta'
+    db_CustomMetaDescription: 'Custom meta description'
+    db_CustomMetaKeywords: 'Custom meta keywords'
+    db_CustomMetaTitle: 'Custom meta title'
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sites
     ReportDropdownSubsite: Subsite
@@ -86,3 +107,7 @@ en:
     RedirectURLFieldLabel: 'Redirect URL'
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Subsite Name'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subsite
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subsite

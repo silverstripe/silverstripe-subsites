@@ -29,11 +29,13 @@ ar:
     MANAGE_SUBSITES: 'إدارة مواقع فرعية للمجموعات'
     MANAGE_SUBSITES_HELP: 'القدرة على الحد من أذونات مجموعة ما على موقع فرعي واحدة أو أكثر.'
     SECURITYTABTITLE: 'المواقع الفرعية'
+    many_many_Subsites: 'المواقع الفرعية'
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'تمّ الحفظ، يرجى تحديث الصفحات ذات الصلة.'
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: نسخ
     CopyToSubsite: 'نسخ الصفحة في موقع فرعي'
+    has_one_Subsite: 'الموقع الفرعي'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: المواصفات
     CopyMessage: 'إنشاء نسخة من {title}'
@@ -47,10 +49,19 @@ ar:
     SiteConfigSubtitle: 'هنا سطر الوصف الخاص بك'
     SiteConfigTitle: 'اسم موقعك'
     ValidateTitle: 'الرجاء إضافة "عنوان"'
+    belongs_many_many_Groups: المجموعات
+    db_DefaultSite: 'الموقع الافتراضي'
+    db_Language: لغة
+    db_RedirectURL: 'إعادة توجيه عنوان موقع الويب'
+    db_Theme: المحور
+    db_Title: عنوان
+    has_many_Domains: النطاقات
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: النطاق
     PLURALNAME: 'نطاقات موقع فرعي'
     SINGULARNAME: 'نطاق موقع فرعي'
+    db_Domain: النطاق
+    has_one_Subsite: 'الموقع الفرعي'
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
     PLURALNAME: 'قاعدة الصفحات'
@@ -58,3 +69,8 @@ ar:
     SubsiteField: 'الموقع الفرعي'
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: المواقع
+    ReportDropdownSubsite: 'الموقع الفرعي'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: 'الموقع الفرعي'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: 'الموقع الفرعي'

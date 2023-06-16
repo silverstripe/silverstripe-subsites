@@ -1,0 +1,13 @@
+sr_RS@latin:
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Prilagođene meta oznake'
+    CustomMetaDescription: Opis
+    CustomMetaTitle: Naslov
+    SiteConfigTitle: 'Naziv sajta'
+    belongs_many_many_Groups: Grupe
+    db_Language: Jezik
+    db_Theme: Tema
+    db_Title: Naslov
+  Subsites:
+    LanguageFieldLabel: Jezik
+    ThemeFieldLabel: Tema

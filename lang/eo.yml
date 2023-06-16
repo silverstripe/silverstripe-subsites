@@ -19,6 +19,7 @@ eo:
     MANAGE_SUBSITES: 'Administri subretejojn por grupoj'
     MANAGE_SUBSITES_HELP: 'Eblo limigi la permesojn por grupo al unu aŭ pluaj subretejoj.'
     SECURITYTABTITLE: Subretejoj
+    many_many_Subsites: Subretejoj
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Enhavo de retejo'
     Saved: 'Konservita, bonvole ĝisdatigi rilatajn paĝojn.'
@@ -27,6 +28,7 @@ eo:
     CopyToSubsite: 'Kopii paĝon al subretejo'
     CopyToSubsiteWithChildren: 'Ĉu inkluzivi  paĝidojn?'
     SubsiteOperations: 'Subretejaj operacioj'
+    has_one_Subsite: Subretejo
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Agordaro
     CopyMessage: 'Kreis kopion de {title}'
@@ -44,6 +46,13 @@ eo:
     SiteConfigTitle: 'Nomo de via retejo'
     ThemeFieldEmptyString: '-'
     ValidateTitle: 'Bonvole aldoni "Titolon"'
+    belongs_many_many_Groups: Grupoj
+    db_DefaultSite: 'Apriora retejo'
+    db_Language: Lingvo
+    db_RedirectURL: 'Redirekti je URL'
+    db_Theme: Etoso
+    db_Title: Titolo
+    has_many_Domains: Domajnoj
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domajno
     DOMAIN_DESCRIPTION: 'Gastiga nomo de ĉi tiu subretejo (ellasu protokolon). Permesas ĵokerojn (*).'
@@ -59,6 +68,9 @@ eo:
     Protocol: Protokolo
     SINGULARNAME: 'Subreteja domajno'
     ISPRIMARY_DESCRIPTION: 'Marki ĉi tion kiel la aprioran domajnon por ĉi tiu subretejo'
+    db_Domain: Domajno
+    db_Protocol: Protokolo
+    has_one_Subsite: Subretejo
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
     OverrideNote: 'Anstataŭigas hereditan valoron el la fonto'
@@ -70,6 +82,7 @@ eo:
     SubsiteField: Subretejo
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Retejoj
+    ReportDropdownSubsite: Subretejo
   Subsite:
     COPYSTRUCTURE: 'Kopii strukturon de:'
     NOTEMPLATE: 'Mankas ŝablono'
@@ -84,3 +97,7 @@ eo:
     RedirectURLFieldLabel: 'Redirekti je URL'
     ThemeFieldLabel: Etoso
     TitleFieldLabel: 'Nomo de subretejo'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subretejo
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subretejo

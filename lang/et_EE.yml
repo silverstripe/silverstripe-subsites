@@ -1,0 +1,13 @@
+et_EE:
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Kohandatud metamärgendid'
+    CustomMetaDescription: Kirjeldus
+    CustomMetaTitle: Pealkiri
+    SiteConfigTitle: 'Teie saidi nimi'
+    belongs_many_many_Groups: Grupid
+    db_Language: Keel
+    db_Theme: Kujundus
+    db_Title: Pealkiri
+  Subsites:
+    LanguageFieldLabel: Keel
+    ThemeFieldLabel: Kujundus
