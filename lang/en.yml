@@ -111,7 +111,3 @@ en:
     RedirectURLFieldLabel: 'Redirect URL'
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Subsite Name'
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Subsite
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Subsite
