@@ -62,3 +62,12 @@ SilverStripe\Subsites\Admin\SubsiteAdmin:
 SilverStripe\SiteConfig\SiteConfigLeftAndMain:
   extensions:
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
+
+---
+Name: subsite-preview-elemental
+Only:
+  classexists: DNADesign\Elemental\Models\BaseElement
+---
+DNADesign\Elemental\Models\BaseElement:
+  extensions:
+    - SilverStripe\Subsites\Extensions\BaseElementSubsites
