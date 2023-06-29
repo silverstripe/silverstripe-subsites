@@ -1,4 +1,5 @@
 /* global jQuery */
+/* eslint-disable func-names */
 (function ($) {
   // eslint-disable-next-line no-shadow
   $.entwine('ss', ($) => {
@@ -14,7 +15,7 @@
         field.setValue(0);
         field.refresh();
         field.trigger('change');
-      }
+      },
     });
 
     /**
@@ -30,7 +31,7 @@
         attributes.data.urlTree += `?${fieldName}_SubsiteID=${subsiteID}`;
         attributes.data.cacheKey = `${attributes.data.cacheKey.substring(0, 19)}_${subsiteID}`;
         return attributes;
-      }
+      },
     });
   });
 }(jQuery));

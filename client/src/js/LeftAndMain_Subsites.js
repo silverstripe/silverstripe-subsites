@@ -1,5 +1,6 @@
 /* jslint browser: true, nomen: true */
 /* global $, window, jQuery */
+/* eslint-disable func-names */
 (function ($) {
   // eslint-disable-next-line no-shadow
   $.entwine('ss', ($) => {
@@ -8,7 +9,7 @@
         this.on('change', function () {
           window.location.search = $.query.set('SubsiteID', $(this).val());
         });
-      }
+      },
     });
 
     /*
@@ -18,7 +19,7 @@
       onclick(e) {
         $('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
         this._super(e);
-      }
+      },
     });
 
     /*
@@ -28,7 +29,7 @@
       onreload(e) {
         $('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
         this._super(e);
-      }
+      },
     });
 
     /*
@@ -38,7 +39,7 @@
       onadd(e) {
         $('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
         this._super(e);
-      }
+      },
     });
 
     // Subsite tab of Group editor
@@ -57,7 +58,7 @@
 
       showHideSubsiteList() {
         $('#Form_ItemEditForm_Subsites').parent().parent().css('display', ($('#Form_ItemEditForm_AccessAllSubsites_1').is(':checked') ? 'none' : ''));
-      }
+      },
     });
 
     $('.cms-edit-form').entwine({
@@ -82,14 +83,14 @@
         }
 
         return opts;
-      }
+      },
     });
 
     $('.cms-edit-form input[name=action_copytosubsite]').entwine({
-      onclick(e) {
+      onclick() {
         const form = this.closest('form');
         form.trigger('submit', [this]);
-      }
+      },
     });
   });
 
@@ -117,7 +118,7 @@
 
           if (typeof href !== 'undefined' && !href.match(/^http:\/\//)) {
             $(this).attr('href', $.path.addSearchParams(href, {
-              SubsiteID: subsiteId
+              SubsiteID: subsiteId,
             }));
           }
         });
@@ -130,7 +131,7 @@
             $(this).append(`<input type=hidden name="SubsiteID" value="${subsiteId}" >`);
           }
         });
-      }
+      },
     });
   });
 }(jQuery));
