@@ -86,7 +86,7 @@
     });
 
     $('.cms-edit-form input[name=action_copytosubsite]').entwine({
-      onclick(e) {
+      onclick() {
         const form = this.closest('form');
         form.trigger('submit', [this]);
       }
