@@ -369,7 +369,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
             }
 
             // We have not found any accessible section or subsite. User should be denied access.
-            return Security::permissionFailure($this->owner);
+            // This is handled already by LeftAndMain thanks to alternateAccessCheck
         }
 
         // Current site is accessible. Allow through.
