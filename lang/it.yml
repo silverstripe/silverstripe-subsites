@@ -1,24 +1,12 @@
 it:
   DomainNameField:
     INVALID_DOMAIN: 'Nome a dominio non valido'
-  Subsite:
-    COPYSTRUCTURE: 'Copia struttura da:'
-    NOTEMPLATE: 'Nessuno schema'
-  Subsites:
-    DefaultSiteFieldLabel: 'Sito di default'
-    DomainFieldLabel: Dominio
-    IsPublicFieldLabel: 'Permetti accesso pubblico'
-    LanguageFieldLabel: Lingua
-    MainSiteTitle: 'Sito principale'
-    PageTypeBlacklistFieldLabel: 'Blacklist dei tipi di pagina'
-    PrimaryDomainFieldLabel: 'Dominio primario'
-    RedirectURLFieldLabel: 'URL di reindirizzamento'
-    ThemeFieldLabel: Tema
-    TitleFieldLabel: 'Nome sottosito'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Clicca qui per editare il contenuto'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Sottositi
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Sottosito
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Tutti i siti'
     SUBSITENOTICE: 'Le cartelle e i files creati nel sito principale sono accessibili da tutti i sottositi.'
@@ -34,6 +22,8 @@ it:
     many_many_Subsites: Sottositi
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'Salvato, si prega di aggiornare le pagine relative.'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Sottosito
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Copia
     CopyToSubsite: 'Copia pagina in sottosito'
@@ -81,7 +71,17 @@ it:
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Siti
     ReportDropdownSubsite: Sottosito
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Sottosito
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Sottosito
+  Subsite:
+    COPYSTRUCTURE: 'Copia struttura da:'
+    NOTEMPLATE: 'Nessuno schema'
+  Subsites:
+    DefaultSiteFieldLabel: 'Sito di default'
+    DomainFieldLabel: Dominio
+    IsPublicFieldLabel: 'Permetti accesso pubblico'
+    LanguageFieldLabel: Lingua
+    MainSiteTitle: 'Sito principale'
+    PageTypeBlacklistFieldLabel: 'Blacklist dei tipi di pagina'
+    PrimaryDomainFieldLabel: 'Dominio primario'
+    RedirectURLFieldLabel: 'URL di reindirizzamento'
+    ThemeFieldLabel: Tema
+    TitleFieldLabel: 'Nome sottosito'

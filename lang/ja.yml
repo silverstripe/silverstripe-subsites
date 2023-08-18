@@ -6,18 +6,12 @@ ja:
     ACCESSONLY: これらのサブサイトのみ
     ACCESSRADIOTITLE: このグループに選択先へのアクセス権を与える
     SECURITYTABTITLE: サブサイト
-  SubsiteAdmin:
-    MENUTITLE: サブサイト
-  SubsiteDomain:
-    DOMAIN: ドメイン
-    PLURALNAME: サブサイトのドメイン
-    SINGULARNAME: サブサイトのドメイン
-  SubsitesVirtualPage:
-    SINGULARNAME: サブサイトの仮想ページ
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: ここをクリックしてコンテンツを編集
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: サブサイト
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: サブサイト
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     SubsiteFieldLabel: サブサイト
   SilverStripe\Subsites\Extensions\GroupSubsites:
@@ -26,6 +20,10 @@ ja:
     ACCESSRADIOTITLE: このグループに選択先へのアクセス権を与える
     SECURITYTABTITLE: サブサイト
     many_many_Subsites: サブサイト
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: サブサイト
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: サブサイト
   SilverStripe\Subsites\Model\Subsite:
     CustomExtraMeta: メタタグをカスタム
     CustomMetaDescription: 説明文
@@ -46,15 +44,17 @@ ja:
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SINGULARNAME: サブサイトの仮想ページ
     SubsiteField: サブサイト
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdownSubsite: サブサイト
+  SubsiteAdmin:
+    MENUTITLE: サブサイト
+  SubsiteDomain:
+    DOMAIN: ドメイン
+    PLURALNAME: サブサイトのドメイン
+    SINGULARNAME: サブサイトのドメイン
   Subsites:
     DomainFieldLabel: ドメイン
     LanguageFieldLabel: 言語
     ThemeFieldLabel: テーマ
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: サブサイト
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: サブサイト
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
-    has_one_Subsite: サブサイト
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
-    ReportDropdownSubsite: サブサイト
+  SubsitesVirtualPage:
+    SINGULARNAME: サブサイトの仮想ページ
