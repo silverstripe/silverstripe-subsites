@@ -1,16 +1,4 @@
 lt:
-  Subsite:
-    COPYSTRUCTURE: 'Kopijuoti struktūrą iš:'
-    NOTEMPLATE: 'Nėra šablono'
-  Subsites:
-    DefaultSiteFieldLabel: 'Pagrindinė svetainė'
-    DomainFieldLabel: Domenas
-    IsPublicFieldLabel: 'Leisti pasiekti visiems'
-    LanguageFieldLabel: Kalba
-    MainSiteTitle: 'Pagrindinis puslapis'
-    PrimaryDomainFieldLabel: 'Pagrindinis domenas'
-    RedirectURLFieldLabel: 'Nukreipimo nuoroda'
-    ThemeFieldLabel: Tema
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Visos svetainės'
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
@@ -41,3 +29,15 @@ lt:
     db_Domain: Domenas
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Svetainės
+  Subsite:
+    COPYSTRUCTURE: 'Kopijuoti struktūrą iš:'
+    NOTEMPLATE: 'Nėra šablono'
+  Subsites:
+    DefaultSiteFieldLabel: 'Pagrindinė svetainė'
+    DomainFieldLabel: Domenas
+    IsPublicFieldLabel: 'Leisti pasiekti visiems'
+    LanguageFieldLabel: Kalba
+    MainSiteTitle: 'Pagrindinis puslapis'
+    PrimaryDomainFieldLabel: 'Pagrindinis domenas'
+    RedirectURLFieldLabel: 'Nukreipimo nuoroda'
+    ThemeFieldLabel: Tema

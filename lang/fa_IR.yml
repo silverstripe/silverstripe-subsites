@@ -1,19 +1,12 @@
 fa_IR:
   DomainNameField:
     INVALID_DOMAIN: 'نام دامنه نامعتبر'
-  Subsite:
-    NOTEMPLATE: 'بدون قالب'
-  Subsites:
-    DefaultSiteFieldLabel: 'سایت پیش فرض'
-    DomainFieldLabel: دامنه
-    LanguageFieldLabel: زبان
-    PrimaryDomainFieldLabel: 'دامنه اولیه'
-    ThemeFieldLabel: پوسته
-    TitleFieldLabel: 'نام زیر سایت'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'برای ویرایش محتوا اینجا را کلیک کنید'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: 'زیر سایت ها'
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: 'زیر سایت'
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'تمامی سایت ها'
     SubsiteFieldLabel: 'زیر سایت'
@@ -22,6 +15,10 @@ fa_IR:
     ACCESSONLY: 'فقط این زیر سایت ها'
     SECURITYTABTITLE: 'زیر سایت ها'
     many_many_Subsites: 'زیر سایت ها'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: 'زیر سایت'
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: 'زیر سایت'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: پیکربندی
     CustomExtraMeta: 'متا تگ‌های اختصاصی'
@@ -51,9 +48,12 @@ fa_IR:
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: 'سایت ها'
     ReportDropdownSubsite: 'زیر سایت'
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: 'زیر سایت'
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: 'زیر سایت'
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
-    has_one_Subsite: 'زیر سایت'
+  Subsite:
+    NOTEMPLATE: 'بدون قالب'
+  Subsites:
+    DefaultSiteFieldLabel: 'سایت پیش فرض'
+    DomainFieldLabel: دامنه
+    LanguageFieldLabel: زبان
+    PrimaryDomainFieldLabel: 'دامنه اولیه'
+    ThemeFieldLabel: پوسته
+    TitleFieldLabel: 'نام زیر سایت'

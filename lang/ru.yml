@@ -1,24 +1,12 @@
 ru:
   DomainNameField:
     INVALID_DOMAIN: 'Неверный домен'
-  Subsite:
-    COPYSTRUCTURE: 'Скопировать структуры из:'
-    NOTEMPLATE: 'Нет шаблона'
-  Subsites:
-    DefaultSiteFieldLabel: 'Основной сайт'
-    DomainFieldLabel: Домен
-    IsPublicFieldLabel: 'Разрешить публичный доступ'
-    LanguageFieldLabel: Язык
-    MainSiteTitle: 'Основной Сайт'
-    PageTypeBlacklistFieldLabel: 'Запрещённые типы страниц'
-    PrimaryDomainFieldLabel: 'Основной Домен'
-    RedirectURLFieldLabel: 'Ссылка для перенаправления'
-    ThemeFieldLabel: Оформление
-    TitleFieldLabel: 'Название Подсайта'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Нажмите для изменения содержимого'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Подсайты
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Подсайт
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Все сайты'
     SUBSITENOTICE: 'Папки и файлы созданные на основном сайте так же доступны для под-сайтов.'
@@ -34,6 +22,8 @@ ru:
     many_many_Subsites: Подсайты
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'Сохранено, пожалуйста обновите связанные группы'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Подсайт
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Копировать
     CopyToSubsite: 'Копировать страницу на подсайт'
@@ -81,7 +71,17 @@ ru:
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Сайты
     ReportDropdownSubsite: Подсайт
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Подсайт
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Подсайт
+  Subsite:
+    COPYSTRUCTURE: 'Скопировать структуры из:'
+    NOTEMPLATE: 'Нет шаблона'
+  Subsites:
+    DefaultSiteFieldLabel: 'Основной сайт'
+    DomainFieldLabel: Домен
+    IsPublicFieldLabel: 'Разрешить публичный доступ'
+    LanguageFieldLabel: Язык
+    MainSiteTitle: 'Основной Сайт'
+    PageTypeBlacklistFieldLabel: 'Запрещённые типы страниц'
+    PrimaryDomainFieldLabel: 'Основной Домен'
+    RedirectURLFieldLabel: 'Ссылка для перенаправления'
+    ThemeFieldLabel: Оформление
+    TitleFieldLabel: 'Название Подсайта'
