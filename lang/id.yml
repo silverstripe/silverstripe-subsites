@@ -3,6 +3,38 @@ id:
     SubsiteFieldLabel: Subsitus
   GroupSubsites:
     SECURITYTABTITLE: Subsitus
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Subsitus
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subsitus
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    SubsiteFieldLabel: Subsitus
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    SECURITYTABTITLE: Subsitus
+    many_many_Subsites: Subsitus
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subsitus
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: Subsitus
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Penanda Meta'
+    CustomMetaDescription: Deskripsi
+    CustomMetaKeywords: 'Kata kunci'
+    CustomMetaTitle: Judul
+    PLURALNAME: Subsitus
+    SINGULARNAME: Subsitus
+    SiteConfigTitle: 'Nama Situs'
+    belongs_many_many_Groups: Kelompok
+    db_Language: Bahasa
+    db_Theme: Tema
+    db_Title: Judul
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    has_one_Subsite: Subsitus
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SubsiteField: Subsitus
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdown: Situs
+    ReportDropdownSubsite: Subsitus
   Subsite:
     CustomMetaDescription: Deskripsi
     CustomMetaKeywords: 'Kata kunci'
@@ -18,35 +50,3 @@ id:
     ThemeFieldLabel: Tema
   SubsitesVirtualPage:
     SubsiteField: Subsitus
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Subsitus
-  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
-    SubsiteFieldLabel: Subsitus
-  SilverStripe\Subsites\Extensions\GroupSubsites:
-    SECURITYTABTITLE: Subsitus
-    many_many_Subsites: Subsitus
-  SilverStripe\Subsites\Model\Subsite:
-    CustomExtraMeta: 'Penanda Meta'
-    CustomMetaDescription: Deskripsi
-    CustomMetaKeywords: 'Kata kunci'
-    CustomMetaTitle: Judul
-    PLURALNAME: Subsitus
-    SINGULARNAME: Subsitus
-    SiteConfigTitle: 'Nama Situs'
-    belongs_many_many_Groups: Kelompok
-    db_Language: Bahasa
-    db_Theme: Tema
-    db_Title: Judul
-  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
-    SubsiteField: Subsitus
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
-    ReportDropdown: Situs
-    ReportDropdownSubsite: Subsitus
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Subsitus
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Subsitus
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
-    has_one_Subsite: Subsitus
-  SilverStripe\Subsites\Model\SubsiteDomain:
-    has_one_Subsite: Subsitus
