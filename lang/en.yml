@@ -7,6 +7,8 @@ en:
     MENUTITLE: Subsites
   SilverStripe\Subsites\Controller\SubsiteXHRController:
     MENUTITLE: SilverStripe\Subsites\Controller\SubsiteXHRController
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subsite
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'All sites'
     SUBSITENOTICE: 'Folders and files created in the main site are accessible by all subsites.'
@@ -24,6 +26,8 @@ en:
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Site Content'
     Saved: 'Saved, please update related pages.'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subsite
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Copy
     CopyToSubsite: 'Copy page to subsite'
@@ -107,7 +111,3 @@ en:
     RedirectURLFieldLabel: 'Redirect URL'
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Subsite Name'
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Subsite
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Subsite

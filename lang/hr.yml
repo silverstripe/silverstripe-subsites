@@ -1,24 +1,12 @@
 hr:
   DomainNameField:
     INVALID_DOMAIN: 'Netočan naziv domene'
-  Subsite:
-    COPYSTRUCTURE: 'Kopiraj strukturu od:'
-    NOTEMPLATE: 'Nema predloška'
-  Subsites:
-    DefaultSiteFieldLabel: 'Zadani sajt'
-    DomainFieldLabel: Domena
-    IsPublicFieldLabel: 'Omogućni javni pristup'
-    LanguageFieldLabel: Jezik
-    MainSiteTitle: 'Glavni sajt'
-    PageTypeBlacklistFieldLabel: 'Crna lista tipova stranica'
-    PrimaryDomainFieldLabel: 'Glavna domena'
-    RedirectURLFieldLabel: 'Link preusmjeravanja'
-    ThemeFieldLabel: Tema
-    TitleFieldLabel: 'Naziv podsajta'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Klikni ovdje za uređivanje sadržaja'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Podsajtovi
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Podsajt
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Svi sajtovi'
     SUBSITENOTICE: 'Direktoriji i datoteke kreirane u glavnom sajtu su dostupne svim podsajtovima.'
@@ -34,6 +22,8 @@ hr:
     many_many_Subsites: Podsajtovi
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 'Spremljeno, molimo osvježite povezane stranice.'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Podsajt
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopiraj
     CopyToSubsite: 'Kopiraj stranicu u podsajt'
@@ -81,7 +71,17 @@ hr:
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Sajtovi
     ReportDropdownSubsite: Podsajt
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Podsajt
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Podsajt
+  Subsite:
+    COPYSTRUCTURE: 'Kopiraj strukturu od:'
+    NOTEMPLATE: 'Nema predloška'
+  Subsites:
+    DefaultSiteFieldLabel: 'Zadani sajt'
+    DomainFieldLabel: Domena
+    IsPublicFieldLabel: 'Omogućni javni pristup'
+    LanguageFieldLabel: Jezik
+    MainSiteTitle: 'Glavni sajt'
+    PageTypeBlacklistFieldLabel: 'Crna lista tipova stranica'
+    PrimaryDomainFieldLabel: 'Glavna domena'
+    RedirectURLFieldLabel: 'Link preusmjeravanja'
+    ThemeFieldLabel: Tema
+    TitleFieldLabel: 'Naziv podsajta'
