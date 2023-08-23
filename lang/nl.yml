@@ -7,6 +7,8 @@ nl:
     MENUTITLE: Subsites
   SilverStripe\Subsites\Controller\SubsiteXHRController:
     MENUTITLE: Subsites
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subsite
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Alle sites'
     SUBSITENOTICE: 'Mappen en bestanden van de Hoofdsite zijn toegankelijk voor alle subsites.'
@@ -23,6 +25,8 @@ nl:
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Site inhoud'
     Saved: 'Opgeslagen, pas onderliggende pagina''s aan.'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subsite
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopieer
     CopyToSubsite: 'Kopieer pagina''s naar subsite'
@@ -55,6 +59,7 @@ nl:
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domein
     DOMAIN_DESCRIPTION: 'Domeinnaam van deze subsite (zonder http), wildcards zijn toegestaan (*).'
+    ISPRIMARY_DESCRIPTION: 'Dit is de standaard domeinnaam voor deze subsite'
     IS_PRIMARY: 'Is Primaire domein'
     PLURALNAME: 'Subsite Domeinen'
     PLURALS:
@@ -66,7 +71,6 @@ nl:
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protocol
     SINGULARNAME: 'Subsite Domein'
-    ISPRIMARY_DESCRIPTION: 'Dit is de standaard domeinnaam voor deze subsite'
     db_Domain: Domein
     db_Protocol: Protocol
     has_one_Subsite: Subsite
@@ -96,7 +100,3 @@ nl:
     RedirectURLFieldLabel: 'Redirect URL'
     ThemeFieldLabel: Thema
     TitleFieldLabel: 'Subsite naam'
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Subsite
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Subsite

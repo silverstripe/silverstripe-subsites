@@ -6,18 +6,12 @@ pl_PL:
     ACCESSONLY: 'Tylko te podwitryny'
     ACCESSRADIOTITLE: 'Daj tej grupie dostęp do'
     SECURITYTABTITLE: Podwitryny
-  SubsiteAdmin:
-    MENUTITLE: Podwitryny
-  SubsiteDomain:
-    DOMAIN: Domena
-    PLURALNAME: 'Domeny podwitryny'
-    SINGULARNAME: 'Domena podwitryny'
-  SubsitesVirtualPage:
-    SINGULARNAME: 'Wirtualna strona dla podwitryn'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Kliknij tutaj aby edytować zawartość'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Podwitryny
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Podwitryna
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     SubsiteFieldLabel: Podwitryna
   SilverStripe\Subsites\Extensions\GroupSubsites:
@@ -26,6 +20,10 @@ pl_PL:
     ACCESSRADIOTITLE: 'Daj tej grupie dostęp do'
     SECURITYTABTITLE: Podwitryny
     many_many_Subsites: Podwitryny
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Podwitryna
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: Podwitryna
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Konfiguracja
     CustomExtraMeta: 'Własne meta tagi'
@@ -43,14 +41,16 @@ pl_PL:
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SINGULARNAME: 'Wirtualna strona dla podwitryn'
     SubsiteField: Podwitryna
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdownSubsite: Podwitryna
+  SubsiteAdmin:
+    MENUTITLE: Podwitryny
+  SubsiteDomain:
+    DOMAIN: Domena
+    PLURALNAME: 'Domeny podwitryny'
+    SINGULARNAME: 'Domena podwitryny'
   Subsites:
     DomainFieldLabel: Domena
     LanguageFieldLabel: Język
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Podwitryna
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Podwitryna
-  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
-    has_one_Subsite: Podwitryna
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
-    ReportDropdownSubsite: Podwitryna
+  SubsitesVirtualPage:
+    SINGULARNAME: 'Wirtualna strona dla podwitryn'

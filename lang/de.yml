@@ -5,6 +5,8 @@ de:
     EDITCONTENT: 'Klicken Sie hier, um den Inhalt zu bearbeiten'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Subsites
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Subseite
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Alle Seiten'
     SUBSITENOTICE: 'Auf Ordner und Dateien der Hauptseite kann von allen Subsites zugegriffen werden.'
@@ -21,6 +23,8 @@ de:
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Seiten Inhalt'
     Saved: 'Gespeichert, bitte aktualisieren Sie verknüpfte Seiten'
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Subseite
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopieren
     CopyToSubsite: 'Seite auf Subseite Kopieren'
@@ -94,7 +98,3 @@ de:
     RedirectURLFieldLabel: Weierleitungs-URL
     ThemeFieldLabel: Theme
     TitleFieldLabel: 'Name der Subsite'
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Subseite
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Subseite

@@ -1,22 +1,10 @@
 zh:
-  Subsite:
-    COPYSTRUCTURE: 复制结构来自：
-    NOTEMPLATE: 没有模板
-  Subsites:
-    DefaultSiteFieldLabel: 默认网站
-    DomainFieldLabel: 域名
-    IsPublicFieldLabel: 启用公共访问权
-    LanguageFieldLabel: 语言
-    MainSiteTitle: 主网站
-    PageTypeBlacklistFieldLabel: 页面类型黑名单
-    PrimaryDomainFieldLabel: 主域名
-    RedirectURLFieldLabel: '重定向 URL'
-    ThemeFieldLabel: 主题
-    TitleFieldLabel: 子网站名称
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 点击这里来编辑内容
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: 多个子网站
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: 子网站
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 所有网站
     SUBSITENOTICE: 主网站上创建的文件夹和文件可以被所有子网站访问。
@@ -32,6 +20,8 @@ zh:
     many_many_Subsites: 多个子网站
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     Saved: 已保存，请更新相关的页面。
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: 子网站
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: 复制
     CopyToSubsite: 将页面复制到子网站
@@ -70,7 +60,17 @@ zh:
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: 网站
     ReportDropdownSubsite: 子网站
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: 子网站
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: 子网站
+  Subsite:
+    COPYSTRUCTURE: 复制结构来自：
+    NOTEMPLATE: 没有模板
+  Subsites:
+    DefaultSiteFieldLabel: 默认网站
+    DomainFieldLabel: 域名
+    IsPublicFieldLabel: 启用公共访问权
+    LanguageFieldLabel: 语言
+    MainSiteTitle: 主网站
+    PageTypeBlacklistFieldLabel: 页面类型黑名单
+    PrimaryDomainFieldLabel: 主域名
+    RedirectURLFieldLabel: '重定向 URL'
+    ThemeFieldLabel: 主题
+    TitleFieldLabel: 子网站名称
