@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
+use SilverStripe\Admin\CMSProfileController;
 use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\CMS\Controllers\CMSPagesController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -88,12 +89,18 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         // Collect permissions - honour the LeftAndMain::required_permission_codes, current model requires
         // us to check if the user satisfies ALL permissions. Code partly copied from LeftAndMain::canView.
         $codes = [];
-        $extraCodes = Config::inst()->get(get_class($this->owner), 'required_permission_codes');
+        $ownerClass = get_class($this->owner);
+        $extraCodes = Config::inst()->get($ownerClass, 'required_permission_codes');
+        if ($ownerClass === CMSProfileController::class) {
+            // This matches the behaviour before merging
+            // https://github.com/silverstripe/silverstripe-admin/pull/1027
+            $extraCodes = false;
+        }
         if ($extraCodes !== false) {
             if ($extraCodes) {
                 $codes = array_merge($codes, (array)$extraCodes);
             } else {
-                $codes[] = sprintf('CMS_ACCESS_%s', get_class($this->owner));
+                $codes[] = sprintf('CMS_ACCESS_%s', $ownerClass);
             }
         } else {
             // Check overriden - all subsites accessible.
