@@ -29,31 +29,31 @@ For user documentation please see:
 
 ### Features:
 
-* Each subsite appears as a standalone website from a users prospective
-* No need to duplicate existing code as all subsites use the same codebase as the main site
-* You can set individual permissions on each subsite domain name
-* Ability to copy a page and its content from the main site into a subsite
-* Create translations of subsite pages
-* Schedule the publishing of subsite pages
-* The database is shared between subsites (meaning duplicating content is easy)
-* When recovering from a disaster it's much easier to bring up a new copy of a single environment with 100 subsites than it is to bring up 100 environments.
+ * Each subsite appears as a standalone website from a users prospective
+ * No need to duplicate existing code as all subsites use the same codebase as the main site
+ * You can set individual permissions on each subsite domain name
+ * Ability to copy a page and its content from the main site into a subsite
+ * Create translations of subsite pages
+ * Schedule the publishing of subsite pages
+ * The database is shared between subsites (meaning duplicating content is easy)
+ * When recovering from a disaster it's much easier to bring up a new copy of a single environment with 100 subsites than it is to bring up 100 environments.
 
 ### Limitations:
 
-* Subsites are usually accessed via their own separate domains.
-  In order to allow efficient cross-subsite CMS editing,
-  they can also be accessed via URL parameters rather than domain maps.
-  This can weaken domain-specific security controls in your environment
-  such as domain-specific IP whitelists, firewall rules or business logic.
-* Each subsite domain name has to be set up on the server first, and DNS records need to be updated as appropriate.
-* A subsite cannot use a different codebase as the main site, they are intrinsically tied
-    * However, you can remove page types from a subsite when creating the subsite - [see the setup documentation for further details](docs/en/userguide/set_up.md)
-* The only code a developer can edit between subsites is the theme
-* The separation between subsites in the CMS needs to be seen as cosmetic, and mostly applicable to the "Pages" and "Files" sections of the CMS.
-* All subsites run in the same process space and data set. Therefore if an outage affects one subsite it will affect all subsites, and if bad code or hardware corrupts one subsite's data, it's very likely that it has corrupted all subsite data.
-    * This principle applies to application error, security vulnerabilities and high levels of traffic
-* It is not currently possible to backup or restore the data from a single subsite.
-* It is awkward (but not impossible) to have separate teams of developers working on different subsites - primarily because of the level of collaboration needed. It is more suited to the same group of developers being responsible for all of the subsites.
+ * Subsites are usually accessed via their own separate domains.
+   In order to allow efficient cross-subsite CMS editing,
+   they can also be accessed via URL parameters rather than domain maps.
+   This can weaken domain-specific security controls in your environment
+   such as domain-specific IP whitelists, firewall rules or business logic.
+ * Each subsite domain name has to be set up on the server first, and DNS records need to be updated as appropriate.
+ * A subsite cannot use a different codebase as the main site, they are intrinsically tied
+ 	* However, you can remove page types from a subsite when creating the subsite - [see the setup documentation for further details](docs/en/userguide/set_up.md)
+ * The only code a developer can edit between subsites is the theme
+ * The separation between subsites in the CMS needs to be seen as cosmetic, and mostly applicable to the "Pages" and "Files" sections of the CMS.
+ * All subsites run in the same process space and data set. Therefore if an outage affects one subsite it will affect all subsites, and if bad code or hardware corrupts one subsite's data, it's very likely that it has corrupted all subsite data.
+ 	* This principle applies to application error, security vulnerabilities and high levels of traffic
+ * It is not currently possible to backup or restore the data from a single subsite.
+ * It is awkward (but not impossible) to have separate teams of developers working on different subsites - primarily because of the level of collaboration needed. It is more suited to the same group of developers being responsible for all of the subsites.
 
 If more isolation of code, security, or performance is needed, then consider running multiple separate installations (e.g. on separate servers).
 
@@ -101,37 +101,37 @@ In some Browsers the SubsiteID is visible if you hover over the "Edit" link in t
 
 ### Subsite-specific themes
 
-Download a second theme from http://www.silverstripe.com/themes/ and put it in your themes folder.  Open
-admin/subsites?flush=1 and select one of your subsites from the menu on the bottom-left.  You should see a
-Theme dropdown in the subsite details, and it should list both your original theme and the new theme.  Select the new
+Download a second theme from http://www.silverstripe.com/themes/ and put it in your themes folder.  Open 
+admin/subsites?flush=1 and select one of your subsites from the menu on the bottom-left.  You should see a 
+Theme dropdown in the subsite details, and it should list both your original theme and the new theme.  Select the new 
 theme in the dropdown.  Now, this subsite will use a different theme from the main site.
 
 #### Cascading themes
 
-In Silverstripe 4 themes will resolve theme files by looking through a list of themes (see the documentation on
+In Silverstripe 4 themes will resolve theme files by looking through a list of themes (see the documentation on 
 [creating your own theme](https://docs.silverstripe.org/en/4/developer_guides/templates/themes/#developing-your-own-theme)).
-Subsites will inherit this configuration for the order of themes. Choosing a theme for a Subsite will set the list of
+Subsites will inherit this configuration for the order of themes. Choosing a theme for a Subsite will set the list of 
 themes to that chosen theme, and all themes that are defined below the chosen theme in priority. For example, with a
 theme configuration as follows:
 
 ```yaml
 SilverStripe\View\SSViewer:
-    themes:
-        - '$public'
-        - 'my-theme'
-        - 'watea'
-        - 'starter'
-        - '$default'
+  themes:
+    - '$public'
+    - 'my-theme'
+    - 'watea'
+    - 'starter'
+    - '$default'
 ```
 
 Choosing `watea` in your Subsite will create a cascading config as follows:
 
 ```yaml
 themes:
-    - 'watea'
-    - '$public'
-    - 'starter'
-    - '$default'
+  - 'watea'
+  - '$public'
+  - 'starter'
+  - '$default'
 ```
 
 You may also completely define your own cascading theme lists for CMS users to choose as theme options for their
@@ -139,16 +139,16 @@ subsite:
 
 ```yaml
 SilverStripe\Subsites\Service\ThemeResolver:
-    theme_options:
-        normal:
-            - '$public'
-            - 'watea'
-            - 'starter'
-            - '$default'
-        special:
-            - 'my-theme'
-            - 'starter'
-            - '$default'
+  theme_options:
+    normal:
+      - '$public'
+      - 'watea'
+      - 'starter'
+      - '$default'
+    special:
+      - 'my-theme'
+      - 'starter'
+      - '$default'
 ```
 
 ### Limit available themes for a subsite
