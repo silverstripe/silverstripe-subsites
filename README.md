@@ -22,8 +22,8 @@ permissions" will imply that the person will likely be able to escalate his/her 
 
 For user documentation please see:
 
-1. [Setting up subsites](docs/en/userguide/set_up.md)
-1. [Working with subsites](docs/en/userguide/working_with.md)
+ 1. [Setting up subsites](docs/en/userguide/set_up.md)
+ 1. [Working with subsites](docs/en/userguide/working_with.md)
 
 ## Features & limitations
 
@@ -134,7 +134,7 @@ themes:
   - '$default'
 ```
 
-You may also completely define your own cascading theme lists for CMS users to choose as theme options for their
+You may also completely define your own cascading theme lists for CMS users to choose as theme options for their 
 subsite:
 
 ```yaml
