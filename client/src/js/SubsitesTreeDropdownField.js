@@ -8,7 +8,6 @@
      */
     $('select.subsitestreedropdownfield-chooser').entwine({
       onchange() {
-        // TODO Data binding between two fields
         const name = this.attr('name').replace('_SubsiteID', '');
         const field = $(`#Form_EditForm_${name}`).first();
         field.setValue(0);

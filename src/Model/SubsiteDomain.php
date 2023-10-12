@@ -180,8 +180,6 @@ class SubsiteDomain extends DataObject
     /**
      * Retrieves domain name with wildcards substituted with actual values
      *
-     * @todo Refactor domains into separate wildcards / primary domains
-     *
      * @return string
      */
     public function getSubstitutedDomain()
@@ -193,7 +191,6 @@ class SubsiteDomain extends DataObject
         $domain = preg_replace('/\.\*$/', ".{$currentHost}", $this->Domain ?? '');
 
         // Default to "subsite." prefix for first wildcard
-        // TODO Whats the significance of "subsite" in this context?!
         $domain = preg_replace('/^\*\./', "subsite.", $domain ?? '');
 
         // *Only* removes "intermediate" subdomains, so 'subdomain.www.domain.com' becomes 'subdomain.domain.com'

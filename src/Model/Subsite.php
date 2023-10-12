@@ -583,7 +583,6 @@ class Subsite extends DataObject
      * If more than one permission is passed to the method, at least one of them must
      * be granted for if to return TRUE.
      *
-     * @todo Allow permission inheritance through group hierarchy.
      *
      * @param Member Member to check against. Defaults to currently logged in member
      * @param array $permissionCodes
@@ -641,7 +640,6 @@ class Subsite extends DataObject
     }
 
     /**
-     * @todo Possible security issue, don't grant edit permissions to everybody.
      * @param bool $member
      * @return bool
      */
