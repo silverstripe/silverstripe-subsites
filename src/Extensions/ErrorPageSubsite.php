@@ -48,17 +48,7 @@ class ErrorPageSubsite extends DataExtension
             $subdomainPart = "-{$subdomain}";
         }
 
-        // @todo implement Translatable namespace
-        if (singleton(SiteTree::class)->hasExtension('Translatable')
-            && $locale
-            && $locale != Translatable::default_locale()
-        ) {
-            $fileName = "error-{$statusCode}-{$locale}{$subdomainPart}.html";
-        } else {
-            $fileName=  "error-{$statusCode}{$subdomainPart}.html";
-        }
-
-        $fileName = FileNameFilter::create()->filter($fileName);
+        $fileName = FileNameFilter::create()->filter("error-{$statusCode}{$subdomainPart}.html");
 
         $name = implode('/', [$static_filepath, $fileName]);
     }
