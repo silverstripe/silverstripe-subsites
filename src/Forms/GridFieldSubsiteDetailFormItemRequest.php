@@ -18,10 +18,6 @@ class GridFieldSubsiteDetailFormItemRequest extends GridFieldDetailForm_ItemRequ
      * Builds an item edit form.  The arguments to getCMSFields() are the popupController and
      * popupFormName, however this is an experimental API and may change.
      *
-     * @todo In the future, we will probably need to come up with a tigher object representing a partially
-     * complete controller with gaps for extra functionality.  This, for example, would be a better way
-     * of letting Security/login put its log-in form inside a UI specified elsewhere.
-     *
      * @return Form
      * @see GridFieldDetailForm_ItemRequest::ItemEditForm()
      */

@@ -61,9 +61,6 @@
     });
 
     $('.cms-edit-form').entwine({
-      /**
-       * TODO: Fix with Entwine API extension. See https://github.com/silverstripe/silverstripe-subsites/pull/125
-       */
       getChangeTrackerOptions() {
         // Figure out if we're still returning the default value
         const isDefault = (this.entwineData('ChangeTrackerOptions') === undefined);
