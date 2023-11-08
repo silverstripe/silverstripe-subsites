@@ -1,5 +1,6 @@
 fr:
   SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Configuration
     CustomExtraMeta: 'Balises Méta personnalisées'
     CustomMetaDescription: Description
     CustomMetaTitle: Titre

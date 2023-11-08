@@ -21,6 +21,7 @@ nl:
     MANAGE_SUBSITES: 'Beheer subsites voor groepen'
     MANAGE_SUBSITES_HELP: 'Bepaal de toegangsrechten voor groepen per subsite'
     SECURITYTABTITLE: Subsites
+    db_AccessAllSubsites: 'Toegang tot alle subsites'
     many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Site inhoud'
