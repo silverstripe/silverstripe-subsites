@@ -49,7 +49,6 @@ class ErrorPageSubsite extends DataExtension
         }
 
         $fileName = FileNameFilter::create()->filter("error-{$statusCode}{$subdomainPart}.html");
-
         $name = implode('/', [$static_filepath, $fileName]);
     }
 }

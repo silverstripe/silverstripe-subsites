@@ -56,10 +56,7 @@ class FileSubsites extends DataExtension
             return;
         }
 
-        // If you're querying by ID, ignore the sub-site - this is a bit ugly... (but it was WAYYYYYYYYY worse)
-        // @TODO I don't think excluding if SiteTree_ImageTracking is a good idea however because of the SS 3.0 api and
-        // ManyManyList::removeAll() changing the from table after this function is called there isn't much of a choice
-
+        // If you're querying by ID, ignore the sub-site
         $from = $query->getFrom();
         if (isset($from['SiteTree_ImageTracking']) || $query->filtersOnID()) {
             return;

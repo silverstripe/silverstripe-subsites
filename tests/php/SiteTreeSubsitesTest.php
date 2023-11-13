@@ -138,7 +138,6 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
             'Administrators can edit all subsites'
         );
 
-        // @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
         Subsite::changeSubsite($subsite1);
 
         $this->logInAs($subsite1member->ID);
@@ -153,7 +152,6 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
             'Members cant edit pages on a subsite if they are not in a group belonging to this subsite'
         );
 
-        // @todo: Workaround because GroupSubsites->augmentSQL() is relying on session state
         Subsite::changeSubsite(0);
         $this->assertFalse(
             $mainpage->canEdit(),

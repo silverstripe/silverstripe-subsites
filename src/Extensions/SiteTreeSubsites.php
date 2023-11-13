@@ -140,9 +140,6 @@ class SiteTreeSubsites extends DataExtension
             );
 
             $copyAction->addExtraClass('btn btn-primary font-icon-save ml-3');
-
-            // @todo check if this needs re-implementation
-//            $copyAction->includeDefaultJS(false);
         }
 
         // replace readonly link prefix
