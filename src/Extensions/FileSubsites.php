@@ -14,6 +14,7 @@ use SilverStripe\Subsites\State\SubsiteState;
  * Extension for the File object to add subsites support
  *
  * @package subsites
+ * @method Subsite Subsite()
  */
 class FileSubsites extends DataExtension
 {

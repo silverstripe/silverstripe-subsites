@@ -38,6 +38,8 @@ use UnexpectedValueException;
  * You can simulate subsite access without setting up virtual hosts by appending ?SubsiteID=<ID> to the request.
  *
  * @package subsites
+ * @method SilverStripe\ORM\HasManyList<SubsiteDomain> Domains()
+ * @method SilverStripe\ORM\ManyManyList<Group> Groups()
  */
 class Subsite extends DataObject
 {
