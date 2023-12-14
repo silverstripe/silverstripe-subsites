@@ -13,6 +13,7 @@ use SilverStripe\Subsites\State\SubsiteState;
 
 /**
  * Extension for the SiteConfig object to add subsites support
+ * @method Subsite Subsite()
  */
 class SiteConfigSubsites extends DataExtension
 {
