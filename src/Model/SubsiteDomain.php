@@ -17,6 +17,7 @@ use SilverStripe\Subsites\Forms\WildcardDomainField;
  * @property string $SubstitutedDomain Domain name with all wildcards filled in
  * @property string $FullProtocol Full protocol including ://
  * @property bool $IsPrimary Is this the primary subdomain?
+ * @method Subsite Subsite()
  */
 class SubsiteDomain extends DataObject
 {

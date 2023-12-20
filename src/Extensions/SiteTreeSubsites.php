@@ -32,6 +32,8 @@ use SilverStripe\VersionedAdmin\Controllers\HistoryViewerController;
 
 /**
  * Extension for the SiteTree object to add subsites support
+ * @method SilverStripe\ORM\ManyManyList<SiteTree> CrossSubsiteLinkTracking()
+ * @method Subsite Subsite()
  */
 class SiteTreeSubsites extends DataExtension
 {
