@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Core\Extension;
 
 /**
@@ -12,6 +13,8 @@ use SilverStripe\Core\Extension;
  * MyAdmin::add_extension('SubsiteMenuExtension');
  *
  * Or you can include the subsiteCMSShowInMenu function in your admin class and have it return true
+ *
+ * @extends Extension<LeftAndMain>
  */
 class SubsiteMenuExtension extends Extension
 {

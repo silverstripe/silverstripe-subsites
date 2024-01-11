@@ -21,8 +21,9 @@ use SilverStripe\Subsites\State\SubsiteState;
 /**
  * Extension for the Group object to add subsites support
  *
- * @package subsites
  * @method SilverStripe\ORM\ManyManyList<Subsite> Subsites()
+ *
+ * @extends DataExtension<Group&static>
  */
 class GroupSubsites extends DataExtension implements PermissionProvider
 {

@@ -2,12 +2,16 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use SilverStripe\AssetAdmin\Forms\FolderFormFactory;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Subsites\Model\Subsite;
 
+/**
+ * @extends Extension<FolderFormFactory>
+ */
 class FolderFormFactoryExtension extends Extension
 {
     /**
