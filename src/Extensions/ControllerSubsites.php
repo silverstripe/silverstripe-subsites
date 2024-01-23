@@ -2,12 +2,13 @@
 
 namespace SilverStripe\Subsites\Extensions;
 
+use SilverStripe\Control\Controller;
 use SilverStripe\Core\Extension;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\View\SSViewer;
 
 /**
- * @package subsites
+ * @extends Extension<Controller>
  */
 class ControllerSubsites extends Extension
 {

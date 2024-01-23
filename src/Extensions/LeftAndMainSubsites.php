@@ -5,6 +5,7 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\CMSProfileController;
+use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\CMS\Controllers\CMSPagesController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -27,7 +28,7 @@ use SilverStripe\View\Requirements;
 /**
  * Decorator designed to add subsites support to LeftAndMain
  *
- * @package subsites
+ * @extends LeftAndMainExtension<LeftAndMain>
  */
 class LeftAndMainSubsites extends LeftAndMainExtension
 {
@@ -66,8 +67,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      * @param bool $includeMainSite
      * @param string $mainSiteTitle
      * @param null $member
-     * @return ArrayList of <a href='psi_element://Subsite'>Subsite</a> instances.
-     * instances.
+     * @return ArrayList<Subsite> of Subsite instances.
      */
     public function sectionSites($includeMainSite = true, $mainSiteTitle = 'Main site', $member = null)
     {
@@ -141,12 +141,11 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         return Subsite::all_accessible_sites();
     }
 
-    /*
+    /**
      * Generates a list of subsites with the data needed to
      * produce a dropdown site switcher
-     * @return ArrayList
+     * @return ArrayList<Subsite>
      */
-
     public function ListSubsites()
     {
         $list = $this->Subsites();

@@ -178,7 +178,7 @@ class Subsite extends DataObject
     /**
      * Gets the subsite currently set in the session.
      *
-     * @return DataObject The current Subsite
+     * @return Subsite The current Subsite
      */
     public static function currentSubsite()
     {
@@ -256,7 +256,7 @@ class Subsite extends DataObject
             $schema = DataObject::getSchema();
 
             $domainTableName = $schema->tableName(SubsiteDomain::class);
-            
+
             if (!DB::get_schema()->hasTable($domainTableName)) {
                 // Table hasn't been created yet. Might be a dev/build, skip.
                 return 0;
@@ -304,13 +304,13 @@ class Subsite extends DataObject
     }
 
     /**
-     *
-     * @param string $className
+     * @template T of DataObject
+     * @param class-string<T> $className
      * @param string $filter
      * @param string $sort
      * @param string $join
      * @param string $limit
-     * @return DataList
+     * @return DataList<T>
      */
     public static function get_from_all_subsites($className, $filter = '', $sort = '', $join = '', $limit = '')
     {
@@ -371,11 +371,11 @@ class Subsite extends DataObject
         return $subsites;
     }
 
-    /*
+    /**
      * Returns an ArrayList of the subsites accessible to the current user.
      * It's enough for any section to be accessible for the site to be included.
      *
-     * @return ArrayList of {@link Subsite} instances.
+     * @return ArrayList<Subsite> of {@link Subsite} instances.
      */
     public static function all_accessible_sites($includeMainSite = true, $mainSiteTitle = 'Main site', $member = null)
     {
@@ -420,7 +420,7 @@ class Subsite extends DataObject
      * @param $includeMainSite bool If true, the main site will be included if appropriate.
      * @param $mainSiteTitle string The label to give to the main site
      * @param $member int|Member The member attempting to access the sites
-     * @return DataList|ArrayList of {@link Subsite} instances
+     * @return DataList<Subsite>|ArrayList<Subsite> of {@link Subsite} instances
      */
     public static function accessible_sites(
         $permCode,
@@ -466,8 +466,8 @@ class Subsite extends DataObject
             )
             ->innerJoin(
                 'Permission',
-                "\"Group\".\"ID\"=\"Permission\".\"GroupID\" 
-                AND \"Permission\".\"Code\" 
+                "\"Group\".\"ID\"=\"Permission\".\"GroupID\"
+                AND \"Permission\".\"Code\"
                 IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
             );
 
@@ -475,7 +475,6 @@ class Subsite extends DataObject
             $subsites = new ArrayList();
         }
 
-        /** @var DataList $rolesSubsites */
         $rolesSubsites = DataList::create(Subsite::class)
             ->where("\"Subsite\".\"Title\" != ''")
             ->leftJoin('Group_Subsites', '"Group_Subsites"."SubsiteID" = "Subsite"."ID"')
@@ -491,8 +490,8 @@ class Subsite extends DataObject
             ->innerJoin('PermissionRole', '"Group_Roles"."PermissionRoleID"="PermissionRole"."ID"')
             ->innerJoin(
                 'PermissionRoleCode',
-                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\" 
-                AND \"PermissionRoleCode\".\"Code\" 
+                "\"PermissionRole\".\"ID\"=\"PermissionRoleCode\".\"RoleID\"
+                AND \"PermissionRoleCode\".\"Code\"
                 IN ($SQL_codes, 'CMS_ACCESS_LeftAndMain', 'ADMIN')"
             );
 
@@ -925,9 +924,8 @@ JS;
     }
 
     /**
-     *
      * @param array $permissionCodes
-     * @return DataList
+     * @return DataList<Member>
      */
     public function getMembersByPermission($permissionCodes = ['ADMIN'])
     {
