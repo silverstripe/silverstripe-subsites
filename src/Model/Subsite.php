@@ -24,6 +24,8 @@ use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\SS_List;
+use SilverStripe\ORM\HasManyList;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
@@ -38,8 +40,8 @@ use UnexpectedValueException;
  * You can simulate subsite access without setting up virtual hosts by appending ?SubsiteID=<ID> to the request.
  *
  * @package subsites
- * @method SilverStripe\ORM\HasManyList<SubsiteDomain> Domains()
- * @method SilverStripe\ORM\ManyManyList<Group> Groups()
+ * @method HasManyList<SubsiteDomain> Domains()
+ * @method ManyManyList<Group> Groups()
  */
 class Subsite extends DataObject
 {
