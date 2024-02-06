@@ -1,0 +1,35 @@
+sl:
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Podspletišča
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Podspletišče
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    SubsiteFieldLabel: Podspletišče
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    SECURITYTABTITLE: Podspletišča
+    db_AccessAllSubsites: 'Dostop do vseh podspletišč'
+    many_many_Subsites: Podspletišča
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Podspletišče
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: Podspletišče
+    many_many_CrossSubsiteLinkTracking: 'Spremljanje povezav med podspletišči'
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Nastavitve
+    CustomExtraMeta: 'Meta tagi po meri'
+    CustomMetaDescription: Opis
+    CustomMetaTitle: Naziv
+    PLURALNAME: Podspletišča
+    SINGULARNAME: Podspletišče
+    SiteConfigTitle: 'Naziv vašega spletnega mesta'
+    belongs_many_many_Groups: Skupine
+    db_Theme: Tema
+    db_Title: Naziv
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    has_one_Subsite: Podspletišče
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SubsiteField: Podspletišče
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdownSubsite: Podspletišče
+  Subsites:
+    ThemeFieldLabel: Tema
