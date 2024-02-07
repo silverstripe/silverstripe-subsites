@@ -1,14 +1,37 @@
 sk:
+  SilverStripe\Subsites\Admin\SubsiteAdmin:
+    MENUTITLE: Podstránky
+  SilverStripe\Subsites\Extensions\FileSubsites:
+    has_one_Subsite: Podstránka
+  SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
+    SubsiteFieldLabel: Podstránka
+  SilverStripe\Subsites\Extensions\GroupSubsites:
+    SECURITYTABTITLE: Podstránky
+    db_AccessAllSubsites: 'Prístup na všetky podstránky'
+    many_many_Subsites: Podstránky
+  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
+    has_one_Subsite: Podstránka
+  SilverStripe\Subsites\Extensions\SiteTreeSubsites:
+    has_one_Subsite: Podstránka
+    many_many_CrossSubsiteLinkTracking: 'Sledovanie odkazov naprieč podstránkami'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Konfigurácia
     CustomExtraMeta: 'Vlastné Meta Tagy'
     CustomMetaDescription: Popis
     CustomMetaTitle: Názov
+    PLURALNAME: Podstránky
+    SINGULARNAME: Podstránka
     SiteConfigTitle: 'Názov vášho webu'
     belongs_many_many_Groups: Skupiny
     db_Language: Jazyk
     db_Theme: Téma
     db_Title: Názov
+  SilverStripe\Subsites\Model\SubsiteDomain:
+    has_one_Subsite: Podstránka
+  SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    SubsiteField: Podstránka
+  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
+    ReportDropdownSubsite: Podstránka
   Subsites:
     LanguageFieldLabel: Jazyk
     ThemeFieldLabel: Téma
