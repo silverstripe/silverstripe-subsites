@@ -122,7 +122,11 @@ class SiteTreeSubsites extends DataExtension
         // Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
         $isDefaultSubsite = $this->owner->SubsiteID == 0 || $this->owner->Subsite()->DefaultSite;
 
-        if ($isDefaultSubsite && $subsitesMap->count() && !$viewingPageHistory) {
+        if ($isDefaultSubsite && $subsitesMap->count() && !$viewingPageHistory
+            && !$fields->dataFieldByName('SubsiteOperations')
+            && !$fields->dataFieldByName('CopyToSubsiteWithChildren')
+            && !$fields->dataFieldByName('action_copytosubsite')
+        ) {
             $fields->addFieldToTab(
                 'Root.Main',
                 ToggleCompositeField::create(
