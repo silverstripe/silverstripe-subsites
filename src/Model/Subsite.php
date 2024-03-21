@@ -32,6 +32,7 @@ use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
+use SilverStripe\Core\ClassInfo;
 
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
