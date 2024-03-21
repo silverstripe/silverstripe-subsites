@@ -256,8 +256,9 @@ class Subsite extends DataObject
             $schema = DataObject::getSchema();
 
             $domainTableName = $schema->tableName(SubsiteDomain::class);
-            
-            if (!DB::get_schema()->hasTable($domainTableName)) {
+
+            // ClassInfo::hasTable provides a cached table list
+            if (!ClassInfo::hasTable($domainTableName)) {
                 // Table hasn't been created yet. Might be a dev/build, skip.
                 return 0;
             }
