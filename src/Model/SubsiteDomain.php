@@ -9,6 +9,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Forms\WildcardDomainField;
+use SilverStripe\Core\ClassInfo;
 
 /**
  * @property string $Domain domain name of this subsite. Can include wildcards. Do not include the URL scheme here
