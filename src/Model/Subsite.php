@@ -34,6 +34,7 @@ use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
+use SilverStripe\Core\ClassInfo;
 
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
@@ -259,7 +260,8 @@ class Subsite extends DataObject
 
             $domainTableName = $schema->tableName(SubsiteDomain::class);
 
-            if (!DB::get_schema()->hasTable($domainTableName)) {
+            // ClassInfo::hasTable provides a cached table list
+            if (!ClassInfo::hasTable($domainTableName)) {
                 // Table hasn't been created yet. Might be a dev/build, skip.
                 return 0;
             }
