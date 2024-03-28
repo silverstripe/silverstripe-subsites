@@ -19,6 +19,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\ORM\Map;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Member;
@@ -32,8 +33,11 @@ use SilverStripe\VersionedAdmin\Controllers\HistoryViewerController;
 
 /**
  * Extension for the SiteTree object to add subsites support
- * @method SilverStripe\ORM\ManyManyList<SiteTree> CrossSubsiteLinkTracking()
+ *
+ * @method ManyManyList<SiteTree> CrossSubsiteLinkTracking()
  * @method Subsite Subsite()
+ *
+ * @extends DataExtension<SiteTree&static>
  */
 class SiteTreeSubsites extends DataExtension
 {
@@ -187,7 +191,6 @@ class SiteTreeSubsites extends DataExtension
             ->withState(function (SubsiteState $newState) use ($subsiteID, $includeChildren) {
                 $newState->setSubsiteId($subsiteID);
 
-                /** @var SiteTree $page */
                 $page = $this->owner;
 
                 try {
@@ -389,7 +392,6 @@ class SiteTreeSubsites extends DataExtension
      */
     public static function contentcontrollerInit($controller)
     {
-        /** @var Subsite $subsite */
         $subsite = Subsite::currentSubsite();
 
         if ($subsite && $subsite->Theme) {

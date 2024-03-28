@@ -5,10 +5,14 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Model\Subsite;
 
+/**
+ * @extends DataExtension<ErrorPage>
+ */
 class ErrorPageSubsite extends DataExtension
 {
     /**

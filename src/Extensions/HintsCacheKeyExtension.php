@@ -10,8 +10,9 @@ use SilverStripe\Subsites\State\SubsiteState;
  * This extension adds the current Subsite ID as an additional factor to the Hints Cßache Key, which is used to cache
  * the Site Tree Hints (which include allowed pagetypes).
  *
- * @package SilverStripe\Subsites\Extensions
  * @see CMSMain::generateHintsCacheKey()
+ *
+ * @extends Extension<CMSMain>
  */
 class HintsCacheKeyExtension extends Extension
 {

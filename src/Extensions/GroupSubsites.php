@@ -12,6 +12,7 @@ use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\PermissionProvider;
@@ -21,8 +22,9 @@ use SilverStripe\Subsites\State\SubsiteState;
 /**
  * Extension for the Group object to add subsites support
  *
- * @package subsites
- * @method SilverStripe\ORM\ManyManyList<Subsite> Subsites()
+ * @method ManyManyList<Subsite> Subsites()
+ *
+ * @extends DataExtension<Group&static>
  */
 class GroupSubsites extends DataExtension implements PermissionProvider
 {
