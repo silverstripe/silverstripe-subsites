@@ -25,13 +25,13 @@ nl:
     many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Site inhoud'
-    Saved: 'Opgeslagen, pas onderliggende pagina''s aan.'
+    Saved: "Opgeslagen, pas onderliggende pagina's aan."
   SilverStripe\Subsites\Extensions\SiteConfigSubsites:
     has_one_Subsite: Subsite
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopieer
-    CopyToSubsite: 'Kopieer pagina''s naar subsite'
-    CopyToSubsiteWithChildren: 'Inclusief onderliggende pagina''s?'
+    CopyToSubsite: "Kopieer pagina's naar subsite"
+    CopyToSubsiteWithChildren: "Inclusief onderliggende pagina's?"
     SubsiteOperations: 'Subsite Acties'
     has_one_Subsite: Subsite
   SilverStripe\Subsites\Model\Subsite:
@@ -67,7 +67,7 @@ nl:
       one: 'Een subsite domein'
       other: '{count} subsite domeinen'
     PROTOCOL_AUTOMATIC: Automatisch
-    PROTOCOL_DESCRIPTION: 'Wordt gebruikt bij het genereren van links naar deze subsite. <br />''Automatisch'' houdt in dat het huidige protocol gebruikt zal worden.'
+    PROTOCOL_DESCRIPTION: "Wordt gebruikt bij het genereren van links naar deze subsite. <br />'Automatisch' houdt in dat het huidige protocol gebruikt zal worden."
     PROTOCOL_HTTP: 'http://'
     PROTOCOL_HTTPS: 'https://'
     Protocol: Protocol
