@@ -57,8 +57,6 @@ hr:
     IS_PRIMARY: 'Da li je glavna domena?'
     PLURALNAME: 'Domene podsajtova'
     PROTOCOL_AUTOMATIC: Automatsko
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
     Protocol: Protokol
     SINGULARNAME: 'Domena podsajta'
     db_Domain: Domena

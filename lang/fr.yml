@@ -1,8 +1,6 @@
 fr:
   SilverStripe\Subsites\Model\Subsite:
-    ConfigurationTab: Configuration
     CustomExtraMeta: 'Balises Méta personnalisées'
-    CustomMetaDescription: Description
     CustomMetaTitle: Titre
     SiteConfigTitle: 'Nom du site'
     belongs_many_many_Groups: Groupes

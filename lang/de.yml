@@ -3,8 +3,6 @@ de:
     INVALID_DOMAIN: 'Ungültige Domain'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Klicken Sie hier, um den Inhalt zu bearbeiten'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Subsites
   SilverStripe\Subsites\Extensions\FileSubsites:
     has_one_Subsite: Subseite
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
@@ -18,8 +16,6 @@ de:
     GlobalGroup: 'globale Gruppe'
     MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
     MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
-    SECURITYTABTITLE: Subsites
-    many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Seiten Inhalt'
     Saved: 'Gespeichert, bitte aktualisieren Sie verknüpfte Seiten'
@@ -38,7 +34,6 @@ de:
     CustomMetaDescription: Beschreibung
     CustomMetaKeywords: Schlüsselwörter
     CustomMetaTitle: Titel
-    PLURALNAME: Subsites
     PLURALS:
       one: 'Eine Subseite'
       other: '{count} Subsites'
@@ -46,15 +41,12 @@ de:
     SINGULARNAME: Subseite
     SiteConfigSubtitle: 'Ihr Websiteslogan'
     SiteConfigTitle: 'Name Ihrer Website'
-    ThemeFieldEmptyString: '-'
     ValidateTitle: 'Bitte geben Sie einen Titel an'
     belongs_many_many_Groups: Gruppe
     db_DefaultSite: 'Standard Seite'
     db_Language: Sprache
     db_RedirectURL: Weierleitungs-URL
-    db_Theme: Theme
     db_Title: Titel
-    has_many_Domains: Domains
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domäne
     DOMAIN_DESCRIPTION: 'Hostname dieser Subsite (ohne Protokol). Joker (*) ist erlaubt.'
@@ -65,8 +57,6 @@ de:
       other: '{count} Domainen der Subseite'
     PROTOCOL_AUTOMATIC: Automatisch
     PROTOCOL_DESCRIPTION: 'DIes ist die Standarddomäne für diese Subseite'
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
     Protocol: Protokoll
     SINGULARNAME: 'Domäne der Subseite'
     db_Domain: Domäne
@@ -96,5 +86,4 @@ de:
     PageTypeBlacklistFieldLabel: 'Ausgeschlossene Seitentypen'
     PrimaryDomainFieldLabel: 'Primäre Domain'
     RedirectURLFieldLabel: Weierleitungs-URL
-    ThemeFieldLabel: Theme
     TitleFieldLabel: 'Name der Subsite'

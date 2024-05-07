@@ -35,7 +35,6 @@ it:
     CopyMessage: 'Creata una copia di {title}'
     CustomExtraMeta: 'Meta Tags personalizzati'
     CustomMetaDescription: Descrizione
-    CustomMetaKeywords: Keywords
     CustomMetaTitle: Titolo
     PLURALNAME: Sottositi
     PageTypeBlacklistField: 'Disabilita tipi di pagina?'
@@ -57,8 +56,6 @@ it:
     IS_PRIMARY: 'È il dominio primario?'
     PLURALNAME: 'Domini del sottosito'
     PROTOCOL_AUTOMATIC: Automatico
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
     Protocol: Protocollo
     SINGULARNAME: 'Dominio del sottosito'
     db_Domain: Dominio
