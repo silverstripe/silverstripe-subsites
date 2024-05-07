@@ -3,16 +3,11 @@ nl:
     INVALID_DOMAIN: 'Ongeldige domein naam'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Klik hier om inhoud aan te passen'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Subsites
   SilverStripe\Subsites\Controller\SubsiteXHRController:
     MENUTITLE: Subsites
-  SilverStripe\Subsites\Extensions\FileSubsites:
-    has_one_Subsite: Subsite
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     AllSitesDropdownOpt: 'Alle sites'
     SUBSITENOTICE: 'Mappen en bestanden van de Hoofdsite zijn toegankelijk voor alle subsites.'
-    SubsiteFieldLabel: Subsite
   SilverStripe\Subsites\Extensions\GroupSubsites:
     ACCESSALL: 'Alle subsites'
     ACCESSONLY: 'Alleen deze subsites'
@@ -20,20 +15,15 @@ nl:
     GlobalGroup: 'globale groep'
     MANAGE_SUBSITES: 'Beheer subsites voor groepen'
     MANAGE_SUBSITES_HELP: 'Bepaal de toegangsrechten voor groepen per subsite'
-    SECURITYTABTITLE: Subsites
     db_AccessAllSubsites: 'Toegang tot alle subsites'
-    many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Site inhoud'
-    Saved: 'Opgeslagen, pas onderliggende pagina''s aan.'
-  SilverStripe\Subsites\Extensions\SiteConfigSubsites:
-    has_one_Subsite: Subsite
+    Saved: "Opgeslagen, pas onderliggende pagina's aan."
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopieer
-    CopyToSubsite: 'Kopieer pagina''s naar subsite'
-    CopyToSubsiteWithChildren: 'Inclusief onderliggende pagina''s?'
+    CopyToSubsite: "Kopieer pagina's naar subsite"
+    CopyToSubsiteWithChildren: "Inclusief onderliggende pagina's?"
     SubsiteOperations: 'Subsite Acties'
-    has_one_Subsite: Subsite
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Configuratie
     CopyMessage: 'Kopie gemaakt van {title}'
@@ -41,20 +31,16 @@ nl:
     CustomMetaDescription: Omschrijving
     CustomMetaKeywords: Sleutelwoorden
     CustomMetaTitle: Titel
-    PLURALNAME: Subsites
     PLURALS:
       one: 'Een Subsite'
       other: '{count} Subsites'
     PageTypeBlacklistField: 'Niet toegestane paginatypes?'
-    SINGULARNAME: Subsite
     SiteConfigSubtitle: 'Jouw slagzin hier'
     SiteConfigTitle: 'Jouw Site Naam'
-    ThemeFieldEmptyString: '-'
     ValidateTitle: 'Voeg een "Titel" toe'
     belongs_many_many_Groups: Groepen
     db_DefaultSite: 'Standaard Site'
     db_Language: Taal
-    db_RedirectURL: 'Redirect URL'
     db_Theme: Thema
     db_Title: Titel
   SilverStripe\Subsites\Model\SubsiteDomain:
@@ -67,14 +53,9 @@ nl:
       one: 'Een subsite domein'
       other: '{count} subsite domeinen'
     PROTOCOL_AUTOMATIC: Automatisch
-    PROTOCOL_DESCRIPTION: 'Wordt gebruikt bij het genereren van links naar deze subsite. <br />''Automatisch'' houdt in dat het huidige protocol gebruikt zal worden.'
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
-    Protocol: Protocol
+    PROTOCOL_DESCRIPTION: "Wordt gebruikt bij het genereren van links naar deze subsite. <br />'Automatisch' houdt in dat het huidige protocol gebruikt zal worden."
     SINGULARNAME: 'Subsite Domein'
     db_Domain: Domein
-    db_Protocol: Protocol
-    has_one_Subsite: Subsite
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     DESCRIPTION: 'Toon de inhoud van een pagina op een andere subsite'
     OverrideNote: 'Overschrijft de overgenomen tekst van de gelinkte pagina'
@@ -83,10 +64,6 @@ nl:
       one: 'Subsites Virtuele pagina'
       other: '{count} Subsites Virtuele paginas'
     SINGULARNAME: 'Subsites Virtuele pagina'
-    SubsiteField: Subsite
-  SilverStripe\Subsites\Reports\SubsiteReportWrapper:
-    ReportDropdown: Sites
-    ReportDropdownSubsite: Subsite
   Subsite:
     COPYSTRUCTURE: 'Kopieer structuur vanaf:'
     NOTEMPLATE: 'Geen template'
@@ -98,6 +75,5 @@ nl:
     MainSiteTitle: 'Hoofd site'
     PageTypeBlacklistFieldLabel: 'Paginatypes blacklist'
     PrimaryDomainFieldLabel: 'Primaire domein'
-    RedirectURLFieldLabel: 'Redirect URL'
     ThemeFieldLabel: Thema
     TitleFieldLabel: 'Subsite naam'

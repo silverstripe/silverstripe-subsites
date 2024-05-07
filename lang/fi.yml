@@ -61,8 +61,6 @@ fi:
     IS_PRIMARY: 'On päädomain?'
     PLURALNAME: 'Alisivuston domain-osoitteet'
     PROTOCOL_AUTOMATIC: Automaattinen
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
     Protocol: Protokolla
     SINGULARNAME: 'Alisivuston domain-osoite'
     db_Domain: Verkkotunnus
@@ -81,7 +79,6 @@ fi:
     NOTEMPLATE: 'Ei sivupohjaa'
   Subsites:
     DefaultSiteFieldLabel: Oletussivusto
-    DomainFieldLabel: Domain
     IsPublicFieldLabel: 'Aktivoi julkinen pääsy'
     LanguageFieldLabel: Kieli
     MainSiteTitle: Pääsivusto
