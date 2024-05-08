@@ -15,9 +15,6 @@ nb_NO:
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
     SubsiteFieldLabel: Subdomene
   SilverStripe\Subsites\Extensions\GroupSubsites:
-    ACCESSALL: 'All subsites'
-    ACCESSONLY: 'Only these subsites'
-    ACCESSRADIOTITLE: 'Give this group access to'
     SECURITYTABTITLE: subdomener
     many_many_Subsites: subdomener
   SilverStripe\Subsites\Extensions\SiteConfigSubsites:
@@ -29,10 +26,6 @@ nb_NO:
     PLURALNAME: subdomener
     SINGULARNAME: Subdomene
   SilverStripe\Subsites\Model\SubsiteDomain:
-    DOMAIN: Domain
-    PLURALNAME: 'Subsite Domains'
-    SINGULARNAME: 'Subsite Domain'
-    db_Domain: Domain
     has_one_Subsite: Subdomene
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
     SINGULARNAME: 'Subdomeners Virtuelle Side'
@@ -45,7 +38,5 @@ nb_NO:
     DOMAIN: Domain
     PLURALNAME: 'Subsite Domains'
     SINGULARNAME: 'Subsite Domain'
-  Subsites:
-    DomainFieldLabel: Domain
   SubsitesVirtualPage:
     SINGULARNAME: 'Subdomeners Virtuelle Side'

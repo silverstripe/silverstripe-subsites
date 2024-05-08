@@ -57,8 +57,6 @@ ru:
     IS_PRIMARY: 'Это основной домен?'
     PLURALNAME: 'Домены подсайтов'
     PROTOCOL_AUTOMATIC: Автоматически
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
     Protocol: Протокол
     SINGULARNAME: 'Домен подсайта'
     db_Domain: Домен

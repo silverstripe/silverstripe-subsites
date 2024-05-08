@@ -2,11 +2,6 @@ cs:
   LeftAndMain_Menu:
     Hello: Ahoj
     LOGOUT: 'Odhlásit se'
-  SilverStripe\Subsites\Admin\SubsiteAdmin:
-    MENUTITLE: Subsites
-  SilverStripe\Subsites\Extensions\GroupSubsites:
-    SECURITYTABTITLE: Subsites
-    many_many_Subsites: Subsites
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopírovat
   SilverStripe\Subsites\Model\Subsite:
@@ -15,7 +10,6 @@ cs:
     CustomMetaDescription: Popis
     CustomMetaKeywords: 'Klíčová slova'
     CustomMetaTitle: Název
-    PLURALNAME: Subsites
     SiteConfigSubtitle: 'Slogan Vašeho webu'
     SiteConfigTitle: 'Název Vašeho webu'
     ValidateTitle: 'Prosím vložte "Název"'

@@ -50,7 +50,6 @@ eo:
     SINGULARNAME: Subretejo
     SiteConfigSubtitle: 'Jen via slogano'
     SiteConfigTitle: 'Nomo de via retejo'
-    ThemeFieldEmptyString: '-'
     ValidateTitle: 'Bonvole aldoni "Titolon"'
     belongs_many_many_Groups: Grupoj
     db_DefaultSite: 'Apriora retejo'
@@ -72,8 +71,6 @@ eo:
       other: '{count} subretejaj domajnoj'
     PROTOCOL_AUTOMATIC: Aŭtomata
     PROTOCOL_DESCRIPTION: 'Kiam generante ligilojn al ĉi tiu subretejo, uzu la elektitan protokolon.'
-    PROTOCOL_HTTP: 'http://'
-    PROTOCOL_HTTPS: 'https://'
     Protocol: Protokolo
     SINGULARNAME: 'Subreteja domajno'
     db_Domain: Domajno
