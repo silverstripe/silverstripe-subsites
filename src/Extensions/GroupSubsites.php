@@ -78,7 +78,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         }
     }
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         if ($this->owner->canEdit()) {
             // i18n tab
@@ -132,7 +132,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
      *
      * @param string $title
      */
-    public function updateTreeTitle(&$title)
+    protected function updateTreeTitle(&$title)
     {
         if ($this->owner->AccessAllSubsites) {
             $title = _t(__CLASS__ . '.GlobalGroup', 'global group');
@@ -148,7 +148,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
      * @param SQLSelect $query
      * @param DataQuery|null $dataQuery
      */
-    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
+    protected function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {
         if (Subsite::$disable_subsite_filter) {
             return;
@@ -203,7 +203,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         }
     }
 
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         // New record test approximated by checking whether the ID has changed.
         // Note also that the after write test is only used when we're *not* on a subsite
@@ -212,7 +212,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
         }
     }
 
-    public function onAfterWrite()
+    protected function onAfterWrite()
     {
         // New record test approximated by checking whether the ID has changed.
         // Note also that the after write test is only used when we're on a subsite

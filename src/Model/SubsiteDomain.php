@@ -95,7 +95,7 @@ class SubsiteDomain extends DataObject
      *
      * @return void
      */
-    public function onAfterWrite()
+    protected function onAfterWrite()
     {
         Subsite::writeHostMap();
         parent::onAfterWrite();

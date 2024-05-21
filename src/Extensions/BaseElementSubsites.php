@@ -20,7 +20,7 @@ class BaseElementSubsites extends DataExtension
      * @param string|null $action
      * @return string
      */
-    public function updatePreviewLink(&$link)
+    protected function updatePreviewLink(&$link)
     {
         // Get subsite ID from the element or from its page. Defaults to 0 automatically.
         $subsiteID = $this->owner->SubsiteID;
