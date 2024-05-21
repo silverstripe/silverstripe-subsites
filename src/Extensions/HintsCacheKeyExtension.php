@@ -16,7 +16,7 @@ use SilverStripe\Subsites\State\SubsiteState;
  */
 class HintsCacheKeyExtension extends Extension
 {
-    public function updateHintsCacheKey(&$baseKey)
+    protected function updateHintsCacheKey(&$baseKey)
     {
         $baseKey .= '_Subsite:' . SubsiteState::singleton()->getSubsiteId();
     }

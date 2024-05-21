@@ -9,6 +9,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Subsites\Extensions\FileSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Security\Member;
+use ReflectionMethod;
 
 class FileSubsitesTest extends BaseSubsiteTest
 {
@@ -25,7 +26,11 @@ class FileSubsitesTest extends BaseSubsiteTest
         $this->assertEquals('FileTitle', $file->getTreeTitle());
         $this->assertInstanceOf(FieldList::class, singleton(Folder::class)->getCMSFields());
         Subsite::changeSubsite(1);
-        $this->assertEquals('subsite-1', $file->getExtensionInstance(FileSubsites::class)->cacheKeyComponent());
+        $ext = $file->getExtensionInstance(FileSubsites::class);
+        $method = new ReflectionMethod(FileSubsites::class, 'cacheKeyComponent');
+        $method->setAccessible(true);
+        $result = $method->invoke($ext);
+        $this->assertEquals('subsite-1', $result);
     }
 
     public function testWritingSubsiteID()
@@ -35,10 +40,13 @@ class FileSubsitesTest extends BaseSubsiteTest
         $subsite = $this->objFromFixture(Subsite::class, 'domaintest1');
         Config::modify()->set(FileSubsites::class, 'default_root_folders_global', true);
 
+        $method = new ReflectionMethod(File::class, 'onAfterUpload');
+        $method->setAccessible(true);
+
         Subsite::changeSubsite(0);
         $file = new File();
         $file->write();
-        $file->onAfterUpload();
+        $method->invoke($file);
         $this->assertEquals((int)$file->SubsiteID, 0);
 
         Subsite::changeSubsite($subsite->ID);
@@ -63,7 +71,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         Config::modify()->set(FileSubsites::class, 'default_root_folders_global', true);
         $file = new File();
         $file->ParentID = $folder->ID;
-        $file->onAfterUpload();
+        $method->invoke($file);
         $this->assertEquals($folder->SubsiteID, $file->SubsiteID);
     }
 

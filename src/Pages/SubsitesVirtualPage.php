@@ -192,7 +192,7 @@ class SubsitesVirtualPage extends VirtualPage
         Subsite::$disable_subsite_filter = $oldState;
     }
 
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
 

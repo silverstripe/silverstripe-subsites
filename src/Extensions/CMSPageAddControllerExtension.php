@@ -13,7 +13,7 @@ use SilverStripe\Subsites\State\SubsiteState;
  */
 class CMSPageAddControllerExtension extends Extension
 {
-    public function updatePageOptions(FieldList $fields)
+    protected function updatePageOptions(FieldList $fields)
     {
         $fields->push(HiddenField::create('SubsiteID', 'SubsiteID', SubsiteState::singleton()->getSubsiteId()));
     }

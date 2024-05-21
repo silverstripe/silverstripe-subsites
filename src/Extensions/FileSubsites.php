@@ -49,7 +49,7 @@ class FileSubsites extends DataExtension
      * @param SQLSelect $query
      * @param DataQuery|null $dataQuery
      */
-    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
+    protected function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {
         if (Subsite::$disable_subsite_filter) {
             return;
@@ -85,7 +85,7 @@ class FileSubsites extends DataExtension
         }
     }
 
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         if (!$this->owner->ID && !$this->owner->SubsiteID) {
             if ($this->owner->config()->get('default_root_folders_global')) {
@@ -96,7 +96,7 @@ class FileSubsites extends DataExtension
         }
     }
 
-    public function onAfterUpload()
+    protected function onAfterUpload()
     {
         // If we have a parent, use it's subsite as our subsite
         if ($this->owner->Parent()) {
@@ -132,7 +132,7 @@ class FileSubsites extends DataExtension
      *
      * @return string
      */
-    public function cacheKeyComponent()
+    protected function cacheKeyComponent()
     {
         return 'subsite-' . SubsiteState::singleton()->getSubsiteId();
     }

@@ -63,7 +63,7 @@ class SiteTreeSubsites extends DataExtension
      * @param SQLSelect $query
      * @param DataQuery $dataQuery
      */
-    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
+    protected function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {
         if (Subsite::$disable_subsite_filter) {
             return;
@@ -98,7 +98,7 @@ class SiteTreeSubsites extends DataExtension
         }
     }
 
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         if (!$this->owner->ID && !$this->owner->SubsiteID) {
             $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();
@@ -107,7 +107,7 @@ class SiteTreeSubsites extends DataExtension
         parent::onBeforeWrite();
     }
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain');
         if ($subsites && $subsites->count()) {
@@ -225,7 +225,7 @@ class SiteTreeSubsites extends DataExtension
     /**
      * When duplicating a page, assign the current subsite ID from the state
      */
-    public function onBeforeDuplicate()
+    protected function onBeforeDuplicate()
     {
         $subsiteId = SubsiteState::singleton()->getSubsiteId();
         if ($subsiteId !== null) {
@@ -290,7 +290,7 @@ class SiteTreeSubsites extends DataExtension
     /**
      * @return SiteConfig
      */
-    public function alternateSiteConfig()
+    protected function alternateSiteConfig()
     {
         if (!$this->owner->SubsiteID) {
             return false;
@@ -433,7 +433,7 @@ class SiteTreeSubsites extends DataExtension
      * @param string|null $action
      * @return string
      */
-    public function updatePreviewLink(&$link, $action = null)
+    protected function updatePreviewLink(&$link, $action = null)
     {
         $url = Director::absoluteURL($this->owner->Link($action));
         $link = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
@@ -454,7 +454,7 @@ class SiteTreeSubsites extends DataExtension
         return $tags;
     }
 
-    public function augmentSyncLinkTracking()
+    protected function augmentSyncLinkTracking()
     {
         // Set LinkTracking appropriately
         $links = HTTP::getLinksIn($this->owner->Content);
@@ -502,7 +502,7 @@ class SiteTreeSubsites extends DataExtension
      *
      * @return null|bool Either true or false, or null to not influence result
      */
-    public function augmentValidURLSegment()
+    protected function augmentValidURLSegment()
     {
         // If this page is being filtered in the current subsite, then no custom validation query is required.
         $subsiteID = SubsiteState::singleton()->getSubsiteId();
@@ -518,7 +518,7 @@ class SiteTreeSubsites extends DataExtension
     /**
      * Return a piece of text to keep DataObject cache keys appropriately specific
      */
-    public function cacheKeyComponent()
+    protected function cacheKeyComponent()
     {
         return 'subsite-' . SubsiteState::singleton()->getSubsiteId();
     }

@@ -28,7 +28,7 @@ class ErrorPageSubsite extends DataExtension
      * @param string $name
      * @param int $statusCode
      */
-    public function updateErrorFilename(&$name, &$statusCode)
+    protected function updateErrorFilename(&$name, &$statusCode)
     {
         $static_filepath = Config::inst()->get($this->owner->ClassName, 'static_filepath');
         $subdomainPart = '';

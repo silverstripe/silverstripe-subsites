@@ -819,7 +819,7 @@ class Subsite extends DataObject
      *
      * @return void
      */
-    public function onAfterWrite()
+    protected function onAfterWrite()
     {
         Subsite::writeHostMap();
         if ($this->isChanged('ID')) {

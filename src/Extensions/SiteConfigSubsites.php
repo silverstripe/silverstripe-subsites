@@ -29,7 +29,7 @@ class SiteConfigSubsites extends DataExtension
      * @param SQLSelect $query
      * @param DataQuery|null $dataQuery
      */
-    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
+    protected function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
     {
         if (Subsite::$disable_subsite_filter) {
             return;
@@ -60,7 +60,7 @@ class SiteConfigSubsites extends DataExtension
         $query->addWhere("\"$tableName\".\"SubsiteID\" IN ($subsiteID)");
     }
 
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         if ((!is_numeric($this->owner->ID) || !$this->owner->ID) && !$this->owner->SubsiteID) {
             $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();
@@ -70,12 +70,12 @@ class SiteConfigSubsites extends DataExtension
     /**
      * Return a piece of text to keep DataObject cache keys appropriately specific
      */
-    public function cacheKeyComponent()
+    protected function cacheKeyComponent()
     {
         return 'subsite-' . SubsiteState::singleton()->getSubsiteId();
     }
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         $fields->push(HiddenField::create('SubsiteID', 'SubsiteID', SubsiteState::singleton()->getSubsiteId()));
     }

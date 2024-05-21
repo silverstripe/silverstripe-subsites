@@ -56,7 +56,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         return $subsite ? Convert::raw2xml($subsite->Title) : _t(__CLASS__.'.SITECONTENTLEFT', 'Site Content');
     }
 
-    public function updatePageOptions(&$fields)
+    protected function updatePageOptions(&$fields)
     {
         $fields->push(HiddenField::create('SubsiteID', 'SubsiteID', SubsiteState::singleton()->getSubsiteId()));
     }
@@ -266,7 +266,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      * fully re-synchronised with the internal session. This is better than risking some panels
      * showing data from another subsite.
      */
-    public function onBeforeInit()
+    protected function onBeforeInit()
     {
         $request = Controller::curr()->getRequest();
         $session = $request->getSession();
@@ -381,13 +381,13 @@ class LeftAndMainSubsites extends LeftAndMainExtension
         return;
     }
 
-    public function augmentNewSiteTreeItem(&$item)
+    protected function augmentNewSiteTreeItem(&$item)
     {
         $request = Controller::curr()->getRequest();
         $item->SubsiteID = $request->postVar('SubsiteID') ?: SubsiteState::singleton()->getSubsiteId();
     }
 
-    public function onAfterSave($record)
+    protected function onAfterSave($record)
     {
         if ($record->hasMethod('NormalRelated') && ($record->NormalRelated() || $record->ReverseRelated())) {
             $this->owner->response->addHeader(

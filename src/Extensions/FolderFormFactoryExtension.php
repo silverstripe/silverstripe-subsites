@@ -18,7 +18,7 @@ class FolderFormFactoryExtension extends Extension
      * Add subsites-specific fields to the folder editor.
      * @param FieldList $fields
      */
-    public function updateFormFields(FieldList $fields)
+    protected function updateFormFields(FieldList $fields)
     {
         $sites = Subsite::accessible_sites('CMS_ACCESS_AssetAdmin');
         $values = [];
