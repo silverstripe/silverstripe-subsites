@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   # Run on a schedule of once per quarter
   schedule:
-    - cron: '35 7 1 */3 *'
+    - cron: '20 16 1 */3 *'
 
 permissions: {}
 
