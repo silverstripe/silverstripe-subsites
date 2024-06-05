@@ -173,7 +173,7 @@ class SubsitesVirtualPage extends VirtualPage
             }
         }
 
-        foreach (self::$db as $field => $type) {
+        foreach (SubsitesVirtualPage::$db as $field => $type) {
             if (in_array($field, $fields ?? [])) {
                 unset($fields[array_search($field, $fields)]);
             }

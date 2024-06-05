@@ -15,6 +15,6 @@ class TestErrorPage extends ErrorPage implements TestOnly
      */
     public static function get_error_filename_spy($statusCode)
     {
-        return self::get_error_filename($statusCode);
+        return TestErrorPage::get_error_filename($statusCode);
     }
 }

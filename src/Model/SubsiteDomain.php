@@ -108,9 +108,9 @@ class SubsiteDomain extends DataObject
     public function getCMSFields()
     {
         $protocols = [
-            self::PROTOCOL_HTTP => _t(__CLASS__ . '.PROTOCOL_HTTP', 'http://'),
-            self::PROTOCOL_HTTPS => _t(__CLASS__ . '.PROTOCOL_HTTPS', 'https://'),
-            self::PROTOCOL_AUTOMATIC => _t(__CLASS__ . '.PROTOCOL_AUTOMATIC', 'Automatic')
+            SubsiteDomain::PROTOCOL_HTTP => _t(__CLASS__ . '.PROTOCOL_HTTP', 'http://'),
+            SubsiteDomain::PROTOCOL_HTTPS => _t(__CLASS__ . '.PROTOCOL_HTTPS', 'https://'),
+            SubsiteDomain::PROTOCOL_AUTOMATIC => _t(__CLASS__ . '.PROTOCOL_AUTOMATIC', 'Automatic')
         ];
         $fields = FieldList::create(
             WildcardDomainField::create('Domain', $this->fieldLabel('Domain'), null, 255)
@@ -119,7 +119,7 @@ class SubsiteDomain extends DataObject
                     'Hostname of this subsite (exclude protocol). Allows wildcards (*).'
                 )),
             OptionsetField::create('Protocol', $this->fieldLabel('Protocol'), $protocols)
-                ->setValue($this->Protocol ?: self::PROTOCOL_AUTOMATIC)
+                ->setValue($this->Protocol ?: SubsiteDomain::PROTOCOL_AUTOMATIC)
                 ->setDescription(_t(
                     __CLASS__ . '.PROTOCOL_DESCRIPTION',
                     'When generating links to this subsite, use the selected protocol. <br />' .
@@ -169,9 +169,9 @@ class SubsiteDomain extends DataObject
     public function getFullProtocol()
     {
         switch ($this->Protocol) {
-            case self::PROTOCOL_HTTPS:
+            case SubsiteDomain::PROTOCOL_HTTPS:
                 return 'https://';
-            case self::PROTOCOL_HTTP:
+            case SubsiteDomain::PROTOCOL_HTTP:
                 return 'http://';
             default:
                 return Director::protocol();
