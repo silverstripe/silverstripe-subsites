@@ -22,7 +22,8 @@ class SubsiteReportWrapper extends ReportWrapper
     public function parameterFields()
     {
         $subsites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true);
-        $options = [self::SUBSITE_ID_ALL => _t(__CLASS__ . '.ReportDropdownAll', 'All')] + $subsites->map()->toArray();
+        $text = _t(__CLASS__ . '.ReportDropdownAll', 'All');
+        $options = [SubsiteReportWrapper::SUBSITE_ID_ALL => $text] + $subsites->map()->toArray();
 
         $subsiteField = DropdownField::create(
             'Subsite',
@@ -56,8 +57,8 @@ class SubsiteReportWrapper extends ReportWrapper
 
     public function sourceQuery($params)
     {
-        $subsiteID = (int) ($params['Subsite'] ?? self::SUBSITE_ID_ALL);
-        if ($subsiteID === self::SUBSITE_ID_ALL) {
+        $subsiteID = (int) ($params['Subsite'] ?? SubsiteReportWrapper::SUBSITE_ID_ALL);
+        if ($subsiteID === SubsiteReportWrapper::SUBSITE_ID_ALL) {
             return Subsite::withDisabledSubsiteFilter(function () use ($params) {
                 return parent::sourceQuery($params);
             });
@@ -70,8 +71,8 @@ class SubsiteReportWrapper extends ReportWrapper
 
     public function sourceRecords($params = [], $sort = null, $limit = null)
     {
-        $subsiteID = (int) ($params['Subsite'] ?? self::SUBSITE_ID_ALL);
-        if ($subsiteID === self::SUBSITE_ID_ALL) {
+        $subsiteID = (int) ($params['Subsite'] ?? SubsiteReportWrapper::SUBSITE_ID_ALL);
+        if ($subsiteID === SubsiteReportWrapper::SUBSITE_ID_ALL) {
             return Subsite::withDisabledSubsiteFilter(function () use ($params, $sort, $limit) {
                 return parent::sourceRecords($params, $sort, $limit);
             });
