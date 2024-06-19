@@ -35,6 +35,7 @@ use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
@@ -666,16 +667,10 @@ class Subsite extends DataObject
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
-            if ($this->exists()) {
-                // Add a GridField for domains to a new tab if the subsite has already been created
-                $fields->addFieldsToTab('Root.Domains', [
-                    GridField::create(
-                        'Domains',
-                        '',
-                        $this->Domains(),
-                        GridFieldConfig_RecordEditor::create(10)
-                    )
-                ]);
+            $domainsGridField = $fields->dataFieldByName('Domains');
+            if ($domainsGridField instanceof GridField) {
+                $domainsGridField->setTitle('');
+                $domainsGridField->getConfig()->removeComponentsByType(GridFieldAddExistingAutocompleter::class);
             }
 
             // Remove the default scaffolded blacklist field, we replace it with a checkbox set field
