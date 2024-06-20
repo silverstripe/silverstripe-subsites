@@ -64,6 +64,6 @@ class SubsiteXHRController extends LeftAndMain
      */
     public function SubsiteList()
     {
-        return $this->renderWith(['type' => 'Includes', self::class . '_subsitelist']);
+        return $this->renderWith(['type' => 'Includes', SubsiteXHRController::class . '_subsitelist']);
     }
 }

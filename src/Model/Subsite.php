@@ -175,7 +175,7 @@ class Subsite extends DataObject
      */
     public static function set_allowed_themes($themes)
     {
-        self::$allowed_themes = $themes;
+        Subsite::$allowed_themes = $themes;
     }
 
     /**
@@ -250,8 +250,8 @@ class Subsite extends DataObject
 
             $currentUserId = Security::getCurrentUser() ? Security::getCurrentUser()->ID : 0;
             $cacheKey = implode('_', [$host, $currentUserId, static::config()->get('check_is_public')]);
-            if (isset(self::$cache_subsite_for_domain[$cacheKey])) {
-                return self::$cache_subsite_for_domain[$cacheKey];
+            if (isset(Subsite::$cache_subsite_for_domain[$cacheKey])) {
+                return Subsite::$cache_subsite_for_domain[$cacheKey];
             }
 
             $SQL_host = Convert::raw2sql($host);
@@ -301,7 +301,7 @@ class Subsite extends DataObject
         }
 
         if ($cacheKey) {
-            self::$cache_subsite_for_domain[$cacheKey] = $subsiteID;
+            Subsite::$cache_subsite_for_domain[$cacheKey] = $subsiteID;
         }
 
         return $subsiteID;
@@ -329,15 +329,15 @@ class Subsite extends DataObject
      */
     public static function disable_subsite_filter($disabled = true)
     {
-        self::$disable_subsite_filter = $disabled;
+        Subsite::$disable_subsite_filter = $disabled;
     }
 
     public static function withDisabledSubsiteFilter(callable $callable, bool $disabled = true): mixed
     {
-        $orig = self::$disable_subsite_filter;
-        self::disable_subsite_filter($disabled);
+        $orig = Subsite::$disable_subsite_filter;
+        Subsite::disable_subsite_filter($disabled);
         $ret = $callable();
-        self::disable_subsite_filter($orig);
+        Subsite::disable_subsite_filter($orig);
         return $ret;
     }
 
@@ -346,8 +346,8 @@ class Subsite extends DataObject
      */
     public static function on_db_reset()
     {
-        self::$cache_accessible_sites = [];
-        self::$cache_subsite_for_domain = [];
+        Subsite::$cache_accessible_sites = [];
+        Subsite::$cache_subsite_for_domain = [];
     }
 
     /**
@@ -453,8 +453,8 @@ class Subsite extends DataObject
 
         // Cache handling
         $cacheKey = $SQL_codes . '-' . $member->ID . '-' . $includeMainSite . '-' . $mainSiteTitle;
-        if (isset(self::$cache_accessible_sites[$cacheKey])) {
-            return self::$cache_accessible_sites[$cacheKey];
+        if (isset(Subsite::$cache_accessible_sites[$cacheKey])) {
+            return Subsite::$cache_accessible_sites[$cacheKey];
         }
 
         $subsites = DataList::create(Subsite::class)
@@ -517,7 +517,7 @@ class Subsite extends DataObject
             if (!is_array($permCode)) {
                 $permCode = [$permCode];
             }
-            if (self::hasMainSitePermission($member, $permCode)) {
+            if (Subsite::hasMainSitePermission($member, $permCode)) {
                 $subsites = $subsites->toArray();
 
                 $mainSite = new Subsite();
@@ -527,7 +527,7 @@ class Subsite extends DataObject
             }
         }
 
-        self::$cache_accessible_sites[$cacheKey] = $subsites;
+        Subsite::$cache_accessible_sites[$cacheKey] = $subsites;
 
         return $subsites;
     }
@@ -771,7 +771,7 @@ class Subsite extends DataObject
      */
     public function allowedThemes()
     {
-        if (($themes = self::$allowed_themes) || ($themes = ThemeResolver::singleton()->getCustomThemeOptions())) {
+        if (($themes = Subsite::$allowed_themes) || ($themes = ThemeResolver::singleton()->getCustomThemeOptions())) {
             return ArrayLib::valuekey($themes);
         }
 
@@ -958,7 +958,7 @@ JS;
         $duplicate = parent::duplicate($doWrite);
 
         $oldSubsiteID = SubsiteState::singleton()->getSubsiteId();
-        self::changeSubsite($this->ID);
+        Subsite::changeSubsite($this->ID);
 
         /*
          * Copy data from this object to the given subsite. Does this using an iterative depth-first search.
@@ -973,21 +973,21 @@ JS;
 
             if ($children) {
                 foreach ($children as $child) {
-                    self::changeSubsite($duplicate->ID); //Change to destination subsite
+                    Subsite::changeSubsite($duplicate->ID); //Change to destination subsite
 
                     $childClone = $child->duplicateToSubsite($duplicate, false);
                     $childClone->ParentID = $destParentID;
                     $childClone->writeToStage('Stage');
                     $childClone->copyVersionToStage('Stage', 'Live');
 
-                    self::changeSubsite($this->ID); //Change Back to this subsite
+                    Subsite::changeSubsite($this->ID); //Change Back to this subsite
 
                     array_push($stack, [$child->ID, $childClone->ID]);
                 }
             }
         }
 
-        self::changeSubsite($oldSubsiteID);
+        Subsite::changeSubsite($oldSubsiteID);
 
         return $duplicate;
     }
