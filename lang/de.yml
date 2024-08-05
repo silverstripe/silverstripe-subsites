@@ -16,6 +16,7 @@ de:
     GlobalGroup: 'globale Gruppe'
     MANAGE_SUBSITES: 'Subseiten für jede Gruppe bearbeiten'
     MANAGE_SUBSITES_HELP: 'Möglichkeit, die Berechtigungen einer Gruppe auf bestimmte Subsites zu beschränken.'
+    db_AccessAllSubsites: 'Zugang zu allen Unterseiten'
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
     SITECONTENTLEFT: 'Seiten Inhalt'
     Saved: 'Gespeichert, bitte aktualisieren Sie verknüpfte Seiten'
@@ -44,12 +45,15 @@ de:
     ValidateTitle: 'Bitte geben Sie einen Titel an'
     belongs_many_many_Groups: Gruppe
     db_DefaultSite: 'Standard Seite'
+    db_IsPublic: 'Ist Veröffentlicht'
     db_Language: Sprache
+    db_PageTypeBlacklist: 'Ausgeschlossene Seitentypen'
     db_RedirectURL: Weierleitungs-URL
     db_Title: Titel
   SilverStripe\Subsites\Model\SubsiteDomain:
     DOMAIN: Domäne
     DOMAIN_DESCRIPTION: 'Hostname dieser Subsite (ohne Protokol). Joker (*) ist erlaubt.'
+    ISPRIMARY_DESCRIPTION: 'Markiere dies als die Standard-Domain für diese Subseite'
     IS_PRIMARY: 'Ist Hauptdomäne?'
     PLURALNAME: 'Domänen der Subseite'
     PLURALS:
@@ -73,6 +77,7 @@ de:
     SubsiteField: Subseite
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Seiten
+    ReportDropdownAll: Alle
     ReportDropdownSubsite: Subseite
   Subsite:
     COPYSTRUCTURE: 'Struktur kopieren von:'
