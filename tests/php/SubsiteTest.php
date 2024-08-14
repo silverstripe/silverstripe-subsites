@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Tests;
 
 use Page;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObject;
@@ -304,7 +305,7 @@ class SubsiteTest extends BaseSubsiteTest
 
         // If there is a Director::baseURL() value this will also be included
         $this->assertEquals(
-            'http://' . $_SERVER['HTTP_HOST'],
+            $this->normaliseTrailingSlash('http://' . $_SERVER['HTTP_HOST']),
             singleton(Subsite::class)->absoluteBaseURL()
         );
     }
@@ -324,7 +325,7 @@ class SubsiteTest extends BaseSubsiteTest
         $model = $this->objFromFixture($class, $identifier);
         $protocol = $currentIsSecure ? 'https' : 'http';
         Config::modify()->set(Director::class, 'alternate_base_url', $protocol . '://www.mysite.com');
-        $this->assertSame($expected, $model->absoluteBaseURL());
+        $this->assertSame($this->normaliseTrailingSlash($expected), $model->absoluteBaseURL());
     }
 
     public function domainProtocolProvider()
@@ -501,5 +502,18 @@ class SubsiteTest extends BaseSubsiteTest
 
         $pages = SiteTree::get();
         $this->assertGreaterThanOrEqual(1, $pages->count());
+    }
+
+    /**
+     * Normalises a test URL's trailing slash, but ignores complexities
+     * such as whether the domain host in the UR matches Director::host()
+     */
+    private function normaliseTrailingSlash(string $testURL): string
+    {
+        if ($testURL === '/' || $testURL === '') {
+            return '/';
+        }
+        $slash = Controller::config()->get('add_trailing_slash') ? '/' : '';
+        return (rtrim($testURL, '/')) . $slash;
     }
 }

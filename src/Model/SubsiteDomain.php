@@ -217,9 +217,11 @@ class SubsiteDomain extends DataObject
      */
     public function absoluteBaseURL()
     {
-        return Controller::join_links(
+        $slash = Controller::config()->get('add_trailing_slash') ? '/' : '';
+        $baseURL = Controller::join_links(
             $this->getAbsoluteLink(),
             Director::baseURL()
         );
+        return (rtrim($baseURL, '/')) . $slash;
     }
 }
