@@ -53,6 +53,15 @@ class SiteTreeSubsites extends DataExtension
         'CrossSubsiteLinkTracking' => ['FieldName' => 'Varchar']
     ];
 
+    private static array $scaffold_cms_fields_settings = [
+        'ignoreFields' => [
+            'Subsite',
+        ],
+        'ignoreRelations' => [
+            'CrossSubsiteLinkTracking',
+        ],
+    ];
+
     public function isMainSite()
     {
         return $this->owner->SubsiteID == 0;
