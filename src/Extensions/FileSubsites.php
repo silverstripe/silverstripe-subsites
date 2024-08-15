@@ -107,7 +107,7 @@ class FileSubsites extends DataExtension
         $this->owner->write();
     }
 
-    public function canEdit($member = null)
+    protected function canEdit($member = null)
     {
         // Opt out of making opinions if no subsite ID is set yet
         if (!$this->owner->SubsiteID) {
