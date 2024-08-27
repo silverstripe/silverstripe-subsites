@@ -43,7 +43,7 @@ class GroupSubsites extends DataExtension implements PermissionProvider
     /**
      * Migrations for GroupSubsites data.
      */
-    public function requireDefaultRecords()
+    protected function onRequireDefaultRecords()
     {
         if (!$this->owner) {
             return;

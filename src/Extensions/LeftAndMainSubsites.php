@@ -41,7 +41,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      */
     private static $treats_subsite_0_as_global = false;
 
-    public function init()
+    protected function onInit()
     {
         Requirements::css('silverstripe/subsites:client/dist/styles/LeftAndMain_Subsites.css');
         Requirements::javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js');
@@ -223,7 +223,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      *
      * @param Member $member
      */
-    public function canAccess(Member $member = null)
+    protected function canAccess(Member $member = null)
     {
         if (!$member) {
             $member = Security::getCurrentUser();
@@ -253,7 +253,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
      */
     public function alternateAccessCheck(Member $member = null)
     {
-        return $this->owner->canAccess($member);
+        return $this->canAccess($member);
     }
 
     /**
@@ -345,7 +345,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension
 
         // SECOND, check if we need to change subsites due to lack of permissions.
 
-        if (!$this->owner->canAccess()) {
+        if (!$this->canAccess()) {
             $member = Security::getCurrentUser();
 
             // Current section is not accessible, try at least to stick to the same subsite.

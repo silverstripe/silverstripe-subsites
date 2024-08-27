@@ -325,7 +325,7 @@ class SiteTreeSubsites extends DataExtension
      * @param Member|null $member
      * @return bool|null
      */
-    public function canEdit($member = null)
+    protected function canEdit($member = null)
     {
         if (!$member) {
             $member = Security::getCurrentUser();
@@ -360,7 +360,7 @@ class SiteTreeSubsites extends DataExtension
      * @param null $member
      * @return bool
      */
-    public function canDelete($member = null)
+    protected function canDelete($member = null)
     {
         if (!$member && $member !== false) {
             $member = Security::getCurrentUser();
@@ -373,7 +373,7 @@ class SiteTreeSubsites extends DataExtension
      * @param null $member
      * @return bool
      */
-    public function canAddChildren($member = null)
+    protected function canAddChildren($member = null)
     {
         if (!$member && $member !== false) {
             $member = Security::getCurrentUser();
@@ -386,7 +386,7 @@ class SiteTreeSubsites extends DataExtension
      * @param Member|null $member
      * @return bool|null
      */
-    public function canPublish($member = null)
+    protected function canPublish($member = null)
     {
         if (!$member && $member !== false) {
             $member = Security::getCurrentUser();
@@ -454,7 +454,7 @@ class SiteTreeSubsites extends DataExtension
      * @param $tags
      * @return string
      */
-    public function MetaTags(&$tags)
+    protected function updateMetaTags(&$tags)
     {
         if ($this->owner->SubsiteID) {
             $tags .= '<meta name="x-subsite-id" content="' . $this->owner->SubsiteID . "\" />\n";
@@ -536,7 +536,7 @@ class SiteTreeSubsites extends DataExtension
      * @param Member $member
      * @return boolean|null
      */
-    public function canCreate($member = null)
+    protected function canCreate($member = null)
     {
         // Typically called on a singleton, so we're not using the Subsite() relation
         $subsite = Subsite::currentSubsite();
