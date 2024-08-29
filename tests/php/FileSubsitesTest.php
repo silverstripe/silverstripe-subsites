@@ -17,7 +17,6 @@ class FileSubsitesTest extends BaseSubsiteTest
 
     public function testTrivialFeatures()
     {
-        $this->assertTrue(is_array(singleton(FileSubsites::class)->extraStatics()));
         $file = new File();
         $file->Name = 'FileTitle';
         $file->Title = 'FileTitle';

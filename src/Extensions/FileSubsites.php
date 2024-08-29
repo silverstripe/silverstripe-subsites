@@ -3,7 +3,7 @@
 namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Assets\File;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\Security\Permission;
@@ -15,9 +15,9 @@ use SilverStripe\Subsites\State\SubsiteState;
  *
  * @method Subsite Subsite()
  *
- * @extends DataExtension<File>
+ * @extends Extension<File>
  */
-class FileSubsites extends DataExtension
+class FileSubsites extends Extension
 {
     /**
      * If this is set to true, all folders created will be default be considered 'global', unless set otherwise

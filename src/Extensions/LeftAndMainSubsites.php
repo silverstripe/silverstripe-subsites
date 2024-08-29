@@ -6,13 +6,13 @@ use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\CMSProfileController;
 use SilverStripe\Admin\LeftAndMain;
-use SilverStripe\Admin\LeftAndMainExtension;
 use SilverStripe\CMS\Controllers\CMSPagesController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -27,10 +27,8 @@ use SilverStripe\View\Requirements;
 
 /**
  * Decorator designed to add subsites support to LeftAndMain
- *
- * @extends LeftAndMainExtension<LeftAndMain>
  */
-class LeftAndMainSubsites extends LeftAndMainExtension
+class LeftAndMainSubsites extends Extension
 {
     private static $allowed_actions = ['CopyToSubsite'];
 

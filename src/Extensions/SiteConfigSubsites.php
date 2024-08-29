@@ -4,7 +4,7 @@ namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\Queries\SQLSelect;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -16,9 +16,9 @@ use SilverStripe\Subsites\State\SubsiteState;
  *
  * @method Subsite Subsite()
  *
- * @extends DataExtension<SiteConfig&static>
+ * @extends Extension<SiteConfig&static>
  */
-class SiteConfigSubsites extends DataExtension
+class SiteConfigSubsites extends Extension
 {
     private static $has_one = [
         'Subsite' => Subsite::class, // The subsite that this page belongs to

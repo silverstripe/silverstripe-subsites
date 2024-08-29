@@ -109,6 +109,6 @@ class LeftAndMainSubsitesTest extends FunctionalTest
 
         /** @var LeftAndMain&LeftAndMainSubsites $leftAndMain */
         $leftAndMain = new LeftAndMain();
-        $this->assertTrue($leftAndMain->canAccess($member));
+        $this->assertTrue($leftAndMain->alternateAccessCheck($member));
     }
 }

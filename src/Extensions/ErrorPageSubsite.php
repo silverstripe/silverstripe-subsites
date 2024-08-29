@@ -6,14 +6,14 @@ use SilverStripe\Assets\FileNameFilter;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ErrorPage\ErrorPage;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Model\Subsite;
 
 /**
- * @extends DataExtension<ErrorPage>
+ * @extends Extension<ErrorPage>
  */
-class ErrorPageSubsite extends DataExtension
+class ErrorPageSubsite extends Extension
 {
     /**
      * Alter file path to generated a static (static) error page file to handle error page template

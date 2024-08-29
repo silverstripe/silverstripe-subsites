@@ -15,8 +15,6 @@ class SiteConfigSubsitesTest extends BaseSubsiteTest
         $subsite1 = $this->objFromFixture(Subsite::class, 'domaintest1');
         $subsite2 = $this->objFromFixture(Subsite::class, 'domaintest2');
 
-        $this->assertTrue(is_array(singleton(SiteConfigSubsites::class)->extraStatics()));
-
         Subsite::changeSubsite(0);
         $sc = SiteConfig::current_site_config();
         $sc->Title = 'RootSite';

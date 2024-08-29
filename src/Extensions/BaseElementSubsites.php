@@ -4,14 +4,14 @@ namespace SilverStripe\Subsites\Extensions;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Control\HTTP;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 
 /**
  * Extension for the BaseElement object to add subsites support for CMS previews
  *
- * @extends DataExtension<BaseElement>
+ * @extends Extension<BaseElement>
  */
-class BaseElementSubsites extends DataExtension
+class BaseElementSubsites extends Extension
 {
     /**
      * Set SubsiteID to avoid errors when a page doesn't exist on the CMS domain.
