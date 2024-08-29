@@ -15,7 +15,6 @@ class GroupSubsitesTest extends BaseSubsiteTest
 
     public function testTrivialFeatures()
     {
-        $this->assertIsArray(singleton(GroupSubsites::class)->extraStatics());
         $this->assertIsArray(singleton(GroupSubsites::class)->providePermissions());
         $this->assertInstanceOf(FieldList::class, singleton(Group::class)->getCMSFields());
     }

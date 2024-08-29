@@ -92,7 +92,6 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         // The following assert is breaking in Translatable.
         $this->assertInstanceOf(FieldList::class, singleton(SiteTree::class)->getCMSFields());
         $this->assertInstanceOf(FieldList::class, singleton(SubsitesVirtualPage::class)->getCMSFields());
-        $this->assertTrue(is_array(singleton(SiteTreeSubsites::class)->extraStatics()));
     }
 
     public function errorPageLocationsProvider()

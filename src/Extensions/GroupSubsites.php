@@ -8,7 +8,7 @@ use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\DB;
@@ -24,9 +24,9 @@ use SilverStripe\Subsites\State\SubsiteState;
  *
  * @method ManyManyList<Subsite> Subsites()
  *
- * @extends DataExtension<Group&static>
+ * @extends Extension<Group&static>
  */
-class GroupSubsites extends DataExtension implements PermissionProvider
+class GroupSubsites extends Extension implements PermissionProvider
 {
     private static $db = [
         'AccessAllSubsites' => 'Boolean'

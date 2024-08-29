@@ -9,7 +9,7 @@ page to a particular subsite.
 
 The subsite module adds functionality to the admin section of the site to allow you to create new subsites and copy 
 pages between the main site and any subsites.
-Subsites makes use of a DataExtension called SiteTreeSubsites to add support for subsites to the SiteTree,
+Subsites makes use of an Extension called SiteTreeSubsites to add support for subsites to the SiteTree,
 which extends various methods to add Subsite functionality some of the methods are listed below
 
 ### augmentSQL

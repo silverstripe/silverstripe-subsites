@@ -16,7 +16,7 @@ use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataQuery;
 use SilverStripe\ORM\ManyManyList;
@@ -37,9 +37,9 @@ use SilverStripe\VersionedAdmin\Controllers\HistoryViewerController;
  * @method ManyManyList<SiteTree> CrossSubsiteLinkTracking()
  * @method Subsite Subsite()
  *
- * @extends DataExtension<SiteTree&static>
+ * @extends Extension<SiteTree&static>
  */
-class SiteTreeSubsites extends DataExtension
+class SiteTreeSubsites extends Extension
 {
     private static $has_one = [
         'Subsite' => Subsite::class, // The subsite that this page belongs to
@@ -112,8 +112,6 @@ class SiteTreeSubsites extends DataExtension
         if (!$this->owner->ID && !$this->owner->SubsiteID) {
             $this->owner->SubsiteID = SubsiteState::singleton()->getSubsiteId();
         }
-
-        parent::onBeforeWrite();
     }
 
     protected function updateCMSFields(FieldList $fields)
