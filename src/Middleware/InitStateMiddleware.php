@@ -23,7 +23,6 @@ class InitStateMiddleware implements HTTPMiddleware
      */
     private static $admin_url_paths = [
         'dev/',
-        'graphql/',
     ];
 
     public function process(HTTPRequest $request, callable $delegate)

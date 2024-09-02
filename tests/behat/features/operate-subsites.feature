@@ -68,6 +68,7 @@ Feature: Create and select a subsite
     When I go to "admin/assets"
     And I select "My subsite" from "SubsitesSelect"
     And I press the "Add folder" button
+    And I wait for 2 seconds
     And I fill in "Folder name" with "sfol"
     And I press the "Create" button
     When I go to "admin/assets"
