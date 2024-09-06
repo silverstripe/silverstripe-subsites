@@ -2,14 +2,17 @@
 
 namespace SilverStripe\Subsites\Tasks;
 
-use InvalidArgumentException;
+use Closure;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\Dev\Deprecation;
+use SilverStripe\PolyExecution\PolyOutput;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
 use SilverStripe\Versioned\Versioned;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Handy alternative to copying pages when creating a subsite through the UI.
@@ -17,38 +20,43 @@ use SilverStripe\Versioned\Versioned;
  * Can be used to batch-add new pages after subsite creation, or simply to
  * process a large site outside of the UI.
  *
- * Example: sake dev/tasks/SubsiteCopyPagesTask from=<subsite-source> to=<subsite-target>
+ * Example: sake tasks:SubsiteCopyPagesTask --from=<subsite-source> --to=<subsite-target>
  *
  * @package subsites
  */
 class SubsiteCopyPagesTask extends BuildTask
 {
-    protected $title = 'Copy pages to different subsite';
-    protected $description = '';
+    protected string $title = 'Copy pages to different subsite';
 
-    private static $segment = 'SubsiteCopyPagesTask';
+    protected static string $description = 'Handy alternative to copying pages when creating a subsite through the UI';
 
-    public function run($request)
+    protected static string $commandName = 'SubsiteCopyPagesTask';
+
+    protected function execute(InputInterface $input, PolyOutput $output): int
     {
-        $subsiteFromId = $request->getVar('from');
+        $subsiteFromId = $input->getOption('from');
         if (!is_numeric($subsiteFromId)) {
-            throw new InvalidArgumentException('Missing "from" parameter');
+            $output->writeln('<error>Missing "from" parameter</>');
+            return Command::INVALID;
         }
         $subsiteFrom = DataObject::get_by_id(Subsite::class, $subsiteFromId);
         if (!$subsiteFrom) {
-            throw new InvalidArgumentException('Subsite not found');
+            $output->writeln('<error>Subsite not found</>');
+            return Command::FAILURE;
         }
 
-        $subsiteToId = $request->getVar('to');
+        $subsiteToId = $input->getOption('to');
         if (!is_numeric($subsiteToId)) {
-            throw new InvalidArgumentException('Missing "to" parameter');
+            $output->writeln('<error>Missing "to" parameter</>');
+            return Command::INVALID;
         }
         $subsiteTo = DataObject::get_by_id(Subsite::class, $subsiteToId);
         if (!$subsiteTo) {
-            throw new InvalidArgumentException('Subsite not found');
+            $output->writeln('<error>Subsite not found</>');
+            return Command::FAILURE;
         }
 
-        $useVirtualPages = (bool)$request->getVar('virtual');
+        $useVirtualPages = $input->getOption('virtual');
 
         Subsite::changeSubsite($subsiteFrom);
 
@@ -78,22 +86,50 @@ class SubsiteCopyPagesTask extends BuildTask
                     $childClone->copyVersionToStage('Stage', 'Live');
                     array_push($stack, [$child->ID, $childClone->ID]);
 
-                    Deprecation::withSuppressedNotice(function () use ($child) {
-                        $this->log(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));
-                    });
+                    $output->writeln(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));
                 }
             }
 
             unset($children);
         }
+
+        return Command::SUCCESS;
     }
 
-    /**
-     * @deprecated 3.4.0 Will be replaced with new $output parameter in the run() method
-     */
-    public function log($msg)
+    public function getOptions(): array
     {
-        Deprecation::notice('3.4.0', 'Will be replaced with new $output parameter in the run() method');
-        echo $msg . "\n";
+        $subsiteSuggestionClosure = Closure::fromCallable([static::class, 'getSubsiteCompletion']);
+        return [
+            new InputOption(
+                'from',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'ID of the subsite to copy from',
+                suggestedValues: $subsiteSuggestionClosure
+            ),
+            new InputOption(
+                'to',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'ID of the subsite to copy to',
+                suggestedValues: $subsiteSuggestionClosure
+            ),
+            new InputOption(
+                'virtual',
+                null,
+                InputOption::VALUE_NONE,
+                'Create virtual pages instead of duplicating pages'
+            ),
+        ];
+    }
+
+    public static function getSubsiteCompletion(): array
+    {
+        $subsites = Subsite::get()->map('ID', 'Title');
+        $suggestions = [];
+        foreach ($subsites as $id => $title) {
+            $suggestions[] = "{$id}\t{$title}";
+        }
+        return $suggestions;
     }
 }
