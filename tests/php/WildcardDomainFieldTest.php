@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Tests;
 
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Subsites\Forms\WildcardDomainField;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests {@see WildcardDomainField}
@@ -14,9 +15,9 @@ class WildcardDomainFieldTest extends SapphireTest
     /**
      * Check that valid domains are accepted
      *
-     * @dataProvider validDomains
      * @param $domain
      */
+    #[DataProvider('validDomains')]
     public function testValidDomains($domain)
     {
         $field = new WildcardDomainField('DomainField');
@@ -26,9 +27,9 @@ class WildcardDomainFieldTest extends SapphireTest
     /**
      * Check that valid domains are accepted
      *
-     * @dataProvider invalidDomains
      * @param $domain
      */
+    #[DataProvider('invalidDomains')]
     public function testInvalidDomains($domain)
     {
         $field = new WildcardDomainField('DomainField');
@@ -38,16 +39,16 @@ class WildcardDomainFieldTest extends SapphireTest
     /**
      * Check that valid domains are accepted
      *
-     * @dataProvider validWildcards
      * @param $domain
      */
+    #[DataProvider('validWildcards')]
     public function testValidWildcards($domain)
     {
         $field = new WildcardDomainField('DomainField');
         $this->assertTrue($field->checkHostname($domain), "Validate that {$domain} is a valid domain wildcard");
     }
 
-    public function validDomains()
+    public static function validDomains()
     {
         return [
             ['www.mysite.com'],
@@ -60,7 +61,7 @@ class WildcardDomainFieldTest extends SapphireTest
         ];
     }
 
-    public function invalidDomains()
+    public static function invalidDomains()
     {
         return [
             ['-mysite'],
@@ -77,7 +78,7 @@ class WildcardDomainFieldTest extends SapphireTest
         ];
     }
 
-    public function validWildcards()
+    public static function validWildcards()
     {
         return [
             ['*.mysite.com'],

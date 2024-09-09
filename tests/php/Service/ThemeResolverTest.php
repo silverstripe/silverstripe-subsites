@@ -7,6 +7,7 @@ use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\View\SSViewer;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemeResolverTest extends SapphireTest
 {
@@ -64,9 +65,7 @@ class ThemeResolverTest extends SapphireTest
         $this->assertSame($expected, $resolver->getThemeList($subsite));
     }
 
-    /**
-     * @dataProvider customThemeDefinitionsAreRespectedProvider
-     */
+    #[DataProvider('customThemeDefinitionsAreRespectedProvider')]
     public function testCustomThemeDefinitionsAreRespected($themeOptions, $siteTheme, $expected)
     {
         Config::modify()->set(ThemeResolver::class, 'theme_options', $themeOptions);
@@ -79,7 +78,7 @@ class ThemeResolverTest extends SapphireTest
         $this->assertSame($expected, $resolver->getThemeList($subsite));
     }
 
-    public function customThemeDefinitionsAreRespectedProvider()
+    public static function customThemeDefinitionsAreRespectedProvider()
     {
         return [
             // Simple
