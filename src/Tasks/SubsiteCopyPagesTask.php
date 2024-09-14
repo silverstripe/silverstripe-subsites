@@ -5,6 +5,7 @@ namespace SilverStripe\Subsites\Tasks;
 use InvalidArgumentException;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\BuildTask;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
@@ -77,7 +78,9 @@ class SubsiteCopyPagesTask extends BuildTask
                     $childClone->copyVersionToStage('Stage', 'Live');
                     array_push($stack, [$child->ID, $childClone->ID]);
 
-                    $this->log(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));
+                    Deprecation::withNoReplacement(function () use ($child) {
+                        $this->log(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));
+                    });
                 }
             }
 
@@ -85,8 +88,12 @@ class SubsiteCopyPagesTask extends BuildTask
         }
     }
 
+    /**
+     * @deprecated 3.4.0 Will be replaced with new $output parameter in the run() method
+     */
     public function log($msg)
     {
+        Deprecation::notice('3.4.0', 'Will be replaced with new $output parameter in the run() method');
         echo $msg . "\n";
     }
 }
