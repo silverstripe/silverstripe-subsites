@@ -18,12 +18,12 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\i18n\Data\Intl\IntlLocales;
 use SilverStripe\i18n\i18n;
-use SilverStripe\ORM\ArrayLib;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Core\ArrayLib;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
-use SilverStripe\ORM\SS_List;
+use SilverStripe\Model\List\SS_List;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Group;
@@ -798,7 +798,7 @@ class Subsite extends DataObject
 
     /**
      *
-     * @return \SilverStripe\ORM\ValidationResult
+     * @return \SilverStripe\Core\Validation\ValidationResult
      */
     public function validate()
     {
