@@ -26,6 +26,7 @@ use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestErrorPage;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\SSViewer;
 use TractorCow\Fluent\Extension\FluentSiteTreeExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SiteTreeSubsitesTest extends BaseSubsiteTest
 {
@@ -94,7 +95,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         $this->assertInstanceOf(FieldList::class, singleton(SubsitesVirtualPage::class)->getCMSFields());
     }
 
-    public function errorPageLocationsProvider()
+    public static function errorPageLocationsProvider()
     {
         return [
             ['domaintest1', '/error-500-one.example.org.html'],
@@ -102,9 +103,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         ];
     }
 
-    /**
-     * @dataProvider errorPageLocationsProvider
-     */
+    #[DataProvider('errorPageLocationsProvider')]
     public function testErrorPageLocations($subsiteFixtureName, $expectedFilename)
     {
         $static_path = Config::inst()->get(ErrorPage::class, 'static_filepath');
@@ -382,8 +381,8 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     /**
      * @param bool $withChildren
      * @param int $expectedChildren
-     * @dataProvider duplicateToSubsiteProvider
      */
+    #[DataProvider('duplicateToSubsiteProvider')]
     public function testDuplicateToSubsite($withChildren, $expectedChildren)
     {
         /** @var SiteTree $page */
@@ -408,7 +407,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     /**
      * @return array[]
      */
-    public function duplicateToSubsiteProvider()
+    public static function duplicateToSubsiteProvider()
     {
         return [
             [true, 1],
@@ -437,7 +436,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         SiteTree::singleton()->extend('contentcontrollerInit', $controller);
     }
 
-    public function provideAlternateAbsoluteLink()
+    public static function provideAlternateAbsoluteLink()
     {
         return [
             ['home', null, 'http://localhost'],
@@ -452,11 +451,11 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
     }
 
     /**
-     * @dataProvider provideAlternateAbsoluteLink
      * @param string $pageFixtureName
      * @param string|null $action
      * @param string $expectedAbsoluteLink
      */
+    #[DataProvider('provideAlternateAbsoluteLink')]
     public function testAlternateAbsoluteLink($pageFixtureName, $action, $expectedAbsoluteLink)
     {
         // Setting a control value, in case base url is set for the installation under test

@@ -10,6 +10,7 @@ use SilverStripe\Subsites\Extensions\FileSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Security\Member;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileSubsitesTest extends BaseSubsiteTest
 {
@@ -74,9 +75,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         $this->assertEquals($folder->SubsiteID, $file->SubsiteID);
     }
 
-    /**
-     * @dataProvider provideTestCanEdit
-     */
+    #[DataProvider('provideTestCanEdit')]
     public function testCanEdit(
         string $fileKey,
         string $memberKey,
@@ -91,7 +90,7 @@ class FileSubsitesTest extends BaseSubsiteTest
         $this->assertSame($expected, $file->canEdit($member));
     }
 
-    public function provideTestCanEdit(): array
+    public static function provideTestCanEdit(): array
     {
         $ret = [];
         $data = [

@@ -13,6 +13,7 @@ use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Model\SubsiteDomain;
 use SilverStripe\Subsites\State\SubsiteState;
 use UnexpectedValueException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SubsiteTest extends BaseSubsiteTest
 {
@@ -317,8 +318,8 @@ class SubsiteTest extends BaseSubsiteTest
      * @param string $identifier Fixture identifier
      * @param bool $currentIsSecure Whether the current base URL should be secure
      * @param string $expected The expected base URL for the subsite or subsite domain
-     * @dataProvider domainProtocolProvider
      */
+    #[DataProvider('domainProtocolProvider')]
     public function testDomainProtocol($class, $identifier, $currentIsSecure, $expected)
     {
         /** @var Subsite|SubsiteDomain $model */
@@ -328,7 +329,7 @@ class SubsiteTest extends BaseSubsiteTest
         $this->assertSame($this->normaliseTrailingSlash($expected), $model->absoluteBaseURL());
     }
 
-    public function domainProtocolProvider()
+    public static function domainProtocolProvider()
     {
         return [
             [Subsite::class, 'domaintest2', false, 'http://two.mysite.com'],
