@@ -78,7 +78,7 @@ class SubsiteCopyPagesTask extends BuildTask
                     $childClone->copyVersionToStage('Stage', 'Live');
                     array_push($stack, [$child->ID, $childClone->ID]);
 
-                    Deprecation::withNoReplacement(function () use ($child) {
+                    Deprecation::withSuppressedNotice(function () use ($child) {
                         $this->log(sprintf('Copied "%s" (#%d, %s)', $child->Title, $child->ID, $child->Link()));
                     });
                 }
