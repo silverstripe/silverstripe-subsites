@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "silverstripe/framework": "^5",
+        "silverstripe/framework": "^5.4",
         "silverstripe/cms": "^5",
         "silverstripe/admin": "^2",
         "silverstripe/asset-admin": "^2",
