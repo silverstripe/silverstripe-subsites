@@ -10,12 +10,12 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Subsites\Forms\SubsitesTreeDropdownField;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\ArrayData;
 
 class SubsitesVirtualPage extends VirtualPage
 {
