@@ -263,7 +263,7 @@ class Subsite extends DataObject
 
             // ClassInfo::hasTable provides a cached table list
             if (!ClassInfo::hasTable($domainTableName)) {
-                // Table hasn't been created yet. Might be a dev/build, skip.
+                // Table hasn't been created yet. Might be building the db, skip.
                 return 0;
             }
 
