@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemeResolverTest extends SapphireTest
 {
-    protected $themeList = [
+    protected static array $themeList = [
         '$public',
         'custom',
         'main',
@@ -24,7 +24,7 @@ class ThemeResolverTest extends SapphireTest
         parent::setUp();
 
         // Setup known theme config
-        Config::modify()->set(SSViewer::class, 'themes', $this->themeList);
+        Config::modify()->set(SSViewer::class, 'themes', static::$themeList);
     }
 
     public function testSubsiteWithoutThemeReturnsDefaultThemeList()
@@ -32,7 +32,7 @@ class ThemeResolverTest extends SapphireTest
         $subsite = new Subsite();
         $resolver = new ThemeResolver();
 
-        $this->assertSame($this->themeList, $resolver->getThemeList($subsite));
+        $this->assertSame(static::$themeList, $resolver->getThemeList($subsite));
     }
 
     public function testSubsiteWithCustomThemePrependsToList()
@@ -42,7 +42,7 @@ class ThemeResolverTest extends SapphireTest
 
         $resolver = new ThemeResolver();
 
-        $expected = array_merge(['subsite'], $this->themeList);
+        $expected = array_merge(['subsite'], static::$themeList);
 
         $this->assertSame($expected, $resolver->getThemeList($subsite));
     }
@@ -135,7 +135,7 @@ class ThemeResolverTest extends SapphireTest
                     SSViewer::DEFAULT_THEME,
                 ]],
                 'other',
-                array_merge(['other'], $this->themeList)
+                array_merge(['other'], static::$themeList)
             ],
         ];
     }
