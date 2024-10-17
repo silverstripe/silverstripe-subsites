@@ -287,7 +287,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
 
         Subsite::changeSubsite($s1);
         $cmsmain = CMSMain::create();
-        $hints = json_decode($cmsmain->SiteTreeHints() ?? '', true);
+        $hints = json_decode($cmsmain->TreeHints() ?? '', true);
         $classes = $hints['Root']['disallowedChildren'];
         $this->assertContains(ErrorPage::class, $classes);
         $this->assertContains(TestClassA::class, $classes);
@@ -298,7 +298,7 @@ class SiteTreeSubsitesTest extends BaseSubsiteTest
         if ($cmsmain->hasMethod('getHintsCache')) {
             $cmsmain->getHintsCache()->clear();
         }
-        $hints = json_decode($cmsmain->SiteTreeHints() ?? '', true);
+        $hints = json_decode($cmsmain->TreeHints() ?? '', true);
 
         $classes = $hints['Root']['disallowedChildren'];
         $this->assertNotContains(ErrorPage::class, $classes);
