@@ -240,7 +240,8 @@ class LeftAndMainSubsites extends Extension
 
         // Check if we have access to current section on the current subsite.
         $accessibleSites = $this->owner->sectionSites(true, 'Main site', $member);
-        return $accessibleSites->count() && $accessibleSites->find('ID', SubsiteState::singleton()->getSubsiteId());
+        $id = SubsiteState::singleton()->getSubsiteId() ?: 0;
+        return $accessibleSites->count() && $accessibleSites->find('ID', $id);
     }
 
     /**

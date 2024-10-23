@@ -186,7 +186,7 @@ class Subsite extends DataObject
      */
     public static function currentSubsite()
     {
-        return Subsite::get()->byID(SubsiteState::singleton()->getSubsiteId());
+        return Subsite::get()->byID(SubsiteState::singleton()->getSubsiteId() ?: 0);
     }
 
     /**
