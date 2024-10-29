@@ -32,7 +32,7 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\Subsites\State\SubsiteState;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 use UnexpectedValueException;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;

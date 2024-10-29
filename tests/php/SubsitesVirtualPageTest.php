@@ -12,7 +12,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DB;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\Pages\SubsitesVirtualPage;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 
 class SubsitesVirtualPageTest extends BaseSubsiteTest
 {

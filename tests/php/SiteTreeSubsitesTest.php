@@ -23,7 +23,7 @@ use SilverStripe\Subsites\Service\ThemeResolver;
 use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestClassA;
 use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestClassB;
 use SilverStripe\Subsites\Tests\SiteTreeSubsitesTest\TestErrorPage;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 use SilverStripe\View\SSViewer;
 use TractorCow\Fluent\Extension\FluentSiteTreeExtension;
 use PHPUnit\Framework\Attributes\DataProvider;
