@@ -12,16 +12,6 @@
     });
 
     /*
-     * Reload subsites dropdown when links are processed
-     */
-    $('.cms-container .cms-menu-list li a').entwine({
-      onclick(e) {
-        $('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
-        this._super(e);
-      }
-    });
-
-    /*
      * Reload subsites dropdown when the admin area reloads (for deleting sites)
      */
     $('.cms-container .SubsiteAdmin .cms-edit-form fieldset.ss-gridfield').entwine({
@@ -32,11 +22,15 @@
     });
 
     /*
-     * Reload subsites dropdown when subsites are added or names are modified
+     * Reload subsites dropdown when subsites are added or modified
      */
-    $('.cms-container .tab.subsite-model').entwine({
-      onadd(e) {
-        $('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
+    $('#Form_ItemEditForm').entwine({
+      onaftersubmitform(e) {
+        // Only load the fragment if this form is the subsite form.
+        // We can't add a selector to the form itself so check for the tab we added a specific class to.
+        if (this.find('[role="tab"].subsite-model').length > 0) {
+          $('.cms-container').loadFragment('admin/subsite_xhr', 'SubsiteList');
+        }
         this._super(e);
       }
     });
