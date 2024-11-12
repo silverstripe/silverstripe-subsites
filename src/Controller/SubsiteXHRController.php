@@ -2,21 +2,27 @@
 
 namespace SilverStripe\Subsites\Controller;
 
-use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\Admin\AdminController;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\PjaxResponseNegotiator;
-use SilverStripe\Dev\Deprecation;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Member;
-use SilverStripe\Security\Permission;
 use SilverStripe\Subsites\Model\Subsite;
 
 /**
- * Section-agnostic PJAX controller.
+ * Section-agnostic PJAX controller that renders the subsites swapper dropdown
  */
-class SubsiteXHRController extends LeftAndMain
+class SubsiteXHRController extends AdminController
 {
     private static $url_segment = 'subsite_xhr';
 
-    private static $ignore_menuitem = true;
+    private static string $required_permission_codes = 'CMS_ACCESS';
+
+    public function index(HTTPRequest $request): HTTPResponse
+    {
+        return $this->getResponseNegotiator()->respond($request);
+    }
 
     /**
      * Relax the access permissions, so anyone who has access to any CMS subsite can access this controller.
@@ -37,35 +43,21 @@ class SubsiteXHRController extends LeftAndMain
     }
 
     /**
-     * Allow access if user allowed into the CMS at all.
-     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it.
+     * Get a Pjax response negotiator for the subsite list
      */
-    public function canAccess()
-    {
-        Deprecation::noticeWithNoReplacment('3.4.0');
-        // Allow if any cms access is available
-        return Permission::check([
-            'CMS_ACCESS', // Supported by 3.1.14 and up
-            'CMS_ACCESS_LeftAndMain'
-        ]);
-    }
-
     public function getResponseNegotiator(): PjaxResponseNegotiator
     {
-        $negotiator = parent::getResponseNegotiator();
-
-        // Register a new callback
-        $negotiator->setCallback('SubsiteList', function () {
-            return $this->SubsiteList();
-        });
-
-        return $negotiator;
+        return new PjaxResponseNegotiator([
+            'SubsiteList' => function () {
+                return $this->SubsiteList();
+            },
+        ]);
     }
 
     /**
      * Provide the list of available subsites as a cms-section-agnostic PJAX handler.
      */
-    public function SubsiteList()
+    public function SubsiteList(): DBHTMLText
     {
         return $this->renderWith(['type' => 'Includes', SubsiteXHRController::class . '_subsitelist']);
     }
