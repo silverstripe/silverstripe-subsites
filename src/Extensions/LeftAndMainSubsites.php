@@ -13,9 +13,11 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extension;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
@@ -24,11 +26,12 @@ use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\View\Requirements;
+use SilverStripe\View\TemplateGlobalProvider;
 
 /**
  * Decorator designed to add subsites support to LeftAndMain
  */
-class LeftAndMainSubsites extends Extension
+class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
 {
     private static $allowed_actions = ['CopyToSubsite'];
 
@@ -43,6 +46,44 @@ class LeftAndMainSubsites extends Extension
     {
         Requirements::css('silverstripe/subsites:client/dist/styles/LeftAndMain_Subsites.css');
         Requirements::javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js');
+    }
+
+    public static function get_template_global_variables()
+    {
+        return [
+            'SubsiteSwitchList',
+        ];
+    }
+
+    /**
+     * Generates a list of subsites with the data needed to
+     * produce a dropdown site switcher
+     * @return SS_List<Subsite>
+     */
+    public static function SubsiteSwitchList(): SS_List
+    {
+        $list = Subsite::all_accessible_sites();
+        $currentSubsiteID = SubsiteState::singleton()->getSubsiteId();
+
+        if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
+            return false;
+        }
+
+        Requirements::javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js');
+
+        $output = ArrayList::create();
+
+        foreach ($list as $subsite) {
+            $currentState = $subsite->ID == $currentSubsiteID ? 'selected' : '';
+
+            $output->push(ArrayData::create([
+                'CurrentState' => $currentState,
+                'ID' => $subsite->ID,
+                'Title' => $subsite->Title,
+            ]));
+        }
+
+        return $output;
     }
 
     /**
@@ -143,31 +184,12 @@ class LeftAndMainSubsites extends Extension
      * Generates a list of subsites with the data needed to
      * produce a dropdown site switcher
      * @return ArrayList<Subsite>
+     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it.
      */
     public function ListSubsites()
     {
-        $list = $this->Subsites();
-        $currentSubsiteID = SubsiteState::singleton()->getSubsiteId();
-
-        if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
-            return false;
-        }
-
-        Requirements::javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js');
-
-        $output = ArrayList::create();
-
-        foreach ($list as $subsite) {
-            $currentState = $subsite->ID == $currentSubsiteID ? 'selected' : '';
-
-            $output->push(ArrayData::create([
-                'CurrentState' => $currentState,
-                'ID' => $subsite->ID,
-                'Title' => $subsite->Title,
-            ]));
-        }
-
-        return $output;
+        Deprecation::notice('3.4.0', 'Use SubsiteSwitchList() instead.');
+        return static::SubsiteSwitchList();
     }
 
     public function alternateMenuDisplayCheck($controllerName)
