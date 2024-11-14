@@ -4,6 +4,7 @@ namespace SilverStripe\Subsites\Controller;
 
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\PjaxResponseNegotiator;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Subsites\Model\Subsite;
@@ -37,9 +38,11 @@ class SubsiteXHRController extends LeftAndMain
 
     /**
      * Allow access if user allowed into the CMS at all.
+     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it.
      */
     public function canAccess()
     {
+        Deprecation::noticeWithNoReplacment('3.4.0');
         // Allow if any cms access is available
         return Permission::check([
             'CMS_ACCESS', // Supported by 3.1.14 and up
