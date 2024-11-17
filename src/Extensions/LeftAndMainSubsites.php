@@ -17,7 +17,7 @@ use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\SS_List;
+use SilverStripe\Model\List\SS_List;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;

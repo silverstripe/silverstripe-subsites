@@ -41,7 +41,7 @@ class ThemeResolver
      * @param Subsite $site
      * @return array
      */
-    public function getThemeList(Subsite $site)
+    public function getThemeList(Subsite $site): array
     {
         $themes = array_values(SSViewer::get_themes() ?? []);
         $siteTheme = $site->Theme;
