@@ -6,6 +6,7 @@
         <% include SilverStripe\\Admin\\LeftAndMain_MenuStatus %>
 
         <% if $SubsiteSwitchList.Count > 1 %>
+            <% require javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js') %>
             <% include SilverStripe\\Subsites\\Controller\\SubsiteXHRController_subsitelist %>
         <% end_if %>
     </div>

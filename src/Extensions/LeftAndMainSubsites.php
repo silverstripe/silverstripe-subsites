@@ -13,7 +13,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extension;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
@@ -68,8 +67,6 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
         if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
             return false;
         }
-
-        Requirements::javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js');
 
         $output = ArrayList::create();
 
@@ -178,18 +175,6 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
     public function Subsites()
     {
         return Subsite::all_accessible_sites();
-    }
-
-    /**
-     * Generates a list of subsites with the data needed to
-     * produce a dropdown site switcher
-     * @return ArrayList<Subsite>
-     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it.
-     */
-    public function ListSubsites()
-    {
-        Deprecation::notice('3.4.0', 'Use SubsiteSwitchList() instead.');
-        return static::SubsiteSwitchList();
     }
 
     public function alternateMenuDisplayCheck($controllerName)
