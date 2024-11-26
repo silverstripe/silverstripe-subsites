@@ -21,11 +21,6 @@ class SubsitesVirtualPage extends VirtualPage
 {
     private static $table_name = 'SubsitesVirtualPage';
 
-    /**
-     * @deprecated 5.4.0 use class_description instead.
-     */
-    private static $description = 'Displays the content of a page on another subsite';
-
     private static $class_description = 'Displays the content of a page on another subsite';
 
     private static $non_virtual_fields = [
