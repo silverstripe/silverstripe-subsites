@@ -18,10 +18,10 @@ Feature: Insert an internal link into content
     When I select "My page" in the "Content" HTML field
     And I press the "Insert link" HTML field button
     And I click "Page on this site" in the ".tox-collection__group" element
-    Then I should see an "form#Form_editorInternalLink" element
-    When I select "Another page" in the "#Form_editorInternalLink_PageID_Holder" tree dropdown
+    Then I should see an "form#Form_linkModalFormeditorInternalLink" element
+    When I select "Another page" in the "#Form_linkModalFormeditorInternalLink_PageID_Holder" tree dropdown
     And I fill in "my desc" for "Link description"
-    And I click on the "#Form_editorInternalLink_action_insert" element
+    And I click on the "#Form_linkModalFormeditorInternalLink_action_insert" element
     Then the "Content" HTML field should contain "<a title="my desc" href="[sitetree_link"
     And the "Content" HTML field should contain "My page</a>"
     # Required to avoid "unsaved changes" browser dialog
