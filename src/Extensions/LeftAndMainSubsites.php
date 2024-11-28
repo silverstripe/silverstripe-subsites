@@ -228,7 +228,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
      *
      * @param Member $member
      */
-    protected function canAccess(Member $member = null)
+    protected function canAccess(?Member $member = null)
     {
         if (!$member) {
             $member = Security::getCurrentUser();
@@ -256,7 +256,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
      *
      * @param Member $member
      */
-    public function alternateAccessCheck(Member $member = null)
+    public function alternateAccessCheck(?Member $member = null)
     {
         return $this->canAccess($member);
     }
