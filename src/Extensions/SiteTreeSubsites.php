@@ -72,7 +72,7 @@ class SiteTreeSubsites extends Extension
      * @param SQLSelect $query
      * @param DataQuery $dataQuery
      */
-    protected function augmentSQL(SQLSelect $query, DataQuery $dataQuery = null)
+    protected function augmentSQL(SQLSelect $query, ?DataQuery $dataQuery = null)
     {
         if (Subsite::$disable_subsite_filter) {
             return;
