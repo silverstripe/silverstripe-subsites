@@ -2,6 +2,7 @@
 namespace SilverStripe\Subsites\Forms;
 
 use SilverStripe\Forms\TextField;
+use SilverStripe\Core\Validation\ValidationResult;
 
 /**
  * A text field that accepts only valid domain names, but allows the wildcard (*) character
@@ -10,22 +11,20 @@ class WildcardDomainField extends TextField
 {
     /**
      * Validate this field as a valid hostname
-     *
-     * @param Validator $validator
-     * @return bool
      */
-    public function validate($validator)
+    public function validate(): ValidationResult
     {
-        if ($this->checkHostname($this->Value())) {
-            return $this->extendValidationResult(true, $validator);
-        }
-
-        $validator->validationError(
-            $this->getName(),
-            _t('DomainNameField.INVALID_DOMAIN', 'Invalid domain name'),
-            'validation'
-        );
-        return $this->extendValidationResult(false, $validator);
+        $this->beforeExtending('updateValidate', function (ValidationResult $result) {
+            if ($this->checkHostname($this->Value())) {
+                return;
+            }
+            $result->addFieldError(
+                $this->getName(),
+                _t('DomainNameField.INVALID_DOMAIN', 'Invalid domain name'),
+                'validation'
+            );
+        });
+        return parent::validate();
     }
 
     /**
@@ -36,7 +35,7 @@ class WildcardDomainField extends TextField
      */
     public function checkHostname($hostname)
     {
-        return (bool)preg_match('/^([a-z0-9\*]+[\-\.\:])*([a-z0-9\*]+)$/', $hostname ?? '');
+        return (bool) preg_match('/^([a-z0-9\*]+[\-\.\:])*([a-z0-9\*]+)$/', $hostname ?? '');
     }
 
     public function Type()
