@@ -300,7 +300,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
             $currentController = Controller::curr();
             if ($currentController instanceof CMSPageEditController) {
                 /** @var SiteTree $page */
-                $page = $currentController->currentPage();
+                $page = $currentController->currentRecord();
 
                 // If the page exists but doesn't belong to the requested subsite, redirect to admin/pages which
                 // will show a list of the requested subsite's pages
@@ -321,7 +321,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
 
         // Automatically redirect the session to appropriate subsite when requesting a record.
         // This is needed to properly initialise the session in situations where someone opens the CMS via a link.
-        $record = $this->owner->currentPage();
+        $record = $this->owner->currentRecord();
         if ($record
             && isset($record->SubsiteID, $this->owner->urlParams['ID'])
             && is_numeric($record->SubsiteID)
