@@ -6,7 +6,7 @@ use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\CMSProfileController;
 use SilverStripe\Admin\LeftAndMain;
-use SilverStripe\CMS\Controllers\CMSPagesController;
+use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
@@ -274,22 +274,12 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
     protected function onBeforeInit()
     {
         $request = Controller::curr()->getRequest();
-        $session = $request->getSession();
-
         $state = SubsiteState::singleton();
 
         // FIRST, check if we need to change subsites due to the URL.
 
         // Catch forced subsite changes that need to cause CMS reloads.
         if ($request->getVar('SubsiteID') !== null) {
-            // Clear current page when subsite changes (or is set for the first time)
-            if ($state->getSubsiteIdWasChanged()) {
-                // sessionNamespace() is protected - see for info
-                $override = $this->owner->config()->get('session_namespace');
-                $sessionNamespace = $override ? $override : get_class($this->owner);
-                $session->clear($sessionNamespace . '.currentPage');
-            }
-
             // Context: Subsite ID has already been set to the state via InitStateMiddleware
 
             // If the user cannot view the current page, redirect to the admin landing section
@@ -306,7 +296,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
                 // will show a list of the requested subsite's pages
                 $currentSubsiteId = $request->getVar('SubsiteID');
                 if ($page && (int) $page->SubsiteID !== (int) $currentSubsiteId) {
-                    return $this->owner->redirect(CMSPagesController::singleton()->Link());
+                    return $this->owner->redirect(CMSMain::singleton()->Link());
                 }
 
                 // Page does belong to the current subsite, so remove the query string parameter and refresh the page
@@ -328,11 +318,11 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
             && $this->shouldChangeSubsite(
                 get_class($this->owner),
                 $record->SubsiteID,
-                SubsiteState::singleton()->getSubsiteId()
+                $state->getSubsiteId()
             )
         ) {
             // Update current subsite
-            $canViewElsewhere = SubsiteState::singleton()->withState(function ($newState) use ($record) {
+            $canViewElsewhere = $state->withState(function ($newState) use ($record) {
                 $newState->setSubsiteId($record->SubsiteID);
 
                 return (bool) $this->owner->canView(Security::getCurrentUser());
@@ -386,7 +376,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
         return;
     }
 
-    protected function augmentNewSiteTreeItem(&$item)
+    protected function updateNewItem(&$item)
     {
         $request = Controller::curr()->getRequest();
         $item->SubsiteID = $request->postVar('SubsiteID') ?: SubsiteState::singleton()->getSubsiteId();

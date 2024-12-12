@@ -728,7 +728,8 @@ class Subsite extends DataObject
     {
         $pageTypeMap = [];
 
-        $pageTypes = SiteTree::page_type_classes();
+        $pageTypes = ClassInfo::getValidSubClasses(SiteTree::class);
+        SiteTree::singleton()->updateAllowedSubClasses($pageTypes);
         foreach ($pageTypes as $pageType) {
             $pageTypeMap[$pageType] = singleton($pageType)->i18n_singular_name();
         }

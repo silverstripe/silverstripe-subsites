@@ -51,10 +51,6 @@ SilverStripe\CMS\Controllers\CMSMain:
     - SilverStripe\Subsites\Extensions\HintsCacheKeyExtension
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
 
-SilverStripe\CMS\Controllers\CMSPagesController:
-  extensions:
-    - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
-
 SilverStripe\Subsites\Admin\SubsiteAdmin:
   extensions:
     - SilverStripe\Subsites\Extensions\SubsiteMenuExtension
