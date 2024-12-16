@@ -126,6 +126,17 @@ class GroupSubsites extends Extension implements PermissionProvider
         }
     }
 
+    public function getTreeTitle(): string
+    {
+        // Overrides Hierachy::getTreeTitle() to change where Convert::raw2xml() is called
+        // so that the html added updateTreeTitle() is not escaped.
+        $owner = $this->getOwner();
+        $title = $owner->MenuTitle ?: $owner->Title;
+        $title = Convert::raw2xml($title);
+        $owner->extend('updateTreeTitle', $title);
+        return $title;
+    }
+
     /**
      * If this group belongs to a subsite, append the subsites title to the group title to make it easy to
      * distinguish in the tree-view of the security admin interface.
