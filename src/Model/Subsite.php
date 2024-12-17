@@ -36,6 +36,7 @@ use SilverStripe\Versioned\Versioned;
 use UnexpectedValueException;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Core\Validation\ValidationResult;
 
 /**
  * A dynamically created subsite. SiteTree objects can now belong to a subsite.
@@ -797,11 +798,7 @@ class Subsite extends DataObject
         return i18n::get_locale();
     }
 
-    /**
-     *
-     * @return \SilverStripe\Core\Validation\ValidationResult
-     */
-    public function validate()
+    public function validate(): ValidationResult
     {
         $result = parent::validate();
         if (!$this->Title) {
