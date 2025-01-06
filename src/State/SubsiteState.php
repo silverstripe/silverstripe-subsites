@@ -5,7 +5,6 @@ namespace SilverStripe\Subsites\State;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Resettable;
-use SilverStripe\Dev\Deprecation;
 
 /**
  * SubsiteState provides static access to the current state for subsite related data during a request
