@@ -313,7 +313,7 @@ class Subsite extends DataObject
      * @param class-string<T> $className
      * @param string $filter
      * @param string $sort
-     * @param string $join
+     * @param string $join Deprecated, use leftJoin($table, $joinClause) instead
      * @param string $limit
      * @return DataList<T>
      */
@@ -922,9 +922,11 @@ JS;
     /**
      * @param array $permissionCodes
      * @return DataList<Member>
+     * @deprecated 3.4.0 Will be removed without equivalent functionality
      */
     public function getMembersByPermission($permissionCodes = ['ADMIN'])
     {
+        Deprecation::noticeWithNoReplacment('3.4.0');
         if (!is_array($permissionCodes)) {
             user_error('Permissions must be passed to Subsite::getMembersByPermission as an array', E_USER_ERROR);
         }
