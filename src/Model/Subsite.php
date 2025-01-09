@@ -313,13 +313,12 @@ class Subsite extends DataObject
      * @param class-string<T> $className
      * @param string $filter
      * @param string $sort
-     * @param string $join Deprecated, use leftJoin($table, $joinClause) instead
      * @param string $limit
      * @return DataList<T>
      */
-    public static function get_from_all_subsites($className, $filter = '', $sort = '', $join = '', $limit = '')
+    public static function get_from_all_subsites($className, $filter = '', $sort = '', $limit = '')
     {
-        $result = DataObject::get($className, $filter, $sort, $join, $limit);
+        $result = DataObject::get($className, $filter, $sort, $limit);
         $result = $result->setDataQueryParam('Subsite.filter', false);
         return $result;
     }
@@ -917,31 +916,6 @@ JS;
     public function activate()
     {
         Subsite::changeSubsite($this);
-    }
-
-    /**
-     * @param array $permissionCodes
-     * @return DataList<Member>
-     * @deprecated 3.4.0 Will be removed without equivalent functionality
-     */
-    public function getMembersByPermission($permissionCodes = ['ADMIN'])
-    {
-        Deprecation::noticeWithNoReplacment('3.4.0');
-        if (!is_array($permissionCodes)) {
-            user_error('Permissions must be passed to Subsite::getMembersByPermission as an array', E_USER_ERROR);
-        }
-        $SQL_permissionCodes = Convert::raw2sql($permissionCodes);
-
-        $SQL_permissionCodes = join("','", $SQL_permissionCodes);
-
-        return DataObject::get(
-            Member::class,
-            "\"Group\".\"SubsiteID\" = $this->ID AND \"Permission\".\"Code\" IN ('$SQL_permissionCodes')",
-            '',
-            'LEFT JOIN "Group_Members" ON "Member"."ID" = "Group_Members"."MemberID"
-            LEFT JOIN "Group" ON "Group"."ID" = "Group_Members"."GroupID"
-            LEFT JOIN "Permission" ON "Permission"."GroupID" = "Group"."ID"'
-        );
     }
 
     /**
