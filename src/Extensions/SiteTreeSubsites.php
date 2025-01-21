@@ -152,7 +152,7 @@ class SiteTreeSubsites extends Extension
                 )->setHeadingLevel(4)
             );
 
-            $copyAction->addExtraClass('btn btn-primary font-icon-save ml-3');
+            $copyAction->addExtraClass('btn btn-primary font-icon-save ms-3');
         }
 
         // replace readonly link prefix
