@@ -53,6 +53,7 @@ ar:
     db_Domain: النطاق
     has_one_Subsite: 'الموقع الفرعي'
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
     DESCRIPTION: 'يعرض محتوى صفحة على موقع فرعي آخر'
     PLURALNAME: 'قاعدة الصفحات'
     SINGULARNAME: 'الصفحة الإفتراضية للمواقع الفرعية'

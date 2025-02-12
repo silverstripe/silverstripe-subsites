@@ -63,6 +63,7 @@ hr:
     db_Protocol: Protokol
     has_one_Subsite: Podsajt
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Prikazuje sadržaj stranice na drugom podsajtu'
     DESCRIPTION: 'Prikazuje sadržaj stranice na drugom podsajtu'
     SINGULARNAME: 'Virtualna stranica podsajta'
     SubsiteField: Podsajt

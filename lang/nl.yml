@@ -24,6 +24,7 @@ nl:
     CopyToSubsite: "Kopieer pagina's naar subsite"
     CopyToSubsiteWithChildren: "Inclusief onderliggende pagina's?"
     SubsiteOperations: 'Subsite Acties'
+    many_many_CrossSubsiteLinkTracking: 'Andere subsite linkverwijzing'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Configuratie
     CopyMessage: 'Kopie gemaakt van {title}'
@@ -57,6 +58,7 @@ nl:
     SINGULARNAME: 'Subsite Domein'
     db_Domain: Domein
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Toon de inhoud van een pagina op een andere subsite'
     DESCRIPTION: 'Toon de inhoud van een pagina op een andere subsite'
     OverrideNote: 'Overschrijft de overgenomen tekst van de gelinkte pagina'
     PLURALNAME: 'Subsites Virtuele paginas'
