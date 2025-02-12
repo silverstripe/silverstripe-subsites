@@ -15,7 +15,7 @@ class WildcardDomainField extends TextField
     public function validate(): ValidationResult
     {
         $this->beforeExtending('updateValidate', function (ValidationResult $result) {
-            if ($this->checkHostname($this->Value())) {
+            if ($this->checkHostname($this->getValue())) {
                 return;
             }
             $result->addFieldError(
