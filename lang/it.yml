@@ -1,6 +1,6 @@
 it:
   DomainNameField:
-    INVALID_DOMAIN: 'Nome a dominio non valido'
+    INVALID_DOMAIN: 'Nome dominio non valido'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'Clicca qui per editare il contenuto'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
@@ -19,8 +19,10 @@ it:
     MANAGE_SUBSITES: 'Gestisci sottositi per gruppi'
     MANAGE_SUBSITES_HELP: 'Abilità di limitare i permessi per un gruppo di uno o più sottositi.'
     SECURITYTABTITLE: Sottositi
+    db_AccessAllSubsites: 'Accesso a tutti i sottositi'
     many_many_Subsites: Sottositi
   SilverStripe\Subsites\Extensions\LeftAndMainSubsites:
+    SITECONTENTLEFT: 'Contenuto Sito'
     Saved: 'Salvato, si prega di aggiornare le pagine relative.'
   SilverStripe\Subsites\Extensions\SiteConfigSubsites:
     has_one_Subsite: Sottosito
@@ -30,6 +32,7 @@ it:
     CopyToSubsiteWithChildren: 'Includi pagine figlie?'
     SubsiteOperations: 'Operazioni sui sottositi'
     has_one_Subsite: Sottosito
+    many_many_CrossSubsiteLinkTracking: 'Monitoraggio link tra sottositi'
   SilverStripe\Subsites\Model\Subsite:
     ConfigurationTab: Configurazione
     CopyMessage: 'Creata una copia di {title}'
@@ -37,6 +40,10 @@ it:
     CustomMetaDescription: Descrizione
     CustomMetaTitle: Titolo
     PLURALNAME: Sottositi
+    PLURALS:
+      many: '{count} Sottositi'
+      one: 'Un Sottosito'
+      other: '{count} Sottositi'
     PageTypeBlacklistField: 'Disabilita tipi di pagina?'
     SINGULARNAME: Sottosito
     SiteConfigSubtitle: 'Lo slogan qui'
@@ -44,7 +51,9 @@ it:
     ValidateTitle: 'Prego aggiungere il "Titolo"'
     belongs_many_many_Groups: Gruppi
     db_DefaultSite: 'Sito di default'
+    db_IsPublic: 'È pubblico'
     db_Language: Lingua
+    db_PageTypeBlacklist: 'Blacklist dei tipi di pagina'
     db_RedirectURL: 'URL di reindirizzamento'
     db_Theme: Tema
     db_Title: Titolo
@@ -55,18 +64,36 @@ it:
     ISPRIMARY_DESCRIPTION: 'Segna questo come il dominio di default per questo sottosito'
     IS_PRIMARY: 'È il dominio primario?'
     PLURALNAME: 'Domini del sottosito'
+    PLURALS:
+      many: '{count} Domini del Sottosito'
+      one: 'Un Dominio del Sottosito'
+      other: '{count} Domini del Sottosito'
     PROTOCOL_AUTOMATIC: Automatico
+    PROTOCOL_DESCRIPTION: "Durante la generazione dei link a questo sottosito, usare il protocollo selezionato. <br />Scegliendo 'Automatico' significa che i link al sottosito useranno per default il protocollo corrente."
     Protocol: Protocollo
     SINGULARNAME: 'Dominio del sottosito'
     db_Domain: Dominio
+    db_IsPrimary: 'È primario'
     db_Protocol: Protocollo
     has_one_Subsite: Sottosito
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Mostra il contenuto di una pagina appartenente ad un altro sottosito'
     DESCRIPTION: 'Mostra il contenuto di una pagina appartenente ad un altro sottosito'
+    OverrideNote: 'Sovrascrive il valore ereditato dal sorgente'
+    PLURALNAME: 'Pagina Virtuale dei Sottositi'
+    PLURALS:
+      many: '{count} Pagine Virtuali dei Sottositi'
+      one: 'Una Pagina Virtuale dei Sottositi'
+      other: '{count} Pagine Virtuali dei Sottositi'
     SINGULARNAME: 'Pagina virtuale dei sottositi'
     SubsiteField: Sottosito
+    db_CustomExtraMeta: 'Meta aggiuntivi personalizzati'
+    db_CustomMetaDescription: 'Meta descrizione personalizzata'
+    db_CustomMetaKeywords: 'Meta parole chiave personalizzate'
+    db_CustomMetaTitle: 'Meta titolo personalizzato'
   SilverStripe\Subsites\Reports\SubsiteReportWrapper:
     ReportDropdown: Siti
+    ReportDropdownAll: Tutti
     ReportDropdownSubsite: Sottosito
   Subsite:
     COPYSTRUCTURE: 'Copia struttura da:'

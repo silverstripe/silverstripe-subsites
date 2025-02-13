@@ -81,6 +81,7 @@ en:
     db_Protocol: Protocol
     has_one_Subsite: Subsite
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Displays the content of a page on another subsite'
     DESCRIPTION: 'Displays the content of a page on another subsite'
     OverrideNote: 'Overrides inherited value from the source'
     PLURALNAME: 'Subsites Virtual Pages'

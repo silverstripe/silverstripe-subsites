@@ -78,6 +78,7 @@ eo:
     db_Protocol: Protokolo
     has_one_Subsite: Subretejo
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
     DESCRIPTION: 'Vidigas la enhavon de paĝo en alia subretejo'
     OverrideNote: 'Anstataŭigas hereditan valoron el la fonto'
     PLURALNAME: 'Virtualaj paĝoj de subretejoj'
