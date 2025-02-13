@@ -124,7 +124,7 @@ class SiteTreeSubsites extends Extension
             $subsitesMap = new Map(ArrayList::create());
         }
 
-        $viewingPageHistory = Controller::has_curr() && Controller::curr() instanceof HistoryViewerController;
+        $viewingPageHistory = Controller::curr() instanceof HistoryViewerController;
 
         // Master page edit field (only allowed from default subsite to avoid inconsistent relationships)
         $isDefaultSubsite = $this->owner->SubsiteID == 0 || $this->owner->Subsite()->DefaultSite;
