@@ -67,6 +67,7 @@ de:
     db_Protocol: Protokoll
     has_one_Subsite: Subseite
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subseite an'
     DESCRIPTION: 'Zeigt den Inhalt einer anderen Seite von einer anderen Subseite an'
     OverrideNote: 'Überschreibt den geerbten Wert der Quelle'
     PLURALNAME: 'Subsites Virtuelle Seiten'

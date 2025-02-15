@@ -63,6 +63,7 @@ ru:
     db_Protocol: Протокол
     has_one_Subsite: Подсайт
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Отображает содержимое выбранной страницы на другом подсайте'
     DESCRIPTION: 'Отображает содержимое выбранной страницы на другом подсайте'
     SINGULARNAME: 'Виртуальная страница подсайта'
     SubsiteField: Подсайт

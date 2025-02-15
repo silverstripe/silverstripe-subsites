@@ -67,6 +67,7 @@ fi:
     db_Protocol: Protokolla
     has_one_Subsite: Alasivusto
   SilverStripe\Subsites\Pages\SubsitesVirtualPage:
+    CLASS_DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
     DESCRIPTION: 'Näyttää sisällön toisen alisivuston sivulta'
     PLURALNAME: 'Alisivustojen virtuaaliset sivut'
     SINGULARNAME: 'Alisivuston Virtuaalisivu'
