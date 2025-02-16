@@ -56,8 +56,9 @@ class SubsitesVirtualPage extends VirtualPage
                 'ID',
                 'MenuTitle'
             );
-            if (Controller::has_curr() && Controller::curr()->getRequest()) {
-                $subsiteID = (int) Controller::curr()->getRequest()->requestVar('CopyContentFromID_SubsiteID');
+            $request = Controller::curr()?->getRequest();
+            if ($request) {
+                $subsiteID = (int) $request->requestVar('CopyContentFromID_SubsiteID');
                 $pageSelectionField->setSubsiteID($subsiteID);
             }
             $fields->replaceField('CopyContentFromID', $pageSelectionField);
