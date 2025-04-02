@@ -16,6 +16,9 @@ class SubsiteXHRController extends LeftAndMain
 {
     private static $url_segment = 'subsite_xhr';
 
+    /**
+     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it
+     */
     private static $ignore_menuitem = true;
 
     /**
