@@ -44,8 +44,12 @@ class LeftAndMainSubsites extends LeftAndMainExtension implements TemplateGlobal
      */
     private static $treats_subsite_0_as_global = false;
 
+    /**
+     * @deprecated 3.4.0 Will be renamed to onInit()
+     */
     public function init()
     {
+        Deprecation::noticeWithNoReplacment('Will be renamed to onInit()');
         Requirements::css('silverstripe/subsites:client/dist/styles/LeftAndMain_Subsites.css');
         Requirements::javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js');
     }
@@ -403,8 +407,12 @@ class LeftAndMainSubsites extends LeftAndMainExtension implements TemplateGlobal
         return;
     }
 
+    /**
+     * @deprecated 3.4.0 Will be renamed to updateNewItem()
+     */
     public function augmentNewSiteTreeItem(&$item)
     {
+        Deprecation::noticeWithNoReplacment('3.4.0', 'Will be renamed to updateNewItem()');
         $request = Controller::curr()->getRequest();
         $item->SubsiteID = $request->postVar('SubsiteID') ?: SubsiteState::singleton()->getSubsiteId();
     }

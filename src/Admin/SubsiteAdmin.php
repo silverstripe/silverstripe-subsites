@@ -25,6 +25,9 @@ class SubsiteAdmin extends ModelAdmin
 
     public $showImportForm = false;
 
+    /**
+     * @deprecated 3.4.0 Will be renamed to model_class
+     */
     private static $tree_class = Subsite::class;
 
     public function getEditForm($id = null, $fields = null)
