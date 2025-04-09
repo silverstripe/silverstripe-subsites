@@ -67,3 +67,12 @@ Only:
 DNADesign\Elemental\Models\BaseElement:
   extensions:
     - SilverStripe\Subsites\Extensions\BaseElementSubsites
+
+---
+Name: subsite-reports
+Only:
+  classexists: SilverStripe\Reports\SiteWideContentReport\Reports\SitewideContentReport
+---
+SilverStripe\Reports\SiteWideContentReport\Reports\SitewideContentReport:
+  extensions:
+    - SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites
