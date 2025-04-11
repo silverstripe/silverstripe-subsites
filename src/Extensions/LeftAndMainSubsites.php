@@ -5,7 +5,6 @@ namespace SilverStripe\Subsites\Extensions;
 use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Admin\CMSMenu;
 use SilverStripe\Admin\CMSProfileController;
-use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
