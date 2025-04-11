@@ -9,6 +9,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
@@ -451,9 +452,11 @@ class SiteTreeSubsites extends Extension
      * Inject the subsite ID into the content so it can be used by frontend scripts.
      * @param $tags
      * @return string
+     * @deprecated 3.4.0 Will be renamed to updateMetaTags()
      */
     protected function updateMetaTags(&$tags)
     {
+        Deprecation::noticeWithNoReplacment('3.4.0', 'Will be renamed to updateMetaTags()');
         if ($this->owner->SubsiteID) {
             $tags .= '<meta name="x-subsite-id" content="' . $this->owner->SubsiteID . "\" />\n";
         }
