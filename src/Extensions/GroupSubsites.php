@@ -4,7 +4,6 @@ namespace SilverStripe\Subsites\Extensions;
 
 use SilverStripe\Control\Cookie;
 use SilverStripe\Core\Convert;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\OptionsetField;
@@ -43,11 +42,9 @@ class GroupSubsites extends Extension implements PermissionProvider
 
     /**
      * Migrations for GroupSubsites data.
-     * @deprecated 3.4.0 Will be renamed to onRequireDefaultRecords()
      */
     protected function onRequireDefaultRecords()
     {
-        Deprecation::noticeWithNoReplacment('Will be renamed to onRequireDefaultRecords()');
         if (!$this->owner) {
             return;
         }
