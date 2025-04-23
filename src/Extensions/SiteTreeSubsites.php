@@ -62,6 +62,11 @@ class SiteTreeSubsites extends Extension
         ],
     ];
 
+    /**
+     * Used to cache the result of a heavily called database query
+     */
+    private bool $subsitesExist;
+
     public function isMainSite()
     {
         return $this->owner->SubsiteID == 0;
@@ -312,7 +317,7 @@ class SiteTreeSubsites extends Extension
         }
         return $sc;
     }
-
+    
     /**
      * Only allow editing of a page if the member satisfies one of the following conditions:
      * - Is in a group which has access to the subsite this page belongs to
@@ -325,18 +330,18 @@ class SiteTreeSubsites extends Extension
      */
     protected function canEdit($member = null)
     {
+        // Do not provide any input if there are no subsites configured
+        if (!$this->subsitesExist()) {
+            return null;
+        }
+        
         if (!$member) {
             $member = Security::getCurrentUser();
         }
-
-        // Do not provide any input if there are no subsites configured
-        if (!Subsite::get()->exists()) {
-            return null;
-        }
-
+        
         // Find the sites that this user has access to
         $goodSites = Subsite::accessible_sites('CMS_ACCESS_CMSMain', true, 'all', $member)->column('ID');
-
+        
         if (!is_null($this->owner->SubsiteID)) {
             $subsiteID = $this->owner->SubsiteID;
         } else {
@@ -347,13 +352,13 @@ class SiteTreeSubsites extends Extension
             // make it possible to force relations to point to other (forbidden) subsites.
             $subsiteID = SubsiteState::singleton()->getSubsiteId();
         }
-
+        
         // Return true if they have access to this object's site
         if (!(in_array(0, $goodSites ?? []) || in_array($subsiteID, $goodSites ?? []))) {
             return false;
         }
     }
-
+    
     /**
      * @param null $member
      * @return bool
@@ -363,10 +368,10 @@ class SiteTreeSubsites extends Extension
         if (!$member && $member !== false) {
             $member = Security::getCurrentUser();
         }
-
+        
         return $this->canEdit($member);
     }
-
+    
     /**
      * @param null $member
      * @return bool
@@ -376,10 +381,10 @@ class SiteTreeSubsites extends Extension
         if (!$member && $member !== false) {
             $member = Security::getCurrentUser();
         }
-
+        
         return $this->canEdit($member);
     }
-
+    
     /**
      * @param Member|null $member
      * @return bool|null
@@ -389,10 +394,10 @@ class SiteTreeSubsites extends Extension
         if (!$member && $member !== false) {
             $member = Security::getCurrentUser();
         }
-
+        
         return $this->canEdit($member);
     }
-
+    
     /**
      * Called by ContentController::init();
      * @param $controller
@@ -400,22 +405,22 @@ class SiteTreeSubsites extends Extension
     public static function contentcontrollerInit($controller)
     {
         $subsite = Subsite::currentSubsite();
-
+        
         if ($subsite && $subsite->Theme) {
             SSViewer::set_themes(ThemeResolver::singleton()->getThemeList($subsite));
         }
-
+        
         $ignore_subsite_locale = Config::inst()->get(SiteTreeSubsites::class, 'ignore_subsite_locale');
-
+        
         if (!$ignore_subsite_locale
-            && $subsite
-            && $subsite->Language
-            && i18n::getData()->validate($subsite->Language)
+        && $subsite
+        && $subsite->Language
+        && i18n::getData()->validate($subsite->Language)
         ) {
             i18n::set_locale($subsite->Language);
         }
     }
-
+    
     /**
      * @param null $action
      * @return string
@@ -430,7 +435,7 @@ class SiteTreeSubsites extends Extension
         }
         return $url;
     }
-
+    
     /**
      * Use the CMS domain for iframed CMS previews to prevent single-origin violations
      * and SSL cert problems. Always set SubsiteID to avoid errors because a page doesn't
@@ -446,7 +451,7 @@ class SiteTreeSubsites extends Extension
         $link = HTTP::setGetVar('SubsiteID', $this->owner->SubsiteID, $url);
         return $link;
     }
-
+    
     /**
      * Inject the subsite ID into the content so it can be used by frontend scripts.
      * @param $tags
@@ -457,40 +462,40 @@ class SiteTreeSubsites extends Extension
         if ($this->owner->SubsiteID) {
             $tags .= '<meta name="x-subsite-id" content="' . $this->owner->SubsiteID . "\" />\n";
         }
-
+        
         return $tags;
     }
-
+    
     protected function augmentSyncLinkTracking()
     {
         // Set LinkTracking appropriately
         $links = HTTP::getLinksIn($this->owner->Content);
         $linkedPages = [];
-
+        
         if ($links) {
             foreach ($links as $link) {
                 if (substr($link ?? '', 0, strlen('http://')) == 'http://') {
                     $withoutHttp = substr($link ?? '', strlen('http://'));
                     if (strpos($withoutHttp ?? '', '/') &&
-                        strpos($withoutHttp ?? '', '/') < strlen($withoutHttp ?? '')
+                    strpos($withoutHttp ?? '', '/') < strlen($withoutHttp ?? '')
                     ) {
                         $domain = substr($withoutHttp ?? '', 0, strpos($withoutHttp ?? '', '/'));
                         $rest = substr($withoutHttp ?? '', strpos($withoutHttp ?? '', '/') + 1);
-
+                        
                         $subsiteID = Subsite::getSubsiteIDForDomain($domain);
                         if ($subsiteID == 0) {
                             continue;
                         } // We have no idea what the domain for the main site is, so cant track links to it
-
+                        
                         $origDisableSubsiteFilter = Subsite::$disable_subsite_filter;
                         Subsite::disable_subsite_filter(true);
                         $candidatePage = SiteTree::get()->filter([
-                                                                     'URLSegment' => urldecode($rest),
-                                                                     'SubsiteID'  => $subsiteID,
-                                                                 ])->first();
-                        Subsite::disable_subsite_filter($origDisableSubsiteFilter);
-
-                        if ($candidatePage) {
+                            'URLSegment' => urldecode($rest),
+                            'SubsiteID'  => $subsiteID,
+                            ])->first();
+                            Subsite::disable_subsite_filter($origDisableSubsiteFilter);
+                            
+                            if ($candidatePage) {
                             $linkedPages[] = $candidatePage->ID;
                         } else {
                             $this->owner->HasBrokenLink = true;
@@ -499,10 +504,10 @@ class SiteTreeSubsites extends Extension
                 }
             }
         }
-
+        
         $this->owner->CrossSubsiteLinkTracking()->setByIDList($linkedPages);
     }
-
+    
     /**
      * Ensure that valid url segments are checked within the correct subsite of the owner object,
      * even if the current subsiteID is set to some other subsite.
@@ -521,7 +526,7 @@ class SiteTreeSubsites extends Extension
             return (bool) $this->owner->validURLSegment();
         });
     }
-
+    
     /**
      * Return a piece of text to keep DataObject cache keys appropriately specific
      */
@@ -529,7 +534,7 @@ class SiteTreeSubsites extends Extension
     {
         return 'subsite-' . SubsiteState::singleton()->getSubsiteId();
     }
-
+    
     /**
      * @param Member $member
      * @return boolean|null
@@ -544,10 +549,21 @@ class SiteTreeSubsites extends Extension
             if ($blacklist === false) {
                 $blacklist = explode(',', $subsite->PageTypeBlacklist ?? '');
             }
-
+            
             if (in_array(get_class($this->owner), (array) $blacklist)) {
                 return false;
             }
         }
+    }
+    
+    /**
+     * Cached query of whether subsites exist
+     */
+    private function subsitesExist(): bool
+    {
+        if (!isset($this->subsitesExist)) {
+            $this->subsitesExist = Subsite::get()->exists();
+        }
+        return $this->subsitesExist;
     }
 }
