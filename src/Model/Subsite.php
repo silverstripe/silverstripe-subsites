@@ -930,7 +930,7 @@ JS;
     /**
      * @param array $permissionCodes
      * @return DataList<Member>
-     * @deprecated 3.4.0 Will be removed without equivalent functionality
+     * @deprecated 3.4.0 Will be removed without equivalent functionality in a future major release
      */
     public function getMembersByPermission($permissionCodes = ['ADMIN'])
     {
