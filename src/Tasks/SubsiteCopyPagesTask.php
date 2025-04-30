@@ -89,11 +89,14 @@ class SubsiteCopyPagesTask extends BuildTask
     }
 
     /**
-     * @deprecated 3.4.0 Will be replaced with new $output parameter in the run() method
+     * @deprecated 3.4.0 Will be replaced with new $output parameter in the run() method in a future major release
      */
     public function log($msg)
     {
-        Deprecation::notice('3.4.0', 'Will be replaced with new $output parameter in the run() method');
+        Deprecation::notice(
+            '3.4.0',
+            'Will be replaced with new $output parameter in the run() method in a future major release'
+        );
         echo $msg . "\n";
     }
 }

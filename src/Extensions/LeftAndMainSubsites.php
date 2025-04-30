@@ -190,7 +190,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension implements TemplateGlobal
      * Generates a list of subsites with the data needed to
      * produce a dropdown site switcher
      * @return ArrayList<Subsite>
-     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it.
+     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it in a future major release.
      */
     public function ListSubsites()
     {
