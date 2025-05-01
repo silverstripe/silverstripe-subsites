@@ -17,7 +17,7 @@ class SubsiteXHRController extends LeftAndMain
     private static $url_segment = 'subsite_xhr';
 
     /**
-     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it
+     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it in a future major release
      */
     private static $ignore_menuitem = true;
 
@@ -41,7 +41,7 @@ class SubsiteXHRController extends LeftAndMain
 
     /**
      * Allow access if user allowed into the CMS at all.
-     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it.
+     * @deprecated 3.4.0 Will be removed without equivalent functionality to replace it in a future major release.
      */
     public function canAccess()
     {
