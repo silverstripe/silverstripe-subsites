@@ -52,6 +52,11 @@ class SiteTreeSubsites extends Extension
     private static $many_many_extraFields = [
         'CrossSubsiteLinkTracking' => ['FieldName' => 'Varchar']
     ];
+    
+    /**
+    * Used to cache the result of a heavily called database query
+    */
+    private bool $subsitesExist;
 
     private static array $scaffold_cms_fields_settings = [
         'ignoreFields' => [
@@ -330,7 +335,7 @@ class SiteTreeSubsites extends Extension
         }
 
         // Do not provide any input if there are no subsites configured
-        if (!Subsite::get()->exists()) {
+        if (!$this->subsitesExist()) {
             return null;
         }
 
@@ -549,5 +554,16 @@ class SiteTreeSubsites extends Extension
                 return false;
             }
         }
+    }
+
+    /**
+     * Cached query of whether subsites exist
+     */
+    private function subsitesExist(): bool
+    {
+        if (!isset($this->subsitesExist)) {
+            $this->subsitesExist = Subsite::get()->exists();
+        }
+        return $this->subsitesExist;
     }
 }
