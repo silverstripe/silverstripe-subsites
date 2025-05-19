@@ -2,7 +2,12 @@ fi:
   DomainNameField:
     INVALID_DOMAIN: 'Virheellinen domain-nimi'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Linkitetty sivu'
     EDITCONTENT: 'Napsauta tässä muokataksesi sisältöä'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Sivut
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Alasivusto
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Alasivustot
   SilverStripe\Subsites\Extensions\FileSubsites:

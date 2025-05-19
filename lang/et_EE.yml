@@ -1,4 +1,6 @@
 et_EE:
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Lehed
   SilverStripe\Subsites\Model\Subsite:
     CustomExtraMeta: 'Kohandatud metamärgendid'
     CustomMetaDescription: Kirjeldus

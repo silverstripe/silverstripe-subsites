@@ -8,6 +8,10 @@ nb_NO:
     SECURITYTABTITLE: subdomener
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'klikk her for å endre dette innholdet'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Sider
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Subdomene
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: subdomener
   SilverStripe\Subsites\Extensions\FileSubsites:

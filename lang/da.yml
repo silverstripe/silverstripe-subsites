@@ -1,18 +1,15 @@
-sv:
+da:
   SilverStripe\CMS\Model\VirtualPage:
-    CHOOSE: 'Länkad sida'
+    CHOOSE: 'Linket side'
   SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
-    Pages: Sidor
+    Pages: Sider
   SilverStripe\Subsites\Model\Subsite:
-    ConfigurationTab: Konfiguration
-    CustomExtraMeta: 'Egna metataggar'
-    CustomMetaDescription: Beskrivning
+    CustomExtraMeta: 'Brugerdefinerede Meta Tags'
+    CustomMetaDescription: Beskrivelse
     CustomMetaTitle: Titel
-    SiteConfigTitle: 'Din Sajts Namn'
+    SiteConfigTitle: 'Dit sidenavn'
     belongs_many_many_Groups: Grupper
-    db_Language: Språk
     db_Theme: Tema
     db_Title: Titel
   Subsites:
-    LanguageFieldLabel: Språk
     ThemeFieldLabel: Tema

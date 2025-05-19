@@ -1,0 +1,15 @@
+bg:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Свързани страници'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Страници
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Собствени етикети'
+    CustomMetaDescription: Описание
+    CustomMetaTitle: Заглавие
+    SiteConfigTitle: 'Име на сайта'
+    belongs_many_many_Groups: Групи
+    db_Theme: Тема
+    db_Title: Заглавие
+  Subsites:
+    ThemeFieldLabel: Тема
