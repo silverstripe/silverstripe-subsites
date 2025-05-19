@@ -2,6 +2,10 @@ cs:
   LeftAndMain_Menu:
     Hello: Ahoj
     LOGOUT: 'Odhlásit se'
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Odkazovaná stránka'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Stránky
   SilverStripe\Subsites\Extensions\SiteTreeSubsites:
     CopyAction: Kopírovat
   SilverStripe\Subsites\Model\Subsite:

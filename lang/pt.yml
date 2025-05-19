@@ -1,17 +1,15 @@
-es:
+pt:
   SilverStripe\CMS\Model\VirtualPage:
-    CHOOSE: Seleccionar
+    CHOOSE: 'Página associada'
   SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
     Pages: Páginas
   SilverStripe\Subsites\Model\Subsite:
-    CustomExtraMeta: 'Meta Tags Personalizadas'
-    CustomMetaDescription: Descripción
+    CustomExtraMeta: 'Meta-Tags personalizáveis'
+    CustomMetaDescription: Descrição
     CustomMetaTitle: Título
-    SiteConfigTitle: 'Nombre de tu Sitio'
+    SiteConfigTitle: 'Nome do site'
     belongs_many_many_Groups: Grupos
-    db_Language: Lenguaje
     db_Theme: Tema
     db_Title: Título
   Subsites:
-    LanguageFieldLabel: Lenguaje
     ThemeFieldLabel: Tema

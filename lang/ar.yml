@@ -1,6 +1,11 @@
 ar:
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'الصفحة المرتبطة'
     EDITCONTENT: 'انقر هنا لتحرير المحتوى'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: الصفحات
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: 'الموقع الفرعي'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: 'المواقع الفرعية'
   SilverStripe\Subsites\Extensions\FileSubsites:

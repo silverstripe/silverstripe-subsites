@@ -1,4 +1,10 @@
 sl:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Povezana stran'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: 'Seznam strani'
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Podspletišče
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Podspletišča
   SilverStripe\Subsites\Extensions\FileSubsites:

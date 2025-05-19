@@ -1,0 +1,15 @@
+fi_FI:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Linkitetty sivu'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Sivut
+  SilverStripe\Subsites\Model\Subsite:
+    ConfigurationTab: Asetukset
+    CustomExtraMeta: 'Omat meta-tagit'
+    CustomMetaDescription: Kuvaus
+    CustomMetaTitle: Otsikko
+    belongs_many_many_Groups: Ryhmät
+    db_Language: Kieli
+    db_Title: Otsikko
+  Subsites:
+    LanguageFieldLabel: Kieli

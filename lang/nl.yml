@@ -2,7 +2,10 @@ nl:
   DomainNameField:
     INVALID_DOMAIN: 'Ongeldige domein naam'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Gekoppelde pagina'
     EDITCONTENT: 'Klik hier om inhoud aan te passen'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: "Pagina's"
   SilverStripe\Subsites\Controller\SubsiteXHRController:
     MENUTITLE: Subsites
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:
