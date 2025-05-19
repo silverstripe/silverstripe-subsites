@@ -1,0 +1,15 @@
+nb:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Lenket side'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Sider
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Egendefinerte meta-elementer'
+    CustomMetaDescription: Beskrivelse
+    CustomMetaTitle: Tittel
+    SiteConfigTitle: Nettstedsnavn
+    belongs_many_many_Groups: Grupper
+    db_Theme: Utseende
+    db_Title: Tittel
+  Subsites:
+    ThemeFieldLabel: Utseende

@@ -1,4 +1,10 @@
 sk:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Odkazovaná stránka'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Stránky
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Podstránka
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Podstránky
   SilverStripe\Subsites\Extensions\FileSubsites:

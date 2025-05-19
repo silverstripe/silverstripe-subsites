@@ -3,6 +3,12 @@ id:
     SubsiteFieldLabel: Subsitus
   GroupSubsites:
     SECURITYTABTITLE: Subsitus
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Laman Tertaut'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Laman
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Subsitus
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Subsitus
   SilverStripe\Subsites\Extensions\FileSubsites:

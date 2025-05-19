@@ -7,7 +7,12 @@ ja:
     ACCESSRADIOTITLE: このグループに選択先へのアクセス権を与える
     SECURITYTABTITLE: サブサイト
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: リンクされたページ
     EDITCONTENT: ここをクリックしてコンテンツを編集
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: ページ
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: サブサイト
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: サブサイト
   SilverStripe\Subsites\Extensions\FileSubsites:

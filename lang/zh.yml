@@ -1,6 +1,11 @@
 zh:
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 链接的页面
     EDITCONTENT: 点击这里来编辑内容
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: 页面
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: 子网站
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: 多个子网站
   SilverStripe\Subsites\Extensions\FileSubsites:

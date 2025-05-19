@@ -2,7 +2,12 @@ fa_IR:
   DomainNameField:
     INVALID_DOMAIN: 'نام دامنه نامعتبر'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'صفحه ارجاعی'
     EDITCONTENT: 'برای ویرایش محتوا اینجا را کلیک کنید'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: صفحات
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: 'زیر سایت'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: 'زیر سایت ها'
   SilverStripe\Subsites\Extensions\FileSubsites:
