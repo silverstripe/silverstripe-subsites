@@ -2,7 +2,12 @@ hr:
   DomainNameField:
     INVALID_DOMAIN: 'Netočan naziv domene'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Povezane stranice'
     EDITCONTENT: 'Klikni ovdje za uređivanje sadržaja'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Stranice
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Podsajt
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Podsajtovi
   SilverStripe\Subsites\Extensions\FileSubsites:

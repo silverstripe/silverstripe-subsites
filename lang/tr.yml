@@ -1,4 +1,6 @@
 tr:
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Sayfalar
   SilverStripe\Subsites\Model\Subsite:
     CustomExtraMeta: 'Kişisel Meta Etiketleri'
     CustomMetaDescription: Açıklama

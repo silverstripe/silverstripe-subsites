@@ -1,4 +1,6 @@
 fr:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Page liée'
   SilverStripe\Subsites\Model\Subsite:
     CustomExtraMeta: 'Balises Méta personnalisées'
     CustomMetaTitle: Titre

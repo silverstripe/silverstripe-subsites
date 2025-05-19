@@ -2,7 +2,12 @@ de:
   DomainNameField:
     INVALID_DOMAIN: 'Ungültige Domain'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Verknüpfte Seite'
     EDITCONTENT: 'Klicken Sie hier, um den Inhalt zu bearbeiten'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Seiten
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Subseite
   SilverStripe\Subsites\Extensions\FileSubsites:
     has_one_Subsite: Subseite
   SilverStripe\Subsites\Extensions\FolderFormFactoryExtension:

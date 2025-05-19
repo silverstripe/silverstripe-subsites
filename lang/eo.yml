@@ -2,7 +2,12 @@ eo:
   DomainNameField:
     INVALID_DOMAIN: 'Nevalida domajna nomo'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Ligita paĝo'
     EDITCONTENT: 'Alklaku ĉi tie por redakti la enhavon'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Paĝoj
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Subretejo
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Subretejoj
   SilverStripe\Subsites\Controller\SubsiteXHRController:
