@@ -2,7 +2,16 @@ en:
   DomainNameField:
     INVALID_DOMAIN: 'Invalid domain name'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Linked Page'
     EDITCONTENT: 'Click here to edit the content'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    ALL_SUBSITES: 'All Subsites'
+    FilterBy: 'Filter by:'
+    Pages: Pages
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    AccessFromAllSubsites: '(accessible by all subsites)'
+    MainSite: 'Main Site'
+    Subsite: Subsite
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Subsites
   SilverStripe\Subsites\Controller\SubsiteXHRController:

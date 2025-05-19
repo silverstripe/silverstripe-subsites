@@ -2,7 +2,12 @@ ru:
   DomainNameField:
     INVALID_DOMAIN: 'Неверный домен'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Связанная страница'
     EDITCONTENT: 'Нажмите для изменения содержимого'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Страницы
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Подсайт
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Подсайты
   SilverStripe\Subsites\Extensions\FileSubsites:

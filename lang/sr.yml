@@ -1,0 +1,15 @@
+sr:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Повезана страница'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Странице
+  SilverStripe\Subsites\Model\Subsite:
+    CustomExtraMeta: 'Прилагођене мета ознаке'
+    CustomMetaDescription: Опис
+    CustomMetaTitle: Наслов
+    SiteConfigTitle: 'Назив сајта'
+    belongs_many_many_Groups: Групе
+    db_Theme: Тема
+    db_Title: Наслов
+  Subsites:
+    ThemeFieldLabel: Тема

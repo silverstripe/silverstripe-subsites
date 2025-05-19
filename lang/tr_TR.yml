@@ -8,6 +8,10 @@ tr_TR:
     SECURITYTABTITLE: 'Alt Siteler'
   SilverStripe\CMS\Model\VirtualPage:
     EDITCONTENT: 'İçeriği düzenlemek için tıklayınız'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Sayfalar
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: 'Alt Site'
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: 'Alt Siteler'
   SilverStripe\Subsites\Extensions\FileSubsites:

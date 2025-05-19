@@ -1,4 +1,8 @@
 sr_RS@latin:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Povezana stranica'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Stranice
   SilverStripe\Subsites\Model\Subsite:
     CustomExtraMeta: 'Prilagođene meta oznake'
     CustomMetaDescription: Opis

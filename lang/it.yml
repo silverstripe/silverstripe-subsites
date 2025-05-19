@@ -2,7 +2,12 @@ it:
   DomainNameField:
     INVALID_DOMAIN: 'Nome dominio non valido'
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Pagina collegata'
     EDITCONTENT: 'Clicca qui per editare il contenuto'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Pagine
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Sottosito
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Sottositi
   SilverStripe\Subsites\Extensions\FileSubsites:
