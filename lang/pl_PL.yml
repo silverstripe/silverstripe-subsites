@@ -7,7 +7,12 @@ pl_PL:
     ACCESSRADIOTITLE: 'Daj tej grupie dostęp do'
     SECURITYTABTITLE: Podwitryny
   SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Podlinkowanych stron'
     EDITCONTENT: 'Kliknij tutaj aby edytować zawartość'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Strony
+  SilverStripe\SiteWideContentReport\SitewideContentReport:
+    Subsite: Podwitryna
   SilverStripe\Subsites\Admin\SubsiteAdmin:
     MENUTITLE: Podwitryny
   SilverStripe\Subsites\Extensions\FileSubsites:

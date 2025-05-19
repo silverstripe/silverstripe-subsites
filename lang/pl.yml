@@ -1,4 +1,8 @@
 pl:
+  SilverStripe\CMS\Model\VirtualPage:
+    CHOOSE: 'Linkowana strona'
+  SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites:
+    Pages: Strony
   SilverStripe\Subsites\Model\Subsite:
     CustomExtraMeta: 'Własne meta tagi'
     CustomMetaDescription: Opis
