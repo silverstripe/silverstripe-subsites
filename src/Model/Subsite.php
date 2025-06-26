@@ -391,7 +391,7 @@ class Subsite extends DataObject
             return ArrayList::create();
         }
         if (!is_object($member)) {
-            $member = DataObject::get_by_id(Member::class, $member);
+            $member = Member::get()->setUseCache(true)->byID($member);
         }
 
         $subsites = ArrayList::create();
@@ -441,7 +441,7 @@ class Subsite extends DataObject
             return new ArrayList();
         }
         if (!is_object($member)) {
-            $member = DataObject::get_by_id(Member::class, $member);
+            $member = Member::get()->setUseCache(true)->byID($member);
         }
 
         // Rationalise permCode argument

@@ -58,13 +58,10 @@ class SubsiteTest extends BaseSubsiteTest
         // Test that changeSubsite is working
         Subsite::changeSubsite($template->ID);
         $this->assertEquals($template->ID, SubsiteState::singleton()->getSubsiteId());
-        $tmplStaff = $this->objFromFixture('Page', 'staff');
-        $tmplHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
 
         // Publish all the pages in the template, testing that DataObject::get only returns pages
         // from the chosen subsite
         $pages = DataObject::get(SiteTree::class);
-        $totalPages = $pages->count();
         foreach ($pages as $page) {
             $this->assertEquals($template->ID, $page->SubsiteID);
             $page->copyVersionToStage('Stage', 'Live');
@@ -79,7 +76,7 @@ class SubsiteTest extends BaseSubsiteTest
         // Another test that changeSubsite is working
         $subsite->activate();
 
-        $siteHome = DataObject::get_one('Page', "\"URLSegment\" = 'home'");
+        $siteHome = Page::get()->find('URLSegment', 'home');
         $this->assertNotEquals($siteHome, false, 'Home Page for subsite not found');
         $this->assertEquals(
             $subsite->ID,
@@ -482,16 +479,16 @@ class SubsiteTest extends BaseSubsiteTest
         $subsite2 = $subsite1->duplicate();
         $subsite2->activate();
         // change content on dupe
-        $page2 = DataObject::get_one('Page', "\"Title\" = 'MyAwesomePage'");
+        $page2 = Page::get()->find('Title', 'MyAwesomePage');
         $page2->Title = 'MyNewAwesomePage';
         $page2->write();
         $page2->publishRecursive();
 
         // check change & check change has not affected subiste1
         $subsite1->activate();
-        $this->assertEquals('MyAwesomePage', DataObject::get_by_id('Page', $page1->ID)->Title);
+        $this->assertEquals('MyAwesomePage', Page::get()->byID($page1->ID)->Title);
         $subsite2->activate();
-        $this->assertEquals('MyNewAwesomePage', DataObject::get_by_id('Page', $page2->ID)->Title);
+        $this->assertEquals('MyNewAwesomePage', Page::get()->byID($page2->ID)->Title);
     }
 
     public function testDefaultPageCreatedWhenCreatingSubsite()

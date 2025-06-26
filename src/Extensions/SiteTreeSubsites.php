@@ -52,7 +52,7 @@ class SiteTreeSubsites extends Extension
     private static $many_many_extraFields = [
         'CrossSubsiteLinkTracking' => ['FieldName' => 'Varchar']
     ];
-    
+
     /**
     * Used to cache the result of a heavily called database query
     */
@@ -307,7 +307,7 @@ class SiteTreeSubsites extends Extension
         if (!$this->owner->SubsiteID) {
             return false;
         }
-        $sc = DataObject::get_one(SiteConfig::class, '"SubsiteID" = ' . $this->owner->SubsiteID);
+        $sc = SiteConfig::get()->setUseCache(true)->find('SubsiteID', $this->owner->SubsiteID);
         if (!$sc) {
             $sc = new SiteConfig();
             $sc->SubsiteID = $this->owner->SubsiteID;
