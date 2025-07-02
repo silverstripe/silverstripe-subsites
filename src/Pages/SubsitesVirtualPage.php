@@ -108,7 +108,7 @@ class SubsitesVirtualPage extends VirtualPage
         $oldState = Subsite::$disable_subsite_filter;
         Subsite::$disable_subsite_filter = true;
         if ($this->CopyContentFromID) {
-            $this->HasBrokenLink = DataObject::get_by_id(SiteTree::class, $this->CopyContentFromID) ? false : true;
+            $this->HasBrokenLink = SiteTree::get()->setUseCache(true)->byID($this->CopyContentFromID) ? false : true;
         }
         Subsite::$disable_subsite_filter = $oldState;
     }

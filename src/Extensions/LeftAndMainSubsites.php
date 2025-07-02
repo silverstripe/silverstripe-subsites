@@ -118,7 +118,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
             return ArrayList::create();
         }
         if (!is_object($member)) {
-            $member = DataObject::get_by_id(Member::class, $member);
+            $member = Member::get()->setUseCache(true)->byID($member);
         }
 
         // Collect permissions - honour the LeftAndMain::required_permission_codes, current model requires
@@ -397,8 +397,8 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
      */
     public function copytosubsite($data, $form)
     {
-        $page = DataObject::get_by_id(SiteTree::class, $data['ID']);
-        $subsite = DataObject::get_by_id(Subsite::class, $data['CopyToSubsiteID']);
+        $page = SiteTree::get()->setUseCache(true)->byID($data['ID']);
+        $subsite = Subsite::get()->setUseCache(true)->byID($data['CopyToSubsiteID']);
         $includeChildren = (isset($data['CopyToSubsiteWithChildren'])) ? $data['CopyToSubsiteWithChildren'] : false;
 
         $newPage = $page->duplicateToSubsite($subsite->ID, $includeChildren);

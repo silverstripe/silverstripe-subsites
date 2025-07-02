@@ -39,7 +39,7 @@ class SubsiteCopyPagesTask extends BuildTask
             $output->writeln('<error>Missing "from" parameter</>');
             return Command::INVALID;
         }
-        $subsiteFrom = DataObject::get_by_id(Subsite::class, $subsiteFromId);
+        $subsiteFrom = Subsite::get()->setUseCache(true)->byID($subsiteFromId);
         if (!$subsiteFrom) {
             $output->writeln('<error>Subsite not found</>');
             return Command::FAILURE;
@@ -50,7 +50,7 @@ class SubsiteCopyPagesTask extends BuildTask
             $output->writeln('<error>Missing "to" parameter</>');
             return Command::INVALID;
         }
-        $subsiteTo = DataObject::get_by_id(Subsite::class, $subsiteToId);
+        $subsiteTo = Subsite::get()->setUseCache(true)->byID($subsiteToId);
         if (!$subsiteTo) {
             $output->writeln('<error>Subsite not found</>');
             return Command::FAILURE;

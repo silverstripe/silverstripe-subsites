@@ -41,7 +41,7 @@ class ErrorPageSubsite extends Extension
         if (!$subsite) {
             $subsiteID = Subsite::getSubsiteIDForDomain();
             if ($subsiteID != 0) {
-                $subsite = DataObject::get_by_id(Subsite::class, $subsiteID);
+                $subsite = Subsite::get()->setUseCache(true)->byID($subsiteID);
             } else {
                 $subsite = null;
             }
