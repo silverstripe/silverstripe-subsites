@@ -72,7 +72,7 @@ class LeftAndMainSubsites extends LeftAndMainExtension implements TemplateGlobal
         $currentSubsiteID = SubsiteState::singleton()->getSubsiteId();
 
         if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
-            return false;
+            return ArrayList::create();
         }
 
         Requirements::javascript('silverstripe/subsites:client/dist/js/LeftAndMain_Subsites.js');
