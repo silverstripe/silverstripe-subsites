@@ -64,7 +64,7 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
         $currentSubsiteID = SubsiteState::singleton()->getSubsiteId();
 
         if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
-            return false;
+            return ArrayList::create();
         }
 
         $output = ArrayList::create();
