@@ -407,7 +407,8 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
 
         return $this->owner->redirect(Controller::join_links(
             $this->owner->Link('show'),
-            $newPage->ID
+            $newPage->ID,
+            "?SubsiteID={$subsite->ID}"
         ));
     }
 }
