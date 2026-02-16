@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SiteWideContentReport\Model;
+namespace SilverStripe\Subsites\Model;
 
 use SilverStripe\Core\Extension;
 use SilverStripe\SiteWideContentReport\Form\GridFieldBasicContentReport;
