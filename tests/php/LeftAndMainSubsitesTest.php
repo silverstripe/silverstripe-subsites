@@ -12,6 +12,7 @@ use SilverStripe\Security\Member;
 use SilverStripe\Subsites\Extensions\LeftAndMainSubsites;
 use SilverStripe\Subsites\Model\Subsite;
 use SilverStripe\Subsites\State\SubsiteState;
+use SilverStripe\Control\Director;
 
 class LeftAndMainSubsitesTest extends FunctionalTest
 {
@@ -110,5 +111,57 @@ class LeftAndMainSubsitesTest extends FunctionalTest
         /** @var LeftAndMain&LeftAndMainSubsites $leftAndMain */
         $leftAndMain = new LeftAndMain();
         $this->assertTrue($leftAndMain->alternateAccessCheck($member));
+    }
+
+    public function testSubsiteSwitchListNullForSingleAccessUser()
+    {
+        $this->logInAs('subsite1member');
+        SubsiteState::singleton()->setUseSessions(true);
+
+        $result = LeftAndMainSubsites::SubsiteSwitchList();
+        $this->assertNull($result, 'SubsiteSwitchList should return null when user has access to only one subsite');
+    }
+
+    public function testAutoSwitchToOnlyAccessibleSubsite()
+    {
+        SubsiteState::singleton()->setUseSessions(true);
+        $this->logInAs('subsite1member');
+
+        $subsite1 = $this->objFromFixture(Subsite::class, 'subsite1');
+
+        // Start on the main site (ID 0)
+        Subsite::changeSubsite(0);
+        $this->session()->set('SubsiteID', 0);
+
+        $response = $this->get('admin/');
+
+        // Should have been redirected (not a login redirect)
+        $this->assertGreaterThanOrEqual(300, $response->getStatusCode());
+        $this->assertLessThan(400, $response->getStatusCode());
+
+        // InitStateMiddleware writes SubsiteID to session in its finally block
+        $this->assertEquals(
+            $subsite1->ID,
+            (int) $this->session()->get('SubsiteID'),
+            'User with access to one subsite should be auto-switched to it'
+        );
+    }
+
+    public function testAdminNotAutoSwitched()
+    {
+        SubsiteState::singleton()->setUseSessions(true);
+        $this->logInAs('admin');
+
+        // Start on the main site (ID 0)
+        Subsite::changeSubsite(0);
+        $this->session()->set('SubsiteID', 0);
+
+        $this->get('admin/');
+
+        $this->assertEquals(
+            0,
+            (int) $this->session()->get('SubsiteID'),
+            'Admin user should not be auto-switched away from the main site'
+        );
     }
 }
