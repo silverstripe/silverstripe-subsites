@@ -25,7 +25,7 @@ Feature: Create and select a subsite
 
     # Add a file to the main site
     When I go to "admin/assets"
-    And I press the "Add folder" button
+    And I press the "Add new folder" button
     And I select "Main site" from "SubsitesSelect"
     # Using a short folder name so that it doesn't get truncated on the frontend
     And I fill in "Folder name" with "mfol"
@@ -67,7 +67,7 @@ Feature: Create and select a subsite
     # Add a file to the subsite
     When I go to "admin/assets"
     And I select "My subsite" from "SubsitesSelect"
-    And I press the "Add folder" button
+    And I press the "Add new folder" button
     And I wait for 2 seconds
     And I fill in "Folder name" with "sfol"
     And I press the "Create" button
