@@ -56,15 +56,15 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
     /**
      * Generates a list of subsites with the data needed to
      * produce a dropdown site switcher
-     * @return SS_List<Subsite>
+     * @return SS_List<Subsite>|null
      */
-    public static function SubsiteSwitchList(): SS_List
+    public static function SubsiteSwitchList(): SS_List|null
     {
         $list = Subsite::all_accessible_sites();
         $currentSubsiteID = SubsiteState::singleton()->getSubsiteId();
 
-        if ($list == null || $list->count() == 1 && $list->first()->DefaultSite == true) {
-            return false;
+        if (!$list || $list->count() <= 1) {
+            return null;
         }
 
         $output = ArrayList::create();
@@ -337,7 +337,21 @@ class LeftAndMainSubsites extends Extension implements TemplateGlobalProvider
             return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
         }
 
-        // SECOND, check if we need to change subsites due to lack of permissions.
+        // SECOND, if the user only has access to one subsite, auto-switch to it.
+
+        $member = Security::getCurrentUser();
+        if ($member && !Permission::checkMember($member, ['ADMIN', 'CMS_ACCESS_LeftAndMain'])) {
+            $accessibleSites = $this->owner->sectionSites(true, 'Main site', $member);
+            if ($accessibleSites->count() === 1) {
+                $onlySite = $accessibleSites->first();
+                if ((int) $onlySite->ID !== (int) $state->getSubsiteId()) {
+                    Subsite::changeSubsite($onlySite->ID);
+                    return $this->owner->redirect(AdminRootController::config()->get('url_base') . '/');
+                }
+            }
+        }
+
+        // THIRD, check if we need to change subsites due to lack of permissions.
 
         if (!$this->canAccess()) {
             $member = Security::getCurrentUser();
