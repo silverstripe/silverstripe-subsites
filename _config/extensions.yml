@@ -75,4 +75,4 @@ Only:
 ---
 SilverStripe\Reports\SiteWideContentReport\Reports\SitewideContentReport:
   extensions:
-    - SilverStripe\SiteWideContentReport\Model\SitewideContentSubsites
+    - SilverStripe\Subsites\Model\SitewideContentSubsites
